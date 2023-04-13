@@ -17,9 +17,9 @@ namespace Cinema;
 /// You can use this to create things like HUDs and declare which player class
 /// to use for spawned players.
 /// </summary>
-public partial class MyGame : GameManager
+public partial class CinemaGame : GameManager
 {
-    public MyGame()
+    public CinemaGame()
     {
     }
 
@@ -35,4 +35,10 @@ public partial class MyGame : GameManager
         client.Pawn = pawn;
         pawn.Respawn();
     }
+
+    public override void ClientSpawn()
+    {
+        Game.RootPanel = new UI.Hud();
+    }
+
 }

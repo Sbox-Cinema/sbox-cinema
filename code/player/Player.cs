@@ -18,6 +18,9 @@ partial class Player : AnimatedEntity, IEyes
 
     public static Model PlayerModel = Model.Load("models/citizen/citizen.vmdl");
 
+    [Net, Predicted]
+    public bool ThirdPersonCamera { get; set; }
+
     /// <summary>
     /// Called when the entity is first created
     /// </summary>
@@ -45,6 +48,10 @@ partial class Player : AnimatedEntity, IEyes
 
     public void Respawn()
     {
+        SetupPhysicsFromOrientedCapsule(
+            PhysicsMotionType.Keyframed,
+            new Capsule(Vector3.Zero, Vector3.Up * 75, 16)
+        );
 
         var spawnpoints = Entity.All.OfType<SpawnPoint>();
 
@@ -58,12 +65,6 @@ partial class Player : AnimatedEntity, IEyes
             tx.Position = tx.Position + Vector3.Up * 50.0f; // raise it up
             Transform = tx;
         }
-
-        SetupPhysicsFromAABB(
-            PhysicsMotionType.Keyframed,
-            new Vector3(-16, -16, 0),
-            new Vector3(16, 16, 72)
-        );
 
         EnableAllCollisions = true;
         EnableDrawing = true;
@@ -116,6 +117,11 @@ partial class Player : AnimatedEntity, IEyes
     public override void Simulate(IClient cl)
     {
         Rotation = LookInput.WithPitch(0f).ToRotation();
+
+        if (Input.Pressed(InputButton.View))
+        {
+            ThirdPersonCamera = !ThirdPersonCamera;
+        }
 
         TickPlayerUse();
 

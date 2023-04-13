@@ -42,7 +42,7 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
     [ConVar.Replicated("Cinema_debug_pc")]
     public static bool Debug { get; set; } = false;
 
-    public float BodyGirth => 32f;
+    public float BodyGirth => 28f;
 
     public BBox Hull
     {
@@ -166,7 +166,7 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
         var tr = Trace
             .Ray(start, end)
             .Size(mins, maxs)
-            .WithAnyTags("solid", "playerclip", "passbullets", "player")
+            .WithAnyTags("solid", "playerclip", "passbullets")
             .Ignore(Player)
             .Run();
 
@@ -259,7 +259,7 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
     public void StepMove(float groundAngle = 46f, float stepSize = 18f)
     {
         MoveHelper mover = new MoveHelper(Position, Velocity);
-        mover.Trace = mover.Trace.Size(Hull).Ignore(Player);
+        mover.Trace = mover.Trace.Size(Hull).Ignore(Player).WithoutTags("player");
         mover.MaxStandableAngle = groundAngle;
 
         mover.TryMoveWithStep(Time.Delta, stepSize);
@@ -271,7 +271,7 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
     public void Move(float groundAngle = 46f)
     {
         MoveHelper mover = new MoveHelper(Position, Velocity);
-        mover.Trace = mover.Trace.Size(Hull).Ignore(Player);
+        mover.Trace = mover.Trace.Size(Hull).Ignore(Player).WithoutTags("player");
         mover.MaxStandableAngle = groundAngle;
 
         mover.TryMove(Time.Delta);
