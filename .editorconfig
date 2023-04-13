@@ -4,8 +4,8 @@ root = true
 # C# files
 [*.cs]
 indent_style = space
-indent_size = 2
-tab_size = 2
+indent_size = 4
+tab_size = 4
 
 # New line preferences
 end_of_line = crlf
@@ -88,10 +88,10 @@ csharp_space_before_semicolon_in_for_statement = false
 csharp_space_between_empty_square_brackets = false
 csharp_space_between_method_call_empty_parameter_list_parentheses = false
 csharp_space_between_method_call_name_and_opening_parenthesis = false
-csharp_space_between_method_call_parameter_list_parentheses = true
+csharp_space_between_method_call_parameter_list_parentheses = false
 csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
 csharp_space_between_method_declaration_name_and_open_parenthesis = false
-csharp_space_between_method_declaration_parameter_list_parentheses = true
+csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = control_flow_statements
 csharp_space_between_square_brackets = false
 

@@ -1,0 +1,25 @@
+using Sandbox;
+
+namespace Cinema;
+
+/// <summary>
+/// The basic crouch mechanic for players.
+/// </summary>
+public partial class CrouchMechanic : PlayerBodyControllerMechanic
+{
+	public override int SortOrder => 9;
+	public override float? WishSpeed => 120f;
+	public override float? EyeHeight => 40f;
+
+	protected override bool ShouldStart()
+	{
+		if ( !Input.Down( InputButton.Duck ) )
+			return false;
+		if ( !Controller.GroundEntity.IsValid() )
+			return false;
+		if ( Controller.IsMechanicActive<SprintMechanic>() )
+			return false;
+
+		return true;
+	}
+}
