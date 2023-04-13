@@ -35,7 +35,7 @@ partial class Player : AnimatedEntity, IEyes
         Tags.Add("player");
     }
 
-    public void UpdateClothes(IClient cl)
+    public void LoadClientClothingSettings(IClient cl)
     {
         Clothing ??= new();
         Clothing.LoadFromClient(cl);
@@ -52,7 +52,7 @@ partial class Player : AnimatedEntity, IEyes
         var randomSpawnPoint = spawnpoints.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
 
         // if it exists, place the pawn there
-        if ( randomSpawnPoint != null )
+        if (randomSpawnPoint != null)
         {
             var tx = randomSpawnPoint.Transform;
             tx.Position = tx.Position + Vector3.Up * 50.0f; // raise it up
@@ -73,11 +73,10 @@ partial class Player : AnimatedEntity, IEyes
         BodyController.Active = true;
 
         ClientRespawn(To.Single(Client));
-
-        Clothing.Clothing = Clothing.Clothing
-            .Where(e => e.Category != Sandbox.Clothing.ClothingCategory.Hat)
-            .ToList();
-
+        if (Clothing == null)
+        {
+            LoadClientClothingSettings(Client);
+        }
         Clothing.DressEntity(this);
     }
 
@@ -98,7 +97,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         var player = ConsoleSystem.Caller.Pawn as Player;
         var noclip = player.Components.GetOrCreate<NoclipController>();
-        if ( player.ActiveController is NoclipController )
+        if (player.ActiveController is NoclipController && player.BodyController != null)
         {
             player.BodyController.Active = true;
         }
@@ -124,7 +123,7 @@ partial class Player : AnimatedEntity, IEyes
 
         ActiveController?.Simulate(cl);
 
-        if ( ActiveController is PlayerBodyController bodyController )
+        if (ActiveController is PlayerBodyController bodyController)
         {
             GroundEntity = bodyController.GroundEntity;
         }
