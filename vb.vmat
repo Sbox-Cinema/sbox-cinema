@@ -1,0 +1,23 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "shaders/lcd_monitor.shader_c"
+
+	//---- LCD Screen ----
+	g_flBrightnessMultiplier "10.623"
+	g_flFresnelExponent "5.000"
+	g_flFresnelReflectance "0.010"
+	g_flPixelBlendDistance "4.000"
+	g_flPixelBlendOffset "0.000"
+	g_flPixelOpacityMax "1.000"
+	g_flPixelOpacityMin "0.213"
+	g_vAnimationScroll "[0.000 0.000]"
+	g_vPixelSize "[2.000 2.000]"
+	g_vScreenResolution "[32.000 32.000]"
+	PixelTexture "materials/pixel-1.png"
+
+	//---- Material ----
+	TextureColor "materials/default/default.tga"
+	TextureTintMask "materials/default/default.tga"
+}

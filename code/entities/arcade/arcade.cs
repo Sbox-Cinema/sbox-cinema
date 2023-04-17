@@ -30,6 +30,8 @@ public partial class ArcadeMachine : ModelEntity
         base.Spawn();
     }
 
+    public Material ScreenMat { get; set; }
+
     public override void ClientSpawn()
     {
         ScreenWorldPanel = new WorldPanel();
@@ -39,8 +41,12 @@ public partial class ArcadeMachine : ModelEntity
         ScreenTexture = Texture.CreateRenderTarget(
                 "arcade-screen",
                 ImageFormat.RGBA8888,
-                new Vector2(512, 512)
+                new Vector2(256, 256)
             );
+
+        ScreenMat = Material.FromShader("shaders/lcd_monitor.shader_c");
+        ScreenMat.Set("Color", ScreenTexture);
+        ScreenMat.Set("Animation Scroll", new Vector2(1f, 0f));
 
 
     }
@@ -49,7 +55,7 @@ public partial class ArcadeMachine : ModelEntity
     public void Render()
     {
         ScreenWorldPanel.WorldScale = 0.5f;
-        ScreenWorldPanel.Position = Position + Vector3.Up * 65 + Rotation.Forward * 8;
+        ScreenWorldPanel.Position = Position + Vector3.Up * 165 + Rotation.Forward * 8;
 
         var camera = new SceneCamera();
         camera.World = Game.SceneWorld;
@@ -58,7 +64,35 @@ public partial class ArcadeMachine : ModelEntity
         camera.FieldOfView = 120;
         camera.ZFar = 10000;
 
+        var t = Texture.Load(FileSystem.Mounted, "materials/pixel-1.vtex");
+        //var t = Texture.Find("materials/pixel-1.vtex");
+        //Log.Info(t.GetPixels(0)[0]);
+
         Graphics.RenderToTexture(camera, ScreenTexture);
+
+        ScreenMat.Set("Color", ScreenTexture);
+        ScreenMat.Set("TintMask", new Color(0, 0, 0));
+        ScreenMat.Set("Pixel", t);
+        //ScreenMat.Set("Roughness", new Color(0, 0, 0));
+
+
+        ScreenMat.Set("g_flFresnelExponent", 20f);
+        ScreenMat.Set("g_flFresnelReflectance", 0.01f);
+
+        ScreenMat.Set("g_flPixelBlendDistance", 4f);
+        ScreenMat.Set("g_flPixelBlendOffset", 0f);
+        ScreenMat.Set("g_flPixelOpacityMin", 0.2f);
+        ScreenMat.Set("g_flPixelOpacityMax", 0.4f);
+        ScreenMat.Set("g_vPixelSize", new Vector2(1f, 1f));
+        ScreenMat.Set("g_vScreenResolution", new Vector2(128f, 128f));
+
+        ScreenMat.Set("g_vAnimationScroll", new Vector2(0f, 0f));
+
+        ScreenMat.Set("g_flBrightnessMultiplier", 1f);
+
+
+        SetMaterialOverride(ScreenMat, "screen");
+
     }
 
     [Event.Client.Frame]
