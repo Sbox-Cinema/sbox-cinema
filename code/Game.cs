@@ -56,9 +56,9 @@ public partial class CinemaGame : GameManager
         base.ClientJoined(client);
 
         // Create a pawn for this client to play with
-        var pawn = new Player();
+        var pawn = new Player(client);
         client.Pawn = pawn;
-        pawn.Respawn();
+
     }
 
     //Why is this here? -ItsRifter

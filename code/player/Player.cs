@@ -5,9 +5,10 @@ using System.Linq;
 
 namespace Cinema;
 
-partial class Player : AnimatedEntity, IEyes
+public partial class Player : AnimatedEntity, IEyes
 {
-    public ClothingContainer Clothing { get; protected set; }
+    //This doesn't need to be public
+    ClothingContainer clothing = new();
 
     [BindComponent]
     public PlayerBodyController BodyController { get; }
@@ -21,64 +22,84 @@ partial class Player : AnimatedEntity, IEyes
     [Net, Predicted]
     public bool ThirdPersonCamera { get; set; }
 
+    public Player()
+    {
+
+    }
+
+    public Player( IClient cl ) : this()
+    {
+        clothing.LoadFromClient( cl );
+    }
+
     /// <summary>
     /// Called when the entity is first created
     /// </summary>
     public override void Spawn()
     {
         Model = PlayerModel;
-        Predictable = true;
+
+        EnableHideInFirstPerson = true;
+        EnableShadowInFirstPerson = true;
+        EnableDrawing = true;
+
+        MoveToSpawnLocation();
+        CreateHull();
+        SetupBodyController();
+
+        /*Predictable = true;
         // Default properties
         EnableDrawing = true;
         EnableHideInFirstPerson = true;
         EnableShadowInFirstPerson = true;
         EnableLagCompensation = true;
-        EnableHitboxes = true;
+        EnableHitboxes = true;*/
 
         Tags.Add("player");
     }
 
-    public void LoadClientClothingSettings(IClient cl)
+    protected void MoveToSpawnLocation()
     {
-        Clothing ??= new();
-        Clothing.LoadFromClient(cl);
+        var spawnpoint = All.OfType<SpawnPoint>().OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+
+        if ( spawnpoint != null )
+        {
+            var tx = spawnpoint.Transform;
+            tx.Position = tx.Position + Vector3.Up * 50.0f;
+            Transform = tx;
+        }
     }
 
     public override void ClientSpawn() { }
 
-    public void Respawn()
+    protected void CreateHull()
     {
         SetupPhysicsFromOrientedCapsule(
-            PhysicsMotionType.Keyframed,
-            new Capsule(Vector3.Zero, Vector3.Up * 75, 16)
+           PhysicsMotionType.Keyframed,
+           new Capsule(Vector3.Zero, Vector3.Up * 75, 16)
         );
 
-        var spawnpoints = Entity.All.OfType<SpawnPoint>();
-
-        // chose a random one
-        var randomSpawnPoint = spawnpoints.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-
-        // if it exists, place the pawn there
-        if (randomSpawnPoint != null)
-        {
-            var tx = randomSpawnPoint.Transform;
-            tx.Position = tx.Position + Vector3.Up * 50.0f; // raise it up
-            Transform = tx;
-        }
-
+        LifeState = LifeState.Alive;
         EnableAllCollisions = true;
+    }
+
+    protected void DestroyHull()
+    {
+        PhysicsClear();
+        EnableAllCollisions = false;
+    }
+
+    public void Respawn()
+    {
         EnableDrawing = true;
         Children.OfType<ModelEntity>().ToList().ForEach(x => x.EnableDrawing = true);
 
         SetupBodyController();
-        BodyController.Active = true;
+        CreateHull();
 
-        ClientRespawn(To.Single(Client));
-        if (Clothing == null)
-        {
-            LoadClientClothingSettings(Client);
-        }
-        Clothing.DressEntity(this);
+        //ClientRespawn( To.Single(Client) );
+
+        clothing.DressEntity(this);
     }
 
     private void SetupBodyController()
@@ -91,6 +112,13 @@ partial class Player : AnimatedEntity, IEyes
         Components.Create<CrouchMechanic>();
         Components.Create<AirMoveMechanic>();
         Components.Create<JumpMechanic>();
+
+        BodyController.Active = true;
+    }
+
+    private void DestroyComponents()
+    {
+        Components.RemoveAll();
     }
 
     [ConCmd.Admin("noclip")]
@@ -150,5 +178,15 @@ partial class Player : AnimatedEntity, IEyes
         ActiveController?.FrameSimulate(cl);
 
         SimulateCamera(cl);
+    }
+
+    public override void OnKilled()
+    {
+        DestroyComponents();
+
+        LifeState = LifeState.Dead;
+
+        EnableDrawing = false;
+        DestroyHull();
     }
 }
