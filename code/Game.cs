@@ -1,13 +1,15 @@
-﻿using Sandbox;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿global using System;
+global using System.IO;
+global using System.Linq;
+global using System.Threading.Tasks;
 
-//
-// You don't need to put things in a namespace, but it doesn't hurt.
-//
+global using Sandbox;
+global using Sandbox.UI;
+global using Sandbox.UI.Construct;
+
+global using Cinema;
+global using Cinema.UI;
+
 namespace Cinema;
 
 /// <summary>
@@ -21,6 +23,29 @@ public partial class CinemaGame : GameManager
 {
     public CinemaGame()
     {
+        if ( Game.IsServer )
+        {
+
+        }
+
+        if ( Game.IsClient )
+        {
+            _ = new Hud();
+        }
+    }
+
+    [Event.Hotload]
+    protected void ReloadGame()
+    {
+        if ( Game.IsServer )
+        {
+
+        }
+
+        if ( Game.IsClient )
+        {
+            _ = new Hud();
+        }
     }
 
     /// <summary>
@@ -36,9 +61,9 @@ public partial class CinemaGame : GameManager
         pawn.Respawn();
     }
 
-    public override void ClientSpawn()
+    //Why is this here? -ItsRifter
+    /*public override void ClientSpawn()
     {
         Game.RootPanel = new UI.Hud();
-    }
-
+    }*/
 }
