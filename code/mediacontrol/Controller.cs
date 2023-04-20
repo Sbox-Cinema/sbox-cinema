@@ -12,6 +12,8 @@ public partial class MediaController : Entity
     [Net]
     public IList<Media> Queue { get; set; } = new List<Media>();
 
+    public static string StaticImage => "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
+
     public Media CurrentMedia => Queue.FirstOrDefault();
 
     public Media Next => Queue.ElementAtOrDefault(1);
@@ -23,7 +25,7 @@ public partial class MediaController : Entity
     [Event.Tick.Server]
     public void ServerUpdate()
     {
-        // @TODO: Figure out how to tell if the media is done playing and goto next if needed
+        PlayCurrentMediaOnProjector();
     }
 
     [Event.Tick.Client]
@@ -35,34 +37,45 @@ public partial class MediaController : Entity
     public void AddToQueue(Media movie)
     {
         Queue.Add(movie);
+        if ( Queue.Count == 1 )
+            PlayCurrentMediaOnProjector(true);
     }
 
     public void StartNext()
     {
         Queue.RemoveAt(0);
-        PlayCurrentMediaOnProjector();
+        PlayCurrentMediaOnProjector(true);
     }
 
-    protected void PlayCurrentMediaOnProjector()
+    protected void PlayCurrentMediaOnProjector(bool forceUpdate = false)
     {
-        if ( CurrentMedia == null ) return;
+        if ( CurrentMedia == null )
+        {
+            SetMediaSourceUrl(StaticImage);
+            return;
+        }
 
+        SetMediaSourceUrl(CurrentMedia.Url, forceUpdate);
+    }
+
+    private void SetMediaSourceUrl(string url, bool forceUpdate = true)
+    {
         if ( Game.IsServer )
         {
-            // Force the url on the client to change via RPC
-            ClientSetMediaSourceUrl(CurrentMedia.Url);
+            ClientSetMediaSourceUrl(url, forceUpdate);
+            return;
         }
-        else
+
+        if ( forceUpdate || Projector.ProjectionImage.MediaSource.CurrentUrl != url )
         {
-            if ( Projector.ProjectionImage.MediaSource.CurrentUrl != CurrentMedia.Url )
-                Projector.ProjectionImage.MediaSource.SetUrl(CurrentMedia.Url);
+            Projector.ProjectionImage.MediaSource.SetUrl(url);
         }
     }
 
     [ClientRpc]
-    private void ClientSetMediaSourceUrl(string url)
+    private void ClientSetMediaSourceUrl(string url, bool forceUpdate = true)
     {
-        Projector.ProjectionImage.MediaSource.SetUrl(url);
+        SetMediaSourceUrl(url, forceUpdate);
     }
 
     [ConCmd.Server("queue")]
