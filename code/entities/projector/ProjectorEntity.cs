@@ -21,6 +21,8 @@ public partial class ProjectorEntity : Entity
     public Projection ProjectionImage { get; set; }
     public WebMediaSource MediaSrc { get; set; }
 
+    public MediaController Controller { get; set; }
+
     public override void Spawn()
     {
         base.Spawn();
@@ -28,6 +30,12 @@ public partial class ProjectorEntity : Entity
         Transmit = TransmitType.Always;
 
         Rotation = Rotation.FromYaw(90);
+
+        Controller = new MediaController()
+        {
+            Projector = this
+        };
+        Controller.Parent = this;
     }
     public override void ClientSpawn()
     {

@@ -11,6 +11,8 @@ public partial class WebMediaSource : WorldPanel
     private WebSurface WebSurface;
     public Texture WebTexture;
 
+    public string CurrentUrl => WebSurface.Url;
+
     public WebMediaSource(ProjectorEntity ent)
     {
         Projector = ent;
@@ -40,8 +42,14 @@ public partial class WebMediaSource : WorldPanel
     }
     void ResetWebPanel()
     {
-        WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=1;frameborder=0";
+        WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
     }
+
+    public void SetUrl(string url)
+    {
+        WebSurface.Url = url;
+    }
+
     public override void OnHotloaded()
     {
         ResetWebPanel();
