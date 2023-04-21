@@ -59,7 +59,7 @@ partial class Player : AnimatedEntity, IEyes
         var randomSpawnPoint = spawnpoints.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
 
         // if it exists, place the pawn there
-        if (randomSpawnPoint != null)
+        if ( randomSpawnPoint != null )
         {
             var tx = randomSpawnPoint.Transform;
             tx.Position = tx.Position + Vector3.Up * 50.0f; // raise it up
@@ -74,7 +74,7 @@ partial class Player : AnimatedEntity, IEyes
         BodyController.Active = true;
 
         ClientRespawn(To.Single(Client));
-        if (Clothing == null)
+        if ( Clothing == null )
         {
             LoadClientClothingSettings(Client);
         }
@@ -98,7 +98,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         var player = ConsoleSystem.Caller.Pawn as Player;
         var noclip = player.Components.GetOrCreate<NoclipController>();
-        if (player.ActiveController is NoclipController && player.BodyController != null)
+        if ( player.ActiveController is NoclipController && player.BodyController != null )
         {
             player.BodyController.Active = true;
         }
@@ -118,7 +118,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         Rotation = LookInput.WithPitch(0f).ToRotation();
 
-        if (Input.Pressed(InputButton.View))
+        if ( Input.Pressed(InputButton.View) )
         {
             ThirdPersonCamera = !ThirdPersonCamera;
         }
@@ -129,7 +129,7 @@ partial class Player : AnimatedEntity, IEyes
 
         ActiveController?.Simulate(cl);
 
-        if (ActiveController is PlayerBodyController bodyController)
+        if ( ActiveController is PlayerBodyController bodyController )
         {
             GroundEntity = bodyController.GroundEntity;
         }
@@ -141,6 +141,9 @@ partial class Player : AnimatedEntity, IEyes
         SimulateActiveChild(cl, ActiveChild);
     }
 
+    // @TODO: remove when facepunch fixes input.pressed
+    private TimeSince TimeSinceMenuPressed = 0;
+
     /// <summary>
     /// Called every frame on the client
     /// </summary>
@@ -148,6 +151,27 @@ partial class Player : AnimatedEntity, IEyes
     {
         Rotation = LookInput.WithPitch(0f).ToRotation();
         ActiveController?.FrameSimulate(cl);
+
+        if ( Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f )
+        {
+            TimeSinceMenuPressed = 0;
+            if ( !UI.MovieQueue.Instance.Visible )
+            {
+                var closestMoviePlayer = Entity.All.OfType<MediaController>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
+                if ( closestMoviePlayer != null )
+                {
+                    Log.Info($"Found a movie player {closestMoviePlayer}");
+                    UI.MovieQueue.Instance.Controller = closestMoviePlayer;
+                    UI.MovieQueue.Instance.Visible = true;
+                }
+            }
+            else
+            {
+                Log.Info("Closing media player");
+                UI.MovieQueue.Instance.Visible = false;
+                UI.MovieQueue.Instance.Controller = null;
+            }
+        }
 
         SimulateCamera(cl);
     }

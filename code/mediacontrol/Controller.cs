@@ -78,15 +78,17 @@ public partial class MediaController : Entity
         SetMediaSourceUrl(url, forceUpdate);
     }
 
+    //Hacky, @todo: make this cleaner and target specific controllers
+
     [ConCmd.Server("queue")]
-    public static void ConsoleAddMedia(string url)
+    public static void AddMedia(string url)
     {
         foreach ( var controller in Entity.All.OfType<MediaController>() )
             controller.AddToQueue(new Media() { Url = url, Requestor = ConsoleSystem.Caller });
     }
 
     [ConCmd.Server("skip")]
-    public static void ConsoleSkip()
+    public static void Skip()
     {
         foreach ( var controller in Entity.All.OfType<MediaController>() )
             controller.StartNext();
