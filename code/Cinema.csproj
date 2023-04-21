@@ -36,7 +36,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Analyzer Include="D:\SteamLibrary\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll" />
+		<Analyzer Include="D:\SteamLibrary\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll"/>
 		<Reference Include="D:\SteamLibrary\steamapps\common\sbox\bin\managed/Sandbox.System.dll" />
 		<Reference Include="D:\SteamLibrary\steamapps\common\sbox\bin\managed/Sandbox.Engine.dll" />
 		<Reference Include="D:\SteamLibrary\steamapps\common\sbox\bin\managed/Sandbox.Game.dll" />
@@ -48,10 +48,6 @@
   <ItemGroup>
 		<ProjectReference Include="D:\SteamLibrary\steamapps\common\sbox\addons\base\code\Base Library.csproj" />
 
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ui\movie-select\" />
   </ItemGroup>
 
 </Project>
