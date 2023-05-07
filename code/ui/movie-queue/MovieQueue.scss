@@ -1,0 +1,173 @@
+MovieQueue {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    font-family: SourceSansPro;
+    font-size: 20px;
+    color: #EEE;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+
+    &.visible {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+.placement {
+    width: 100%;
+    max-width: 800px;
+    height: 60%;
+}
+
+.container {
+    background-color: #222;
+    border-radius: 4px;
+    border: 2px solid #1112;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    flex-direction: column;
+
+    >.header {
+        flex-direction: column;
+        align-items: center;
+        font-size: 36px;
+        padding-bottom: 8px;
+
+        .close-btn {
+            position: absolute;
+            right: 8px;
+        }
+    }
+}
+
+.contents {
+    flex-direction: column;
+    height: 100%;
+}
+
+.section {
+    padding-bottom: 8px;
+    flex-direction: column;
+    flex-shrink: 0;
+   
+    margin: 8px;
+    padding: 2px;
+
+    &.outline {
+        border: 2px solid #1115;
+        background-color: #333;
+    }
+
+    &.grow {
+        flex-grow: 1;
+    }
+
+    >.title {
+        font-size: 24px;
+        padding-bottom: 4px;
+        font-weight: 600;
+
+        &.center {
+            justify-content: center;
+        }
+    }
+}
+
+.control-bar {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.button {
+    background-color: #444;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 2px solid #1115;
+
+    min-width: 100px;
+    justify-content: center;
+
+    &.close-btn {
+        background-color: #533;
+        font-size: 18px;
+    }
+
+    &:hover {
+        background-color: #555;
+        border: 2px solid #2225;
+    }
+
+    &:active {
+        background-color: #666;
+        border: 2px solid #3335;
+    }
+
+    
+}
+
+.rows {
+    flex-direction: column;
+
+    &.scroll {
+        overflow: scroll;
+    }
+}
+
+.row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0px 2px;
+    max-height: 42px;
+
+    &.header {
+        font-weight: 800;
+    }
+
+    >.title {
+        color: #CCC;
+        flex-grow: 1;
+        max-width: 65%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    >.requestor {
+        width: 20%;
+        justify-content: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    >.controls {
+        min-width: 15%;
+        justify-content: flex-end;
+    }
+}
+
+
+.add-queue-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    TextEntry {
+        flex-grow: 1;
+        background-color: #BBB;
+        margin: 2px 8px;
+        max-width: 60%;
+        height: 32px;
+        color: #000;
+        align-items: center;
+        padding: 0px 4px;
+    }
+}
