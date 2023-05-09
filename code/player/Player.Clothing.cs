@@ -9,6 +9,10 @@ public partial class Player
 
     public ClothingContainer Clothing { get; protected set; }
 
+    /// <summary>
+    /// Dresses the player entity.
+    /// It will load the player's clothing from the client data if it hasn't been loaded yet.
+    /// </summary>
     public void LoadClothing()
     {
         if (Client == null || !Client.IsValid) return;
