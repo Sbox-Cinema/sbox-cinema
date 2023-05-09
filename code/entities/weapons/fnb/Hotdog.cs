@@ -41,8 +41,6 @@ public partial class Hotdog : WeaponBase
             projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
             projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
         }
-
-        HolsterWeapon(true);
     }
 
     public override void Reload()

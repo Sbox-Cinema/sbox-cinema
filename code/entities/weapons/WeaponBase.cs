@@ -141,17 +141,17 @@ public partial class WeaponBase : Carriable
     }
 
     //Equips the weapon, does any setup when deployed
-    public virtual void EquipWeapon()
+    public override void ActiveStart(Entity ent)
     {
+        base.ActiveStart(ent);
         DeployTime = DeployingTime;
-        ActiveStart(WeaponHolder);
     }
 
     //Holsters the weapon
-    public virtual void HolsterWeapon(bool hasDropped = false)
+    public override void ActiveEnd(Entity ent, bool dropped)
     {
+        base.ActiveEnd(ent, dropped);
         IsReloading = false;
-        ActiveEnd(WeaponHolder, hasDropped);
     }
 
     public override void CreateViewModel()
