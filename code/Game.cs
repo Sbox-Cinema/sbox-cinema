@@ -1,9 +1,4 @@
 ﻿using Sandbox;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -33,6 +28,7 @@ public partial class CinemaGame : GameManager
         // Create a pawn for this client to play with
         var pawn = new Player();
         client.Pawn = pawn;
+        pawn.Money = 500; // @TEMP: Give players money when they join
         pawn.Respawn();
     }
 
