@@ -1,0 +1,68 @@
+﻿@using System;
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema
+
+<style>
+	Money {
+        justify-content: center;
+        align-items: center;
+        
+        left: 32px;
+        gap: 8px;
+
+        .credit {
+            width: 90px;
+            height: 58px;
+
+            bottom: 2px;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            font-family: 'Jost';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 40px;
+            line-height: 58px;
+
+            color: #FFFFFF;
+        }
+
+        .icon {
+           
+            width: 32px;
+            height: 32px;
+ 
+            justify-content: center;
+            align-items: center;
+           
+            font-size: 20px;
+            font-family: Material Icons;
+            
+            text-align: center;
+
+            background-color: #FFFFFF;
+            
+            border-radius: 4px;
+        }
+    }
+</style>
+
+<root>
+    <label class="icon">attach_money</label>
+    <label class="credit">@PlayerMoney</label>
+</root>
+
+
+@code {
+    public Player Player => Game.LocalPawn as Player;
+    public string PlayerMoney => $"{Player.Money:F0}";
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(PlayerMoney);
+    }
+}

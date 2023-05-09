@@ -1,0 +1,33 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+<style>
+    AvatarPanel 
+        {
+            > .avatar 
+            {
+                width: 100%;
+                height: 100%;
+
+                border-radius: 50%;
+
+                border: 6px solid rgba(0,0,0,1);
+                
+                background: linear-gradient(0deg, #b7c2ef, #cad1df, #dae0ce, #e8f0bd);
+            }
+        }
+</style>
+
+@code
+{
+    public CitizenPanel Avatar { get; set; }
+
+    public AvatarPanel() 
+    {
+        Avatar = new CitizenPanel();
+
+        AddChild(Avatar);
+    }   
+}
