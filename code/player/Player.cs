@@ -12,6 +12,9 @@ partial class Player : AnimatedEntity, IEyes
     [BindComponent]
     public PlayerBodyController BodyController { get; }
 
+    [BindComponent]
+    public PlayerInventory Inventory { get; }
+
     public IEnumerable<PlayerController> PlayerControllers => Components.GetAll<PlayerController>();
 
     public PlayerController ActiveController => PlayerControllers.FirstOrDefault((e) => e.Active);
@@ -144,7 +147,7 @@ partial class Player : AnimatedEntity, IEyes
             GroundEntity = null;
         }
 
-        SimulateActiveChild(cl, ActiveChild);
+        SimulateActiveChild(cl);
     }
 
     // @TODO: remove when facepunch fixes input.pressed
