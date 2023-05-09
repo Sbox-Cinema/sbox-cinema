@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class Player
 {
-    [Net] public int Money { get; set; }
+    [Net] public int Money { get; protected set; }
 
     public bool CanAfford(int amount)
     {
