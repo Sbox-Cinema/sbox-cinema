@@ -44,6 +44,8 @@ partial class Player : AnimatedEntity, IEyes
         EnableHitboxes = true;
         TimeSinceJoinedServer = 0;
 
+        Components.Create<PlayerInventory>();
+
         Tags.Add("player");
     }
 

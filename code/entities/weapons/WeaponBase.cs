@@ -4,9 +4,9 @@ namespace Cinema;
 
 public partial class WeaponBase : Carriable
 {
-    public virtual string WeaponName => "Generic Weapon";
-    public virtual string WeaponDesc => "A generic weapon's description";
-    public virtual string WeaponIcon => "";
+    public virtual string Name => "Generic Weapon";
+    public virtual string Description => "A generic weapon's description";
+    public virtual string Icon => "";
     public virtual Model WorldModel => null;
     public virtual float DeployingTime => 0.25f;
     public virtual float PrimaryFireRate => 0.1f;
@@ -14,9 +14,6 @@ public partial class WeaponBase : Carriable
     public virtual float ReloadingTime => 0.5f;
     public virtual bool AutoPrimary => false;
     public virtual bool AutoSecondary => false;
-
-    //Buying price if it can be bought, if set to -1 means it can't be bought
-    public virtual int BuyingPrice => -1;
     public Player WeaponHolder => Owner as Player;
     [Net] public bool IsReloading { get; set; } = false;
     [Net, Predicted] public TimeUntil DeployTime { get; set; }

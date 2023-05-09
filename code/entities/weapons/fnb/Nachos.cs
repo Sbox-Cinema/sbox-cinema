@@ -4,14 +4,13 @@ namespace Cinema;
 
 public partial class Nachos : WeaponBase
 {
-    public override string WeaponName => "Box of Nachos";
-    public override string WeaponDesc => "Its nacho business";
-    public override string WeaponIcon => "ui/icons/nachos.png";
+    public override string Name => "Box of Nachos";
+    public override string Description => "Its nacho business";
+    public override string Icon => "ui/icons/nachos.png";
     public override Model WorldModel => Model.Load("models/nachos_tray/nachos_tray.vmdl");
     public override string ViewModelPath => "models/nachos_tray/v_nachos_tray.vmdl";
     public override float PrimaryFireRate => 0.65f;
     public override int BaseUses => 26;
-    public override int BuyingPrice => 1;
 
     public override void Spawn()
     {

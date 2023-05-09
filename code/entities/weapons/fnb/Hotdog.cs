@@ -4,14 +4,13 @@ namespace Cinema;
 
 public partial class Hotdog : WeaponBase
 {
-    public override string WeaponName => "Hotdog";
-    public override string WeaponDesc => "As the Germans say: 'Heißer Hund'";
-    public override string WeaponIcon => "ui/icons/hotdog.png";
+    public override string Name => "Hotdog";
+    public override string Description => "As the Germans say: 'Heißer Hund'";
+    public override string Icon => "ui/icons/hotdog.png";
     public override Model WorldModel => Model.Load("models/hotdog/w_hotdog_boxed.vmdl");
     public override string ViewModelPath => "models/hotdog/v_hotdog_boxed.vmdl";
     public override float PrimaryFireRate => 1.35f;
     public override int BaseUses => 4;
-    public override int BuyingPrice => 1;
 
     public override void Spawn()
     {
