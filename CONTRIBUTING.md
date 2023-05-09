@@ -17,7 +17,7 @@ Instead of merging a bunch of your branches together, submit PR's for each one.
 
 ## Keep code consistent
 
-General code formatting should follow the `.editorconfig` in the repo.
+General code formatting should follow the `.editorconfig` in the repo and the `STYLE.md` file.
 
 Try to keep code files consistent in style and convention, if you're working in an existing file, follow how that file does things.
 
