@@ -1,0 +1,31 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+<style>
+    CitizenPanel 
+    {
+        .avatar
+        {
+            width: 100%;
+            height: 100%;
+
+            border-radius: 50%;
+            
+            z-index: 100;
+        }   
+    }
+</style>
+
+@code 
+{
+    public CitizenPanelScene Scene { get; set; }
+
+    public CitizenPanel()
+    {
+        SetClass("avatar", true);
+       
+        Scene = AddChild<CitizenPanelScene>();
+    }
+}
