@@ -1,0 +1,112 @@
+﻿@using System.Collections.Generic;
+
+@namespace Cinema.UI
+
+<style>
+	StoreInterface {
+		width:  100%;
+		height: 100%;
+		
+		background-color: rgba(0,0,0,0);
+
+		z-index: 1000;
+		
+		opacity: 0.0;
+
+		pointer-events: none;
+		
+		.container {
+			flex-direction: column;
+		}
+		
+		.header {
+			width: 100%;
+			height: 10%;
+			
+			background-color: rgba(0,0,0,0.8);
+		}
+
+		.header .title {
+			color: white;
+
+			padding: 8px;
+
+			font-size: 40px;
+		}
+
+		.section {
+			width:100%;
+			height: 80%;
+		}
+
+		.footer {
+			width: 100%;
+			height: 10%;
+
+			background-color: rgba(0,0,0,0.8);
+		}
+
+		.items {
+			width:100%;
+			height:100%;
+
+			background-color: rgba(0,0,0,0.6);
+
+			padding: 128px;
+
+			align-content: center;
+		
+			flex-wrap: wrap;
+			
+			gap: 16px;		
+		}
+
+		.iteminfo {
+			width: 100%;
+			height: 100%;
+
+			background-color: rgba(0,0,0,0.6);
+		}
+
+		&.visible
+		{
+			opacity: 1.0;
+			pointer-events: all;
+		}
+	}
+</style>
+
+<root class="@(Open ? "visible" : "")">
+	<div class="container">
+
+		<div class="header">
+			<label class="title">Store</label>
+		</div>
+		
+		<div class="section">
+			
+			<div class="items">
+				@foreach (var item in Items)
+				{
+					<StoreInterfaceItem Item=@item 
+									onmouseover=@(() => OnItemHovered(item))
+									onclick=@(() => OnItemClicked(item))
+									>
+					</StoreInterfaceItem>
+				}	
+			</div>
+
+			<div class="iteminfo">
+				@if(HoveredItem != null) {
+					<StoreItemInfo Item=@HoveredItem />
+				}
+			</div>
+
+		</div>
+
+		<div class="footer">
+
+		</div>
+
+	</div>
+</root>

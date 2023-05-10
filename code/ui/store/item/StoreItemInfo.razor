@@ -1,0 +1,73 @@
+﻿@namespace Cinema.UI
+
+<style>
+	StoreItemInfo {
+		width: 100%;
+		height: 100%;
+
+		justify-content: left;
+
+		.icon {
+			position: absolute;
+
+			width: 100%;
+			height: 100%;
+
+			max-width: 512px;
+			max-height: 512px;
+
+			align-self: center;
+
+			z-index: 50;
+		}
+
+		.info {
+			width: 100%;
+			height: 25%;
+
+			background-color: rgba(0,0,0,0.6);
+
+			border-top-left-radius: 8px;
+			border-bottom-left-radius: 8px;
+
+			align-self: flex-end;
+
+			flex-direction: column;
+
+			margin-bottom: 32px;
+
+			z-index: 100;
+		}
+
+		.info .title {
+			color: white;
+
+			padding: 8px;
+
+			font-size: 32px;
+		}
+
+		.info .description {
+			color: lightgray;
+
+			padding: 8px;
+
+			font-size: 20px;
+		}
+	}
+</style>
+
+<root>
+	<img class="icon" src=@Item.Icon />
+
+	<div class="info">
+		<label class="title">@Item.Name</label>
+		<label class="description">@Item.Description</label>
+	</div>
+</root>
+
+@code {
+	public StoreItem Item { get; set; }
+}
+
+

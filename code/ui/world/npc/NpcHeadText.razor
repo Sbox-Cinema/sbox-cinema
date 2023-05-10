@@ -1,0 +1,30 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.UI.Construct;
+
+@namespace Cinema.UI
+
+@inherits WorldPanel
+
+<style>
+    NpcHeadText {
+        display: flex;
+        flex-direction:column;
+        
+        align-items:center;
+        
+        .header{
+            font-size: 32px;
+            color: white;
+        }
+        .sub {
+            font-size: 30px;
+            color: rgba(180,180,180,1);
+        }
+    }
+</style>
+
+<root>
+    <div class="header">@Header</div>
+    <div class="sub">@Description</div>
+</root>

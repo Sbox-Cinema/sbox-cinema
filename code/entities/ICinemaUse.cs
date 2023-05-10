@@ -38,4 +38,8 @@ public interface ICinemaUse : IUse
     /// </summary>
     public float TimedUsePercentage => 0;
 
+    /// <summary>
+    /// Is the use of this entity toggled on/off instead of held
+    /// </summary>
+    public bool ToggleUse => false;
 }
