@@ -26,6 +26,9 @@ public partial class ChairController : PlayerController
         base.Simulate(cl);
         Entity.Rotation = Chair.Rotation;
 
+        Entity.EyeRotation = Entity.LookInput.ToRotation();
+        Entity.EyeLocalPosition = Entity.Transform.PointToLocal(LookPosition);
+
         if (Game.IsClient)
         {
             return;
@@ -51,16 +54,19 @@ public partial class ChairController : PlayerController
     [ClientInput]
     public Angles LookInput { get; set; }
 
+    [ClientInput]
+    public Vector3 LookPosition { get; set; }
+
     public override void FrameSimulate(IClient cl)
     {
         base.FrameSimulate(cl);
 
+        Entity.SimulateCamera(cl);
+
         LookInput = (LookInput + Input.AnalogLook).Normal;
         LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
 
-        Entity.EyeRotation = Entity.LookInput.ToRotation();
         var eyeAttachment = Entity.GetAttachment("eyes");
-        Entity.EyeLocalPosition = Entity.Transform.PointToLocal(eyeAttachment.Value.Position);
-        Entity.SimulateCamera(cl);
+        LookPosition = eyeAttachment.Value.Position;
     }
 }
