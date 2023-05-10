@@ -18,17 +18,29 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
     /// An offset from the origin of this chair that shall be used to determine the position 
     /// of an entity sitting in this chair.
     /// </summary>
-    [Property]
+    [Net, Property]
     public Vector3 SeatOffset { get; set; } = new Vector3(0, 0, 0);
 
     /// <summary>
     /// An offset from the origin of this chair that shall be used to determine the position
     /// at which an entity will be placed after it has stopped sitting in this chair.
     /// </summary>
-    [Property]
+    [Net, Property]
     public Vector3 EjectOffset { get; set; }
 
-    [Property]
+    /// <summary>
+    /// Specifies the angles from which this chair is usable. Based on
+    /// the dot product of the chair's forward direction and the direction 
+    /// vector between the player and the chair. For example,
+    /// 
+    ///     -1:     Usable from any direction
+    ///     0:      Usable from the size or front
+    ///     0.5:    Usable from the front
+    /// </summary>
+    [Net, Property]
+    public float UseAngle { get; set; } = 0.7f;
+
+    [Net, Property]
     public Vector3 EyeOffset { get; set; } = new Vector3(0, 0, 64);
 
     public string UseText => "Sit Down";
@@ -68,7 +80,14 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         {
             return false;
         }
-        // TODO: Check whether player is in front of seat.
+        var direction = (user.Position - Position).Normal;
+        var angle = direction.Dot(Rotation.Forward);
+        Log.Trace($"Chair use angle: {angle}, Min valid angle: {UseAngle}");
+        // Check whether the player is in front of the seat.
+        if (angle < UseAngle)
+        {
+            return false;
+        }
         return !IsOccupied;
     }
 
