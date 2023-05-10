@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class Player
 {
     [Net, Predicted]
-    public Carriable ActiveChild { get; set; }
+    public Carriable ActiveChild { get; protected set; }
 
     /// <summary>
     /// This isn't networked, but it's predicted. If it wasn't then when the prediction system
@@ -39,13 +39,35 @@ public partial class Player
     {
         if (previous is Carriable previousBc)
         {
+            Log.Info($"ActiveEnd {previous}");
             previousBc?.ActiveEnd(this, previousBc.Owner != this);
         }
 
         if (next is Carriable nextBc)
         {
+            Log.Info($"ActiveStart {nextBc}");
             nextBc?.ActiveStart(this);
         }
+    }
+
+    /// <summary>
+    /// Sets the active child (carriable)
+    /// If this is called on the client it tells the server.
+    /// </summary>
+    /// <param name="nextChild">The carriable to make active</param>
+    public void ChangeActiveChild(Carriable nextChild)
+    {
+        // Note: I kinda hate this, maybe we use ClientInput to send active child
+        ActiveChild = nextChild;
+        if (Game.IsClient) ClientSetActiveChild(nextChild.NetworkIdent);
+    }
+
+    [ConCmd.Server]
+    private static void ClientSetActiveChild(int nextChildIdent)
+    {
+        var nextChild = Entity.FindByIndex(nextChildIdent) as Carriable;
+        if (!nextChild.IsValid()) return;
+        (ConsoleSystem.Caller.Pawn as Player).ActiveChild = nextChild;
     }
 
 }

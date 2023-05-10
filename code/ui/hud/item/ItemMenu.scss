@@ -1,0 +1,28 @@
+﻿@import "BaseRadialMenu.scss";
+
+.radial-menu {
+    border-color: rgba(black 0.6);
+}
+
+.items {
+    RadialMenuItem {
+        background-color: rgba(black 0.6);
+    }
+}
+
+.center {
+    .info {
+        .name {
+            font-family: Lexend;
+            font-size: 32px;
+            text-shadow: 0px 0px 4px rgba(black, 0.2);
+            color: lighten(black, 0.4);
+        }
+
+        .description {
+            font-family: Lexend;
+            font-size: 20px;
+            color: white;
+        }
+    }
+}

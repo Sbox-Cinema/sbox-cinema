@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class WeaponBase : Carriable
 {
-    public virtual string Name => "Generic Weapon";
+    new public virtual string Name => "Generic Weapon";
     public virtual string Description => "A generic weapon's description";
     public virtual string Icon => "";
     public virtual Model WorldModel => null;
