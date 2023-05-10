@@ -42,14 +42,15 @@ public partial class ChairController : PlayerController
         {
             Log.Trace($"{Entity.Client} - Stopped sitting in chair: {Chair.Name}");
             Chair.EjectUser();
+            return;
         }
         if (Input.Pressed("slot1"))
         {
-            Chair.SetAnimParameter("toggle_left_armrest", !Chair.GetAnimParameterBool("toggle_left_armrest"));
+            Chair.ToggleArmrest(CinemaChair.ArmrestSide.Left);
         }
         if (Input.Pressed("slot3"))
         {
-            Chair.SetAnimParameter("toggle_right_armrest", !Chair.GetAnimParameterBool("toggle_right_armrest"));
+            Chair.ToggleArmrest(CinemaChair.ArmrestSide.Right);
         }
     }
 
