@@ -28,7 +28,6 @@ public partial class ChairController : PlayerController
 
         if (Game.IsClient)
         {
-            SimulateCamera(cl);
             return;
         }
 
@@ -39,13 +38,14 @@ public partial class ChairController : PlayerController
             Log.Trace($"{Entity.Client} - Stopped sitting in chair: {Chair.Name}");
             Chair.EjectUser();
         }
-    }
-
-    public void SimulateCamera(IClient cl)
-    {
-        var eyeAttachment = Entity.GetAttachment("eyes");
-        Camera.Position = eyeAttachment?.Position ?? Chair.Transform.PointToWorld(Chair.EyeOffset);
-        Camera.Rotation = Entity.LookInput.ToRotation();
+        if (Input.Pressed("slot1"))
+        {
+            Chair.SetAnimParameter("toggle_left_armrest", !Chair.GetAnimParameterBool("toggle_left_armrest"));
+        }
+        if (Input.Pressed("slot3"))
+        {
+            Chair.SetAnimParameter("toggle_right_armrest", !Chair.GetAnimParameterBool("toggle_right_armrest"));
+        }
     }
 
     [ClientInput]
@@ -57,5 +57,10 @@ public partial class ChairController : PlayerController
 
         LookInput = (LookInput + Input.AnalogLook).Normal;
         LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
+
+        Entity.EyeRotation = Entity.LookInput.ToRotation();
+        var eyeAttachment = Entity.GetAttachment("eyes");
+        Entity.EyeLocalPosition = Entity.Transform.PointToLocal(eyeAttachment.Value.Position);
+        Entity.SimulateCamera(cl);
     }
 }
