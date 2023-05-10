@@ -1,0 +1,42 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@inherits Panel
+
+<style>
+    PlayerCard 
+    {
+        position: absolute;
+        
+        right:  16px;
+        bottom: 64px;
+        
+        flex-direction: column-reverse;
+
+        justify-content: center;
+        align-items: center;
+
+        AvatarPanel 
+        {
+            position: absolute;
+            
+            right: 0;
+   
+            width: 128px;
+            height: 128px;
+
+            z-index: 100;
+        }
+
+        Status {
+            right:  64px;
+        }
+    }
+</style>
+
+<root>
+    <AvatarPanel />
+    <Status />
+</root>

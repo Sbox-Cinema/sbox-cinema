@@ -7,7 +7,6 @@ namespace Cinema;
 
 partial class Player : AnimatedEntity, IEyes
 {
-    public ClothingContainer Clothing { get; protected set; }
 
     [BindComponent]
     public PlayerBodyController BodyController { get; }
@@ -44,12 +43,6 @@ partial class Player : AnimatedEntity, IEyes
         Tags.Add("player");
     }
 
-    public void LoadClientClothingSettings(IClient cl)
-    {
-        Clothing ??= new();
-        Clothing.LoadFromClient(cl);
-    }
-
     public override void ClientSpawn() { }
 
     public void Respawn()
@@ -79,12 +72,9 @@ partial class Player : AnimatedEntity, IEyes
         SetupBodyController();
         BodyController.Active = true;
 
+        LoadClothing();
+
         ClientRespawn(To.Single(Client));
-        if (Clothing == null)
-        {
-            LoadClientClothingSettings(Client);
-        }
-        Clothing.DressEntity(this);
     }
 
     private void SetupBodyController()
