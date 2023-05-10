@@ -20,6 +20,13 @@ partial class Player : AnimatedEntity, IEyes
     [Net, Predicted]
     public bool ThirdPersonCamera { get; set; }
 
+    [Net]
+    public bool ShouldUpdateUse { get; set; } = true;
+    [Net]
+    public bool ShouldUpdateAnimation { get; set; } = true;
+    [Net]
+    public bool ShouldUpdateCamera { get; set; } = true;
+
 
     // How long this player has been on the server
     [Net]
@@ -112,16 +119,20 @@ partial class Player : AnimatedEntity, IEyes
     /// </summary>
     public override void Simulate(IClient cl)
     {
-        Rotation = LookInput.WithPitch(0f).ToRotation();
+        if (ShouldUpdateCamera)
+        {
+            Rotation = LookInput.WithPitch(0f).ToRotation();
+        }
 
-        if (Input.Pressed(InputButton.View))
+        if (Input.Pressed("view"))
         {
             ThirdPersonCamera = !ThirdPersonCamera;
         }
 
-        TickPlayerUse();
-
-        TickAnimation();
+        if (ShouldUpdateUse)
+            TickPlayerUse();
+        if (ShouldUpdateAnimation)
+            TickAnimation();
 
         ActiveController?.Simulate(cl);
 
@@ -145,7 +156,11 @@ partial class Player : AnimatedEntity, IEyes
     /// </summary>
     public override void FrameSimulate(IClient cl)
     {
-        Rotation = LookInput.WithPitch(0f).ToRotation();
+        if (ShouldUpdateCamera)
+        {
+            Rotation = LookInput.WithPitch(0f).ToRotation();
+        }
+
         ActiveController?.FrameSimulate(cl);
 
         if (Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f)
@@ -169,6 +184,9 @@ partial class Player : AnimatedEntity, IEyes
             }
         }
 
-        SimulateCamera(cl);
+        if (ShouldUpdateCamera)
+        {
+            SimulateCamera(cl);
+        }
     }
 }

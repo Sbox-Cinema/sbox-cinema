@@ -9,7 +9,7 @@ namespace Cinema;
 [Title("Cinema Chair"), Category("Gameplay"), Icon("event_seat")]
 public partial class CinemaChair : AnimatedEntity, ICinemaUse
 {
-    public bool IsOccupied => Occupant != null && Occupant.IsValid();
+    public bool IsOccupied => Occupant.IsValid();
 
     [Net]
     public Player Occupant { get; protected set; }
@@ -64,84 +64,62 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
     public bool IsUsable(Entity user)
     {
-        if (user == null || !user.IsValid)
+        if (!user.IsValid)
         {
             return false;
         }
-        // Add another check for whether this is an assigned/VIP seat?
+        // TODO: Check whether player is in front of seat.
         return !IsOccupied;
-    }
-
-    public void OnStopUse(Entity user)
-    {
-        Log.Info($"{user.Client} - Stopped using chair: {Name}");
     }
 
     public bool OnUse(Entity user)
     {
-        Log.Info($"{user.Client} - Began using chair: {Name}");
+        Log.Trace($"{user.Client} - Began sitting in chair: {Name}");
 
         Occupant = user as Player;
 
         Assert.NotNull(Occupant);
 
-        user.Client.Pawn = this;
-
         Occupant.SetParent(this);
         Occupant.LocalPosition = SeatOffset;
         Occupant.SetAnimParameter("sit", 1);
+        Occupant.ShouldUpdateAnimation = false;
+        Occupant.ShouldUpdateUse = false;
+        Occupant.ShouldUpdateCamera = false;
+
+        var chairComponent = Occupant.Components.GetOrCreate<ChairController>();
+        chairComponent.Chair = this;
+        chairComponent.Active = true;
+        chairComponent.Enabled = true;
 
         SetAnimParameter("toggle_seat", true);
 
         return false;
     }
 
-    public override void Simulate(IClient cl)
+    public void OnStopUse(Entity user)
     {
-        base.Simulate(cl);
-        Occupant.Rotation = Rotation;
 
-        if (Game.IsClient)
-        {
-            SimulateCamera(cl);
-            return;
-        }
-
-        if (Input.Pressed("use"))
-        {
-            EjectUser();
-        }
-    }
-
-    public void SimulateCamera(IClient cl)
-    {
-        var eyeAttachment = Occupant?.GetAttachment("eyes");
-        Camera.Position = eyeAttachment?.Position ?? Transform.PointToWorld(EyeOffset);
-        Camera.Rotation = LookInput.ToRotation();
-    }
-
-    [ClientInput]
-    public Angles LookInput { get; set; }
-
-    public override void BuildInput()
-    {
-        base.BuildInput();
-
-        LookInput = (LookInput + Input.AnalogLook).Normal;
-        LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
     }
 
     public void EjectUser()
     {
         if (Occupant == null)
         {
-            Log.Info($"{Name} Cannot eject occupant from unoccupied chair.");
+            Log.Error($"{Name} Cannot eject occupant from unoccupied chair.");
             return;
         }
 
         Occupant.SetParent(null);
         Occupant.Position = Transform.PointToWorld(EjectOffset);
-        Occupant.Client.Pawn = Occupant;
+        Occupant.BodyController.Active = true;
+        var chairComponent = Occupant.Components.Get<ChairController>();
+        chairComponent.Chair = null;
+        chairComponent.Enabled = false;
+        Occupant.SetAnimParameter("sit", 0);
+        Occupant.ShouldUpdateAnimation = true;
+        Occupant.ShouldUpdateCamera = true;
+        Occupant.ShouldUpdateUse = true;
         Occupant = null;
 
         SetAnimParameter("toggle_seat", false);
