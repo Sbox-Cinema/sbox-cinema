@@ -29,6 +29,8 @@ public partial class ChairController : PlayerController
         Entity.EyeRotation = Entity.LookInput.ToRotation();
         Entity.EyeLocalPosition = Entity.Transform.PointToLocal(LookPosition);
 
+        SimulateAnimation();
+
         if (Game.IsClient)
         {
             return;
@@ -49,6 +51,17 @@ public partial class ChairController : PlayerController
         {
             Chair.SetAnimParameter("toggle_right_armrest", !Chair.GetAnimParameterBool("toggle_right_armrest"));
         }
+    }
+
+    public void SimulateAnimation()
+    {
+        var aimPos = Entity.AimRay.Position + Entity.EyeRotation.Forward * 128.0f;
+
+        var localPos = new Transform(Entity.AimRay.Position, Entity.Rotation).PointToLocal(aimPos);
+
+        Entity.SetAnimParameter("aim_eyes", localPos);
+        Entity.SetAnimParameter("aim_head", localPos);
+        Entity.SetAnimParameter("aim_body", localPos);
     }
 
     [ClientInput]
