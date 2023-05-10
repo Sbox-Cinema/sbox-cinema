@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AssemblyName>Cinema</AssemblyName>
-		<PackageId>Cinema</PackageId>
+		<AssemblyName>cinema</AssemblyName>
+		<PackageId>cinema</PackageId>
 		<LangVersion>11</LangVersion>
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -24,13 +24,14 @@
 	  <AdditionalFiles Include="**/*.razor" />
 	</ItemGroup>
 
+
 	<ItemGroup>
 		<Using Include="Sandbox.Internal.GlobalGameNamespace" Static="true" />
 	</ItemGroup>
 
   <PropertyGroup>
 	<OutputPath>D:\SteamLibrary\steamapps\common\sbox/.vs/output/</OutputPath>
-	<DocumentationFile>D:\SteamLibrary\steamapps\common\sbox/.vs/output/Cinema.xml</DocumentationFile>
+	<DocumentationFile>D:\SteamLibrary\steamapps\common\sbox/.vs/output/cinema.xml</DocumentationFile>
 	<RootNamespace>Sandbox</RootNamespace>
 	<Nullable>disable</Nullable>
   </PropertyGroup>
@@ -46,6 +47,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+		<Reference Include="D:\SteamLibrary\steamapps\common\sbox\.source2\references\conna.radial_menu.17000.2c8b0db8e7092688.dll" />
 		<ProjectReference Include="D:\SteamLibrary\steamapps\common\sbox\addons\base\code\Base Library.csproj" />
 
   </ItemGroup>
