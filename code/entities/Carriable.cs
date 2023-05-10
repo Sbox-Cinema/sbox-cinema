@@ -18,14 +18,9 @@ public partial class Carriable : AnimatedEntity, IUse
         EnableShadowInFirstPerson = true;
     }
 
-    public virtual bool CanCarry(Entity carrier)
-    {
-        return true;
-    }
-
     public virtual void OnCarryStart(Entity carrier)
     {
-        if ( Game.IsClient )
+        if (Game.IsClient)
             return;
 
         SetParent(carrier, true);
@@ -45,7 +40,7 @@ public partial class Carriable : AnimatedEntity, IUse
 
     public virtual void OnCarryDrop(Entity dropper)
     {
-        if ( Game.IsClient )
+        if (Game.IsClient)
             return;
 
         SetParent(null);
@@ -69,7 +64,7 @@ public partial class Carriable : AnimatedEntity, IUse
         // If we're the local player (clientside) create viewmodel
         // and any HUD elements that this weapon wants
         //
-        if ( IsLocalPawn )
+        if (IsLocalPawn)
         {
             DestroyViewModel();
 
@@ -88,12 +83,12 @@ public partial class Carriable : AnimatedEntity, IUse
         //
         // If we're just holstering, then hide us
         //
-        if ( !dropped )
+        if (!dropped)
         {
             EnableDrawing = false;
         }
 
-        if ( Game.IsClient )
+        if (Game.IsClient)
         {
             DestroyViewModel();
             DestroyHudElements();
@@ -104,7 +99,7 @@ public partial class Carriable : AnimatedEntity, IUse
     {
         base.OnDestroy();
 
-        if ( Game.IsClient && ViewModelEntity.IsValid() )
+        if (Game.IsClient && ViewModelEntity.IsValid())
         {
             DestroyViewModel();
             DestroyHudElements();
@@ -119,7 +114,7 @@ public partial class Carriable : AnimatedEntity, IUse
     {
         Game.AssertClient();
 
-        if ( string.IsNullOrEmpty(ViewModelPath) )
+        if (string.IsNullOrEmpty(ViewModelPath))
             return;
 
         ViewModelEntity = new BaseViewModel();
@@ -156,6 +151,13 @@ public partial class Carriable : AnimatedEntity, IUse
 
     public bool OnUse(Entity user)
     {
+        if (!IsUsable(user)) return false;
+
+        if (user is Player player)
+        {
+            player.Inventory.AddWeapon(this, true);
+        }
+
         return false;
     }
 

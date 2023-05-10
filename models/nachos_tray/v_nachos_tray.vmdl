@@ -1,0 +1,4862 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "JiggleBoneList"
+				children = 
+				[
+					{
+						_class = "JiggleBone"
+						name = "nacho1"
+						jiggle_root_bone = "nacho_joint1"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho2"
+						jiggle_root_bone = "nacho_joint2"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho3"
+						jiggle_root_bone = "nacho_joint3"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho4"
+						jiggle_root_bone = "nacho_joint4"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho5"
+						jiggle_root_bone = "nacho_joint5"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho6"
+						jiggle_root_bone = "nacho_joint6"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho7"
+						jiggle_root_bone = "nacho_joint7"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho8"
+						jiggle_root_bone = "nacho_joint8"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho9"
+						jiggle_root_bone = "nacho_joint9"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho10"
+						jiggle_root_bone = "nacho_joint10"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho11"
+						jiggle_root_bone = "nacho_joint11"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho12"
+						jiggle_root_bone = "nacho_joint12"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho13"
+						jiggle_root_bone = "nacho_joint13"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho14"
+						jiggle_root_bone = "nacho_joint14"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho15"
+						jiggle_root_bone = "nacho_joint15"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho16"
+						jiggle_root_bone = "nacho_joint16"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho17"
+						jiggle_root_bone = "nacho_joint17"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho18"
+						jiggle_root_bone = "nacho_joint18"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho19"
+						jiggle_root_bone = "nacho_joint19"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho20"
+						jiggle_root_bone = "nacho_joint20"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho21"
+						jiggle_root_bone = "nacho_joint21"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho22"
+						jiggle_root_bone = "nacho_joint22"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho23"
+						jiggle_root_bone = "nacho_joint23"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho24"
+						jiggle_root_bone = "nacho_joint24"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho25"
+						jiggle_root_bone = "nacho_joint25"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 20.0
+						pitch_stiffness = 150.0
+						pitch_damping = 20.0
+						along_stiffness = 150.0
+						along_damping = 20.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "nacho26"
+						jiggle_root_bone = "cheese_joint2"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 32.0
+						tip_mass = 1000.0
+						angle_limit = 60.0
+						min_yaw = -25.0
+						max_yaw = 100.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 50.0
+						pitch_friction = 25.0
+						pitch_bounce = 0.0
+						base_mass = 2500.0
+						base_stiffness = 0.0
+						base_damping = 0.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 0.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 0.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 0.0
+						yaw_stiffness = 150.0
+						yaw_damping = 2.0
+						pitch_stiffness = 150.0
+						pitch_damping = 2.0
+						along_stiffness = 150.0
+						along_damping = 2.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "napkin_jiggle"
+						jiggle_root_bone = "napkin_joint"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = false
+						has_angle_constraint = false
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 8.0
+						tip_mass = 5.0
+						angle_limit = 15.0
+						min_yaw = 4.0
+						max_yaw = 50.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 25.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 500.0
+						base_damping = 0.0
+						base_left_min = -25.0
+						base_left_max = 25.0
+						base_left_friction = 50.0
+						base_up_min = -50.0
+						base_up_max = 10.0
+						base_up_friction = 50.0
+						base_forward_min = -50.0
+						base_forward_max = 10.0
+						base_forward_friction = 50.0
+						yaw_stiffness = 100.0
+						yaw_damping = 25.0
+						pitch_stiffness = 100.0
+						pitch_damping = 25.0
+						along_stiffness = 100.0
+						along_damping = 25.0
+						radius0 = 0.221047
+						radius1 = 0.418235
+						point0 = [ -0.516539, -0.033332, 0.083718 ]
+						point1 = [ 3.123023, -0.12742, 0.063894 ]
+					},
+				]
+				disabled = true
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "nacho_tray.vmat"
+								to = "materials/nacho_tray/nacho_tray_hotdip.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+					{
+						_class = "MaterialGroup"
+						name = "hotdip"
+						remaps = 
+						[
+							{
+								from = "nacho_tray.vmat"
+								to = "materials/nacho_tray/nacho_tray_hotdip.vmat"
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFile"
+						name = "nachos_phys"
+						parent_bone = ""
+						surface_prop = "plastic"
+						collision_tags = "solid"
+						recenter_on_parent_bone = false
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						filename = "models/nachos_tray/nachos_phys.fbx"
+						import_scale = 1.0
+						faceMergeAngle = 5.0
+						maxHullVertices = 0
+						import_mode = "HullPerMesh"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+				disabled = true
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "Folder"
+						name = "Dip"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								name = "dip_full_lod_0"
+								filename = "models/nachos_tray/nachos_tray.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"dip",
+									]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "dip_full_lod_1"
+								filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"dip_003",
+									]
+								}
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Tray"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								name = "tray_lod_0"
+								filename = "models/nachos_tray/nachos_tray.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"tray_004",
+										"napkin_002",
+									]
+								}
+							},
+							{
+								_class = "RenderMeshFile"
+								name = "tray_lod_1"
+								filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"tray_002",
+										"napkin_010",
+									]
+								}
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Nacho"
+						children = 
+						[
+							{
+								_class = "Folder"
+								name = "nacho_25"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_25_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_25_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_24"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_24_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_25",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_24_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_25_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_23"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_23_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_24",
+												"nacho_25",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_23_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_24_002",
+												"nacho_25_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_22"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_22_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_22_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_21"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_21_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_21_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_20"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_20_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_21",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_20_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_21_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_19"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_19_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_19_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_18"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_18_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_18_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_17"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_17_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_17_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_16"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_16_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_16_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_15"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_15_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_15_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_14"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_14_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_14_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_13"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_13_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_13_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_12"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_12_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_12_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_11"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_11_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_11_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_10"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_10_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_10_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_9"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_9_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_9_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_8"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_8_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_8_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_7"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_7_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_7_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_6"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_6_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+												"nacho_7",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_6_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+												"nacho_7_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_5"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_5_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+												"nacho_7",
+												"nacho_6",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_5_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+												"nacho_7_002",
+												"nacho_6_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_4"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_4_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+												"nacho_7",
+												"nacho_6",
+												"nacho_5",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_4_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+												"nacho_7_002",
+												"nacho_6_002",
+												"nacho_5_001",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_3"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_3_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+												"nacho_7",
+												"nacho_6",
+												"nacho_5",
+												"nacho_4",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_3_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+												"nacho_7_002",
+												"nacho_6_002",
+												"nacho_5_001",
+												"nacho_4_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_2"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_2_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"tray_004",
+												"dip",
+												"napkin_002",
+												"nacho_23",
+												"nacho_24",
+												"nacho_25",
+												"nacho_22",
+												"nacho_20",
+												"nacho_21",
+												"nacho_19",
+												"nacho_18",
+												"nacho_17",
+												"nacho_16",
+												"nacho_15",
+												"nacho_14",
+												"nacho_13",
+												"nacho_12",
+												"nacho_11",
+												"nacho_10",
+												"nacho_9",
+												"nacho_8",
+												"nacho_7",
+												"nacho_6",
+												"nacho_5",
+												"nacho_4",
+												"nacho_3",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_2_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = false
+											exception_list = 
+											[
+												"dip_003",
+												"tray_002",
+												"napkin_010",
+												"nacho_23_004",
+												"nacho_24_002",
+												"nacho_25_002",
+												"nacho_22_002",
+												"nacho_20_002",
+												"nacho_21_002",
+												"nacho_19_002",
+												"nacho_18_002",
+												"nacho_17_002",
+												"nacho_16_002",
+												"nacho_15_002",
+												"nacho_14_002",
+												"nacho_13_002",
+												"nacho_12_002",
+												"nacho_11_002",
+												"nacho_10_002",
+												"nacho_9_002",
+												"nacho_8_002",
+												"nacho_7_002",
+												"nacho_6_002",
+												"nacho_5_001",
+												"nacho_4_002",
+												"nacho_3_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_1"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_1_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = true
+											exception_list = 
+											[
+												"nacho_1",
+											]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_1_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = true
+											exception_list = 
+											[
+												"nacho_1_002",
+											]
+										}
+									},
+								]
+							},
+							{
+								_class = "Folder"
+								name = "nacho_0"
+								children = 
+								[
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_0_lod_0"
+										filename = "models/nachos_tray/nachos_tray.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = true
+											exception_list = [  ]
+										}
+									},
+									{
+										_class = "RenderMeshFile"
+										name = "nacho_0_lod_1"
+										filename = "models/nachos_tray/nachos_tray_lod1.fbx"
+										import_translation = [ 0.0, 0.0, 0.0 ]
+										import_rotation = [ 0.0, 0.0, 0.0 ]
+										import_scale = 1.0
+										align_origin_x_type = "None"
+										align_origin_y_type = "None"
+										align_origin_z_type = "None"
+										parent_bone = ""
+										import_filter = 
+										{
+											exclude_by_default = true
+											exception_list = [  ]
+										}
+									},
+								]
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "LODGroupList"
+				children = 
+				[
+					{
+						_class = "LODGroup"
+						switch_threshold = 0.0
+						meshes = 
+						[
+							"dip_full_lod_0",
+							"dip_empty_lod_0",
+							"tray_lod_0",
+							"nacho_0_lod_0",
+							"nacho_1_lod_0",
+							"nacho_2_lod_0",
+							"nacho_3_lod_0",
+							"nacho_4_lod_0",
+							"nacho_5_lod_0",
+							"nacho_6_lod_0",
+							"nacho_7_lod_0",
+							"nacho_8_lod_0",
+							"nacho_9_lod_0",
+							"nacho_10_lod_0",
+							"nacho_11_lod_0",
+							"nacho_12_lod_0",
+							"nacho_13_lod_0",
+							"nacho_14_lod_0",
+							"nacho_15_lod_0",
+							"nacho_16_lod_0",
+							"nacho_17_lod_0",
+							"nacho_18_lod_0",
+							"nacho_19_lod_0",
+							"nacho_20_lod_0",
+							"nacho_21_lod_0",
+							"nacho_22_lod_0",
+							"nacho_23_lod_0",
+							"nacho_24_lod_0",
+							"nacho_25_lod_0",
+						]
+					},
+					{
+						_class = "LODGroup"
+						disabled = true
+						switch_threshold = 10.0
+						meshes = 
+						[
+							"dip_full_lod_1",
+							"dip_empty_lod_1",
+							"tray_lod_1",
+							"nacho_0_lod_1",
+							"nacho_1_lod_1",
+							"nacho_2_lod_1",
+							"nacho_3_lod_1",
+							"nacho_4_lod_1",
+							"nacho_5_lod_1",
+							"nacho_6_lod_1",
+							"nacho_7_lod_1",
+							"nacho_8_lod_1",
+							"nacho_9_lod_1",
+							"nacho_10_lod_1",
+							"nacho_11_lod_1",
+							"nacho_12_lod_1",
+							"nacho_13_lod_1",
+							"nacho_14_lod_1",
+							"nacho_15_lod_1",
+							"nacho_16_lod_1",
+							"nacho_17_lod_1",
+							"nacho_18_lod_1",
+							"nacho_19_lod_1",
+							"nacho_20_lod_1",
+							"nacho_21_lod_1",
+							"nacho_22_lod_1",
+							"nacho_23_lod_1",
+							"nacho_24_lod_1",
+							"nacho_25_lod_1",
+						]
+					},
+				]
+			},
+			{
+				_class = "BreakPieceList"
+				children = 
+				[
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_0"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_1_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_1"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_2_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_2"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_3_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_3"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_4_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_4"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_5_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_5"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_6_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_6"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_7_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_7"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_8_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_8"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_9_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_9"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_10_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_10"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_11_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_11"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_12_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_12"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_13_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_13"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_14_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_14"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_15_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_15"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_16_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_16"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_17_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_17"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_18_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_18"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_19_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_19"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_20_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_20"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_21_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_21"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_22_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_22"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_23_002",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_23"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_24_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_24"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"nacho_25_003",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceEmbedded"
+						name = "piece_25"
+						children = 
+						[
+							{
+								_class = "RenderMeshFile"
+								filename = "models/nachos_tray/nachos_tray_bp.fbx"
+								import_translation = [ 0.0, 0.0, 0.0 ]
+								import_rotation = [ 0.0, 0.0, 0.0 ]
+								import_scale = 1.0
+								align_origin_x_type = "None"
+								align_origin_y_type = "None"
+								align_origin_z_type = "None"
+								parent_bone = ""
+								import_filter = 
+								{
+									exclude_by_default = true
+									exception_list = 
+									[
+										"tray_002",
+									]
+								}
+							},
+						]
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						manual_mode = false
+						surface_prop_override = ""
+					},
+					{
+						_class = "BreakPieceExternal"
+						placement_mode = "default"
+						placement_bone = ""
+						placement_attach = ""
+						is_ragdoll = false
+						offset = [ 0.0, 0.0, 0.0 ]
+						fadetime = 20.0
+						fade_min_dist = 0.0
+						fade_max_dist = 0.0
+						name_mode = "none"
+						random_spawn_chance = 1.0
+						is_essential_piece = false
+						collision_tags = "debris"
+						model = "models/nachos_tray/napkin_bp/napkin_bp.vmdl"
+					},
+				]
+				disabled = true
+			},
+			{
+				_class = "GameDataList"
+				children = 
+				[
+					{
+						_class = "GenericGameData"
+						game_class = "prop_data"
+						game_keys = 
+						{
+							bakelighting = true
+							health = 1.0
+							min_impact_damage_speed = -1.0
+							impact_damage = -1.0
+							parent_bodygroup_name = ""
+							parent_bodygroup_value = 0
+						}
+					},
+				]
+			},
+			{
+				_class = "BodyGroupList"
+				children = 
+				[
+					{
+						_class = "BodyGroup"
+						name = "base"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								name = "tray"
+								meshes = 
+								[
+									"tray_lod_0",
+									"tray_lod_1",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "Dip"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								name = "full_dip"
+								meshes = 
+								[
+									"dip_full_lod_0",
+									"dip_full_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "empty_dip"
+								meshes = [  ]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "nacho"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_25"
+								meshes = 
+								[
+									"nacho_25_lod_0",
+									"nacho_25_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_24"
+								meshes = 
+								[
+									"nacho_24_lod_0",
+									"nacho_24_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_23"
+								meshes = 
+								[
+									"nacho_23_lod_0",
+									"nacho_23_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_22"
+								meshes = 
+								[
+									"nacho_22_lod_0",
+									"nacho_22_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_21"
+								meshes = 
+								[
+									"nacho_21_lod_0",
+									"nacho_21_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_20"
+								meshes = 
+								[
+									"nacho_20_lod_0",
+									"nacho_20_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_19"
+								meshes = 
+								[
+									"nacho_19_lod_0",
+									"nacho_19_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_18"
+								meshes = 
+								[
+									"nacho_18_lod_0",
+									"nacho_18_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_17"
+								meshes = 
+								[
+									"nacho_17_lod_0",
+									"nacho_17_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_16"
+								meshes = 
+								[
+									"nacho_16_lod_0",
+									"nacho_16_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_15"
+								meshes = 
+								[
+									"nacho_15_lod_0",
+									"nacho_15_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_14"
+								meshes = 
+								[
+									"nacho_14_lod_0",
+									"nacho_14_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_13"
+								meshes = 
+								[
+									"nacho_13_lod_0",
+									"nacho_13_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_12"
+								meshes = 
+								[
+									"nacho_12_lod_0",
+									"nacho_12_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_11"
+								meshes = 
+								[
+									"nacho_11_lod_0",
+									"nacho_11_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_10"
+								meshes = 
+								[
+									"nacho_10_lod_0",
+									"nacho_10_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_9"
+								meshes = 
+								[
+									"nacho_9_lod_0",
+									"nacho_9_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_8"
+								meshes = 
+								[
+									"nacho_8_lod_0",
+									"nacho_8_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_7"
+								meshes = 
+								[
+									"nacho_7_lod_0",
+									"nacho_7_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_6"
+								meshes = 
+								[
+									"nacho_6_lod_0",
+									"nacho_6_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_5"
+								meshes = 
+								[
+									"nacho_5_lod_0",
+									"nacho_5_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_4"
+								meshes = 
+								[
+									"nacho_4_lod_0",
+									"nacho_4_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_3"
+								meshes = 
+								[
+									"nacho_3_lod_0",
+									"nacho_3_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_2"
+								meshes = 
+								[
+									"nacho_2_lod_0",
+									"nacho_2_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_1"
+								meshes = 
+								[
+									"nacho_1_lod_0",
+									"nacho_1_lod_1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "nacho_0"
+								meshes = 
+								[
+									"nacho_0_lod_0",
+									"nacho_0_lod_1",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+				]
+			},
+			{
+				_class = "ModelModifierList"
+				children = 
+				[
+					{
+						_class = "ModelModifier_Translate"
+						translation = [ 12.5, -7.5, -7.5 ]
+					},
+				]
+			},
+		]
+		model_archetype = "physics_prop_model"
+		primary_associated_entity = "prop_physics"
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

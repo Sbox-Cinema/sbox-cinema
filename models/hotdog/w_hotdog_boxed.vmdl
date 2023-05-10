@@ -1,0 +1,458 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "JiggleBoneList"
+				children = 
+				[
+					{
+						_class = "JiggleBone"
+						name = "hotdog_bone1"
+						disabled = true
+						jiggle_root_bone = "dog_joint1"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = false
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 8.0
+						tip_mass = 1.0
+						angle_limit = 30.0
+						min_yaw = -25.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 25.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 1000.0
+						base_damping = 1000.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 15.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 15.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 15.0
+						yaw_stiffness = 600.0
+						yaw_damping = 30.0
+						pitch_stiffness = 600.0
+						pitch_damping = 30.0
+						along_stiffness = 600.0
+						along_damping = 30.0
+						radius0 = 0.5
+						radius1 = 0.5
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "hotdog_bone2"
+						disabled = true
+						jiggle_root_bone = "dog_joint2"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = false
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 8.0
+						tip_mass = 1.0
+						angle_limit = 30.0
+						min_yaw = -25.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 25.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 1000.0
+						base_damping = 1000.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 15.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 15.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 15.0
+						yaw_stiffness = 600.0
+						yaw_damping = 30.0
+						pitch_stiffness = 600.0
+						pitch_damping = 30.0
+						along_stiffness = 600.0
+						along_damping = 30.0
+						radius0 = 0.5
+						radius1 = 0.5
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "card_bone1"
+						disabled = true
+						jiggle_root_bone = "cardboard_joint1"
+						jiggle_type = 1
+						has_yaw_constraint = true
+						has_pitch_constraint = true
+						has_angle_constraint = true
+						has_base_spring = false
+						allow_flex_length = true
+						invert_axes = false
+						has_collision = false
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 8.0
+						tip_mass = 1.0
+						angle_limit = 30.0
+						min_yaw = -25.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -25.0
+						max_pitch = 25.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 1000.0
+						base_damping = 1000.0
+						base_left_min = 0.0
+						base_left_max = 0.0
+						base_left_friction = 15.0
+						base_up_min = 0.0
+						base_up_max = 0.0
+						base_up_friction = 15.0
+						base_forward_min = 0.0
+						base_forward_max = 0.0
+						base_forward_friction = 15.0
+						yaw_stiffness = 600.0
+						yaw_damping = 30.0
+						pitch_stiffness = 600.0
+						pitch_damping = 30.0
+						along_stiffness = 600.0
+						along_damping = 30.0
+						radius0 = 0.1
+						radius1 = 0.1
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "paper_bone_left"
+						disabled = true
+						jiggle_root_bone = "paper_left_joint1"
+						jiggle_type = 1
+						has_yaw_constraint = false
+						has_pitch_constraint = false
+						has_angle_constraint = false
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 1.0
+						tip_mass = 25.0
+						angle_limit = 30.0
+						min_yaw = 0.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -50.0
+						max_pitch = 50.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 500.0
+						base_damping = 0.0
+						base_left_min = -50.0
+						base_left_max = 50.0
+						base_left_friction = 50.0
+						base_up_min = -50.0
+						base_up_max = 10.0
+						base_up_friction = 50.0
+						base_forward_min = -50.0
+						base_forward_max = 10.0
+						base_forward_friction = 50.0
+						yaw_stiffness = 100.0
+						yaw_damping = 25.0
+						pitch_stiffness = 100.0
+						pitch_damping = 25.0
+						along_stiffness = 100.0
+						along_damping = 25.0
+						radius0 = 0.221047
+						radius1 = 0.418235
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "paper_bone_right"
+						disabled = true
+						jiggle_root_bone = "paper_left_joint2"
+						jiggle_type = 1
+						has_yaw_constraint = false
+						has_pitch_constraint = false
+						has_angle_constraint = false
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 1.0
+						tip_mass = 25.0
+						angle_limit = 30.0
+						min_yaw = 0.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -50.0
+						max_pitch = 50.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 500.0
+						base_damping = 0.0
+						base_left_min = -50.0
+						base_left_max = 50.0
+						base_left_friction = 50.0
+						base_up_min = -50.0
+						base_up_max = 10.0
+						base_up_friction = 50.0
+						base_forward_min = -50.0
+						base_forward_max = 10.0
+						base_forward_friction = 50.0
+						yaw_stiffness = 100.0
+						yaw_damping = 25.0
+						pitch_stiffness = 100.0
+						pitch_damping = 25.0
+						along_stiffness = 100.0
+						along_damping = 25.0
+						radius0 = 0.221047
+						radius1 = 0.418235
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+					{
+						_class = "JiggleBone"
+						name = "paper_bone_front"
+						disabled = true
+						jiggle_root_bone = "paper_left_joint3"
+						jiggle_type = 1
+						has_yaw_constraint = false
+						has_pitch_constraint = false
+						has_angle_constraint = false
+						has_base_spring = false
+						allow_flex_length = false
+						invert_axes = false
+						has_collision = true
+						cloth_collision_layer0 = true
+						cloth_collision_layer1 = true
+						cloth_collision_layer2 = true
+						cloth_collision_layer3 = true
+						length = 1.0
+						tip_mass = 25.0
+						angle_limit = 30.0
+						min_yaw = 0.0
+						max_yaw = 25.0
+						yaw_friction = 0.0
+						yaw_bounce = 0.0
+						min_pitch = -50.0
+						max_pitch = 50.0
+						pitch_friction = 0.0
+						pitch_bounce = 0.0
+						base_mass = 0.0
+						base_stiffness = 500.0
+						base_damping = 0.0
+						base_left_min = -50.0
+						base_left_max = 50.0
+						base_left_friction = 50.0
+						base_up_min = -50.0
+						base_up_max = 10.0
+						base_up_friction = 50.0
+						base_forward_min = -50.0
+						base_forward_max = 10.0
+						base_forward_friction = 50.0
+						yaw_stiffness = 100.0
+						yaw_damping = 25.0
+						pitch_stiffness = 100.0
+						pitch_damping = 25.0
+						along_stiffness = 100.0
+						along_damping = 25.0
+						radius0 = 0.221047
+						radius1 = 0.418235
+						point0 = [ 0.0, 0.0, 0.0 ]
+						point1 = [ 2.074594, 0.0, 0.0 ]
+					},
+				]
+				disabled = true
+			},
+			{
+				_class = "GameDataList"
+				children = 
+				[
+					{
+						_class = "GenericGameData"
+						game_class = "particle"
+						game_keys = 
+						{
+							name = resource:"particles/food_steam/hotdogsteam.vpcf"
+							attachment_point = ""
+							attachment_type = "5"
+							attachment_offset = [ 0.0, 0.0, 8.7 ]
+						}
+					},
+				]
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "hotdog_box.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+							{
+								from = "hotdog_sauce.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+							{
+								from = "hotdog_wiener.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+							{
+								from = "tissue.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+							{
+								from = "bun_l.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+							{
+								from = "bun_r.vmat"
+								to = "materials/hotdog_boxed/hotdog_boxed.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = "materials/hotdog_boxed/hotdog_boxed.vmat"
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFromRender"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						faceMergeAngle = 20.0
+						maxHullVertices = 32
+					},
+				]
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "steam"
+						parent_bone = "dog_middlejoint1"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "models/hotdog/hotdog_boxed.fbx"
+						import_translation = [ 0.0, 0.0, 1.5 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"dog",
+								"bun",
+								"sauce",
+								"box",
+								"tissue_high",
+								"tissue_paper",
+								"bun_left",
+								"bun_right",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "ModelModifierList"
+				children = 
+				[
+					{
+						_class = "ModelModifier_ScaleAndMirror"
+						scale = 1.15
+						mirror_x = false
+						mirror_y = false
+						mirror_z = false
+						flip_bone_forward = false
+						swap_left_and_right_bones = false
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}
