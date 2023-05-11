@@ -39,13 +39,11 @@ public partial class Player
     {
         if (previous is Carriable previousBc)
         {
-            Log.Info($"ActiveEnd {previous}");
             previousBc?.ActiveEnd(this, previousBc.Owner != this);
         }
 
         if (next is Carriable nextBc)
         {
-            Log.Info($"ActiveStart {nextBc}");
             nextBc?.ActiveStart(this);
         }
     }

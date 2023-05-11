@@ -147,4 +147,23 @@ public partial class CinemaGame
             given.TakeMoney(amt);
         }
     }
+
+    [ConCmd.Server("cinema.npc.create")]
+    public static void SpawnNpcCMD(string npcName)
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        var player = ConsoleSystem.Caller.Pawn as Player;
+        if (player == null) return;
+
+        var npc = CreateByName<NpcBase>(npcName);
+        if (npc == null) return;
+
+        var tr = Trace.Ray(player.EyePosition, player.EyePosition + player.EyeRotation.Forward * 999)
+            .Ignore(player)
+            .WorldOnly()
+            .Run();
+
+        npc.Position = tr.EndPosition;
+    }
 }
