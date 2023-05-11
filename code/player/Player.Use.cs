@@ -34,8 +34,14 @@ public partial class Player
         // Turn prediction off
         using (Prediction.Off())
         {
-            if (Input.Pressed(InputButton.Use))
+            if (Input.Pressed("use"))
             {
+                if (IsToggleUseEntity(Using))
+                {
+                    StopUsing();
+                    return;
+                }
+
                 Using = FindUsable();
 
                 if (Using == null && !IsUseDisabled())
@@ -43,16 +49,14 @@ public partial class Player
                     UseFail();
                     return;
                 }
+
+                // This will catch the first OnUse
+                if (Using is IUse usable && usable.OnUse(this))
+                    return;
             }
 
             if (!Using.IsValid())
                 return;
-
-            if (!Input.Down(InputButton.Use))
-            {
-                StopUsing();
-                return;
-            }
 
             // Moved too far away while using
             if (UsePoint.DistanceSquared(EyePosition) > InteractRange * InteractRange)
@@ -61,8 +65,14 @@ public partial class Player
                 return;
             }
 
-            // If use returns true then we can keep using it
-            //
+            if (IsToggleUseEntity(Using)) return;
+
+            if (!Input.Down("use"))
+            {
+                StopUsing();
+                return;
+            }
+
             if (Using is IUse use && use.OnUse(this))
                 return;
 
@@ -137,6 +147,11 @@ public partial class Player
         return true;
     }
 
+    protected static bool IsToggleUseEntity(Entity e)
+    {
+        return e is not null && e is ICinemaUse cinemaUse && cinemaUse.ToggleUse;
+    }
+
     /// <summary>
     /// Player tried to use something but there was nothing there.
     /// Tradition is to give a disappointed boop.
@@ -176,6 +191,5 @@ public partial class Player
         Using = null;
         return true;
     }
-
 
 }

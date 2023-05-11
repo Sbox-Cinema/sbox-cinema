@@ -5,13 +5,14 @@ using System.Linq;
 
 namespace Cinema;
 
-public partial class Player : AnimatedEntity, IEyes
+partial class Player : AnimatedEntity, IEyes
 {
-    //This doesn't need to be public
-    ClothingContainer clothing = new();
 
     [BindComponent]
     public PlayerBodyController BodyController { get; }
+
+    [BindComponent]
+    public PlayerInventory Inventory { get; }
 
     public IEnumerable<PlayerController> PlayerControllers => Components.GetAll<PlayerController>();
 
@@ -22,15 +23,10 @@ public partial class Player : AnimatedEntity, IEyes
     [Net, Predicted]
     public bool ThirdPersonCamera { get; set; }
 
-    public Player()
-    {
 
-    }
-
-    public Player( IClient cl ) : this()
-    {
-        clothing.LoadFromClient( cl );
-    }
+    // How long this player has been on the server
+    [Net]
+    public TimeSince TimeSinceJoinedServer { get; set; }
 
     /// <summary>
     /// Called when the entity is first created
@@ -38,68 +34,52 @@ public partial class Player : AnimatedEntity, IEyes
     public override void Spawn()
     {
         Model = PlayerModel;
-
-        EnableHideInFirstPerson = true;
-        EnableShadowInFirstPerson = true;
-        EnableDrawing = true;
-
-        MoveToSpawnLocation();
-        CreateHull();
-        SetupBodyController();
-
-        /*Predictable = true;
+        Predictable = true;
         // Default properties
         EnableDrawing = true;
         EnableHideInFirstPerson = true;
         EnableShadowInFirstPerson = true;
         EnableLagCompensation = true;
-        EnableHitboxes = true;*/
+        EnableHitboxes = true;
+        TimeSinceJoinedServer = 0;
+
+        Components.Create<PlayerInventory>();
 
         Tags.Add("player");
     }
 
-    protected void MoveToSpawnLocation()
-    {
-        var spawnpoint = All.OfType<SpawnPoint>().OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-
-        if ( spawnpoint != null )
-        {
-            var tx = spawnpoint.Transform;
-            tx.Position = tx.Position + Vector3.Up * 50.0f;
-            Transform = tx;
-        }
-    }
-
     public override void ClientSpawn() { }
-
-    protected void CreateHull()
-    {
-        SetupPhysicsFromOrientedCapsule(
-           PhysicsMotionType.Keyframed,
-           new Capsule(Vector3.Zero, Vector3.Up * 75, 16)
-        );
-
-        LifeState = LifeState.Alive;
-        EnableAllCollisions = true;
-    }
-
-    protected void DestroyHull()
-    {
-        PhysicsClear();
-        EnableAllCollisions = false;
-    }
 
     public void Respawn()
     {
+        SetupPhysicsFromOrientedCapsule(
+            PhysicsMotionType.Keyframed,
+            new Capsule(Vector3.Zero, Vector3.Up * 75, 16)
+        );
+
+        var spawnpoints = Entity.All.OfType<SpawnPoint>();
+
+        // chose a random one
+        var randomSpawnPoint = spawnpoints.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+
+        // if it exists, place the pawn there
+        if (randomSpawnPoint != null)
+        {
+            var tx = randomSpawnPoint.Transform;
+            tx.Position = tx.Position + Vector3.Up * 50.0f; // raise it up
+            Transform = tx;
+        }
+
+        EnableAllCollisions = true;
         EnableDrawing = true;
         Children.OfType<ModelEntity>().ToList().ForEach(x => x.EnableDrawing = true);
 
         SetupBodyController();
-        CreateHull();
+        BodyController.Active = true;
 
-        //ClientRespawn( To.Single(Client) );
+        LoadClothing();
 
-        clothing.DressEntity(this);
+        ClientRespawn(To.Single(Client));
     }
 
     private void SetupBodyController()
@@ -112,13 +92,6 @@ public partial class Player : AnimatedEntity, IEyes
         Components.Create<CrouchMechanic>();
         Components.Create<AirMoveMechanic>();
         Components.Create<JumpMechanic>();
-
-        BodyController.Active = true;
-    }
-
-    private void DestroyComponents()
-    {
-        Components.RemoveAll();
     }
 
     [ConCmd.Admin("noclip")]
@@ -166,8 +139,11 @@ public partial class Player : AnimatedEntity, IEyes
             GroundEntity = null;
         }
 
-        SimulateActiveChild(cl, ActiveChild);
+        SimulateActiveChild(cl);
     }
+
+    // @TODO: remove when facepunch fixes input.pressed
+    private TimeSince TimeSinceMenuPressed = 0;
 
     /// <summary>
     /// Called every frame on the client
@@ -177,16 +153,27 @@ public partial class Player : AnimatedEntity, IEyes
         Rotation = LookInput.WithPitch(0f).ToRotation();
         ActiveController?.FrameSimulate(cl);
 
+        if (Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f)
+        {
+            TimeSinceMenuPressed = 0;
+            if (!UI.MovieQueue.Instance.Visible)
+            {
+                var closestMoviePlayer = Entity.All.OfType<MediaController>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
+                if (closestMoviePlayer != null)
+                {
+                    Log.Info($"Found a movie player {closestMoviePlayer}");
+                    UI.MovieQueue.Instance.Controller = closestMoviePlayer;
+                    UI.MovieQueue.Instance.Visible = true;
+                }
+            }
+            else
+            {
+                Log.Info("Closing media player");
+                UI.MovieQueue.Instance.Visible = false;
+                UI.MovieQueue.Instance.Controller = null;
+            }
+        }
+
         SimulateCamera(cl);
-    }
-
-    public override void OnKilled()
-    {
-        DestroyComponents();
-
-        LifeState = LifeState.Dead;
-
-        EnableDrawing = false;
-        DestroyHull();
     }
 }
