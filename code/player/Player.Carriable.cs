@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class Player
 {
     [Net, Predicted]
-    public Carriable ActiveChild { get; protected set; }
+    public Carriable ActiveChild { get; set; }
 
     /// <summary>
     /// This isn't networked, but it's predicted. If it wasn't then when the prediction system
