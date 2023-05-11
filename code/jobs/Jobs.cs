@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sandbox;
 
@@ -6,6 +7,7 @@ namespace Cinema.Jobs;
 /// <summary>
 /// Traits & Ablities that jobs have
 /// </summary>
+[Flags]
 public enum JobAbilities : ulong
 {
     // Is this job a guest (not worker)
@@ -28,7 +30,7 @@ public partial class JobDetails : BaseNetworkable
     /// What abilities this job has
     /// </summary>
     [Net]
-    public ulong Abilities { get; set; }
+    public JobAbilities Abilities { get; set; }
 
     public static JobDetails DefaultJob => All[0];
 
@@ -40,7 +42,7 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails
         {
             Name = "Guest",
-            Abilities = (ulong)(JobAbilities.Guest | JobAbilities.PurchaseConcessions),
+            Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
         },
         /// <summary>
         /// Usher job, can pickup garbage
@@ -48,7 +50,7 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails
         {
             Name = "Usher",
-            Abilities = (ulong)(JobAbilities.PickupGarbage),
+            Abilities = JobAbilities.PickupGarbage,
         }
     };
 }
@@ -61,9 +63,9 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
 
     public new string Name => JobDetails?.Name ?? "Jobless";
 
-    public ulong Abilities => JobDetails?.Abilities ?? 0;
+    public JobAbilities Abilities => JobDetails?.Abilities ?? 0;
 
-    public bool HasAbility(JobAbilities ability) => (Abilities & (ulong)ability) != 0;
+    public bool HasAbility(JobAbilities ability) => Abilities.HasFlag(ability);
 
     public static PlayerJob CreateFromDetails(JobDetails details)
     {

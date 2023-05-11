@@ -202,6 +202,7 @@ public partial class CinemaGame
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
         Log.Info($"Job: {player.Job.JobDetails.Name}");
-        Log.Info($"Abilities: {player.Job.JobDetails.Abilities.ToNiceBinary()}");
+        // Doing .ToString() makes it so sandbox doesn't add a selectable underline
+        Log.Info($"Abilities: {player.Job.JobDetails.Abilities.ToString()}");
     }
 }
