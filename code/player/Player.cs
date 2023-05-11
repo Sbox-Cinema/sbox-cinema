@@ -92,6 +92,7 @@ partial class Player : AnimatedEntity, IEyes
         Components.Create<CrouchMechanic>();
         Components.Create<AirMoveMechanic>();
         Components.Create<JumpMechanic>();
+        Components.Create<AntiStuckMechanic>();
     }
 
     [ConCmd.Admin("noclip")]
