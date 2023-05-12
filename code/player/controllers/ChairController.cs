@@ -1,14 +1,16 @@
 ﻿using Sandbox;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinema;
 
 public partial class ChairController : PlayerController
 {
+    /// <summary>
+    /// Enables spawning cups in the left and right armrests by
+    /// pressing <c>slot3</c> and <c>slot4</c> respectively.
+    /// </summary>
+    [ConVar.Replicated("cinema.chair.debug")]
+    public static bool ChairDebug { get; set; } = false;
+
     [Net]
     public CinemaChair Chair { get; set; }
 
@@ -44,39 +46,37 @@ public partial class ChairController : PlayerController
             Chair.EjectUser();
             return;
         }
-        if (Input.Pressed("slot1"))
+
+        HandleArmrest(Armrest.Sides.Left, "slot1", "slot3");
+        HandleArmrest(Armrest.Sides.Right, "slot2", "slot4");
+    }
+
+    private void HandleArmrest(Armrest.Sides side, string toggleSlot, string debugSlot)
+    {
+        if (Input.Pressed(toggleSlot))
         {
-            Chair.ToggleArmrest(CinemaChair.ArmrestSide.Left);
+            Chair.Armrests[side].Toggle();
         }
-        else if (CinemaChair.ChairDebug && Input.Pressed("slot3"))
+        else if (ChairDebug && Input.Pressed(debugSlot))
         {
-            if (Chair.LeftCuphold == null)
+            var armrest = Chair.Armrests[side];
+            var armrestIsLowered = armrest.State == Armrest.States.Lowered;
+            if (armrestIsLowered && armrest.Cupholded == null)
             {
-                PrimeTest(CinemaChair.ArmrestSide.Left);
-            }
-        }
-        if (Input.Pressed("slot2"))
-        {
-            Chair.ToggleArmrest(CinemaChair.ArmrestSide.Right);
-        }
-        else if (CinemaChair.ChairDebug && Input.Pressed("slot4"))
-        {
-            if (Chair.RightCuphold == null)
-            {
-                PrimeTest(CinemaChair.ArmrestSide.Right);
+                PrimeTest(side);
             }
         }
     }
 
-    private void PrimeTest(CinemaChair.ArmrestSide side)
+    private void PrimeTest(Armrest.Sides side)
     {
         var cup = new ModelEntity("models/papercup/papercup.vmdl");
         cup.Tags.Add("solid");
         cup.SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
-        Chair.CupholdEntity(side, cup);
+        Chair.Armrests[side].CupholdEntity(cup);
     }
 
-    public void SimulateAnimation()
+    private void SimulateAnimation()
     {
         var aimPos = Entity.AimRay.Position + Entity.EyeRotation.Forward * 128.0f;
 
@@ -104,5 +104,19 @@ public partial class ChairController : PlayerController
 
         var eyeAttachment = Entity.GetAttachment("eyes");
         LookPosition = eyeAttachment.Value.Position;
+
+        if (ChairDebug && Chair.IsValid())
+        {
+            var leftArmrest = Chair.LeftArmrest;
+            var rightArmrest = Chair.RightArmrest;
+            DebugOverlay.ScreenText(
+                text: $"Left Armrest - State: {leftArmrest.State}, Entity: {leftArmrest.Cupholded?.Name ?? "null"}",
+                line: 0
+                );
+            DebugOverlay.ScreenText(
+                text: $"Right Armrest: {rightArmrest.State}, Entity: {rightArmrest.Cupholded?.Name ?? "null"}",
+                line: 1
+                );
+        }
     }
 }

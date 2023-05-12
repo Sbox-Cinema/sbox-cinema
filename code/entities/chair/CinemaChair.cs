@@ -1,6 +1,7 @@
 ﻿using Editor;
 using Sandbox;
 using Sandbox.Diagnostics;
+using System.Collections.Generic;
 
 namespace Cinema;
 
@@ -9,19 +10,28 @@ namespace Cinema;
 [Title("Cinema Chair"), Category("Gameplay"), Icon("event_seat")]
 public partial class CinemaChair : AnimatedEntity, ICinemaUse
 {
-    [ConVar.Replicated("cinema.chair.debug")]
-    public static bool ChairDebug { get; set; } = false;
-
-    public enum ArmrestSide
-    {
-        Left,
-        Right
-    }
-
+    /// <summary>
+    /// Returns true if a player is currently seated in this chair.
+    /// </summary>
     public bool IsOccupied => Occupant.IsValid();
 
+    /// <summary>
+    /// The player who is currently seated in this chair, or null if no player 
+    /// is currently seated here.
+    /// </summary>
     [Net]
     public Player Occupant { get; protected set; }
+
+    /// <summary>
+    /// Allows access to both of the armrests associated with this chair.
+    /// </summary>
+    [Net]
+    public IDictionary<Armrest.Sides, Armrest> Armrests { get; set; }
+
+    public Armrest LeftArmrest
+        => Armrests[Armrest.Sides.Left];
+    public Armrest RightArmrest
+        => Armrests[Armrest.Sides.Right];
 
     /// <summary>
     /// An offset from the origin of this chair that shall be used to determine the position 
@@ -80,6 +90,17 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
             16f
             );
         SetupPhysicsFromCapsule(PhysicsMotionType.Keyframed, capsule);
+
+        Armrests[Armrest.Sides.Left] = new Armrest()
+        {
+            Chair = this,
+            Side = Armrest.Sides.Left
+        };
+        Armrests[Armrest.Sides.Right] = new Armrest()
+        {
+            Chair = this,
+            Side = Armrest.Sides.Right
+        };
     }
 
     public bool IsUsable(Entity user)
@@ -152,37 +173,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         SetAnimParameter("toggle_seat", false);
     }
 
-    [Net]
-    public ModelEntity LeftCuphold { get; set; }
-    [Net]
-    public ModelEntity RightCuphold { get; set; }
-
-    public void CupholdEntity(ArmrestSide side, ModelEntity entity)
-    {
-        string boneName = GetCupholderBoneName(side);
-        if (side == ArmrestSide.Left)
-        {
-            LeftCuphold = entity;
-        }
-        else
-        {
-            RightCuphold = entity;
-        }
-        entity.Transform = GetBoneTransform(boneName).WithRotation(Rotation.Identity);
-        entity.SetParent(this, boneName);
-    }
-
-    private string GetCupholderBoneName(ArmrestSide side)
-        => side switch
-        {
-            ArmrestSide.Left => "cupholder_l",
-            ArmrestSide.Right => "cupholder_r",
-            _ => throw new System.Exception(">:(")
-        };
-
-    private Transform GetCupholderTransform(ArmrestSide side)
-        => GetBoneTransform(GetCupholderBoneName(side));
-
     protected override void OnAnimGraphTag(string tag, AnimGraphTagEvent fireMode)
     {
         base.OnAnimGraphTag(tag, fireMode);
@@ -196,58 +186,17 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
             return;
         }
 
-        // When the left or right armrest is fully raised, we'd like to launch
-        // the corresponding cupholded entity.
-        if (tag == "launch_left_armrest")
+        if (tag.Contains("armrest"))
         {
-            LaunchCuphold(ArmrestSide.Left);
-            return;
+            if (tag.Contains("left"))
+            {
+                LeftArmrest.HandleAnimTag(tag);
+            }
+            else if (tag.Contains("right"))
+            {
+                RightArmrest.HandleAnimTag(tag);
+            }
         }
-        else if (tag == "launch_right_armrest")
-        {
-            LaunchCuphold(ArmrestSide.Right);
-            return;
-        }
-    }
-
-    public async void LaunchCuphold(ArmrestSide side)
-    {
-        ModelEntity entity;
-        if (side == ArmrestSide.Left)
-        {
-            entity = LeftCuphold;
-            LeftCuphold = null;
-        }
-        else
-        {
-            entity = RightCuphold;
-            RightCuphold = null;
-        }
-        if (!entity.IsValid())
-        {
-            Log.Trace($"{Name} - No entity in {side} cupholder.");
-            return;
-        }
-        // Make sure the cup doesn't collide with the arm rest for now.
-        entity.EnableSolidCollisions = false;
-        entity.SetParent(null);
-        var launchAngle = (Rotation.Backward + Rotation.Up).Normal;
-        entity.ApplyAbsoluteImpulse(launchAngle * 250f);
-        entity.ApplyLocalAngularImpulse(Vector3.Random * 1000f);
-        // Give the cup some time to fly away from the chair.
-        await GameTask.Delay(200);
-        entity.EnableSolidCollisions = true;
-    }
-
-    public async void ToggleArmrest(ArmrestSide side)
-    {
-        var paramName = side switch
-        {
-            ArmrestSide.Left    => "toggle_left_armrest",
-            _                   => "toggle_right_armrest"
-        };
-        var originalValue = GetAnimParameterBool(paramName);
-        SetAnimParameter(paramName, !originalValue);
     }
 
     public static void DrawGizmos(EditorContext context)
