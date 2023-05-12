@@ -20,10 +20,12 @@ public partial class Trash : Prop, IUse
 
     [Net] DecayEnum decayStatus { get; set; } = DecayEnum.Clean;
 
-    float decayInterval => 40.0f;
+    float decayInterval => 10.0f;
     TimeSince decayTime;
     Glow glow;
     bool canUpdate;
+
+    Particles flies;
 
     public override void Spawn()
     {
@@ -57,7 +59,7 @@ public partial class Trash : Prop, IUse
         } 
         else if (decayStatus == DecayEnum.Infested)
         {
-
+            flies = Particles.Create("particles/flies/fly_swarm.vpcf", this);
         }
         else if (decayStatus == DecayEnum.Rotten)
         {
@@ -81,6 +83,9 @@ public partial class Trash : Prop, IUse
             pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
 
             DestroyGlow(To.Multiple(janitors));
+
+            flies?.Dispose();
+            flies?.Destroy();
         }
     }
 
