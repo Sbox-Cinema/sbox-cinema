@@ -48,10 +48,32 @@ public partial class ChairController : PlayerController
         {
             Chair.ToggleArmrest(CinemaChair.ArmrestSide.Left);
         }
-        if (Input.Pressed("slot3"))
+        else if (CinemaChair.ChairDebug && Input.Pressed("slot3"))
+        {
+            if (Chair.LeftCuphold == null)
+            {
+                PrimeTest(CinemaChair.ArmrestSide.Left);
+            }
+        }
+        if (Input.Pressed("slot2"))
         {
             Chair.ToggleArmrest(CinemaChair.ArmrestSide.Right);
         }
+        else if (CinemaChair.ChairDebug && Input.Pressed("slot4"))
+        {
+            if (Chair.RightCuphold == null)
+            {
+                PrimeTest(CinemaChair.ArmrestSide.Right);
+            }
+        }
+    }
+
+    private void PrimeTest(CinemaChair.ArmrestSide side)
+    {
+        var cup = new ModelEntity("models/papercup/papercup.vmdl");
+        cup.Tags.Add("solid");
+        cup.SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
+        Chair.CupholdEntity(side, cup);
     }
 
     public void SimulateAnimation()
