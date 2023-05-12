@@ -12,6 +12,8 @@
         
         justify-content: center;
         align-items: center;
+
+        opacity: 0.0;
         
         .container 
         {
@@ -24,10 +26,14 @@
             
             font-size: 32px;
         }
+
+        &.visible {
+            opacity: 1.0;
+        }
     }
 </style>
 
-<root>
+<root class="@(Open ? "visible" : "" )">
     <div class="container">@Text</div>
 </root>
 
@@ -35,9 +41,17 @@
 {
     private string Text;
 
+    public bool Open { get; set; } = true;
+
     public Tooltip(string text)
     {
         Text = text;
+    } 
+
+    public void ShouldOpen(bool open)
+    {
+        Open = open;
+
+        StateHasChanged();
     }
-    
 }

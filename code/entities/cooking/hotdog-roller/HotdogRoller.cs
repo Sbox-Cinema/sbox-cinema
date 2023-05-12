@@ -19,6 +19,8 @@ public partial class HotdogRoller : AnimatedEntity, IUse
         SetModel("models/hotdogroller/hotdogroller.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
+
+        Tags.Add("interactable");
     }
 
     public override void ClientSpawn()
@@ -38,7 +40,7 @@ public partial class HotdogRoller : AnimatedEntity, IUse
     /// <returns>If this is useable</returns>
     public virtual bool IsUsable(Entity user)
     {
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -49,9 +51,32 @@ public partial class HotdogRoller : AnimatedEntity, IUse
     public virtual bool OnUse(Entity user)
     {
         if (user is not Player player) return false;
-        
 
+        Log.Info("Player tried to use hotdog roller machine");
 
         return false;
+    }
+
+    [GameEvent.Tick]
+    public void Tick()
+    {
+        if (Game.LocalPawn is Player player)
+        {
+            TraceResult tr = Trace.Ray(player.AimRay, 1024)
+                .WithTag("interactable")
+                .Ignore(player)
+                .Run();
+
+            if (tr.Hit)
+            {
+                Tooltip.ShouldOpen(true);
+            }
+            else
+            {
+                Tooltip.ShouldOpen(false);
+            }
+
+            Tooltip.Rotation = Rotation.LookAt(Camera.Rotation.Forward * -1.0f, Vector3.Up);
+        }
     }
 }
