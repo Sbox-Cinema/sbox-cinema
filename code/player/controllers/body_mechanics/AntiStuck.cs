@@ -36,14 +36,14 @@ public partial class AntiStuckMechanic : PlayerBodyControllerMechanic
             var pos = Controller.Position + (Vector3.Random * 45 * UnstuckAttempts);
 
             var check = Controller.TraceBBox(pos, Controller.Position);
-            if (ValidatePosition(check))
+            if (ValidateTrace(check))
             {
                 Controller.Position = check.EndPosition;
                 return;
             }
 
             check = Controller.TraceBBox(pos, pos + Vector3.Down * 64.0f);
-            if (ValidatePosition(check))
+            if (ValidateTrace(check))
             {
                 Controller.Position = check.EndPosition;
                 return;
@@ -53,7 +53,7 @@ public partial class AntiStuckMechanic : PlayerBodyControllerMechanic
         UnstuckAttempts++;
     }
 
-    protected bool ValidatePosition(TraceResult result)
+    protected bool ValidateTrace(TraceResult result)
     {
         if (result.StartedSolid) return false;
         if (result.Normal.z != 1) return false;
