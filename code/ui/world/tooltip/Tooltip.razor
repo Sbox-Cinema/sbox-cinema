@@ -36,22 +36,3 @@
 <root class="@(Open ? "visible" : "" )">
     <div class="container">@Text</div>
 </root>
-
-@code 
-{
-    private string Text;
-
-    public bool Open { get; set; } = true;
-
-    public Tooltip(string text)
-    {
-        Text = text;
-    } 
-
-    public void ShouldOpen(bool open)
-    {
-        Open = open;
-
-        StateHasChanged();
-    }
-}

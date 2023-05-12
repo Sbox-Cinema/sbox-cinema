@@ -10,6 +10,7 @@ namespace Cinema;
 public partial class HotdogRoller : AnimatedEntity, IUse
 {
     public UI.Tooltip Tooltip { get; set; }
+
     public override void Spawn()
     {
         base.Spawn();
@@ -27,10 +28,35 @@ public partial class HotdogRoller : AnimatedEntity, IUse
     {
         base.ClientSpawn();
 
+        SetupUI();
+    }
+
+    /// <summary>
+    /// Sets up the UI when the Hotdog roller is interacted with
+    /// </summary>
+    private void SetupUI()
+    {
         Tooltip = new UI.Tooltip("Press E to use machine");
 
         Tooltip.Transform = Transform;
         Tooltip.Position += Vector3.Up * 32.0f;
+    }
+
+    public override void Simulate(IClient cl)
+    {
+        base.Simulate(cl);
+
+        if (Game.IsServer)
+        {
+            using (Prediction.Off())
+            {
+                if (Input.Pressed(InputButton.Use))
+                {
+                    Log.Info("turn off??");
+                }
+            }
+
+        }
     }
 
     /// <summary>
@@ -51,8 +77,6 @@ public partial class HotdogRoller : AnimatedEntity, IUse
     public virtual bool OnUse(Entity user)
     {
         if (user is not Player player) return false;
-
-        Log.Info("Player tried to use hotdog roller machine");
 
         return false;
     }
