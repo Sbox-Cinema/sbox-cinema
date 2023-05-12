@@ -32,6 +32,12 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public JobAbilities Abilities { get; set; }
 
+    /// <summary>
+    /// What responsibilities this job has
+    /// </summary>
+    [Net]
+    public JobResponsibilities Responsibilities { get; set; }
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -43,6 +49,7 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Guest",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
+            Responsibilities = JobResponsibilities.UniversalIncome,
         },
         /// <summary>
         /// Usher job, can pickup garbage
