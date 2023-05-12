@@ -83,20 +83,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         ResetAnimParameters();
     }
 
-    [GameEvent.Client.Frame]
-    public void OnFrame()
-    {
-        if (!ChairDebug || Occupant == null)
-        {
-            return;
-        }
-
-        var left = GetCupholderTransform(ArmrestSide.Left);
-        DebugOverlay.Sphere(left.Position, 3f, Color.Red);
-        var right = GetCupholderTransform(ArmrestSide.Right);
-        DebugOverlay.Sphere(right.Position, 3f, Color.Red);
-    }
-
     public bool IsUsable(Entity user)
     {
         if (!user.IsValid)
@@ -168,12 +154,11 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
     }
 
     [Net]
-    public Entity LeftCuphold { get; set; }
+    public ModelEntity LeftCuphold { get; set; }
     [Net]
-    public Entity RightCuphold { get; set; }
+    public ModelEntity RightCuphold { get; set; }
 
-    // CW: Cupholdry
-    public void CupholdEntity(ArmrestSide side, Entity entity)
+    public void CupholdEntity(ArmrestSide side, ModelEntity entity)
     {
         string boneName = GetCupholderBoneName(side);
         if (side == ArmrestSide.Left)
@@ -201,7 +186,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
     public async void LaunchCuphold(ArmrestSide side)
     {
-        Entity entity;
+        ModelEntity entity;
         if (side == ArmrestSide.Left)
         {
             entity = LeftCuphold;
@@ -212,28 +197,28 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
             entity = RightCuphold;
             RightCuphold = null;
         }
-        if (entity == null)
-        {
-            return;
-        }
         if (!entity.IsValid())
         {
-            Log.Error($"{Name} - No entity in {side} cupholder.");
+            Log.Trace($"{Name} - No entity in {side} cupholder.");
             return;
         }
+        // Make sure the cup doesn't collide with the arm rest for now.
+        entity.EnableSolidCollisions = false;
         entity.SetParent(null);
-        entity.ApplyLocalImpulse(Vector3.Up * 250f);
-        await Task.Delay(100);
-        entity.ApplyLocalAngularImpulse(Vector3.Random * 500f);
+        var launchAngle = (Rotation.Backward + Rotation.Up).Normal;
+        entity.ApplyAbsoluteImpulse(launchAngle * 250f);
+        entity.ApplyLocalAngularImpulse(Vector3.Random * 1000f);
+        // Give the cup some time to fly away from the chair.
+        await GameTask.Delay(200);
+        entity.EnableSolidCollisions = true;
     }
 
     public async void ToggleArmrest(ArmrestSide side)
     {
         var paramName = side switch
         {
-            ArmrestSide.Left => "toggle_left_armrest",
-            ArmrestSide.Right => "toggle_right_armrest",
-            _ => throw new System.Exception("What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little \"clever\" comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, kiddo.")
+            ArmrestSide.Left    => "toggle_left_armrest",
+            _                   => "toggle_right_armrest"
         };
         var originalValue = GetAnimParameterBool(paramName);
         SetAnimParameter(paramName, !originalValue);
@@ -242,7 +227,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         {
             // Hack, wait until the the animation is nearly finished. 
             // Should probably use animation events instead
-            await Task.Delay(600);
+            await GameTask.Delay(600);
             LaunchCuphold(side);
         }
     }
