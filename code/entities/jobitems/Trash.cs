@@ -10,7 +10,20 @@ namespace Cinema;
 
 public partial class Trash : Prop, IUse
 {
+    public enum DecayEnum
+    {
+        Clean,
+        Spoiled,
+        Infested,
+        Rotten,
+    }
+
+    [Net] DecayEnum decayStatus { get; set; } = DecayEnum.Clean;
+
+    float decayInterval => 40.0f;
+    TimeSince decayTime;
     Glow glow;
+    bool canUpdate;
 
     public override void Spawn()
     {
@@ -19,8 +32,43 @@ public partial class Trash : Prop, IUse
         SetupPhysicsFromModel(PhysicsMotionType.Static);
     }
 
+    [GameEvent.Tick.Server]
+    protected void ServerTick()
+    {
+        if (Math.Round(decayTime) % decayInterval == 1.0f && !canUpdate)
+            canUpdate = true;
+
+        if (Math.Round(decayTime) % decayInterval == 0 && decayStatus != DecayEnum.Rotten)
+        {
+            if (!canUpdate) return;
+
+            UpdateDecay();
+        }
+    }
+
+    public void UpdateDecay()
+    {
+        decayStatus += 1;
+        canUpdate = false;
+
+        Log.Info(decayStatus);
+
+        if(decayStatus == DecayEnum.Spoiled)
+        {
+
+        } 
+        else if (decayStatus == DecayEnum.Infested)
+        {
+
+        }
+        else if (decayStatus == DecayEnum.Rotten)
+        {
+
+        }
+    }
+
     [GameEvent.Client.Frame]
-    protected void ClientFrameS()
+    protected void ClientFrame()
     {
         UpdateGlow();
     }
@@ -42,7 +90,7 @@ public partial class Trash : Prop, IUse
     void CreateGlow()
     {
         glow = Components.GetOrCreate<Glow>();
-        glow.Color = Color.Cyan;
+        glow.Color = Color.Green;
         glow.ObscuredColor = Color.Transparent;
     }
 
@@ -60,6 +108,13 @@ public partial class Trash : Prop, IUse
         {
             if (player.Job.JobDetails.Abilities != Jobs.JobAbilities.PickupGarbage)
                 DestroyGlow();
+        }
+
+        switch (decayStatus)
+        {
+            case DecayEnum.Spoiled: glow.Color = Color.Yellow; break;
+            case DecayEnum.Infested: glow.Color = Color.Orange; break;
+            case DecayEnum.Rotten: glow.Color = Color.Red; break;
         }
     }
 
@@ -79,6 +134,8 @@ public partial class Trash : Prop, IUse
 
         var janitors = Game.Clients.Where(x => x.Pawn is Player pawn && 
         pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
+        
+        decayTime = 0.01f;
 
         CreateGlow(To.Multiple(janitors));
 
