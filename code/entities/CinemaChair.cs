@@ -80,7 +80,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
             16f
             );
         SetupPhysicsFromCapsule(PhysicsMotionType.Keyframed, capsule);
-        ResetAnimParameters();
     }
 
     public bool IsUsable(Entity user)
@@ -184,6 +183,33 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
     private Transform GetCupholderTransform(ArmrestSide side)
         => GetBoneTransform(GetCupholderBoneName(side));
 
+    protected override void OnAnimGraphTag(string tag, AnimGraphTagEvent fireMode)
+    {
+        base.OnAnimGraphTag(tag, fireMode);
+
+        if (Game.IsClient)
+        {
+            return;
+        }
+        if (fireMode is not AnimGraphTagEvent.Fired or AnimGraphTagEvent.Start)
+        {
+            return;
+        }
+
+        // When the left or right armrest is fully raised, we'd like to launch
+        // the corresponding cupholded entity.
+        if (tag == "launch_left_armrest")
+        {
+            LaunchCuphold(ArmrestSide.Left);
+            return;
+        }
+        else if (tag == "launch_right_armrest")
+        {
+            LaunchCuphold(ArmrestSide.Right);
+            return;
+        }
+    }
+
     public async void LaunchCuphold(ArmrestSide side)
     {
         ModelEntity entity;
@@ -222,14 +248,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         };
         var originalValue = GetAnimParameterBool(paramName);
         SetAnimParameter(paramName, !originalValue);
-        // If the armrest was originally down, we're raising it now, so launch the contents.
-        if (!originalValue)
-        {
-            // Hack, wait until the the animation is nearly finished. 
-            // Should probably use animation events instead
-            await GameTask.Delay(600);
-            LaunchCuphold(side);
-        }
     }
 
     public static void DrawGizmos(EditorContext context)
