@@ -1,0 +1,43 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.UI.Construct;
+
+@namespace Cinema.UI
+
+@inherits WorldPanel
+
+<style>
+    Tooltip {
+        display: flex;
+        
+        justify-content: center;
+        align-items: center;
+        
+        .container 
+        {
+            background-color: rgba(black, 0.2);
+            border-radius: 32px;
+
+            padding: 16px 24px;
+
+            color: white;
+            
+            font-size: 32px;
+        }
+    }
+</style>
+
+<root>
+    <div class="container">@Text</div>
+</root>
+
+@code 
+{
+    private string Text;
+
+    public Tooltip(string text)
+    {
+        Text = text;
+    }
+    
+}
