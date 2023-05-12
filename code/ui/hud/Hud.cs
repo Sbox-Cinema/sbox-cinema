@@ -7,5 +7,4 @@ using Sandbox.UI;
 public partial class Hud : RootPanel
 {
 
-
 }
