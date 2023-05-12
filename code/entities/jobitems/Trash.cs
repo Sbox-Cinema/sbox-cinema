@@ -51,8 +51,6 @@ public partial class Trash : Prop, IUse
         decayStatus += 1;
         canUpdate = false;
 
-        Log.Info(decayStatus);
-
         if(decayStatus == DecayEnum.Spoiled)
         {
 
