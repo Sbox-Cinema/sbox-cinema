@@ -29,7 +29,11 @@ public partial class ConcessionWorker : NpcBase
 
     public override bool IsUsable(Entity user)
     {
-        return true;
+        if (user is not Player player) return false;
+
+        var canPurchaseConcessions = player.Job.HasAbility(Jobs.JobAbilities.PurchaseConcessions);
+
+        return canPurchaseConcessions;
     }
 
     public override void OnClientUse(Player player)

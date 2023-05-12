@@ -51,6 +51,7 @@ partial class Player : AnimatedEntity, IEyes
         TimeSinceJoinedServer = 0;
 
         Components.Create<PlayerInventory>();
+        SetJob(Jobs.JobDetails.DefaultJob);
 
         Tags.Add("player");
     }
@@ -99,6 +100,7 @@ partial class Player : AnimatedEntity, IEyes
         Components.Create<CrouchMechanic>();
         Components.Create<AirMoveMechanic>();
         Components.Create<JumpMechanic>();
+        Components.Create<AntiStuckMechanic>();
     }
 
     [ConCmd.Admin("noclip")]
