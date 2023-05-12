@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Sandbox;
 
 namespace Cinema;
@@ -165,5 +166,43 @@ public partial class CinemaGame
             .Run();
 
         npc.Position = tr.EndPosition;
+    }
+
+    [ConCmd.Server("cinema.player.job.set")]
+    public static void SetJob(string jobName, string playerName = "")
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        if (ConsoleSystem.Caller.Pawn is not Player player) return;
+
+        var target = player;
+
+        if (!string.IsNullOrEmpty(playerName))
+        {
+            var clients = Game.Clients.Where(x => x.Name.ToLower().Contains(playerName));
+
+            if (clients.Count() is <= 0 or > 1) return;
+
+            var client = clients.FirstOrDefault();
+
+            if (client == ConsoleSystem.Caller.Client || client.Pawn is not Player given) return;
+
+            target = given;
+        }
+
+        var details = Jobs.JobDetails.All.FirstOrDefault(x => x.Name.ToLower().Contains(jobName.ToLower()));
+
+        if (details == null) return;
+
+        target.SetJob(details);
+    }
+
+    [ConCmd.Client("cinema.player.job.debug.client")]
+    public static void DebugJobClient()
+    {
+        if (ConsoleSystem.Caller.Pawn is not Player player) return;
+        Log.Info($"Job: {player.Job.JobDetails.Name}");
+        // Doing .ToString() makes it so sandbox doesn't add a selectable underline
+        Log.Info($"Abilities: {player.Job.JobDetails.Abilities.ToString()}");
     }
 }

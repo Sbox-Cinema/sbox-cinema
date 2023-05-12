@@ -44,6 +44,7 @@ partial class Player : AnimatedEntity, IEyes
         TimeSinceJoinedServer = 0;
 
         Components.Create<PlayerInventory>();
+        SetJob(Jobs.JobDetails.DefaultJob);
 
         Tags.Add("player");
     }
