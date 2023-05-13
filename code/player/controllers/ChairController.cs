@@ -42,7 +42,6 @@ public partial class ChairController : PlayerController
         // as the input to begin using the chair may have occurred on the same tick.
         if (Input.Pressed("use") && SinceActivated > Time.Delta)
         {
-            Log.Trace($"{Entity.Client} - Stopped sitting in chair: {Chair.Name}");
             Chair.EjectUser();
             return;
         }

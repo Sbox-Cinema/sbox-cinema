@@ -115,7 +115,6 @@ public partial class Armrest : BaseNetworkable
     {
         if (!HeldEntity.IsValid())
         {
-            Log.Trace($"{Chair.Name} - No entity in {Side} cupholder.");
             return;
         }
         // Make sure the held entity doesn't collide with the arm rest for now.
