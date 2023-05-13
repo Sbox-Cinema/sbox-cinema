@@ -131,9 +131,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         Occupant.SetParent(this);
         Occupant.LocalPosition = SeatOffset;
         Occupant.SetAnimParameter("sit", 1);
-        Occupant.ShouldUpdateAnimation = false;
-        Occupant.ShouldUpdateUse = false;
-        Occupant.ShouldUpdateCamera = false;
 
         var chairComponent = Occupant.Components.GetOrCreate<ChairController>();
         chairComponent.Chair = this;
@@ -165,9 +162,6 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         chairComponent.Chair = null;
         chairComponent.Enabled = false;
         Occupant.SetAnimParameter("sit", 0);
-        Occupant.ShouldUpdateAnimation = true;
-        Occupant.ShouldUpdateCamera = true;
-        Occupant.ShouldUpdateUse = true;
         Occupant = null;
 
         SetAnimParameter("toggle_seat", false);

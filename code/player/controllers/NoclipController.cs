@@ -7,6 +7,8 @@ public class NoclipController : PlayerController, ISingletonComponent
 {
     public override void Simulate(IClient cl)
     {
+        Entity.Rotation = Entity.LookInput.WithPitch(0f).ToRotation();
+
         var pl = cl.Pawn as Player;
 
         var fwd = pl.MoveInput.x.Clamp(-1f, 1f);
@@ -44,6 +46,9 @@ public class NoclipController : PlayerController, ISingletonComponent
 
     public override void FrameSimulate(IClient cl)
     {
+        Entity.SimulateCamera(cl);
+        Entity.Rotation = Entity.LookInput.WithPitch(0f).ToRotation();
+
         var pl = cl.Pawn as Player;
         pl.EyeRotation = pl.LookInput.ToRotation();
         pl.EyeLocalPosition = Vector3.Up * 64;
