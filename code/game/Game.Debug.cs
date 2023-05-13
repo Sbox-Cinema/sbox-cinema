@@ -201,8 +201,9 @@ public partial class CinemaGame
     public static void DebugJobClient()
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
-        Log.Info($"Job: {player.Job.JobDetails.Name}");
+        Log.Info($"Job: {player.Job.Name}");
         // Doing .ToString() makes it so sandbox doesn't add a selectable underline
-        Log.Info($"Abilities: {player.Job.JobDetails.Abilities.ToString()}");
+        Log.Info($"Abilities: {player.Job.Abilities.ToString()}");
+        Log.Info($"Responsibilities: {player.Job.Responsibilities.ToString()}");
     }
 }

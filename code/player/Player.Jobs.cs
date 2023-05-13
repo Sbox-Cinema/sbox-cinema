@@ -1,4 +1,3 @@
-using System;
 using Sandbox;
 
 namespace Cinema;
@@ -8,25 +7,44 @@ public partial class Player
     [BindComponent]
     public Jobs.PlayerJob Job { get; }
 
-    public void SetJob(Jobs.JobDetails details)
+    public void SetJob(Jobs.JobDetails newJob)
     {
         if (Game.IsClient) throw new System.Exception("Cannot set job on client!");
 
+        UpdateResponsibilities(newJob.Responsibilities);
+
         Components.RemoveAny<Jobs.PlayerJob>();
+        Components.Add(Jobs.PlayerJob.CreateFromDetails(newJob));
+    }
 
-        var currentJob = Job.JobDetails;
-        var responsibiltiesToRemove = currentJob.Responsibilities & ~details.Responsibilities;
-        // foreach (var res in responsibiltiesToRemove.GetFlags())
-        // {
-        //     var comp = Components.Remove()
-        //     if (comp != null)
-        //     {
-        //         comp.Remove();
-        //     }
-        // }
+    /// <summary>
+    /// Updates the responsibility components on the player for a new job.
+    /// Will remove any responsibilities that are not in the new job, and add any that are.
+    /// </summary>
+    /// <param name="newJob">New job responsibilities</param>
+    private void UpdateResponsibilities(Jobs.JobResponsibilities newJob)
+    {
+        var currentJob = Job?.JobDetails.Responsibilities ?? 0;
 
-        var responsibiltiesToAdd = details.Responsibilities & ~currentJob.Responsibilities;
+        var toRemove = currentJob & ~newJob;
+        foreach (var res in toRemove.GetFlags())
+        {
+            var typeDescription = TypeLibrary.GetType("Cinema.Jobs." + res.ToString());
+            if (typeDescription is null) continue;
 
-        Components.Add(Jobs.PlayerJob.CreateFromDetails(details));
+            Components.RemoveAny(typeDescription.TargetType);
+        }
+
+        // Filters to only have responsibilities that are in the new job but not the current job
+        var toAdd = (newJob ^ currentJob) & newJob;
+
+        foreach (var res in toAdd.GetFlags())
+        {
+            var typeDescription = TypeLibrary.GetType("Cinema.Jobs." + res.ToString());
+            if (typeDescription is null) continue;
+
+            var responsibility = typeDescription.Create<EntityComponent>();
+            Components.Add(responsibility);
+        }
     }
 }
