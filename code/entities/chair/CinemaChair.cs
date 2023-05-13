@@ -28,10 +28,20 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
     [Net]
     public IDictionary<Armrest.Sides, Armrest> Armrests { get; set; }
 
+    /// <summary>
+    /// Retrieve the left armrest object for this chair. Returns null if no armrest 
+    /// is available yet, which may be the case if the armrests were not yet replicated
+    /// to the client via networking.
+    /// </summary>
     public Armrest LeftArmrest
-        => Armrests[Armrest.Sides.Left];
+        => Armrests.TryGetValue(Armrest.Sides.Left, out Armrest value) ? value : null;
+    /// <summary>
+    /// Retrieve the right armrest object for this chair. Returns null if no armrest 
+    /// is available yet, which may be the case if the armrests were not yet replicated
+    /// to the client via networking.
+    /// </summary>
     public Armrest RightArmrest
-        => Armrests[Armrest.Sides.Right];
+        => Armrests.TryGetValue(Armrest.Sides.Right, out Armrest value) ? value : null;
 
     /// <summary>
     /// An offset from the origin of this chair that shall be used to determine the position 
@@ -63,20 +73,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
     public Vector3 EyeOffset { get; set; } = new Vector3(0, 0, 64);
 
     public string UseText => "Sit Down";
-    public string CannotUseText
-    {
-        get
-        {
-            if (IsOccupied)
-            {
-                return "Seat is occupied.";
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
+    public string CannotUseText => IsOccupied ? "Seat is occupied." : null;
 
     public override void Spawn()
     {
@@ -105,28 +102,29 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
     public bool IsUsable(Entity user)
     {
-        if (!user.IsValid)
+        // Make sure the user is a Player and there's no one in the seat.
+        if (!(user as Player).IsValid || IsOccupied)
         {
             return false;
         }
         var direction = (user.Position - Position).Normal;
         var angle = direction.Dot(Rotation.Forward);
-        Log.Trace($"Chair use angle: {angle}, Min valid angle: {UseAngle}");
         // Check whether the player is in front of the seat.
         if (angle < UseAngle)
         {
             return false;
         }
-        return !IsOccupied;
+        return true;
     }
 
     public bool OnUse(Entity user)
     {
-        Log.Trace($"{user.Client} - Began sitting in chair: {Name}");
-
         Occupant = user as Player;
 
-        Assert.NotNull(Occupant);
+        if (Occupant == null)
+        {
+            return false;
+        }
 
         Occupant.SetParent(this);
         Occupant.LocalPosition = SeatOffset;
@@ -182,14 +180,8 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
         if (tag.Contains("armrest"))
         {
-            if (tag.Contains("left"))
-            {
-                LeftArmrest.HandleAnimTag(tag);
-            }
-            else if (tag.Contains("right"))
-            {
-                RightArmrest.HandleAnimTag(tag);
-            }
+            var armrest = tag.Contains("left") ? LeftArmrest : RightArmrest;
+            armrest?.HandleAnimTag(tag);
         }
     }
 

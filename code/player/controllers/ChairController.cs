@@ -55,9 +55,10 @@ public partial class ChairController : PlayerController
     {
         if (Input.Pressed(toggleSlot))
         {
-            Chair.Armrests[side].Toggle();
+            Chair.Armrests[side]?.Toggle();
+            return;
         }
-        else if (ChairDebug && Input.Pressed(debugSlot))
+        if (ChairDebug && Input.Pressed(debugSlot))
         {
             PrimeTest(side);
         }
@@ -68,7 +69,7 @@ public partial class ChairController : PlayerController
         var cup = new ModelEntity("models/papercup/papercup.vmdl");
         cup.Tags.Add("solid");
         cup.SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
-        Chair.Armrests[side].TryHoldEntity(cup);
+        Chair.Armrests[side]?.TryHoldEntity(cup);
     }
 
     private void SimulateAnimation()
@@ -105,11 +106,11 @@ public partial class ChairController : PlayerController
             var leftArmrest = Chair.LeftArmrest;
             var rightArmrest = Chair.RightArmrest;
             DebugOverlay.ScreenText(
-                text: $"Left Armrest - State: {leftArmrest.State}, Entity: {leftArmrest.HeldEntity?.Name ?? "null"}",
+                text: $"Left Armrest - State: {leftArmrest?.State.ToString() ?? "null"}, Entity: {leftArmrest?.HeldEntity?.Name ?? "null"}",
                 line: 0
                 );
             DebugOverlay.ScreenText(
-                text: $"Right Armrest: {rightArmrest.State}, Entity: {rightArmrest.HeldEntity?.Name ?? "null"}",
+                text: $"Right Armrest: {rightArmrest?.State.ToString() ?? "null"}, Entity: {rightArmrest?.HeldEntity?.Name ?? "null"}",
                 line: 1
                 );
         }
