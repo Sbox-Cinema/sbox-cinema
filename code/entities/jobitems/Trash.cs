@@ -1,10 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Component;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinema;
 
@@ -20,12 +17,16 @@ public partial class Trash : Prop, IUse
 
     [Net] DecayEnum decayStatus { get; set; } = DecayEnum.Clean;
 
-    float decayInterval => 10.0f;
+    float decayInterval => 45.0f;
     TimeSince decayTime;
     Glow glow;
     bool canUpdate;
 
     Particles flies;
+
+    double basePayment => 1.25;
+    double curPayment;
+    double basePayReduct => 2.85;
 
     public override void Spawn()
     {
@@ -34,18 +35,78 @@ public partial class Trash : Prop, IUse
         SetupPhysicsFromModel(PhysicsMotionType.Static);
     }
 
+    //Sets up the trash entity where the projectile landed
+    public void SetUp(Vector3 pos)
+    {
+        //Make sure its set on the ground
+        var tr = Trace.Ray(pos, pos + Vector3.Down * 32.0f).WorldOnly().Run();
+
+        //Move it up a bit so its not in the ground too much
+        //And rotate it randomly
+        Position = tr.EndPosition + Vector3.Up * 3;
+        Rotation = Rotation.FromYaw(Game.Random.Float(-90f, 180f)) + Rotation.FromPitch(90.0f);
+
+        //Get all players who can pick up garbage
+        var janitors = Game.Clients.Where(x => x.Pawn is Player pawn &&
+        pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
+
+        //Set up decay timer and current payment
+        decayTime = 0.01f;
+        curPayment = basePayment;
+
+        //Create the glow highlight effect
+        CreateGlow(To.Multiple(janitors));
+
+        //Can we break the object into its gibs but not delete it? -ItsRifter
+        //Breakables.Break(this);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (Game.IsServer)
+        {
+            //Get all garbage collectors and destroy the glow
+            var janitors = Game.Clients.Where(x => x.Pawn is Player pawn &&
+            pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
+
+            DestroyGlow(To.Multiple(janitors));
+
+            //Cleanup particles
+            flies?.Destroy(true);
+        }
+    }
+
     [GameEvent.Tick.Server]
     protected void ServerTick()
     {
+        //if its been a second since a decay update, reset the bool for the next
         if (Math.Round(decayTime) % decayInterval == 1.0f && !canUpdate)
             canUpdate = true;
 
+        //If its been the decay interval and isn't rotten
         if (Math.Round(decayTime) % decayInterval == 0 && decayStatus != DecayEnum.Rotten)
         {
+            //Can't update, probably because its been updated in a previous server tick
             if (!canUpdate) return;
 
+            //Update the decay state
             UpdateDecay();
         }
+    }
+
+    [GameEvent.Client.Frame]
+    protected void ClientFrame()
+    {
+        //Updates glow on client
+        UpdateGlow();
+    }
+
+    public void Pickup(Player user)
+    {
+        //TODO: Taking the trash out + checks if they can carry
+        Delete();
     }
 
     public void UpdateDecay()
@@ -53,7 +114,12 @@ public partial class Trash : Prop, IUse
         decayStatus += 1;
         canUpdate = false;
 
-        if(decayStatus == DecayEnum.Spoiled)
+        //Deducts payment rather than divide it
+        double reduction = curPayment / basePayReduct;
+        curPayment -= Math.Round(reduction, 2);
+
+        //The decaying stages
+        if (decayStatus == DecayEnum.Spoiled)
         {
 
         } 
@@ -67,33 +133,12 @@ public partial class Trash : Prop, IUse
         }
     }
 
-    [GameEvent.Client.Frame]
-    protected void ClientFrame()
-    {
-        UpdateGlow();
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-
-        if (Game.IsServer)
-        {
-            var janitors = Game.Clients.Where(x => x.Pawn is Player pawn &&
-            pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
-
-            DestroyGlow(To.Multiple(janitors));
-
-            flies?.Dispose();
-            flies?.Destroy();
-        }
-    }
-
     [ClientRpc]
     void CreateGlow()
     {
         glow = Components.GetOrCreate<Glow>();
         glow.Color = Color.Green;
+        //Make the glow not appear through the world
         glow.ObscuredColor = Color.Transparent;
     }
 
@@ -101,18 +146,24 @@ public partial class Trash : Prop, IUse
     {
         var player = Game.LocalPawn as Player;
 
+        //If there is no glow component
         if (glow == null)
         {
+            //and the player can pick up garbage, create the glow
             if (player.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage)
                 CreateGlow();
+            //If they can't, stop here
             else return;
-        } 
+        }
+        //If there is a glow component
         else
         {
+            //The players job changed, remove the glow component
             if (player.Job.JobDetails.Abilities != Jobs.JobAbilities.PickupGarbage)
                 DestroyGlow();
         }
 
+        //Update glow color based on decay state
         switch (decayStatus)
         {
             case DecayEnum.Spoiled: glow.Color = Color.Yellow; break;
@@ -128,32 +179,9 @@ public partial class Trash : Prop, IUse
         glow = null;
     }
 
-    public void SetUp(Vector3 pos)
-    {
-        var tr = Trace.Ray(pos, pos + Vector3.Down * 32.0f).WorldOnly().Run();
-
-        Position = tr.EndPosition + Vector3.Up * 3;
-        Rotation = Rotation.FromYaw(Game.Random.Float(-90f, 180f)) + Rotation.FromPitch(90.0f);
-
-        var janitors = Game.Clients.Where(x => x.Pawn is Player pawn && 
-        pawn.Job.JobDetails.Abilities == Jobs.JobAbilities.PickupGarbage);
-        
-        decayTime = 0.01f;
-
-        CreateGlow(To.Multiple(janitors));
-
-        //Can we break the object into its gibs but not delete it? -ItsRifter
-        //Breakables.Break(this);
-    }
-
     private async void DisableGibPhysics()
     {
         await Task.DelaySeconds(1.0f);
-    }
-
-    public void Pickup(Player user)
-    {
-        Delete();
     }
 
     public bool OnUse(Entity user)

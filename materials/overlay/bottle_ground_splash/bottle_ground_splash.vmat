@@ -1,0 +1,17 @@
+"Layer0"
+{
+	"shader"		"shaders/projected_decals.shader_c"
+	"F_ALPHA_MODE"		"1"
+	"F_TRIPLANAR_MAPPING"		"1"
+	"F_SPECULAR"		"1"
+	"F_SPECULAR_CUBE_MAP"		"1"
+	"g_flAlphaCutoffSoftness"		"1.000000"
+	"TextureAmbientOcclusion"		"materials/default/default_ao.tga"
+	"TextureColor"		"materials/overlay/bottle_ground_splash/bottle_ground_splash.png"
+	"g_bFogEnabled"		"1"
+	"g_flDirectionalLightmapMinZ"		"0.050000"
+	"g_flDirectionalLightmapStrength"		"1.000000"
+	"g_flGlossiness"		"0.761000"
+	"TextureMetalness"		"materials/default/default_metal.tga"
+	"TextureTranslucency"		"materials/overlay/bottle_ground_splash/bottle_ground_splash_trans.png"
+}
