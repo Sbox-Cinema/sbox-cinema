@@ -163,6 +163,9 @@ public partial class Trash : Prop, IUse
                 DestroyGlow();
         }
 
+        //Enable the glow if the player is within range else disable it
+        glow.Enabled = player.Position.Distance(Position) < 236.0f;
+
         //Update glow color based on decay state
         switch (decayStatus)
         {
