@@ -8,9 +8,7 @@ public partial class Armrest : BaseNetworkable
     public enum States : int
     {
         Lowered,
-        Raising,
-        Raised,
-        Lowering
+        Raised
     }
 
     public enum Sides : int
@@ -23,10 +21,13 @@ public partial class Armrest : BaseNetworkable
     public CinemaChair Chair { get; set; }
     [Net]
     public ModelEntity HeldEntity { get; set; }
-    [Net]
-    public States State { get; set; } = States.Lowered;
+
     [Net]
     public Sides Side { get; set; }
+
+    public States State => Chair.GetAnimParameterBool(ArmrestToggleParameter)
+    ? States.Raised
+    : States.Lowered;
 
     public string CupholderBoneName => Side switch
     {
@@ -50,11 +51,6 @@ public partial class Armrest : BaseNetworkable
             // Default to launching HeldEntity back and up a bit.
             var launchDirection = (Chair.Rotation.Backward + Chair.Rotation.Up).Normal;
             LaunchHeldEntity(launchDirection, 250f, 0.2f);
-            State = States.Raised;
-        }
-        else if (tag.Contains("lowered"))
-        {
-            State = States.Lowered;
         }
     }
 
@@ -62,10 +58,6 @@ public partial class Armrest : BaseNetworkable
     {
         var originalValue = Chair.GetAnimParameterBool(ArmrestToggleParameter);
         Chair.SetAnimParameter(ArmrestToggleParameter, !originalValue);
-        // If toggle_seat was true but now is false, we are now lowering the seat.
-        State = originalValue
-            ? States.Lowering
-            : States.Raising;
     }
 
     /// <summary>
@@ -93,8 +85,12 @@ public partial class Armrest : BaseNetworkable
     private void HoldEntity(ModelEntity entity)
     {
         HeldEntity = entity;
-        entity.Transform = GetCupholderTransform()
-            .WithRotation(Rotation.Identity);
+        var cupholderTransform = GetCupholderTransform();
+        // The Rotation.Up vector of the cupholder bone is pointed off to the side,
+        // so we compensate for that here to get the "actual" up direction.
+        var rotation = cupholderTransform.Rotation.RotateAroundAxis(Vector3.Forward, -90f);
+        entity.Transform = cupholderTransform
+            .WithRotation(rotation);
         entity.SetParent(Chair, CupholderBoneName);
     }
 
