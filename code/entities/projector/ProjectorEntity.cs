@@ -9,14 +9,14 @@ namespace Cinema;
 [SupportsSolid]
 public partial class ProjectorEntity : Entity
 {
-    [Property(Title = "Projector Name")]
+    [Net, Property(Title = "Projector Name")]
     public string ProjectorName { get; set; } = "Projector";
 
-    [Property(Title = "Projection Resolution (Pixels)")]
-    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024, 1024);
+    [Net, Property(Title = "Projection Resolution (Pixels)")]
+    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024);
 
-    [Property(Title = "Projection Size (Units)")]
-    public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
+    [Net, Property(Title = "Projection Size (Units)")]
+    public Vector3 ProjectionSize { get; set; } = new Vector3(240, 135);
 
     public Projection ProjectionImage { get; set; }
     public WebMediaSource MediaSrc { get; set; }
@@ -27,9 +27,16 @@ public partial class ProjectorEntity : Entity
     {
         base.Spawn();
 
-        Transmit = TransmitType.Always;
+        if (ProjectionResolution == default)
+        {
+            ProjectionResolution = new Vector2(1024);
+        }
+        if (ProjectionSize == default)
+        {
+            ProjectionSize = new Vector3(240, 135);
+        }
 
-        Rotation = Rotation.FromYaw(90);
+        Transmit = TransmitType.Always;
 
         Controller = new MediaController()
         {
@@ -42,6 +49,23 @@ public partial class ProjectorEntity : Entity
         base.ClientSpawn();
 
         ProjectionImage = new Projection(this, MediaSrc);
+    }
+
+    public static void DrawGizmos(EditorContext context)
+    {
+        if (!context.IsSelected)
+        {
+            return;
+        }
+
+        var projectionSizeProp = context.Target.GetProperty("ProjectionSize");
+        var projectionSize = projectionSizeProp.As.Vector3;
+
+        var length = 3000f;
+        var mins = new Vector3(0, -(projectionSize.x / 2), -(projectionSize.y / 2));
+        var maxs = new Vector3(length, projectionSize.x / 2, projectionSize.y / 2);
+        var bbox = new BBox(mins, maxs);
+        Gizmo.Draw.LineBBox(bbox);
     }
 }
 
