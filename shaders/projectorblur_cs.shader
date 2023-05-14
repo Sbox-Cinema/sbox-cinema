@@ -29,14 +29,15 @@ COMMON
 //=========================================================================================================================
 CS
 {
-	    // Input texture
+	// Input texture
     Texture2D<float4> g_tInput < Attribute("InputTexture"); > ;
+	Texture2D<float4> g_tMask < Attribute("MaskTexture"); > ;
     // Output texture
     RWTexture2D<float4> g_tOutput < Attribute("OutputTexture"); > ;
 
 	float3 LoadColor( int2 pixelCoord )
 	{
-		return g_tInput[ pixelCoord ].rgb;
+		return g_tInput[ pixelCoord ].rgb * g_tMask[pixelCoord];
 	}
 
 	void StoreColor( int2 pixelCoord, float4 color )
@@ -164,6 +165,6 @@ CS
     [numthreads(8, 8, 1)]
     void MainCs(uint2 vGroupID : SV_GroupID, uint2 vGroupThreadID : SV_GroupThreadID, uint uGroupIndex : SV_GroupIndex, uint3 vThreadId : SV_DispatchThreadID )
     {
-		StoreColor( vThreadId.xy, GaussianBlur( vGroupID, vGroupThreadID, vThreadId.xy) );
+		g_tOutput[vThreadId.xy] = GaussianBlur( vGroupID, vGroupThreadID, vThreadId.xy);
     }
 }
