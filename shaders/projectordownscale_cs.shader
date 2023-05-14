@@ -35,7 +35,7 @@ CS
     RWTexture2D<float4> g_tOutput < Attribute("OutputTexture"); > ;
 
     [numthreads(8, 8, 1)]
-    void MainCs(uint uGroupIndex : SV_GroupIndex, uint3 vThreadId : SV_DispatchThreadID )
+    void MainCs(uint2 vGroupID : SV_GroupID, uint2 vGroupThreadID : SV_GroupThreadID, uint uGroupIndex : SV_GroupIndex, uint3 vThreadId : SV_DispatchThreadID )
     {
         uint2 outputSize;
         g_tOutput.GetDimensions(outputSize.x, outputSize.y);

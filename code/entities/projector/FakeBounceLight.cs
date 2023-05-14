@@ -12,9 +12,11 @@ public class FakeBounceLight : Entity
 {
     public OrthoLightEntity Light { get; set; }
     public Texture SourceTexture { get; set; }
+    public Texture IntermediateTexture { get; set; }
     public int SampleSize { get; set; } = 8;
     public SpotLightEntity Spotlight { get; set; }
-    private ComputeShader Shader { get; set; }
+    private ComputeShader DownscaleShader { get; set; }
+    private ComputeShader BlurShader { get; set; }
 
     public void Init()
     {
@@ -23,8 +25,10 @@ public class FakeBounceLight : Entity
             Transform = Transform
         };
         Spotlight.SetParent(this);
-        Shader = new ComputeShader("projectorbounce_cs");
-        Spotlight.LightCookie = CreateLightCookie();
+        DownscaleShader = new ComputeShader("projectordownscale_cs");
+        BlurShader = new ComputeShader("projectorblur_cs");
+        Spotlight.LightCookie = CreateTexture();
+        IntermediateTexture = CreateTexture();
     }
 
     [GameEvent.Tick.Client]
@@ -42,9 +46,9 @@ public class FakeBounceLight : Entity
         Rotation = Rotation.LookAt(tr.Normal);
     }
 
-    private Texture CreateLightCookie()
+    private Texture CreateTexture()
     {
-        return Texture.Create(32, 32)
+        return Texture.Create(64, 64)
             .WithUAVBinding()
             .WithFormat(ImageFormat.RGBA8888)
             .WithDynamicUsage()
@@ -54,12 +58,13 @@ public class FakeBounceLight : Entity
     [GameEvent.Client.Frame]
     public void UpdateLightCookie()
     {
-        var outTex = Spotlight.LightCookie;
-        Shader.Attributes.Set("InputTexture", SourceTexture);
-        Shader.Attributes.Set("OutputTexture", outTex);
-        Shader.Attributes.Set("GameTime", Time.Now);
-        Shader.Dispatch(outTex.Width, outTex.Height, 1);
+        DownscaleShader.Attributes.Set("InputTexture", SourceTexture);
+        DownscaleShader.Attributes.Set("OutputTexture", IntermediateTexture);
+        DownscaleShader.Dispatch(IntermediateTexture.Width, IntermediateTexture.Height, 1);
+        BlurShader.Attributes.Set("InputTexture", IntermediateTexture);
+        BlurShader.Attributes.Set("OutputTexture", Spotlight.LightCookie);
+        BlurShader.Dispatch(Spotlight.LightCookie.Width, Spotlight.LightCookie.Height, 1);
         //DebugOverlay.Texture(SourceTexture, new Vector2(0, 0));
-        //DebugOverlay.Texture(outTex, new Vector2(0, SourceTexture.Height));
+        //DebugOverlay.Texture(Spotlight.LightCookie, new Vector2(0, SourceTexture.Height));
     }
 }
