@@ -5,7 +5,7 @@ using Sandbox;
 namespace Cinema.Jobs;
 
 /// <summary>
-/// Traits & Ablities that jobs have
+/// Traits & Abilities that jobs have
 /// </summary>
 [Flags]
 public enum JobAbilities : ulong
@@ -32,6 +32,12 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public JobAbilities Abilities { get; set; }
 
+    /// <summary>
+    /// What responsibilities this job has
+    /// </summary>
+    [Net]
+    public JobResponsibilities Responsibilities { get; set; }
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -43,6 +49,7 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Guest",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
+            Responsibilities = JobResponsibilities.UniversalIncome,
         },
         /// <summary>
         /// Usher job, can pickup garbage
@@ -51,6 +58,7 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
+            Responsibilities = 0,
         }
     };
 }
@@ -64,6 +72,8 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
     public new string Name => JobDetails?.Name ?? "Jobless";
 
     public JobAbilities Abilities => JobDetails?.Abilities ?? 0;
+
+    public JobResponsibilities Responsibilities => JobDetails?.Responsibilities ?? 0;
 
     public bool HasAbility(JobAbilities ability) => Abilities.HasFlag(ability);
 
