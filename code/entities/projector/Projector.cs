@@ -18,9 +18,6 @@ public partial class ProjectorEntity : Entity
     [Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
 
-    public Projection ProjectionImage { get; set; }
-    public WebMediaSource MediaSrc { get; set; }
-
     public MediaController Controller { get; set; }
 
     public override void Spawn()
@@ -37,11 +34,11 @@ public partial class ProjectorEntity : Entity
         };
         Controller.Parent = this;
     }
+
     public override void ClientSpawn()
     {
         base.ClientSpawn();
-
-        ProjectionImage = new Projection(this, MediaSrc);
+        InitProjection();
     }
 }
 

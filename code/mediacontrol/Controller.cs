@@ -22,13 +22,13 @@ public partial class MediaController : Entity
     {
     }
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     public void ServerUpdate()
     {
         PlayCurrentMediaOnProjector();
     }
 
-    [Event.Tick.Client]
+    [GameEvent.Tick.Client]
     public void ClientUpdate()
     {
         PlayCurrentMediaOnProjector();
@@ -37,7 +37,7 @@ public partial class MediaController : Entity
     public void AddToQueue(Media movie)
     {
         Queue.Add(movie);
-        if ( Queue.Count == 1 )
+        if (Queue.Count == 1)
             PlayCurrentMediaOnProjector(true);
     }
 
@@ -49,7 +49,7 @@ public partial class MediaController : Entity
 
     protected void PlayCurrentMediaOnProjector(bool forceUpdate = false)
     {
-        if ( CurrentMedia == null )
+        if (CurrentMedia == null)
         {
             SetMediaSourceUrl(StaticImage);
             return;
@@ -60,15 +60,15 @@ public partial class MediaController : Entity
 
     private void SetMediaSourceUrl(string url, bool forceUpdate = true)
     {
-        if ( Game.IsServer )
+        if (Game.IsServer)
         {
             ClientSetMediaSourceUrl(url, forceUpdate);
             return;
         }
 
-        if ( forceUpdate || Projector.ProjectionImage.MediaSource.CurrentUrl != url )
+        if (forceUpdate || Projector.CurrentUrl != url)
         {
-            Projector.ProjectionImage.MediaSource.SetUrl(url);
+            Projector.CurrentUrl = url;
         }
     }
 
@@ -83,14 +83,14 @@ public partial class MediaController : Entity
     [ConCmd.Server("queue")]
     public static void AddMedia(string url)
     {
-        foreach ( var controller in Entity.All.OfType<MediaController>() )
+        foreach (var controller in Entity.All.OfType<MediaController>())
             controller.AddToQueue(new Media() { Url = url, Requestor = ConsoleSystem.Caller });
     }
 
     [ConCmd.Server("skip")]
     public static void Skip()
     {
-        foreach ( var controller in Entity.All.OfType<MediaController>() )
+        foreach (var controller in Entity.All.OfType<MediaController>())
             controller.StartNext();
     }
 }
