@@ -4,11 +4,14 @@ namespace Cinema.Cookable;
 
 public partial class Hotdog
 {
+    [BindComponent] public Rotator Rotator { get; }
     public override void Spawn()
     {
         base.Spawn();
 
         SetupModel();
+
+        Components.Create<Rotator>();
     }
     public override void ClientSpawn()
     {
