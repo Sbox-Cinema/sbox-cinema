@@ -33,7 +33,7 @@ public partial class ProjectorEntity
         ProjectionTexture = Texture.CreateRenderTarget("projection-img", ImageFormat.RGBA8888, ProjectionResolution);
 
         //Initialize Media Panel
-        MediaSource = new WebMediaSource();
+        MediaSource = new WebMediaSource(this);
         MediaSource.Position = ProjectorSceneCamera.Position + (Vector3.Forward * 36.0f);
         MediaSource.Rotation = Rotation.FromYaw(180);
 
