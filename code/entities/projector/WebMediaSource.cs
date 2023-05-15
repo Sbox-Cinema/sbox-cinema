@@ -18,7 +18,7 @@ public partial class WebMediaSource : WorldPanel
 
     private Texture WebTexture;
 
-    public WebMediaSource(ProjectorEntity projector)
+    public WebMediaSource(ProjectorEntity projector, SceneWorld world = null) : base(world)
     {
         Projector = projector;
         InitWebSurface();
