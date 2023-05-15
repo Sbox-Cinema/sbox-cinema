@@ -1,45 +1,31 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Cinema;
 
 public partial class ProjectorEntity
 {
-    protected WebMediaSource MediaSource { get; set; }
+    private WebSurface WebSurface;
 
     public string CurrentUrl
     {
-        get => MediaSource.CurrentUrl;
-        set => MediaSource.CurrentUrl = value;
+        get => WebSurface.Url;
+        set => WebSurface.Url = value;
     }
-
-    private SceneWorld ProjectorSceneWorld { get; set; }
-    private SceneCamera ProjectorSceneCamera { get; set; }
     private Texture ProjectionTexture { get; set; }
     private OrthoLightEntity ProjectionLight { get; set; }
 
     private void InitProjection()
     {
-        //Initialize Scene World
-        ProjectorSceneWorld = new SceneWorld();
+        WebSurface = Game.CreateWebSurface();
+        WebSurface.Size = ProjectionSize;
+        WebSurface.InBackgroundMode = false;
+        WebSurface.OnTexture = UpdateWebTexture;
 
-        //Initialize Scene Camera
-        ProjectorSceneCamera = new SceneCamera
-        {
-            World = ProjectorSceneWorld,
-            Position = new Vector3(),
-            ZNear = 1.0f,
-            ZFar = 15000.0f
-        };
+        WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
 
         //Initialize Texture
         ProjectionTexture = Texture.CreateRenderTarget("projection-img", ImageFormat.RGBA8888, ProjectionResolution);
-
-        //Initialize Media Panel
-        MediaSource = new WebMediaSource(this, ProjectorSceneWorld)
-        {
-            Position = ProjectorSceneCamera.Position + (Vector3.Forward * 36.0f),
-            Rotation = Rotation.FromYaw(180)
-        };
 
         ProjectionLight = new OrthoLightEntity
         {
@@ -57,9 +43,17 @@ public partial class ProjectorEntity
         ProjectionLight.UseFog();
     }
 
-    [GameEvent.PreRender]
-    protected void RenderScene()
+    private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
     {
-        Graphics.RenderToTexture(ProjectorSceneCamera, ProjectionTexture);
+        if (ProjectionTexture == null || ProjectionTexture.Size != size)
+        {
+            ProjectionTexture?.Dispose();
+            ProjectionTexture = null;
+            ProjectionTexture = Texture.Create((int)size.x, (int)size.y, ImageFormat.BGRA8888)
+                .WithDynamicUsage()
+                .WithName("Web")
+                .Finish();
+        }
+        ProjectionTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
 }
