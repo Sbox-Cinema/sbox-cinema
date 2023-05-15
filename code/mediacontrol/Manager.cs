@@ -11,5 +11,4 @@ public partial class MediaManager : Entity
     {
         Controllers.Add(controller);
     }
-
 }

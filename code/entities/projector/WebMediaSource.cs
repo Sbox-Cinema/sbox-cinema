@@ -6,57 +6,44 @@ namespace Cinema;
 
 public partial class WebMediaSource : WorldPanel
 {
-    private ProjectorEntity Projector;
-
     private WebSurface WebSurface;
-    public Texture WebTexture;
 
-    public string CurrentUrl => WebSurface.Url;
-
-    public WebMediaSource(ProjectorEntity ent)
+    public string CurrentUrl
     {
-        Projector = ent;
+        get { return WebSurface.Url; }
+        set { WebSurface.Url = value; }
+    }
 
-        InitWorldPanel();
+    private Texture WebTexture;
+
+    public WebMediaSource()
+    {
         InitWebSurface();
     }
-    public WebMediaSource(ProjectorEntity ent, SceneWorld world = null) : base(world)
-    {
-        Projector = ent;
 
-        InitWorldPanel();
-        InitWebSurface();
-    }
-    private void InitWorldPanel()
-    {
-        PanelBounds = new Rect(-Projector.ProjectionResolution.x / 2, -Projector.ProjectionResolution.y / 2, Projector.ProjectionResolution.x, Projector.ProjectionResolution.y);
-    }
     private void InitWebSurface()
     {
         WebSurface = Game.CreateWebSurface();
-        WebSurface.Size = Projector.ProjectionResolution;
+        WebSurface.Size = new Vector2(1600, 900);
         WebSurface.InBackgroundMode = false;
         WebSurface.OnTexture = OnBrowserDataChanged;
 
         WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
     }
-    void ResetWebPanel()
+
+    void OnBrowserDataChanged(ReadOnlySpan<byte> span, Vector2 size)
     {
-        WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
+        if (Game.IsServer)
+        {
+            return;
+        }
+
+        UpdateWebTexture(span, size);
     }
 
-    public void SetUrl(string url)
-    {
-        WebSurface.Url = url;
-    }
-
-    public override void OnHotloaded()
-    {
-        ResetWebPanel();
-    }
     private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
     {
-        if ( WebTexture == null || WebTexture.Size != size )
+        if (WebTexture == null || WebTexture.Size != size)
         {
             WebTexture?.Dispose();
             WebTexture = null;
@@ -69,15 +56,7 @@ public partial class WebMediaSource : WorldPanel
         }
         WebTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
-    void OnBrowserDataChanged(ReadOnlySpan<byte> span, Vector2 size)
-    {
-        if ( Game.IsServer )
-        {
-            return;
-        }
 
-        UpdateWebTexture(span, size);
-    }
     public override void OnDeleted()
     {
         base.OnDeleted();

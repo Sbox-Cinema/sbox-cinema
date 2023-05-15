@@ -27,6 +27,11 @@
     "LeaderboardType": "None",
     "ProjectTemplate": null,
     "CsProjName": "",
-    "HttpAllowList": null
+    "HttpAllowList": [
+      "https://www.youtube.com/*",
+      "https://i.pinimg.com/*",
+      "https://i.pinimg.com/",
+      "https://www.youtube.com/"
+    ]
   }
 }
