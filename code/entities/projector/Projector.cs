@@ -18,7 +18,8 @@ public partial class ProjectorEntity : Entity
     [Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
 
-    public MediaController Controller { get; set; }
+    [BindComponent]
+    public MediaController Controller { get; }
 
     public override void Spawn()
     {
@@ -28,11 +29,7 @@ public partial class ProjectorEntity : Entity
 
         Rotation = Rotation.FromYaw(90);
 
-        Controller = new MediaController()
-        {
-            Projector = this
-        };
-        Controller.Parent = this;
+        Components.Create<MediaController>();
     }
 
     public override void ClientSpawn()

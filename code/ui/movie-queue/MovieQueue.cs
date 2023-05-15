@@ -27,9 +27,9 @@ public partial class MovieQueue : Panel
     {
         var queueHash = 11;
 
-        if ( Queue != null )
+        if (Queue != null)
         {
-            foreach ( var media in Queue )
+            foreach (var media in Queue)
             {
                 queueHash = queueHash * 31 + media.GetHashCode();
             }
@@ -42,10 +42,10 @@ public partial class MovieQueue : Panel
     protected void OnQueue()
     {
         var videoId = MovieIDEntry.Text;
-        if ( videoId == "" )
+        if (videoId == "")
             return;
         var fullUrl = $"https://www.youtube.com/embed/{videoId}?autoplay=1;frameborder=0";
-        MediaController.AddMedia(fullUrl);
+        Controller.AddToQueue(fullUrl);
         MovieIDEntry.Text = "";
         MovieIDEntry.Disabled = true;
         MovieIDEntry.Disabled = false;
@@ -53,7 +53,7 @@ public partial class MovieQueue : Panel
 
     protected void OnSkip()
     {
-        MediaController.Skip();
+        Controller.Skip();
     }
 
     protected void OnClose()

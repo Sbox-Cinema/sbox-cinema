@@ -155,11 +155,11 @@ partial class Player : AnimatedEntity, IEyes
             TimeSinceMenuPressed = 0;
             if (!UI.MovieQueue.Instance.Visible)
             {
-                var closestMoviePlayer = Entity.All.OfType<MediaController>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
-                if (closestMoviePlayer != null)
+                var closestProjector = Entity.All.OfType<ProjectorEntity>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
+                if (closestProjector != null)
                 {
-                    Log.Info($"Found a movie player {closestMoviePlayer}");
-                    UI.MovieQueue.Instance.Controller = closestMoviePlayer;
+                    Log.Info($"Found a projector {closestProjector}");
+                    UI.MovieQueue.Instance.Controller = closestProjector.Controller;
                     UI.MovieQueue.Instance.Visible = true;
                 }
             }
