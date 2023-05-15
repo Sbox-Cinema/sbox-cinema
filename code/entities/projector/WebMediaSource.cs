@@ -14,31 +14,24 @@ public partial class WebMediaSource : WorldPanel
         set { WebSurface.Url = value; }
     }
 
+    public ProjectorEntity Projector { get; protected set; }
+
     private Texture WebTexture;
 
-    public WebMediaSource()
+    public WebMediaSource(ProjectorEntity projector)
     {
+        Projector = projector;
         InitWebSurface();
     }
 
     private void InitWebSurface()
     {
         WebSurface = Game.CreateWebSurface();
-        WebSurface.Size = new Vector2(1600, 900);
+        WebSurface.Size = Projector.ProjectionSize;
         WebSurface.InBackgroundMode = false;
-        WebSurface.OnTexture = OnBrowserDataChanged;
+        WebSurface.OnTexture = UpdateWebTexture;
 
         WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
-    }
-
-    void OnBrowserDataChanged(ReadOnlySpan<byte> span, Vector2 size)
-    {
-        if (Game.IsServer)
-        {
-            return;
-        }
-
-        UpdateWebTexture(span, size);
     }
 
     private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
