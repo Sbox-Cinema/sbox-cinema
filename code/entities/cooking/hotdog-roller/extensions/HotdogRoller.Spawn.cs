@@ -9,6 +9,8 @@ public partial class HotdogRoller
         base.Spawn();
 
         SetupModel();
+
+        TestHotDogs();
     }
     public override void ClientSpawn()
     {
@@ -31,11 +33,34 @@ public partial class HotdogRoller
         Tags.Add("interactable");
     }
 
-    /// <summary>
-    /// Sets up the entity's UI when the client is spawned 
-    /// </summary>
     private void SetupUI()
     {
         Tooltip = new UI.Tooltip(this, "Press E to use machine");
+    }
+
+    private void TestHotDogs()
+    { 
+        for (int i = 0; i < 11; i++)
+        {
+            HotdogsFront.Add(new Cookable.Hotdog());
+            AttachEntity(HotdogsFront[i], $"S{i + 1}F");
+        }
+
+        for (int i = 0; i < 11; i++)
+        {
+            HotdogsBack.Add(new Cookable.Hotdog());
+            AttachEntity(HotdogsBack[i], $"S{i + 1}B");
+        }
+    }
+
+    private void AttachEntity(Entity ent, string attach)
+    {
+        if (GetAttachment(attach) is Transform t)
+        {
+            ent.Transform = t;
+
+            ent.Position += (Vector3.Up * 0.5f);
+            ent.Position += (Vector3.Left * 0.5f);
+        }
     }
 }
