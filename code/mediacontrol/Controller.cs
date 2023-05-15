@@ -4,10 +4,9 @@ using Sandbox;
 
 namespace Cinema;
 
-public partial class MediaController : Entity
+public partial class MediaController : EntityComponent<ProjectorEntity>, ISingletonComponent
 {
-    [Net]
-    public ProjectorEntity Projector { get; set; }
+    public ProjectorEntity Projector => Entity;
 
     [Net]
     public IList<Media> Queue { get; set; } = new List<Media>();
@@ -17,10 +16,6 @@ public partial class MediaController : Entity
     public Media CurrentMedia => Queue.FirstOrDefault();
 
     public Media Next => Queue.ElementAtOrDefault(1);
-
-    public MediaController()
-    {
-    }
 
     [GameEvent.Tick.Server]
     public void ServerUpdate()
@@ -39,6 +34,23 @@ public partial class MediaController : Entity
         Queue.Add(movie);
         if (Queue.Count == 1)
             PlayCurrentMediaOnProjector(true);
+    }
+
+    public void AddToQueue(string url)
+    {
+        if (Game.IsServer) return;
+        AddMedia(Entity.NetworkIdent, url);
+    }
+
+    public void Skip()
+    {
+        if (Game.IsServer)
+        {
+            StartNext();
+            return;
+        }
+
+        Skip(Entity.NetworkIdent);
     }
 
     public void StartNext()
@@ -81,16 +93,22 @@ public partial class MediaController : Entity
     //Hacky, @todo: make this cleaner and target specific controllers
 
     [ConCmd.Server("queue")]
-    public static void AddMedia(string url)
+    public static void AddMedia(int projectorId, string url)
     {
-        foreach (var controller in Entity.All.OfType<MediaController>())
-            controller.AddToQueue(new Media() { Url = url, Requestor = ConsoleSystem.Caller });
+        var projector = Sandbox.Entity.FindByIndex(projectorId);
+        var controller = projector?.Components.Get<MediaController>();
+        if (controller is null) return;
+
+        controller.AddToQueue(new Media() { Url = url, Requestor = ConsoleSystem.Caller });
     }
 
     [ConCmd.Server("skip")]
-    public static void Skip()
+    public static void Skip(int projectorId)
     {
-        foreach (var controller in Entity.All.OfType<MediaController>())
-            controller.StartNext();
+        var projector = Sandbox.Entity.FindByIndex(projectorId);
+        var controller = projector?.Components.Get<MediaController>();
+        if (controller is null) return;
+
+        controller.StartNext();
     }
 }
