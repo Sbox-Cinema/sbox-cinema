@@ -264,7 +264,7 @@ public partial class CinemaGame
         target.SetJob(details);
     }
 
-    [ConCmd.Client("player.job.debug")]
+    [ConCmd.Client("player.job.debug.client")]
     public static void DebugJobClient()
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
