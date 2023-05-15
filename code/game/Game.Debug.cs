@@ -18,6 +18,8 @@ public partial class CinemaGame
 		76561197991940798,
         //Walker / eXodos
         76561197973408108,
+        //trende2001
+        76561198043979097,
     };
 
     public static bool ValidateUser(long steamID)
@@ -27,8 +29,66 @@ public partial class CinemaGame
         return false;
     }
 
-    [ConCmd.Server("cinema.entity.delete")]
-    public static void CommandExample()
+    [ClientRpc]
+    public static void CleanupClientEntities()
+    {
+        Decal.Clear(true, true);
+        foreach (Entity ent in Entity.All)
+        {
+            if (ent.IsClientOnly)
+                ent.Delete();
+        }
+    }
+
+    private static bool CanDeleteEntity(Entity ent)
+    {
+        if (ent is Player) return false;
+        if (ent is WorldEntity) return false;
+
+        return true;
+    }
+
+    [ConCmd.Server("reset.game")]
+    public static void ResetGame()
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        // Tell our game that all clients have just left.
+        foreach (IClient cl in Game.Clients)
+        {
+            CinemaGame.Current.ClientDisconnect(cl, NetworkDisconnectionReason.SERVER_SHUTDOWN);
+        }
+
+        // Cleanup on clients
+        CleanupClientEntities(To.Everyone);
+
+        // Delete everything except the clients and the world 
+        foreach (Entity ent in Entity.All)
+        {
+            if (ent is not IClient &&
+                ent is not WorldEntity)
+                ent.Delete();
+        }
+
+
+        // Reset the map, this will respawn all map entities
+        Game.ResetMap(Entity.All.Where(x => x is Player).ToArray());
+
+        // Create a brand new game
+        CinemaGame.Current = new CinemaGame();
+
+        // Fake a post level load after respawning entities, just incase something uses it
+        CinemaGame.Current.PostLevelLoaded();
+
+        // Tell our new game that all clients have just joined to set them all back up.
+        foreach (IClient cl in Game.Clients)
+        {
+            CinemaGame.Current.ClientJoined(cl);
+        }
+    }
+
+    [ConCmd.Server("ent.delete")]
+    public static void DeleteEntity()
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
 
@@ -42,15 +102,41 @@ public partial class CinemaGame
             tr.Entity.Delete();
     }
 
-    private static bool CanDeleteEntity(Entity ent)
+    [ConCmd.Server("ent.create")]
+    public static void SpawnEntity(string entName)
     {
-        if (ent is Player) return false;
-        if (ent is WorldEntity) return false;
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
 
-        return true;
+        Log.Info("creating " + entName);
+
+        var owner = ConsoleSystem.Caller.Pawn as Player;
+
+        if (owner == null)
+        {
+            Log.Info("Failed to create " + entName);
+            return;
+        }
+
+        var entityType = TypeLibrary.GetType<Entity>(entName)?.TargetType;
+        if (entityType == null)
+        {
+            Log.Info("Failed to create " + entName);
+            return;
+        }
+
+        var tr = Trace.Ray(owner.AimRay, 500)
+            .UseHitboxes()
+            .Ignore(owner)
+            .Size(2)
+            .Run();
+
+        var ent = TypeLibrary.Create<Entity>(entityType);
+
+        ent.Position = tr.EndPosition;
+        ent.Rotation = Rotation.From(new Angles(0, owner.AimRay.Forward.EulerAngles.yaw, 0));
     }
 
-    [ConCmd.Server("cinema.weapon.create")]
+    [ConCmd.Server("weapon.create")]
     public static void SpawnWeaponCMD(string wepName, bool inInv = false)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -75,7 +161,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("cinema.player.bring")]
+    [ConCmd.Server("player.bring")]
     public static void BringPlayerCMD(string playerName)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -99,7 +185,7 @@ public partial class CinemaGame
         (client.Pawn as Player).ResetInterpolation();
     }
 
-    [ConCmd.Server("cinema.player.money.give")]
+    [ConCmd.Server("money.give")]
     public static void GivePlayerCashCMD(int amt, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -124,7 +210,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("cinema.player.money.take")]
+    [ConCmd.Server("money.take")]
     public static void TakePlayerCashCMD(int amt, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -149,26 +235,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("cinema.npc.create")]
-    public static void SpawnNpcCMD(string npcName)
-    {
-        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
-
-        var player = ConsoleSystem.Caller.Pawn as Player;
-        if (player == null) return;
-
-        var npc = CreateByName<NpcBase>(npcName);
-        if (npc == null) return;
-
-        var tr = Trace.Ray(player.EyePosition, player.EyePosition + player.EyeRotation.Forward * 999)
-            .Ignore(player)
-            .WorldOnly()
-            .Run();
-
-        npc.Position = tr.EndPosition;
-    }
-
-    [ConCmd.Server("cinema.player.job.set")]
+    [ConCmd.Server("player.job.set")]
     public static void SetJob(string jobName, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -197,7 +264,7 @@ public partial class CinemaGame
         target.SetJob(details);
     }
 
-    [ConCmd.Client("cinema.player.job.debug.client")]
+    [ConCmd.Client("player.job.debug")]
     public static void DebugJobClient()
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
