@@ -48,7 +48,7 @@ public partial class CinemaGame
         return true;
     }
 
-    [ConCmd.Server("reset.game")]
+    [ConCmd.Server("game.reset")]
     public static void ResetGame()
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
