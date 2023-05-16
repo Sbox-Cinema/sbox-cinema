@@ -25,12 +25,7 @@ public partial class FakeBounceLight : Entity
     {
         DownscaleShader = new ComputeShader("projectordownscale_cs");
         BlurShader = new ComputeShader("projectorblur_cs");
-        LightCookie = Texture.CreateRenderTarget()
-            .WithSize(64)
-            .WithFormat(ImageFormat.RGBA8888)
-            .WithDynamicUsage()
-            .WithUAVBinding()
-            .Create();
+        LightCookie = CreateTexture();
         IntermediateTexture = CreateTexture();
         MaskTexture = CreateTexture();
         var maskLargeTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
