@@ -27,6 +27,6 @@
     "LeaderboardType": "None",
     "ProjectTemplate": null,
     "CsProjName": "",
-    "HttpAllowList": null
+    "HttpAllowList": []
   }
 }

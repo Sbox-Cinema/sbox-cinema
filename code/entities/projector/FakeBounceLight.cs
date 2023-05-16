@@ -8,43 +8,43 @@ using System.Threading.Tasks;
 
 namespace Cinema;
 
-public class FakeBounceLight : Entity
+public partial class FakeBounceLight : Entity
 {
-    public OrthoLightEntity Light { get; set; }
+    [ConVar.Client("cinema.projector.bouncetest")]
+    public static bool EnableBounceTest { get; set; } = false;
+    public OrthoLightEntity ProjectorLight { get; set; }
     public Texture SourceTexture { get; set; }
     public Texture IntermediateTexture { get; set; }
-    public int SampleSize { get; set; } = 8;
+    public Texture LightCookie { get; set; }
     public SpotLightEntity Spotlight { get; set; }
     private ComputeShader DownscaleShader { get; set; }
     private ComputeShader BlurShader { get; set; }
     public Texture MaskTexture { get; set; }
 
-    public void Init()
+    public FakeBounceLight()
     {
-        Spotlight = new SpotLightEntity()
-        {
-            Transform = Transform,
-            Range = 400,
-            InnerConeAngle = 50f,
-            OuterConeAngle = 80f,
-            DynamicShadows = true
-        };
-        Spotlight.SetParent(this);
         DownscaleShader = new ComputeShader("projectordownscale_cs");
         BlurShader = new ComputeShader("projectorblur_cs");
-        Spotlight.LightCookie = CreateTexture();
+        LightCookie = Texture.CreateRenderTarget()
+            .WithSize(64)
+            .WithFormat(ImageFormat.RGBA8888)
+            .WithDynamicUsage()
+            .WithUAVBinding()
+            .Create();
         IntermediateTexture = CreateTexture();
         MaskTexture = CreateTexture();
-        var maskTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
-        DownscaleTexture(maskTex, MaskTexture);
+        var maskLargeTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
+        DownscaleTexture(maskLargeTex, MaskTexture);
+        Spotlight = CreateSpotlight();
     }
 
     [GameEvent.Tick.Client]
     public void OnClientTick() 
     {
-        var traceStart = Light.Position;
-        var traceEnd = Light.Position + Light.Rotation.Forward * 5000f;
+        var traceStart = ProjectorLight.Position;
+        var traceEnd = ProjectorLight.Position + ProjectorLight.Rotation.Forward * 5000f;
         var tr = Trace.Ray(traceStart, traceEnd)
+            .WorldOnly()
             .Run();
         if (!tr.Hit)
         {
@@ -52,6 +52,36 @@ public class FakeBounceLight : Entity
         }
         Position = tr.HitPosition;
         Rotation = Rotation.LookAt(tr.Normal);
+    }
+
+    [GameEvent.Client.Frame]
+    public void OnClientFrame()
+    {
+        DownscaleTexture(SourceTexture, IntermediateTexture);
+        BlurTexture(IntermediateTexture, LightCookie, MaskTexture);
+        if (EnableBounceTest)
+        {
+            DebugOverlay.Texture(SourceTexture, new Vector2(0, 0));
+            DebugOverlay.Texture(IntermediateTexture, new Vector2(SourceTexture.Width, 0));
+            DebugOverlay.Texture(LightCookie, new Vector2(SourceTexture.Width, IntermediateTexture.Height));
+        }
+    }
+
+    private SpotLightEntity CreateSpotlight()
+    {
+        var spotlight = new SpotLightEntity()
+        {
+            Brightness = 2,
+            Transform = Transform,
+            Range = 1000,
+            InnerConeAngle = 50f,
+            OuterConeAngle = 80f,
+            DynamicShadows = true,
+            FogStrength = 0.25f,
+            LightCookie = LightCookie
+        };
+        spotlight.SetParent(this);
+        return spotlight;
     }
 
     private Texture CreateTexture()
@@ -63,22 +93,18 @@ public class FakeBounceLight : Entity
             .Finish();
     }
 
-    private void DownscaleTexture(Texture sourceTex, Texture destinationTex)
+    private void DownscaleTexture(Texture fromTex, Texture toTex)
     {
-        DownscaleShader.Attributes.Set("InputTexture", sourceTex);
-        DownscaleShader.Attributes.Set("OutputTexture", destinationTex);
-        DownscaleShader.Dispatch(destinationTex.Width, destinationTex.Height, 1);
+        DownscaleShader.Attributes.Set("InputTexture", fromTex);
+        DownscaleShader.Attributes.Set("OutputTexture", toTex);
+        DownscaleShader.Dispatch(toTex.Width, toTex.Height, 1);
     }
 
-    [GameEvent.Client.Frame]
-    public void UpdateLightCookie()
+    private void BlurTexture(Texture fromTex, Texture toTex, Texture maskTex)
     {
-        DownscaleTexture(SourceTexture, IntermediateTexture);
-        BlurShader.Attributes.Set("InputTexture", IntermediateTexture);
-        BlurShader.Attributes.Set("MaskTexture", MaskTexture);
-        BlurShader.Attributes.Set("OutputTexture", Spotlight.LightCookie);
-        BlurShader.Dispatch(Spotlight.LightCookie.Width, Spotlight.LightCookie.Height, 1);
-        //DebugOverlay.Texture(SourceTexture, new Vector2(0, 0));
-        //DebugOverlay.Texture(Spotlight.LightCookie, new Vector2(0, SourceTexture.Height));
+        BlurShader.Attributes.Set("InputTexture", fromTex);
+        BlurShader.Attributes.Set("MaskTexture", maskTex);
+        BlurShader.Attributes.Set("OutputTexture", toTex);
+        BlurShader.Dispatch(toTex.Width, toTex.Height, 1);
     }
 }

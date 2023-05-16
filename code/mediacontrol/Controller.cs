@@ -87,6 +87,12 @@ public partial class MediaController : Entity
             controller.AddToQueue(new Media() { Url = url, Requestor = ConsoleSystem.Caller });
     }
 
+    [ConCmd.Server("duccqueue")]
+    public static void DuccAddMedia()
+    {
+        AddMedia("https://www.youtube.com/watch?v=xFE4tzsDFsY");
+    }
+
     [ConCmd.Server("skip")]
     public static void Skip()
     {

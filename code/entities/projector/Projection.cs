@@ -21,10 +21,9 @@ public partial class Projection : Entity
         InitProjectionImage();
         FakeBounceLight = new FakeBounceLight() 
         { 
-            Light = ProjectionLight,
+            ProjectorLight = ProjectionLight,
             SourceTexture = ProjectionLight.LightCookie
         };
-        FakeBounceLight.Init();
     }
     private void InitProjectionScene()
     {
