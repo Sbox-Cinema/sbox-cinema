@@ -37,5 +37,10 @@ public partial class ProjectorEntity : Entity
         base.ClientSpawn();
         InitProjection();
     }
+
+    protected override void OnDestroy()
+    {
+        WebSurface?.Dispose();
+    }
 }
 
