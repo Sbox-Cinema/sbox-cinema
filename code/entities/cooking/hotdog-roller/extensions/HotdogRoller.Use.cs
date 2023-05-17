@@ -23,9 +23,7 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
-        TogglePower();
-        ToggleCookingComponents();
-        ToggleKnobs();
+        OnMachineUse();
 
         Input.Clear("use");
 
@@ -40,5 +38,12 @@ public partial class HotdogRoller
     public void OnStopUse(Entity user)
     {
         
+    }
+
+    protected virtual void OnMachineUse()
+    {
+        TogglePower();
+        ToggleCookingComponents();
+        ToggleKnobs();
     }
 }
