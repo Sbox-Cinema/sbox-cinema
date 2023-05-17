@@ -4,14 +4,11 @@ namespace Cinema.Cookable;
 
 public partial class Hotdog
 {
-    [BindComponent] public Rotator Rotator { get; }
     public override void Spawn()
     {
         base.Spawn();
 
         SetupModel();
-
-        Components.Create<Rotator>();
     }
     public override void ClientSpawn()
     {
@@ -25,7 +22,7 @@ public partial class Hotdog
     {
         Transmit = TransmitType.Always;
 
-        SetModel("models/hotdog/hotdog_cookable.vmdl");
+        SetModel("models/hotdog/hotdog_roller.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 

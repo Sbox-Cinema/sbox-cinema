@@ -21,8 +21,24 @@ public partial class HotdogRoller
     /// <returns>If the player can continue to use the Hotdog Roller</returns>
     public virtual bool OnUse(Entity user)
     {
-        if (user is not Player player) return false;
+        if (Game.IsClient) return false;
+
+        TogglePower();
+        ToggleCookingComponents();
+        ToggleKnobs();
+
+        Input.Clear("use");
 
         return false;
+    }
+
+    /// <summary>
+    /// Called on the server when the Hotdog Roller is stopped being used by a player
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns>If the player can continue to use the Hotdog Roller</returns>
+    public void OnStopUse(Entity user)
+    {
+        
     }
 }

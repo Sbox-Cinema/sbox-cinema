@@ -1,6 +1,5 @@
 ﻿using Editor;
 using Sandbox;
-using System;
 using System.Collections.Generic;
 
 namespace Cinema;
@@ -9,12 +8,16 @@ namespace Cinema;
 [Title("Hotdog Roller"), Category("Gameplay"), Icon("monitor")]
 [EditorModel("models/hotdogroller/hotdogroller.vmdl")]
 [SupportsSolid]
-public partial class HotdogRoller : AnimatedEntity, IUse
+public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     public UI.Tooltip Tooltip { get; set; }
 
     private List<Cookable.Hotdog> HotdogsFront = new();
     private List<Cookable.Hotdog> HotdogsBack = new();
+
+    private bool IsOn = false;
+
+    public string UseText => "Press E to use Hotdog Roller";
 
     public override void Simulate(IClient cl)
     {
@@ -22,6 +25,7 @@ public partial class HotdogRoller : AnimatedEntity, IUse
 
         if (Game.IsServer)
         {
+
             using (Prediction.Off())
             {
                 if (Input.Pressed(InputButton.Use))

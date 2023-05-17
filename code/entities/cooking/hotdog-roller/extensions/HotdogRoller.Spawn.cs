@@ -35,7 +35,7 @@ public partial class HotdogRoller
 
     private void SetupUI()
     {
-        Tooltip = new UI.Tooltip(this, "Press E to use machine");
+        Tooltip = new UI.Tooltip(this, UseText);
     }
 
     private void TestHotDogs()
