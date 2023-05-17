@@ -1,2 +1,29 @@
+# Sandbox
+code/accesslist.txt
+Properties
+.intermediate
+*.csproj
+*.bat
 
-code/obj/*
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Oo]bj/
+.vs/
+
+# Compiled files
+*.vanmgrph_c
+*.vmat_c
+*.vmdl_c
+*.vsnd_c
+*.vtex_c
+*.zip
+*.vpcf_c
+*.vpost_c
+*.sound_c
+*.prefab_c

@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class Player
 {
     // The players current money
-    [Net] public int Money { get; protected set; }
+    [Net] public int Money { get; set; }
 
     /// <summary>
     /// Checks if a player can afford a certain amount of money.

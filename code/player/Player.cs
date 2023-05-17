@@ -44,6 +44,7 @@ partial class Player : AnimatedEntity, IEyes
         TimeSinceJoinedServer = 0;
 
         Components.Create<PlayerInventory>();
+        SetJob(Jobs.JobDetails.DefaultJob);
 
         Tags.Add("player");
     }
@@ -92,6 +93,7 @@ partial class Player : AnimatedEntity, IEyes
         Components.Create<CrouchMechanic>();
         Components.Create<AirMoveMechanic>();
         Components.Create<JumpMechanic>();
+        Components.Create<AntiStuckMechanic>();
     }
 
     [ConCmd.Admin("noclip")]
@@ -117,16 +119,12 @@ partial class Player : AnimatedEntity, IEyes
     /// </summary>
     public override void Simulate(IClient cl)
     {
-        Rotation = LookInput.WithPitch(0f).ToRotation();
-
-        if (Input.Pressed(InputButton.View))
+        if (Input.Pressed("view"))
         {
             ThirdPersonCamera = !ThirdPersonCamera;
         }
 
         TickPlayerUse();
-
-        TickAnimation();
 
         ActiveController?.Simulate(cl);
 
@@ -150,7 +148,6 @@ partial class Player : AnimatedEntity, IEyes
     /// </summary>
     public override void FrameSimulate(IClient cl)
     {
-        Rotation = LookInput.WithPitch(0f).ToRotation();
         ActiveController?.FrameSimulate(cl);
 
         if (Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f)
@@ -173,7 +170,5 @@ partial class Player : AnimatedEntity, IEyes
                 UI.MovieQueue.Instance.Controller = null;
             }
         }
-
-        SimulateCamera(cl);
     }
 }

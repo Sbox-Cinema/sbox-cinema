@@ -102,8 +102,11 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
 
     public override void Simulate(IClient cl)
     {
+        Entity.Rotation = Entity.LookInput.WithPitch(0f).ToRotation();
+
         SimulateEyes();
         SimulateMechanics();
+        SimulateAnimation();
 
         if (Debug)
         {
@@ -135,7 +138,10 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
 
     public override void FrameSimulate(IClient cl)
     {
+        Entity.Rotation = Entity.LookInput.WithPitch(0f).ToRotation();
+
         SimulateEyes();
+        Entity.SimulateCamera(cl);
     }
 
     /// <summary>
