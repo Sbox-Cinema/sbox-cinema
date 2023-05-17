@@ -11,6 +11,8 @@ public partial class HotdogRoller
         SetupModel();
 
         TestHotDogs();
+
+        
     }
     public override void ClientSpawn()
     {
@@ -33,6 +35,9 @@ public partial class HotdogRoller
         Tags.Add("interactable");
     }
 
+    /// <summary>
+    /// Sets up the UI when the machine is interacted with
+    /// </summary>
     private void SetupUI()
     {
         Tooltip = new UI.Tooltip(this, UseText);

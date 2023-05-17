@@ -7,6 +7,9 @@ public partial class Rotator : EntityComponent
     [Net] private float RotatorDeg { get; set; } = 0.0f;
     [Net] private float RotatorSpeed { get; set; } = 0.5f;
 
+    /// <summary>
+    /// Called when activated 
+    /// </summary>
     protected override void OnActivate()
     {
         base.OnActivate();

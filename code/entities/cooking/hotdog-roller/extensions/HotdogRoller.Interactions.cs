@@ -7,17 +7,25 @@ public partial class HotdogRoller
     private void TogglePower()
     {
         IsOn = !IsOn;
-       
-        if(IsOn)
+
+        UpdatePowerIndicator();
+        UpdateCookingComponents();
+        UpdateControlKnobs();
+    }
+
+    private void UpdatePowerIndicator()
+    {
+        if (IsOn)
         {
             SetMaterialGroup(1);
-        } else
+        }
+        else
         {
             SetMaterialGroup(0);
         }
     }
 
-    private void ToggleCookingComponents()
+    private void UpdateCookingComponents()
     {
         if (IsOn) 
         {
@@ -49,8 +57,9 @@ public partial class HotdogRoller
         }
     }
 
-    private void ToggleKnobs()
+    private void UpdateControlKnobs()
     {
+        Log.Info($"Updating control knobs { IsOn }");
         if (IsOn)
         {
             SetAnimParameter("LeftHandleState", 3);

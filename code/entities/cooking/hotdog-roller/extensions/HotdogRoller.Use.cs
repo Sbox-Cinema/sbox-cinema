@@ -43,7 +43,5 @@ public partial class HotdogRoller
     protected virtual void OnMachineUse()
     {
         TogglePower();
-        ToggleCookingComponents();
-        ToggleKnobs();
     }
 }
