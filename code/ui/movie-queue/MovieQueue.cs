@@ -39,16 +39,24 @@ public partial class MovieQueue : Panel
     }
 
 
-    protected void OnQueue()
+    protected async void OnQueue()
     {
         var videoId = MovieIDEntry.Text;
         if (videoId == "")
             return;
-        var fullUrl = $"https://www.youtube.com/embed/{videoId}?autoplay=1;frameborder=0";
-        Controller.AddToQueue(fullUrl);
         MovieIDEntry.Text = "";
         MovieIDEntry.Disabled = true;
         MovieIDEntry.Disabled = false;
+
+        var valid = await Media.VerifyYouTubeId(videoId);
+
+        if (!valid)
+        {
+            Log.Error("Invalid YouTube ID");
+            return;
+        }
+
+        Controller.RequestMedia(videoId);
     }
 
     protected void OnSkip()
