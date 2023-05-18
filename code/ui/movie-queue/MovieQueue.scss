@@ -80,14 +80,14 @@ MovieQueue {
 .section {
     flex-direction: column;
     
-    margin: 8px;
+    margin: 4px;
 
     &:not(.clear) {
         padding: 8px;
     }
     
     &.outline {
-        border: 2px solid #5555;
+        //border: 2px solid #5555;
         background-color: rgba(30, 30, 30, 0.5);
     }
 
@@ -171,7 +171,8 @@ MovieQueue {
     align-items: center;
     width: 100%;
     padding: 6px;
-    max-height: 55px;
+    height: 42px;
+    max-height: 42px;
     margin: 4px 0px;
 
     &.header {
@@ -180,11 +181,11 @@ MovieQueue {
 
     border: 1px solid #5555;
     border-radius: 4px;
-    background-color: rgba(30, 30, 30, 0.5);
+    background-color: rgba(30, 30, 30, 0.8);
 
     &:hover {
         border: 1px solid #555F;
-        background-color: rgba(30, 30, 30, 0.7);
+        background-color: rgba(50, 50, 50, 0.8);
     }
 
     >.title {
@@ -193,6 +194,7 @@ MovieQueue {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        align-items: center;
     }
 
     >.requestor {

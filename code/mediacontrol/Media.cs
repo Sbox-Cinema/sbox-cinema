@@ -18,7 +18,7 @@ public partial class Media : BaseNetworkable
     public string YouTubeId { get; set; }
 
     [Net]
-    public string Requestor { get; set; }
+    public IClient Requestor { get; set; }
 
     [Net]
     public string Title { get; set; }
@@ -35,14 +35,21 @@ public partial class Media : BaseNetworkable
     [Net]
     public bool Verified { get; set; } = false;
 
+    public bool CanRemove(IClient client)
+    {
+        return client == Requestor;
+    }
+
+    public bool LocalClientCanRemove => Requestor == Game.LocalClient;
+
     public override string ToString()
     {
-        return $"Media: {YouTubeId} ({Title}) by {Requestor}";
+        return $"Media: {YouTubeId} ({Title}) by {Requestor.Name}";
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(YouTubeId, Requestor, Title, Duration, Thumbnail, CanEmbed, Verified);
+        return HashCode.Combine(YouTubeId, Requestor.Name, Title, Duration, Thumbnail, CanEmbed, Verified);
     }
 
     public static readonly string ApiUrl = "https://cinema-api.fly.dev";
@@ -81,7 +88,7 @@ public partial class Media : BaseNetworkable
             Thumbnail = response.Thumbnail,
             Verified = true,
             YouTubeId = request.YouTubeId,
-            Requestor = request.Requestor.Name
+            Requestor = request.Requestor
         };
 
         return media;
