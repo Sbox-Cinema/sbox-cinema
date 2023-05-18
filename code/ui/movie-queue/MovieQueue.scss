@@ -120,11 +120,11 @@ MovieQueue {
 }
 
 .button {
-    //background-color: #111;
     padding: 4px 8px;
     border-radius: 4px;
     border: 2px solid #5555;
-
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
 
     &:not(.fit) {
@@ -133,6 +133,7 @@ MovieQueue {
 
     &.small {
         padding: 0px 4px;
+        //min-width: 40px;
     }
 
     &.close-btn {
@@ -170,7 +171,7 @@ MovieQueue {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 6px;
+    padding: 6px 12px;
     height: 42px;
     max-height: 42px;
     margin: 4px 0px;
@@ -192,9 +193,18 @@ MovieQueue {
         flex-grow: 1;
         max-width: 65%;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         align-items: center;
+        flex-direction: row;
+
+        >.text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+    }
+
+    >.duration {
+        color: #ddd;
     }
 
     >.requestor {
@@ -202,7 +212,7 @@ MovieQueue {
         justify-content: center;
         text-overflow: ellipsis;
         white-space: nowrap;
-        color: #fffb;
+        color: #ddd;
     }
 
     >.controls {

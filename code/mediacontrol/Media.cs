@@ -26,6 +26,8 @@ public partial class Media : BaseNetworkable
     [Net]
     public int Duration { get; set; } = 0;
 
+    public string DurationFormatted => TimeSpan.FromSeconds(Duration).ToString(@"hh\:mm\:ss");
+
     [Net]
     public string Thumbnail { get; set; }
 
