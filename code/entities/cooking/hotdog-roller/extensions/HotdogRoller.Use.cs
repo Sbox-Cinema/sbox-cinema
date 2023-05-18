@@ -25,7 +25,7 @@ public partial class HotdogRoller
 
         OnMachineUse();
 
-        Input.Clear("use");
+        Input.Clear("use"); // Why?
 
         return false;
     }

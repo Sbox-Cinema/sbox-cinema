@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class Rotator : EntityComponent
 {
     [Net] private float RotatorDeg { get; set; } = 0.0f;
-    [Net] private float RotatorSpeed { get; set; } = 0.5f;
+    [Net] private float RotatorSpeed { get; set; } = 0.75f;
 
     /// <summary>
     /// Called when activated 

@@ -4,15 +4,29 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
+    /// <summary>
+    ///
+    /// </summary>
     private void TogglePower()
     {
         IsOn = !IsOn;
 
+        UpdateMachine();
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void UpdateMachine()
+    {
         UpdatePowerIndicator();
+        UpdatePowerButtons();
         UpdateCookingComponents();
         UpdateControlKnobs();
     }
-
+    /// <summary>
+    ///
+    /// </summary>
     private void UpdatePowerIndicator()
     {
         if (IsOn)
@@ -25,6 +39,25 @@ public partial class HotdogRoller
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    private void UpdatePowerButtons()
+    {
+        if (IsOn)
+        {
+            SetAnimParameter("toggle_left", true);
+            SetAnimParameter("toggle_right", true);
+        }
+        else
+        {
+            SetAnimParameter("toggle_left", false);
+            SetAnimParameter("toggle_right", false);
+        }
+    }
+    /// <summary>
+    ///
+    /// </summary>
     private void UpdateCookingComponents()
     {
         if (IsOn) 
@@ -45,18 +78,18 @@ public partial class HotdogRoller
         {
             foreach (var hotdog in HotdogsFront)
             {
-                hotdog.Components.RemoveAny<Rotator>();
-                hotdog.Components.RemoveAny<Steam>();
+                hotdog.Components.RemoveAll();
             }
 
             foreach (var hotdog in HotdogsBack)
             {
-                hotdog.Components.RemoveAny<Rotator>();
-                hotdog.Components.RemoveAny<Steam>();
+                hotdog.Components.RemoveAll();
             }
         }
     }
-
+    /// <summary>
+    ///
+    /// </summary>
     private void UpdateControlKnobs()
     {
         Log.Info($"Updating control knobs { IsOn }");

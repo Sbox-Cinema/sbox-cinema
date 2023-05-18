@@ -11,8 +11,6 @@ public partial class HotdogRoller
         SetupModel();
 
         TestHotDogs();
-
-        
     }
     public override void ClientSpawn()
     {

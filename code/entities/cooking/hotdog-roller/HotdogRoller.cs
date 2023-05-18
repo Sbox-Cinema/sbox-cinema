@@ -10,11 +10,9 @@ namespace Cinema;
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     public UI.Tooltip Tooltip { get; set; }
-    public UI.Placement PlacementIndicator { get; set; }
-
-    private List<Cookable.Hotdog> HotdogsFront = new();
-    private List<Cookable.Hotdog> HotdogsBack = new();
-
+    
+    [Net] public IList<Cookable.Hotdog> HotdogsFront { get; set; }
+    [Net] public IList<Cookable.Hotdog> HotdogsBack { get; set; }
     [Net] public bool IsOn { get; set; } = false;
     public string UseText => "Press E to use Hotdog Roller";
 
