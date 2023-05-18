@@ -19,7 +19,7 @@ public partial class MovieQueue : Panel
 
     public IList<Media> Queue => Controller?.Queue ?? new List<Media>();
 
-    public Media NowPlaying => Controller?.CurrentMedia ?? null;
+    public Media NowPlaying => Controller?.PlayingMedia ?? null;
 
     public TextEntry MovieIDEntry { get; set; }
 
@@ -31,6 +31,11 @@ public partial class MovieQueue : Panel
         {
             foreach (var media in Queue)
             {
+                if (media == null)
+                {
+                    Log.Info($"Null media");
+                    continue;
+                }
                 queueHash = queueHash * 31 + media.GetHashCode();
             }
         }

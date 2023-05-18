@@ -9,17 +9,30 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 {
     public ProjectorEntity Projector => Entity;
 
+    public List<Media> RequestQueue { get; set; } = new List<Media>();
+
     [Net]
     public IList<Media> Queue { get; set; }
 
-    public static string StaticImage => "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
+    public static string WaitingImage => "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
 
-    public Media CurrentMedia => Queue.FirstOrDefault();
+    public Media NextMedia => Queue.FirstOrDefault();
+
+    [Net]
+    public Media PlayingMedia { get; set; }
+    public TimeSince TimeSinceStartedPlaying { get; set; }
 
     [GameEvent.Tick.Server]
     public void ServerUpdate()
     {
-        PlayCurrentMediaOnProjector();
+        while (RequestQueue.Count > 0)
+        {
+            var request = RequestQueue.First();
+            RequestQueue.RemoveAt(0);
+            Queue.Add(request);
+        }
+
+        PlayNextMediaIfReady();
     }
 
     [GameEvent.Tick.Client]
@@ -37,15 +50,19 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         }
 
         var media = await Media.CreateFromRequest(movie);
-
-        Queue.Add(media);
-        if (Queue.Count == 1)
-            PlayCurrentMediaOnProjector(true);
+        Log.Info($"Media request: {media}");
+        RequestQueue.Add(media);
     }
 
     public void RequestMedia(string youTubeId)
     {
         if (Game.IsServer) return;
+        if (!Entity.IsValid())
+        {
+            Log.Error($"Tried to request on an invalid controller.");
+            return;
+        }
+
         RequestAddMedia(Entity.NetworkIdent, youTubeId);
     }
 
@@ -62,51 +79,89 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 
     public void StartNext()
     {
-        Queue.RemoveAt(0);
-        PlayCurrentMediaOnProjector(true);
+        Log.Info("Playing next media");
+        var next = NextMedia;
+        if (Queue.Count > 0)
+            Queue.RemoveAt(0);
+        StartPlayingMedia(next);
     }
 
     protected void PlayCurrentMediaOnProjector(bool forceUpdate = false)
     {
-        if (CurrentMedia == null)
+        if (PlayingMedia?.YouTubeId == null)
         {
-            SetMediaSourceUrl(StaticImage);
+            SetWaitingImage();
             return;
         }
 
-        if (CurrentMedia.YouTubeId == null)
-        {
-            return;
-        }
-
-        SetMediaSourceUrl(CurrentMedia.YouTubeId, forceUpdate);
+        PlayYouTubeVideo(PlayingMedia.YouTubeId, forceUpdate);
     }
 
-    private void SetMediaSourceUrl(string youtubeId, bool forceUpdate = true)
+    private void StartPlayingMedia(Media media)
+    {
+        // new media is playing
+        PlayingMedia = media;
+        TimeSinceStartedPlaying = 0;
+        PlayCurrentMediaOnProjector(true);
+        return;
+    }
+
+    private void PlayNextMediaIfReady()
+    {
+        if (PlayingMedia == null)
+        {
+            if (NextMedia != null)
+            {
+                StartNext();
+            }
+
+            return;
+        }
+
+        if (TimeSinceStartedPlaying > PlayingMedia.Duration + 1)
+        {
+            StartNext();
+        }
+
+    }
+
+    private void SetWaitingImage()
     {
         if (Game.IsServer)
         {
-            ClientSetMediaSourceUrl(youtubeId, forceUpdate);
+            ClientSetWaitingImage();
             return;
         }
 
-        if (youtubeId.Substring(0, 4) == "http")
+        Projector.SetStaticImage(WaitingImage);
+    }
+
+    private void PlayYouTubeVideo(string youtubeId, bool forceUpdate = true)
+    {
+        if (Game.IsServer)
         {
-            Projector.SetStaticImage(youtubeId);
+            ClientPlayYouTubeVideo(youtubeId, forceUpdate);
             return;
         }
 
-        if (forceUpdate || Projector.CurrentUrl != youtubeId)
-        {
-            Projector.PlayYouTubeVideo(youtubeId);
-        }
+        if (Projector.CurrentVideoId == youtubeId && !forceUpdate)
+            return;
+
+        Projector.PlayYouTubeVideo(youtubeId);
     }
 
     [ClientRpc]
-    private void ClientSetMediaSourceUrl(string url, bool forceUpdate = true)
+    private void ClientPlayYouTubeVideo(string url, bool forceUpdate = true)
     {
-        SetMediaSourceUrl(url, forceUpdate);
+        PlayYouTubeVideo(url, forceUpdate);
     }
+
+    [ClientRpc]
+    private void ClientSetWaitingImage()
+    {
+        SetWaitingImage();
+    }
+
 
     //Hacky, @todo: make this cleaner and target specific controllers
 

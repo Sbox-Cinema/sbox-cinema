@@ -58,9 +58,9 @@ public partial class ProjectorEntity
         CurrentVideoId = null;
     }
 
-    public void PlayYouTubeVideo(string id)
+    public void PlayYouTubeVideo(string id, bool forceUpdate = true)
     {
-        if (CurrentVideoId == id) return;
+        if (CurrentVideoId == id && !forceUpdate) return;
 
         CurrentVideoId = id;
         WebSurface.Url = $"https://cinema-api.fly.dev/player.html?dt={id}&st=0&vol=100";
