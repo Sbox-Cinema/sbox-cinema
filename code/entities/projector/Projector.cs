@@ -41,6 +41,7 @@ public partial class ProjectorEntity : Entity
     protected override void OnDestroy()
     {
         WebSurface?.Dispose();
+        WebSurfaceTexture?.Dispose();
     }
 }
 

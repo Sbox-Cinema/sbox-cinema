@@ -74,12 +74,6 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
             return;
         }
 
-        if (Game.IsClient)
-        {
-            Log.Info(CurrentMedia.ToString());
-        }
-
-
         if (CurrentMedia.YouTubeId == null)
         {
             return;

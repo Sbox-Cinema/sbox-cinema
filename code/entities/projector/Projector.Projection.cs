@@ -1,5 +1,6 @@
 ﻿using System;
 using Sandbox;
+using Sandbox.UI;
 
 namespace Cinema;
 
@@ -11,23 +12,40 @@ public partial class ProjectorEntity
 
     public string CurrentVideoId { get; protected set; }
 
-    private Texture ProjectionTexture { get; set; }
+    private Texture WebSurfaceTexture { get; set; }
     private OrthoLightEntity ProjectionLight { get; set; }
+    private Texture ProjectionTexture { get; set; }
+
+    private SceneWorld RenderWorld { get; set; }
+    private SceneCamera RenderCamera { get; set; }
+    private WorldPanel RenderWorldPanel { get; set; }
 
     private void InitProjection()
     {
+        RenderWorld ??= new SceneWorld();
+        RenderCamera ??= new SceneCamera()
+        {
+            World = RenderWorld,
+            Position = new Vector3(),
+            ZFar = 15000,
+            ZNear = 1
+        };
+
+        RenderWorldPanel?.Delete();
+        RenderWorldPanel = new WorldPanel(RenderWorld)
+        {
+            Position = RenderCamera.Position + Vector3.Forward * 36f,
+            Rotation = Rotation.FromYaw(180f),
+            PanelBounds = new Rect(-ProjectionResolution / 2f, ProjectionResolution)
+        };
+
         WebSurface = Game.CreateWebSurface();
         WebSurface.Size = ProjectionResolution;
         WebSurface.InBackgroundMode = false;
         WebSurface.OnTexture = UpdateWebTexture;
+        WebSurface.Url = "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
 
-        WebSurface.Url = "https://www.youtube.com/embed/XkfmrXLxaNk?autoplay=0;frameborder=0";
-
-        //Initialize Texture
-        ProjectionTexture = Texture.Create((int)ProjectionResolution.x, (int)ProjectionResolution.y, ImageFormat.BGRA8888)
-                                        .WithName("projection-img")
-                                        .WithUAVBinding()
-                                        .Finish();
+        ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
 
         SetupProjectionLight();
     }
@@ -56,7 +74,6 @@ public partial class ProjectorEntity
         WebSurface.TellMouseMove(Vector2.One * 10);
         WebSurface.TellMouseButton(MouseButtons.Left, true);
         await GameTask.Delay(10);
-        Log.Info("tell");
         WebSurface.TellMouseMove(Vector2.One * 30);
         WebSurface.TellMouseButton(MouseButtons.Left, false);
         await GameTask.Delay(100);
@@ -87,17 +104,22 @@ public partial class ProjectorEntity
 
     private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
     {
-        if (ProjectionTexture == null || ProjectionTexture.Size != size)
+        if (WebSurfaceTexture == null || WebSurfaceTexture.Size != size)
         {
             Log.Info("Updating projection texture");
-            ProjectionTexture?.Dispose();
-            ProjectionTexture = Texture.Create((int)size.x, (int)size.y, ImageFormat.BGRA8888)
-                                        .WithName("projection-img")
+            WebSurfaceTexture?.Dispose();
+            WebSurfaceTexture = Texture.Create((int)size.x, (int)size.y, ImageFormat.BGRA8888)
+                                        .WithName("web-surface-texture")
                                         .WithDynamicUsage()
-                                        .WithUAVBinding()
                                         .Finish();
-            SetupProjectionLight();
+            RenderWorldPanel.Style.SetBackgroundImage(WebSurfaceTexture);
         }
-        ProjectionTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
+        WebSurfaceTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
+    }
+
+    [GameEvent.PreRender]
+    protected void OnPreRender()
+    {
+        Graphics.RenderToTexture(RenderCamera, ProjectionTexture);
     }
 }
