@@ -6,73 +6,56 @@
 
 @attribute [StyleSheet("ui/movie-queue/MovieQueue.scss")]
 <root class="@(Visible ? "visible" : "")">
-    <div class="placement">
-        <div class="container">
-            <div class="header">
-                <div class="title">
-                    Media Player
-                </div>
-                <div class="close-btn button" @onclick=@OnClose>
-                    Close
-                </div>
+    <div class="placement container">
+        <div class="header">
+            <div class="title">
+                Media Player
             </div>
-            <div class="contents">
-                <div class="section">
-                    <div class="control-bar">
-                        <div class="button" @onclick=@OnSkip>
-                            Skip Current Movie
-                        </div>
+            <div class="close-btn button" @onclick=@OnClose>
+                Close
+            </div>
+        </div>
+        <div class="contents">
+            <div class="section outline">
+                <div class="add-queue-container">
+                    <div class="title">
+                        Add To Queue (Youtube ID):
                     </div>
-                </div>
-                <div class="section grow outline">
-                    <div class="title center">
-                        Queue
-                    </div>
-                    <div class="row header">
-                        <div class="title">
-                            Url
-                        </div>
-                        <div class="requestor">
-                            Added By
-                        </div>
-                        <div class="controls">
-
-                        </div>
-                    </div>
-                    <div class="rows scrollable">
-                        @foreach (var movie in Queue)
-
-
-
-                        {
-                                    <div class="row">
-                                        <div class="title">
-                                    @movie.Title
-                                        </div>
-                                        <div class="requestor">
-                                    @movie.Requestor
-                                        </div>
-                                        <div class="controls">
-                                            <div class="button">
-                                                Remove
-                                            </div>
-                                        </div>
-                                    </div>
-                        }
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="add-queue-container">
-                        <div class="title">
-                            Add To Queue (Youtube ID):
-                        </div>
-                        <TextEntry @ref=MovieIDEntry CaretColor="#555" />
-                        <div class="button" @onclick=@OnQueue >
-                            Add
-                        </div>
+                    <TextEntry @ref=MovieIDEntry CaretColor="#555" />
+                    <div class="button" @onclick=@OnQueue >
+                        Add
                     </div>
                 </div>
             </div>
+            <div class="section clear grow scroll">
+                <div class="rows scrollable">
+                    @foreach (var movie in Queue)
+                    {
+                        <div class="row">
+                            <div class="title">
+                                <span>@movie.Title</span>
+                                <div class="button fit small">X</div>
+                            </div>
+                            <div class="requestor">
+                                @movie.Requestor
+                            </div>
+                            <div class="controls">
+                                
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="section outline">
+                <div class="control-bar">
+                    <div class="button" @onclick=@OnSkip>
+                        Skip Current Movie
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+
         </div>
     </div>
 </root>
