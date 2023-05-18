@@ -10,14 +10,15 @@ namespace Cinema;
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     public UI.Tooltip Tooltip { get; set; }
-    
-    [Net] public IList<Cookable.Hotdog> HotdogsFront { get; set; }
-    [Net] public IList<Cookable.Hotdog> HotdogsBack { get; set; }
-    [Net] public bool IsOn { get; set; } = false;
+
     public string UseText => "Press E to use Hotdog Roller";
 
-    public override void Simulate(IClient cl)
+    [Net] public IList<Cookable.Hotdog> HotdogsFront { get; set; }
+    [Net] public IList<Cookable.Hotdog> HotdogsBack { get; set; }
+    [Net, Change] public bool IsOn { get; set; }
+
+    public void OnIsOnChanged(bool oldValue, bool newValue)
     {
-        base.Simulate(cl);
-    }
+        
+    }    
 }
