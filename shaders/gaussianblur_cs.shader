@@ -4,7 +4,7 @@
 HEADER
 {
     DevShader = true;
-    Description = "Projector Fake Bounce Lighting";
+    Description = "Performs a gaussian blur on an input texture, writing the result to an output texture.";
 }
 
 //=========================================================================================================================
@@ -31,13 +31,12 @@ CS
 {
 	// Input texture
     Texture2D<float4> g_tInput < Attribute("InputTexture"); > ;
-	Texture2D<float4> g_tMask < Attribute("MaskTexture"); > ;
     // Output texture
     RWTexture2D<float4> g_tOutput < Attribute("OutputTexture"); > ;
 
 	float3 LoadColor( int2 pixelCoord )
 	{
-		return g_tInput[ pixelCoord ].rgb * g_tMask[pixelCoord];
+		return g_tInput[ pixelCoord ].rgb;
 	}
 
 	void StoreColor( int2 pixelCoord, float4 color )

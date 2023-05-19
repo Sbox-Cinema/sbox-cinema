@@ -4,7 +4,7 @@
 HEADER
 {
     DevShader = true;
-    Description = "Projector Fake Bounce Lighting";
+    Description = "Downscales a texture to fit an output texture of an arbitrary size that is smaller in both dimensions.";
 }
 
 //=========================================================================================================================
