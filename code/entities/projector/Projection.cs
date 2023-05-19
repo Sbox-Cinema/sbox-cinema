@@ -19,11 +19,6 @@ public partial class Projection : Entity
 
         InitProjectionScene();
         InitProjectionImage();
-        FakeBounceLight = new FakeBounceLight() 
-        { 
-            ProjectorLight = ProjectionLight,
-            SourceTexture = ProjectionLight.LightCookie
-        };
     }
     private void InitProjectionScene()
     {
@@ -61,6 +56,7 @@ public partial class Projection : Entity
         };
 
         ProjectionLight.UseFog();
+        ProjectionLight.Components.Create<FakeBounceLight>();
     }
 
     [GameEvent.Client.Frame]

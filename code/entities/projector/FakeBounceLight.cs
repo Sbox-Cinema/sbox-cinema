@@ -8,33 +8,50 @@ using System.Threading.Tasks;
 
 namespace Cinema;
 
-public partial class FakeBounceLight : Entity
+public partial class FakeBounceLight : EntityComponent, ISingletonComponent
 {
-    [ConVar.Client("cinema.projector.bouncetest")]
-    public static bool EnableBounceTest { get; set; } = false;
-    public OrthoLightEntity ProjectorLight { get; set; }
+    [ConVar.Client("projector.bounce.enable")]
+    public static bool EnableBounce { get; set; } = true;
+    [ConVar.Client("projector.bounce.debug")]
+    public static bool EnableBounceDebug { get; set; } = false;
+    // You won't actually see this update in-game until issue #3288 is resolved.
+    // For more details: https://github.com/sboxgame/issues/issues/3288
+    [ConVar.Client("projector.bounce.cookiesize")]
+    public static int BounceLightCookieSize { get; set; } = 64;
+    private int _previousLightCookieSize = 64;
+    
     public Texture SourceTexture { get; set; }
-    public Texture DownscaledTexture { get; set; }
-    public Texture ProductTexture { get; set; }
-    public Texture BounceLightCookie { get; set; }
     public SpotLightEntity Spotlight { get; set; }
+
+    protected Texture DownscaledTexture { get; set; }
+    protected Texture MultiplicandTexture { get; set; }
+    protected Texture ProductTexture { get; set; }
+    protected Texture BounceLightCookie { get; set; }
+
     private ComputeShader DownscaleShader { get; set; }
     private ComputeShader MultiplyShader { get; set; }
     private ComputeShader BlurShader { get; set; }
-    public Texture MultiplicandTexture { get; set; }
+
 
     public FakeBounceLight()
     {
-        DownscaleShader = new ComputeShader("downscale_cs");
-        MultiplyShader = new ComputeShader("multiplytexture_cs");
-        BlurShader = new ComputeShader("gaussianblur_cs");
-        BounceLightCookie = CreateTexture();
-        DownscaledTexture = CreateTexture();
-        MultiplicandTexture = CreateTexture();
-        ProductTexture = CreateTexture();
-        var maskLargeTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
-        DownscaleTexture(maskLargeTex, MultiplicandTexture);
-        Spotlight = CreateSpotlight();
+        // Don't unnecessarily recreate textures if light cookie size isn't default.
+        if (BounceLightCookieSize != _previousLightCookieSize)
+        {
+            _previousLightCookieSize = BounceLightCookieSize;
+        }
+        CreateAllShaders();
+        CreateAllTextures();
+    }
+
+    protected override void OnActivate()
+    {
+        base.OnActivate();
+
+        if (Spotlight == null)
+        {
+            Spotlight = CreateSpotlight();
+        }
     }
 
     private SpotLightEntity CreateSpotlight()
@@ -42,7 +59,7 @@ public partial class FakeBounceLight : Entity
         var spotlight = new SpotLightEntity()
         {
             Brightness = 2,
-            Transform = Transform,
+            Transform = Entity.Transform,
             Range = 1000,
             InnerConeAngle = 50f,
             OuterConeAngle = 80f,
@@ -50,13 +67,37 @@ public partial class FakeBounceLight : Entity
             FogStrength = 0.25f,
             LightCookie = BounceLightCookie
         };
-        spotlight.SetParent(this);
+        spotlight.SetParent(Entity);
         return spotlight;
+    }
+
+    /// <summary>
+    /// Instantiates all of the shaders required for bounce light calculation.
+    /// </summary>
+    private void CreateAllShaders()
+    {
+        DownscaleShader = new ComputeShader("downscale_cs");
+        MultiplyShader = new ComputeShader("multiplytexture_cs");
+        BlurShader = new ComputeShader("gaussianblur_cs");
+    }
+
+    /// <summary>
+    /// Instantiates all of the textures objects required for bounce light calculation.
+    /// </summary>
+    private void CreateAllTextures()
+    {
+        DownscaledTexture   = CreateTexture();
+        MultiplicandTexture = CreateTexture();
+        ProductTexture      = CreateTexture();
+        BounceLightCookie   = CreateTexture();
+        // Load the mask texture and downscale it to the size of the bounce light cookie.
+        var largeMaskTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
+        DownscaleTexture(largeMaskTex, MultiplicandTexture);
     }
 
     private Texture CreateTexture()
     {
-        return Texture.Create(64, 64)
+        return Texture.Create(BounceLightCookieSize, BounceLightCookieSize)
             .WithUAVBinding()
             .WithFormat(ImageFormat.RGBA8888)
             .WithDynamicUsage()
@@ -66,8 +107,21 @@ public partial class FakeBounceLight : Entity
     [GameEvent.Tick.Client]
     public void OnClientTick() 
     {
-        var traceStart = ProjectorLight.Position;
-        var traceEnd = ProjectorLight.Position + ProjectorLight.Rotation.Forward * 5000f;
+        if (EnableBounce)
+        {
+            Spotlight.Enabled = true;
+            Spotlight.Brightness = 2;
+        }
+        else
+        {
+            Spotlight.Enabled = false;
+            Spotlight.Brightness = 0;
+            return;
+        }
+
+        // Trace forward from the projector light to find the surface it projects on to.
+        var traceStart = Entity.Position;
+        var traceEnd = Entity.Position + Entity.Rotation.Forward * 5000f;
         var tr = Trace.Ray(traceStart, traceEnd)
             .WorldOnly()
             .Run();
@@ -75,12 +129,61 @@ public partial class FakeBounceLight : Entity
         {
             return;
         }
-        Position = tr.HitPosition;
-        Rotation = Rotation.LookAt(tr.Normal);
+        // Make sure the bounce spotlight is at the surface and pointing away from it.
+        Spotlight.Position = tr.HitPosition;
+        Spotlight.Rotation = Rotation.LookAt(tr.Normal);
     }
 
     [GameEvent.Client.Frame]
     public void OnClientFrame()
+    {
+        if (!EnableBounce)
+        {
+            return;
+        }
+
+        // Check to see if the light cookie size has changed.
+        if (_previousLightCookieSize != BounceLightCookieSize)
+        {
+            CreateAllTextures();
+            Spotlight.LightCookie = BounceLightCookie;
+        }
+        _previousLightCookieSize = BounceLightCookieSize;
+
+        if (!EnsureSourceIsNotNull())
+        {
+            return;
+        }
+
+        UpdateBounceLightCookie();
+        if (EnableBounceDebug)
+        {
+            TextureDebugOverlay();
+        }
+    }
+
+    /// <summary>
+    /// If <c>SourceTexture</c> is null, tries to set it to the <c>LightCookie</c> of
+    /// <c>Entity</c>, if <c>Entity</c> is a light that supports light cookies. 
+    /// Returns true if source texture is not null.
+    /// </summary>
+    /// <returns></returns>
+    private bool EnsureSourceIsNotNull()
+    {
+        if (SourceTexture != null)
+        {
+            return true;
+        }
+        SourceTexture = Entity switch
+        {
+            OrthoLightEntity ortho => ortho.LightCookie,
+            SpotLightEntity spot => spot.LightCookie,
+            _ => null
+        };
+        return SourceTexture != null;
+    }
+
+    private void UpdateBounceLightCookie()
     {
         /* 
          *  Here we daisy-chain three compute shaders to downscale, multiply, and blur the
@@ -94,10 +197,6 @@ public partial class FakeBounceLight : Entity
         DownscaleTexture(SourceTexture, DownscaledTexture);
         MultiplyTexture(DownscaledTexture, MultiplicandTexture, ProductTexture);
         BlurTexture(ProductTexture, BounceLightCookie);
-        if (EnableBounceTest)
-        {
-            TextureDebugOverlay();
-        }
     }
 
     private void DownscaleTexture(Texture fromTex, Texture toTex)
