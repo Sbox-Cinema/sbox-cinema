@@ -17,8 +17,10 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     // You won't actually see this update in-game until issue #3288 is resolved.
     // For more details: https://github.com/sboxgame/issues/issues/3288
     [ConVar.Client("projector.bounce.cookiesize")]
-    public static int BounceLightCookieSize { get; set; } = 64;
-    private int _previousLightCookieSize = 64;
+    public static int BounceLightCookieSize { get; set; } = 32;
+    private int _previousLightCookieSize = 32;
+    [ConVar.Client("projector.bounce.brightnessfactor")]
+    public static float BounceLightBrightnessFactor { get; set; } = 1f;
     
     public Texture SourceTexture { get; set; }
     public SpotLightEntity Spotlight { get; set; }
@@ -31,6 +33,9 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     private ComputeShader DownscaleShader { get; set; }
     private ComputeShader MultiplyShader { get; set; }
     private ComputeShader BlurShader { get; set; }
+    private float BaseBounceLightBrightness { get; set; } = 5f;
+    private float CalculatedBounceLightBrightness 
+        => BaseBounceLightBrightness * BounceLightBrightnessFactor;
 
 
     public FakeBounceLight()
@@ -48,17 +53,14 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     {
         base.OnActivate();
 
-        if (Spotlight == null)
-        {
-            Spotlight = CreateSpotlight();
-        }
+        Spotlight ??= CreateSpotlight();
     }
 
     private SpotLightEntity CreateSpotlight()
     {
         var spotlight = new SpotLightEntity()
         {
-            Brightness = 2,
+            Brightness = CalculatedBounceLightBrightness,
             Transform = Entity.Transform,
             Range = 1000,
             InnerConeAngle = 50f,
@@ -90,8 +92,8 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         MultiplicandTexture = CreateTexture();
         ProductTexture      = CreateTexture();
         BounceLightCookie   = CreateTexture();
-        // Load the mask texture and downscale it to the size of the bounce light cookie.
-        var largeMaskTex = Texture.Load(FileSystem.Mounted, "materials/effects/dirt1.vtex");
+        // Downscale the mask texture to the size of the bounce light cookie.
+        var largeMaskTex = Texture.Load(FileSystem.Mounted, "materials/lightcookies/box_soft.vtex");
         DownscaleTexture(largeMaskTex, MultiplicandTexture);
     }
 
@@ -110,7 +112,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         if (EnableBounce)
         {
             Spotlight.Enabled = true;
-            Spotlight.Brightness = 2;
+            Spotlight.Brightness = CalculatedBounceLightBrightness;
         }
         else
         {
@@ -142,13 +144,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
             return;
         }
 
-        // Check to see if the light cookie size has changed.
-        if (_previousLightCookieSize != BounceLightCookieSize)
-        {
-            CreateAllTextures();
-            Spotlight.LightCookie = BounceLightCookie;
-        }
-        _previousLightCookieSize = BounceLightCookieSize;
+        HandleCookieSizeUpdate();
 
         if (!EnsureSourceIsNotNull())
         {
@@ -160,6 +156,16 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         {
             TextureDebugOverlay();
         }
+    }
+
+    public void HandleCookieSizeUpdate()
+    {
+        if (_previousLightCookieSize != BounceLightCookieSize)
+        {
+            CreateAllTextures();
+            Spotlight.LightCookie = BounceLightCookie;
+        }
+        _previousLightCookieSize = BounceLightCookieSize;
     }
 
     /// <summary>
