@@ -43,20 +43,19 @@ public partial class HotdogRoller
 
     private void TestHotDogs()
     { 
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 22; i++)
         {
-            HotdogsFront.Add(new Cookable.Hotdog());
-            AttachEntity(HotdogsFront[i], $"S{i + 1}F");
+            Hotdogs.Add($"S{i + 1}F", new Cookable.Hotdog());
+            Hotdogs.Add($"S{i + 1}B", new Cookable.Hotdog());
         }
 
-        for (int i = 0; i < 11; i++)
+        foreach(var hotdog in Hotdogs)
         {
-            HotdogsBack.Add(new Cookable.Hotdog());
-            AttachEntity(HotdogsBack[i], $"S{i + 1}B");
+            AttachEntity(hotdog.Key, hotdog.Value);
         }
     }
 
-    private void AttachEntity(Entity ent, string attach)
+    private void AttachEntity(string attach, Entity ent)
     {
         if (GetAttachment(attach) is Transform t)
         {

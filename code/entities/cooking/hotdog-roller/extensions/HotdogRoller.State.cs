@@ -4,6 +4,14 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
+    public enum State : int
+    {
+        Off,
+        On
+    }
+
+    [Net] public State MachineState { get; set; } = State.Off;
+
     /// <summary>
     ///
     /// </summary>
@@ -46,13 +54,10 @@ public partial class HotdogRoller
         SetAnimParameter("RightHandleState", 0);
 
         // Hotdogs
-        foreach (var hotdog in HotdogsFront)
+        foreach (var element in Hotdogs)
         {
-            hotdog.Components.RemoveAll();
-        }
+            var hotdog = element.Value;
 
-        foreach (var hotdog in HotdogsBack)
-        {
             hotdog.Components.RemoveAll();
         }
     }
@@ -74,14 +79,10 @@ public partial class HotdogRoller
         SetAnimParameter("RightHandleState", 3);
 
         // Hotdogs
-        foreach (var hotdog in HotdogsFront)
+        foreach (var element in Hotdogs)
         {
-            hotdog.Components.Create<Rotator>();
-            hotdog.Components.Create<Cooking>();
-        }
+            var hotdog = element.Value;
 
-        foreach (var hotdog in HotdogsBack)
-        {
             hotdog.Components.Create<Rotator>();
             hotdog.Components.Create<Cooking>();
         }
