@@ -1,4 +1,6 @@
+using Cinema.Jobs;
 using Sandbox;
+using System;
 
 namespace Cinema;
 
@@ -7,25 +9,140 @@ public partial class Player
     [BindComponent]
     public Jobs.PlayerJob Job { get; }
 
+    //The default cooldown time for setting the forgiveness timer
+    float cooldownTime => 30.0f;
+
+    /// <summary>
+    /// The cooldown after leaving a job to prevent being assigned to a new job too quickly
+    /// </summary>
+    public TimeUntil JobCooldown { get; set; }
+
+    /// <summary>
+    /// Set the job to the player
+    /// </summary>
+    /// <param name="details">The details for that job to be assigned for the player</param>
     public void SetJob(Jobs.JobDetails details)
     {
         if (Game.IsClient) throw new System.Exception("Cannot set job on client!");
 
+        //Remove any current job and assign the new one
         Components.RemoveAny<Jobs.PlayerJob>();
         Components.Add(Jobs.PlayerJob.CreateFromDetails(details));
     }
 
+    //Job server ticking
+    [GameEvent.Tick.Server]
+    protected void JobServerTick()
+    {
+        //This could change if proper jobs have guest abilities
+        //if that happens, I'll think of a better check -ItsRifter
+
+        //This is a guest job
+        if (Job.HasAbility(JobAbilities.Guest)) return;
+
+        //Forgiveness timer hasn't finished
+        if (Job.JobDetails.ForgiveTimer > 0.0f) return;
+
+        //If there are recent fails and the timer has finished, forgive the employee for a fail
+        if(Job.JobDetails.Fails > 0)
+            SubtractJobFails();
+    }
+
+    /// <summary>
+    /// Perform actions for a job task success
+    /// </summary>
+    public void SuccessJobTask()
+    {
+        //Give payment to the employee
+        AddMoney(Job.JobDetails.PayRate);
+    }
+
+    /// <summary>
+    /// Perform actions for a job task fail
+    /// </summary>
+    public void FailJobTask()
+    {
+        //The job won't take into account of fails, just stop here
+        if (Job.JobDetails.FailAllowance == -1) return;
+
+        //Reset forgiveness timer
+        Job.JobDetails.ForgiveTimer = Job.JobDetails.ForgiveInterval;
+
+        //Increment the fails
+        Job.JobDetails.Fails++;
+
+        //The employee has failed too many times past the allowance, fire them
+        if (Job.JobDetails.Fails >= Job.JobDetails.FailAllowance)
+            LeaveJob(true);
+    }
+
+    //Removes any active job fails
+    private void SubtractJobFails()
+    {
+        //Decrement the total fails and reset the forgive timer to the forgive interval
+        Job.JobDetails.Fails--;
+        Job.JobDetails.ForgiveTimer = Job.JobDetails.ForgiveInterval;
+    }
+
+    /// <summary>
+    /// Leaves the active job
+    /// </summary>
+    /// <param name="wasFired">Was the employee fired for bad performance?</param>
+    public void LeaveJob(bool wasFired = false)
+    {
+        //The player's doesn't have a proper job (is a guest)
+        if (Job.HasAbility(JobAbilities.Guest))
+            throw new System.Exception("Tried to leave current job as a guest");
+
+        if (wasFired)
+            //180 seconds (3 minutes)
+            JobCooldown = cooldownTime * 6;
+        else
+            JobCooldown = cooldownTime;
+
+        //TODO: Cleanup any task in progress
+
+        //Remove active job and reset to default
+        Components.RemoveAny<Jobs.PlayerJob>();
+        Components.Add(Jobs.PlayerJob.GetDefaultJob());
+    }
+
+    //Developer command for setting jobs
+    //IF NEEDED: add a parameter for setting job on a target player
     [ConCmd.Server("cinema.job.set")]
     public static void SetJob(int job = 0)
     {
+        if (!CinemaGame.ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
         var player = ConsoleSystem.Caller.Pawn as Player;
         if ( player == null ) return;
 
+        //Decrement the parameter so this can be used for array indexes
+        job--;
+
+        //the parameter is less than 0 or is past the total jobs
+        //total job count is subtracted by 1 to prevent array out of bound indexes
         if (job < 0) return;
         if (job > Jobs.JobDetails.All.Count-1) return;
 
+        //Set the job with the parameter index
         player.SetJob(Jobs.JobDetails.All[job]);
 
+        //Log message to the host or dedicated console
         Log.Info($"Assigned to '{player.Job.Name}'");
+    }
+
+    //Leave the job, this is used either by console or from UI
+    [ConCmd.Server("cinema.job.leave")]
+    public static void JobLeaveCMD()
+    {
+        var player = ConsoleSystem.Caller.Pawn as Player;
+        if (player == null) return;
+
+        //The player's job is a guest job
+        if (player.Job.HasAbility(JobAbilities.Guest)) return;
+
+        //Leave the job
+        player.LeaveJob();
     }
 }

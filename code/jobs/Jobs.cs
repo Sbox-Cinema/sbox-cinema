@@ -32,6 +32,33 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public JobAbilities Abilities { get; set; }
 
+
+    /// <summary>
+    /// How much does this job pay
+    /// </summary>
+    public double PayRate;
+
+    /// <summary>
+    /// The interval for a job fail to be forgiven
+    /// </summary>
+    public float ForgiveInterval;
+
+    /// <summary>
+    /// The forgiveness timer
+    /// </summary>
+    public TimeUntil ForgiveTimer;
+
+    /// <summary>
+    /// How many fails are allowed on the job before being fired, set -1 if employees cannot be fired for fails
+    /// </summary>
+    public int FailAllowance;
+
+    /// <summary>
+    /// The fails in total
+    /// </summary>
+    [Net]
+    public int Fails { get; set; } = 0;
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -43,7 +70,10 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Guest",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
+            PayRate = -1,
+            FailAllowance = -1
         },
+
         /// <summary>
         /// Usher job, can pickup garbage
         /// </summary>
@@ -51,6 +81,17 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
+            PayRate = 1.25,
+            FailAllowance = -1,
+        },
+
+        new JobDetails
+        {
+            Name = "Debug Job",
+            Abilities = JobAbilities.PurchaseConcessions,
+            PayRate = 1,
+            FailAllowance = 5,
+            ForgiveInterval = 15.0f,
         }
     };
 }
@@ -75,5 +116,19 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
         };
 
         return job;
+    }
+
+    /// <summary>
+    /// Gets the default job
+    /// </summary>
+    /// <returns>The default job</returns>
+    public static PlayerJob GetDefaultJob()
+    {
+        var defJob = new PlayerJob
+        {
+            JobDetails = JobDetails.DefaultJob,
+        };
+
+        return defJob;
     }
 }
