@@ -64,6 +64,11 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public JobResponsibilities Responsibilities { get; set; }
 
+    /// <summary>
+    /// When the player leaves, apply the job cooldown so they can't be assigned to another job
+    /// </summary>
+    public float BaseLeaveCooldown;
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -77,6 +82,7 @@ public partial class JobDetails : BaseNetworkable
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
             PayRate = -1,
             FailAllowance = -1,
+            BaseLeaveCooldown = -1,
             Responsibilities = JobResponsibilities.UniversalIncome,
         },
 
@@ -89,6 +95,7 @@ public partial class JobDetails : BaseNetworkable
             Abilities = JobAbilities.PickupGarbage,
             PayRate = 1,
             FailAllowance = -1,
+            BaseLeaveCooldown = 15
         },    
     };
 }

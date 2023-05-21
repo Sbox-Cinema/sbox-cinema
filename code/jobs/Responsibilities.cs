@@ -14,6 +14,9 @@ public enum JobResponsibilities : ulong
 {
     // Gives you money for playing on the server
     UniversalIncome = 1 << 0,
+
+    //Gives players money for completing tasks
+    PerTaskIncome = 1 << 1,
 }
 
 public partial class JobResponsibility : EntityComponent<Player>

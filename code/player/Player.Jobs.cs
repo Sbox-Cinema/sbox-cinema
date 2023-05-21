@@ -9,9 +9,6 @@ public partial class Player
     [BindComponent]
     public Jobs.PlayerJob Job { get; }
 
-    //The default cooldown time for setting the forgiveness timer
-    float JobCooldownDuration => 30.0f;
-
     /// <summary>
     /// The cooldown after leaving a job to prevent being assigned to a new job too quickly
     /// </summary>
@@ -130,15 +127,11 @@ public partial class Player
             throw new System.Exception("Tried to leave current job as a guest");
 
         if (wasFired)
-            //180 seconds (3 minutes)
-            TimeUntilStartNewJob = JobCooldownDuration * 6;
+            //put the player on job cooldown by a lengthy amount (surely this can be improved on -ItsRifter)
+            TimeUntilStartNewJob = Job.JobDetails.BaseLeaveCooldown * 6;
         else
-            //If they left with any remaining fails, multiply with base cooldown duration    
-            TimeUntilStartNewJob = JobCooldownDuration * Job.JobDetails.Fails;
-
-        //^^^
-        //Will have to add a property to the job details with a base cooldown
-        //the cooldown here might break things -ItsRifter
+            //If they left with any remaining fails, multiply with job cooldown (add 1 to prevent multiplying by 0)
+            TimeUntilStartNewJob = Job.JobDetails.BaseLeaveCooldown * (Job.JobDetails.Fails + 1);
 
         //TODO: Cleanup any task in progress
 
