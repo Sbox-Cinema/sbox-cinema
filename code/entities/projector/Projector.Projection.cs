@@ -44,6 +44,7 @@ public partial class ProjectorEntity
 
     private void InitProjection()
     {
+        Log.Info("init projection");
         RenderWorld ??= new SceneWorld();
         RenderCamera ??= new SceneCamera()
         {
@@ -65,7 +66,7 @@ public partial class ProjectorEntity
         WebSurface.Size = ProjectionResolution;
         WebSurface.InBackgroundMode = false;
         WebSurface.OnTexture = UpdateWebTexture;
-        WebSurface.Url = null;
+        WebSurface.Url = "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
 
         ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
 
@@ -105,14 +106,12 @@ public partial class ProjectorEntity
 
     public void PlayContentOnProjector()
     {
-        if (!CanSeeProjector(Game.LocalPawn.Position))
-        {
-            WebSurface.Url = null;
-            WebSurfaceVideoId = null;
-            // @TODO: Remove dev console logs
-            Log.Info("Not playing content on projector because player is not in a CinemaArea");
-            return;
-        }
+        // if (!CanSeeProjector(Game.LocalPawn.Position))
+        // {
+        //     //WebSurface.Url = null;
+        //     WebSurfaceVideoId = null;
+        //     return;
+        // }
 
         if (PlayingYouTubeVideo && WebSurfaceVideoId != CurrentVideoId)
         {
@@ -130,6 +129,12 @@ public partial class ProjectorEntity
             WebSurface.Url = CurrentStaticUrl;
             return;
         }
+    }
+
+    [GameEvent.Tick.Client]
+    protected void TickClient()
+    {
+        PlayContentOnProjector();
     }
 
     private async void SpamMouseClicks()
@@ -177,6 +182,8 @@ public partial class ProjectorEntity
                                         .Finish();
             RenderWorldPanel.Style.SetBackgroundImage(WebSurfaceTexture);
         }
+
+        Log.Info("texture");
         WebSurfaceTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
 

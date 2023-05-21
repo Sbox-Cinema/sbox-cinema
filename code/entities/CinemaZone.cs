@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Cinema;
 
-[Library("cinema_zone"), HammerEntity]
+[Library("cinema_zone"), HammerEntity, Solid]
 [Title("Cinema Zone"), Category("Cinema")]
 public partial class CinemaZone : BaseTrigger
 {
