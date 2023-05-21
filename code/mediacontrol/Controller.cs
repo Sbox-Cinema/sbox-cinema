@@ -20,6 +20,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 
     [Net]
     public Media PlayingMedia { get; set; }
+    [Net]
     public TimeSince TimeSinceStartedPlaying { get; set; }
 
     [GameEvent.Tick.Server]

@@ -8,9 +8,30 @@ public partial class ProjectorEntity
 {
     private WebSurface WebSurface;
 
-    public string CurrentUrl => WebSurface.Url;
+    public string WebSurfaceUrl => WebSurface.Url;
 
-    public string CurrentVideoId { get; protected set; }
+    public string CurrentVideoId
+    {
+        get => _CurrentVideoId;
+        protected set
+        {
+            _CurrentVideoId = value;
+            _CurrentStaticUrl = null;
+        }
+    }
+    private string _CurrentVideoId;
+    public string CurrentStaticUrl
+    {
+        get => _CurrentStaticUrl;
+        protected set
+        {
+            _CurrentStaticUrl = value;
+            _CurrentVideoId = null;
+        }
+    }
+    private string _CurrentStaticUrl;
+    public bool PlayingYouTubeVideo => CurrentVideoId != null;
+    public bool ShowingStaticImage => CurrentStaticUrl != null;
 
     private Texture WebSurfaceTexture { get; set; }
     private OrthoLightEntity ProjectionLight { get; set; }
@@ -52,21 +73,60 @@ public partial class ProjectorEntity
 
     public void SetStaticImage(string url)
     {
-        if (CurrentUrl == url) return;
+        if (CurrentStaticUrl == url) return;
 
-        WebSurface.Url = url;
+        CurrentStaticUrl = url;
         CurrentVideoId = null;
+
+        PlayContentOnProjector();
     }
 
-    public void PlayYouTubeVideo(string id, bool forceUpdate = true)
+    public void PlayYouTubeVideo(string id)
     {
-        if (CurrentVideoId == id && !forceUpdate) return;
+        if (CurrentVideoId == id) return;
 
         CurrentVideoId = id;
-        WebSurface.Url = $"https://cinema-api.fly.dev/player.html?dt={id}&st=0&vol=100";
-        WebSurface.TellMouseMove(Vector2.One);
-        WebSurface.TellMouseButton(MouseButtons.Left, true);
-        SpamMouseClicks();
+        CurrentStaticUrl = null;
+
+        PlayContentOnProjector();
+    }
+
+    public bool CanSeeProjector(Vector3 pos)
+    {
+        foreach (var area in Areas)
+        {
+            var inside = area.WorldSpaceBounds.Contains(pos);
+            if (inside) return true;
+        }
+
+        return false;
+    }
+
+    public void PlayContentOnProjector()
+    {
+        if (!CanSeeProjector(Game.LocalPawn.Position))
+        {
+            WebSurface.Url = null;
+            // @TODO: Remove dev console logs
+            Log.Info("Not playing content on projector because player is not in a CinemaArea");
+            return;
+        }
+
+        if (PlayingYouTubeVideo)
+        {
+            WebSurface.Url = $"https://cinema-api.fly.dev/player.html?dt={CurrentVideoId}&vol=100";
+            WebSurface.TellMouseMove(Vector2.One);
+            WebSurface.TellMouseButton(MouseButtons.Left, true);
+            SpamMouseClicks();
+            return;
+        }
+
+        if (ShowingStaticImage)
+        {
+            WebSurface.Url = CurrentStaticUrl;
+            return;
+        }
+
     }
 
     private async void SpamMouseClicks()

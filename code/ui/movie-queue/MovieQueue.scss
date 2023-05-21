@@ -82,6 +82,10 @@ MovieQueue {
     
     margin: 4px;
 
+    &.as-rows {
+        flex-direction: row;
+    }
+
     &:not(.clear) {
         padding: 8px;
     }
@@ -114,21 +118,31 @@ MovieQueue {
     }
 }
 
-.control-bar {
-    flex-direction: row;
-    justify-content: start;
+.admin-control-bar {
+    flex-direction: column;
+    margin-left: auto;
+
+    >.header {
+        justify-content: center;
+        margin-bottom: 2px;
+    }
+
+    .controls {
+        flex-direction: row;
+        font-size: 14px;
+    }
 }
 
 .button {
-    padding: 4px 8px;
+    padding: 2px 8px;
     border-radius: 4px;
-    border: 2px solid #5555;
+    border: 1px solid #5555;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 
     &:not(.fit) {
-        min-width: 100px;
+        min-width: 80px;
     }
 
     &.small {
@@ -143,12 +157,12 @@ MovieQueue {
 
     &:hover {
         background-color: #333;
-        border: 2px solid #6665;
+        border: 1px solid #6665;
     }
 
     &:active {
         background-color: #444;
-        border: 2px solid #7775;
+        border: 1px solid #7775;
     }
 
     &.fill {
@@ -171,7 +185,7 @@ MovieQueue {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 6px 12px;
+    padding: 2px 12px;
     height: 42px;
     max-height: 42px;
     margin: 4px 0px;
@@ -180,12 +194,14 @@ MovieQueue {
         //font-weight: 800;
     }
 
-    border: 1px solid #5555;
-    border-radius: 4px;
+    border-top: 1px solid #5555;
+    border-bottom: 1px solid #5555;
+    //border-radius: 4px;
     background-color: rgba(30, 30, 30, 0.8);
 
     &:hover {
-        border: 1px solid #555F;
+        border-top: 1px solid #555F;
+        border-bottom: 1px solid #555F;
         background-color: rgba(50, 50, 50, 0.8);
     }
 
@@ -219,6 +235,53 @@ MovieQueue {
         min-width: 15%;
         justify-content: flex-end;
     }
+
+    >.voting-buttons {
+
+        flex-direction: row;
+
+        >.button {
+            font-size: 16px;
+            min-width: 30px;
+            padding: 0px;
+            margin: 0px;
+            border-radius: 2px;
+
+            &.like {
+                background-color: #262;
+
+                &:hover {
+                    background-color: #282;
+                    border: 1px solid #6665;
+                }
+            
+                &:active {
+                    background-color: #595;
+                    border: 1px solid #7775;
+                }
+            }
+
+            &.dislike {
+                background-color: #622;
+
+                &:hover {
+                    background-color: #822;
+                    border: 1px solid #6665;
+                }
+            
+                &:active {
+                    background-color: #955;
+                    border: 1px solid #7775;
+                }
+            }
+
+            
+
+            &:first-child {
+                margin-right: 8px;
+            }
+        }
+    }
 }
 
 
@@ -237,5 +300,87 @@ MovieQueue {
         color: #000;
         align-items: center;
         padding: 0px 8px;
+    }
+}
+
+.now-playing-block {
+    flex-direction: column;
+
+    .stats {
+        flex-direction: row;
+    }
+
+    .details {
+        flex-direction: column;
+        margin-left: 12px;
+
+        .title {
+            font-weight: 500;
+        }
+
+        .time {
+            color: #ddd;
+            font-weight: 100;
+            font-size: 14px;
+        }
+
+        .requestor {
+            color: #ddd;
+            font-weight: 100;
+            font-size: 14px;
+        }
+    }
+
+    .voting-buttons {
+        flex-direction: row;
+        margin-top: 8px;
+
+        >.button {
+            font-size: 16px;
+            min-width: 60px;
+            padding: 0px;
+
+            &.like {
+                background-color: #262;
+
+                &:hover {
+                    background-color: #282;
+                    border: 1px solid #6665;
+                }
+            
+                &:active {
+                    background-color: #595;
+                    border: 1px solid #7775;
+                }
+            }
+
+            &.dislike {
+                background-color: #622;
+
+                &:hover {
+                    background-color: #822;
+                    border: 1px solid #6665;
+                }
+            
+                &:active {
+                    background-color: #955;
+                    border: 1px solid #7775;
+                }
+            }
+
+            
+
+            &:first-child {
+                margin-right: 8px;
+            }
+        }
+    }
+    
+
+    .thumbnail {
+        width: 130px;
+        height: 100px;
+        background-image: url("https://i.ytimg.com/vi/EbnH3VHzhu8/default.jpg");
+        background-size: 100%;
     }
 }

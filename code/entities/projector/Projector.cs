@@ -1,4 +1,6 @@
-﻿using Editor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Editor;
 using Sandbox;
 
 namespace Cinema;
@@ -21,6 +23,9 @@ public partial class ProjectorEntity : Entity
     [BindComponent]
     public MediaController Controller { get; }
 
+    [Net]
+    public IList<CinemaArea> Areas { get; set; }
+
     public override void Spawn()
     {
         base.Spawn();
@@ -30,6 +35,8 @@ public partial class ProjectorEntity : Entity
         Rotation = Rotation.FromYaw(90);
 
         Components.Create<MediaController>();
+
+        Areas = All.OfType<CinemaArea>().Where(area => area.ProjectorEntity == this).ToList();
     }
 
     public override void ClientSpawn()

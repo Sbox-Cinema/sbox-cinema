@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Cinema.UI;
@@ -15,11 +16,17 @@ public partial class MovieQueue : Panel
 
     public bool Visible { get; set; } = false;
 
+    public string VisibleClass => Visible ? "visible" : "";
+
     public MediaController Controller { get; set; } = null;
 
     public IList<Media> Queue => Controller?.Queue ?? new List<Media>();
 
     public Media NowPlaying => Controller?.PlayingMedia ?? null;
+
+    public TimeSince TimeSinceStartedPlaying => Controller?.TimeSinceStartedPlaying ?? 0;
+
+    public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative).ToString(@"hh\:mm\:ss")} / {TimeSpan.FromSeconds(NowPlaying.Duration).ToString(@"hh\:mm\:ss")}";
 
     public TextEntry MovieIDEntry { get; set; }
 
@@ -40,7 +47,7 @@ public partial class MovieQueue : Panel
             }
         }
 
-        return HashCode.Combine(Visible, NowPlaying, queueHash);
+        return HashCode.Combine(Visible, NowPlaying, queueHash, NowPlayingTimeString);
     }
 
 
