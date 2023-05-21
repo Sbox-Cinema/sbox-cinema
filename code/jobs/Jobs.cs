@@ -34,9 +34,9 @@ public partial class JobDetails : BaseNetworkable
 
 
     /// <summary>
-    /// How much does this job pay
+    /// How much does this job pay for each successful task
     /// </summary>
-    public double PayRate;
+    public int PayRate;
 
     /// <summary>
     /// The interval for a job fail to be forgiven
@@ -81,7 +81,7 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
-            PayRate = 1.25,
+            PayRate = 1,
             FailAllowance = -1,
         },
 

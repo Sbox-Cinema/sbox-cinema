@@ -7,7 +7,7 @@ public class Projectile : ModelEntity
 {
     private static float VelocityToBreak => 120;
 
-    static float minZBreak => 0.75f;
+    static float MinZBreak => 0.75f;
 
     public override void Spawn()
     {
@@ -27,15 +27,8 @@ public class Projectile : ModelEntity
 
         if (eventData.Other.Entity is not WorldEntity || eventData.Other.Entity == this) return;
 
-        if (Math.Abs(eventData.Normal.z) >= minZBreak)
+        if (Math.Abs(eventData.Normal.z) >= MinZBreak)
         {
-            var trash = new Trash()
-            {
-                Model = this.Model,
-            };
-
-            trash.SetUp(Position);
-
             Delete();
         }
     }

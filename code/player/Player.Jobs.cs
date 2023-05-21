@@ -10,12 +10,12 @@ public partial class Player
     public Jobs.PlayerJob Job { get; }
 
     //The default cooldown time for setting the forgiveness timer
-    float cooldownTime => 30.0f;
+    float JobCooldownDuration => 30.0f;
 
     /// <summary>
     /// The cooldown after leaving a job to prevent being assigned to a new job too quickly
     /// </summary>
-    public TimeUntil JobCooldown { get; set; }
+    public TimeUntil TimeUntilStartNewJob { get; set; }
 
     /// <summary>
     /// Set the job to the player
@@ -34,18 +34,21 @@ public partial class Player
     [GameEvent.Tick.Server]
     protected void JobServerTick()
     {
-        //This could change if proper jobs have guest abilities
-        //if that happens, I'll think of a better check -ItsRifter
+        //Handle any active fails
+        if(Job.JobDetails.Fails > 0)
+            HandleActiveJobFails();
+    }
 
-        //This is a guest job
-        if (Job.HasAbility(JobAbilities.Guest)) return;
-
+    /// <summary>
+    /// Handles any active fails the employee currently has
+    /// </summary>
+    public void HandleActiveJobFails()
+    {
         //Forgiveness timer hasn't finished
         if (Job.JobDetails.ForgiveTimer > 0.0f) return;
 
         //If there are recent fails and the timer has finished, forgive the employee for a fail
-        if(Job.JobDetails.Fails > 0)
-            SubtractJobFails();
+         SubtractJobFails();
     }
 
     /// <summary>
@@ -96,9 +99,14 @@ public partial class Player
 
         if (wasFired)
             //180 seconds (3 minutes)
-            JobCooldown = cooldownTime * 6;
+            TimeUntilStartNewJob = JobCooldownDuration * 6;
         else
-            JobCooldown = cooldownTime;
+            //If they left with any remaining fails, multiply with base cooldown duration    
+            TimeUntilStartNewJob = JobCooldownDuration * Job.JobDetails.Fails;
+
+        //^^^
+        //Will have to add a property to the job details with a base cooldown
+        //the cooldown here might break things -ItsRifter
 
         //TODO: Cleanup any task in progress
 
@@ -139,8 +147,8 @@ public partial class Player
         var player = ConsoleSystem.Caller.Pawn as Player;
         if (player == null) return;
 
-        //The player's job is a guest job
-        if (player.Job.HasAbility(JobAbilities.Guest)) return;
+        //The player's job is as a guest
+        if (player.Job.Name == "Guest") return;
 
         //Leave the job
         player.LeaveJob();
