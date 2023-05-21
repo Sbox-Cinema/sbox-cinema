@@ -5,7 +5,7 @@ using Sandbox;
 namespace Cinema.Jobs;
 
 /// <summary>
-/// Traits & Ablities that jobs have
+/// Traits & Abilities that jobs have
 /// </summary>
 [Flags]
 public enum JobAbilities : ulong
@@ -31,7 +31,6 @@ public partial class JobDetails : BaseNetworkable
     /// </summary>
     [Net]
     public JobAbilities Abilities { get; set; }
-
 
     /// <summary>
     /// How much does this job pay for each successful task
@@ -59,6 +58,12 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public int Fails { get; set; } = 0;
 
+    /// <summary>
+    /// What responsibilities this job has
+    /// </summary>
+    [Net]
+    public JobResponsibilities Responsibilities { get; set; }
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -71,7 +76,8 @@ public partial class JobDetails : BaseNetworkable
             Name = "Guest",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
             PayRate = -1,
-            FailAllowance = -1
+            FailAllowance = -1,
+            Responsibilities = JobResponsibilities.UniversalIncome,
         },
 
         /// <summary>
@@ -83,16 +89,7 @@ public partial class JobDetails : BaseNetworkable
             Abilities = JobAbilities.PickupGarbage,
             PayRate = 1,
             FailAllowance = -1,
-        },
-
-        new JobDetails
-        {
-            Name = "Debug Job",
-            Abilities = JobAbilities.PurchaseConcessions,
-            PayRate = 1,
-            FailAllowance = 5,
-            ForgiveInterval = 15.0f,
-        }
+        },    
     };
 }
 
@@ -105,6 +102,8 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
     public new string Name => JobDetails?.Name ?? "Jobless";
 
     public JobAbilities Abilities => JobDetails?.Abilities ?? 0;
+
+    public JobResponsibilities Responsibilities => JobDetails?.Responsibilities ?? 0;
 
     public bool HasAbility(JobAbilities ability) => Abilities.HasFlag(ability);
 
