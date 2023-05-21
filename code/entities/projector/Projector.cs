@@ -24,7 +24,7 @@ public partial class ProjectorEntity : Entity
     public MediaController Controller { get; }
 
     [Net]
-    public IList<CinemaArea> Areas { get; set; }
+    public IList<CinemaZone> Areas { get; set; }
 
     public override void Spawn()
     {
@@ -36,7 +36,7 @@ public partial class ProjectorEntity : Entity
 
         Components.Create<MediaController>();
 
-        Areas = All.OfType<CinemaArea>().Where(area => area.ProjectorEntity == this).ToList();
+        Areas = All.OfType<CinemaZone>().Where(area => area.ProjectorEntity == this).ToList();
     }
 
     public override void ClientSpawn()

@@ -1,8 +1,11 @@
+using Editor;
 using Sandbox;
 
 namespace Cinema;
 
-public partial class CinemaArea : BaseTrigger
+[Library("cinema_zone"), HammerEntity]
+[Title("Cinema Zone"), Category("Cinema")]
+public partial class CinemaZone : BaseTrigger
 {
     /// <summary>
     /// The projector entity that will play in this area
