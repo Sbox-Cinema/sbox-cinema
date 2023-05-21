@@ -13,7 +13,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     [ConVar.Client("projector.bounce.enable")]
     public static bool EnableBounce { get; set; } = true;
     [ConVar.Client("projector.bounce.debug")]
-    public static bool EnableBounceDebug { get; set; } = false;
+    public static int BounceDebug { get; set; } = 0;
     // You won't actually see this update in-game until issue #3288 is resolved.
     // For more details: https://github.com/sboxgame/issues/issues/3288
     [ConVar.Client("projector.bounce.cookiesize")]
@@ -21,9 +21,13 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     private int _previousLightCookieSize = 32;
     [ConVar.Client("projector.bounce.brightnessfactor")]
     public static float BounceLightBrightnessFactor { get; set; } = 1f;
+    [ConVar.Client("projector.bounce.fadedistancemin")]
+    public static float FadeDistanceMin { get; set; } = 1500f;
+    [ConVar.Client("projector.bounce.fadedistancemax")]
+    public static float FadeDistanceMax { get; set; } = 2000f;
     
     public Texture SourceTexture { get; set; }
-    public SpotLightEntity Spotlight { get; set; }
+    public SpotLightEntity BounceSpotlight { get; set; }
 
     protected Texture DownscaledTexture { get; set; }
     protected Texture MultiplicandTexture { get; set; }
@@ -33,9 +37,8 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     private ComputeShader DownscaleShader { get; set; }
     private ComputeShader MultiplyShader { get; set; }
     private ComputeShader BlurShader { get; set; }
-    private float BaseBounceLightBrightness { get; set; } = 5f;
-    private float CalculatedBounceLightBrightness 
-        => BaseBounceLightBrightness * BounceLightBrightnessFactor;
+    private float BaseBounceLightBrightness { get; set; } = 10f;
+    private float ScreenDistanceFromProjector { get; set; }
 
 
     public FakeBounceLight()
@@ -53,14 +56,14 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     {
         base.OnActivate();
 
-        Spotlight ??= CreateSpotlight();
+        BounceSpotlight ??= CreateSpotlight();
     }
 
     private SpotLightEntity CreateSpotlight()
     {
         var spotlight = new SpotLightEntity()
         {
-            Brightness = CalculatedBounceLightBrightness,
+            Brightness = CalculateBounceBrightness(),
             Transform = Entity.Transform,
             Range = 1000,
             InnerConeAngle = 50f,
@@ -109,18 +112,6 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     [GameEvent.Tick.Client]
     public void OnClientTick() 
     {
-        if (EnableBounce)
-        {
-            Spotlight.Enabled = true;
-            Spotlight.Brightness = CalculatedBounceLightBrightness;
-        }
-        else
-        {
-            Spotlight.Enabled = false;
-            Spotlight.Brightness = 0;
-            return;
-        }
-
         // Trace forward from the projector light to find the surface it projects on to.
         var traceStart = Entity.Position;
         var traceEnd = Entity.Position + Entity.Rotation.Forward * 5000f;
@@ -131,9 +122,33 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         {
             return;
         }
+
+        ScreenDistanceFromProjector = tr.Distance;
+
         // Make sure the bounce spotlight is at the surface and pointing away from it.
-        Spotlight.Position = tr.HitPosition;
-        Spotlight.Rotation = Rotation.LookAt(tr.Normal);
+        BounceSpotlight.Position = tr.HitPosition;
+        BounceSpotlight.Rotation = Rotation.LookAt(tr.Normal);
+
+        var distFromCameraToBounceLight = Camera.Position.Distance(BounceSpotlight.Position);
+        if (EnableBounce && distFromCameraToBounceLight < FadeDistanceMax)
+        {
+            BounceSpotlight.Enabled = true;
+            BounceSpotlight.Brightness = CalculateBounceBrightness();
+            BounceSpotlight.FadeDistanceMin = FadeDistanceMin;
+            BounceSpotlight.FadeDistanceMax = FadeDistanceMax;
+        }
+        else
+        {
+            BounceSpotlight.Enabled = false;
+            BounceSpotlight.Brightness = 0;
+            return;
+        }
+    }
+
+    public float CalculateBounceBrightness()
+    {
+        var attenuated = Math.Clamp(100f / ScreenDistanceFromProjector, 0, 1);
+        return attenuated * BaseBounceLightBrightness * BounceLightBrightnessFactor;
     }
 
     [GameEvent.Client.Frame]
@@ -152,9 +167,13 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         }
 
         UpdateBounceLightCookie();
-        if (EnableBounceDebug)
+        if (BounceDebug > 0)
         {
-            TextureDebugOverlay();
+            ProjectorDebugOverlay();
+            if (BounceDebug > 1)
+            {
+                TextureDebugOverlay();
+            }
         }
     }
 
@@ -163,7 +182,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         if (_previousLightCookieSize != BounceLightCookieSize)
         {
             CreateAllTextures();
-            Spotlight.LightCookie = BounceLightCookie;
+            BounceSpotlight.LightCookie = BounceLightCookie;
         }
         _previousLightCookieSize = BounceLightCookieSize;
     }
@@ -225,6 +244,13 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         BlurShader.Attributes.Set("InputTexture", fromTex);
         BlurShader.Attributes.Set("OutputTexture", toTex);
         BlurShader.Dispatch(toTex.Width, toTex.Height, 1);
+    }
+
+    private void ProjectorDebugOverlay()
+    {
+        DebugOverlay.Sphere(Entity.Position, 5f, Color.Blue);
+        DebugOverlay.Line(Entity.Position, BounceSpotlight.Position, Color.Yellow);
+        DebugOverlay.Circle(BounceSpotlight.Position, BounceSpotlight.Rotation, BounceSpotlight.OuterConeAngle, Color.Red);
     }
 
     private void TextureDebugOverlay()
