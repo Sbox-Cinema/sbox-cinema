@@ -28,8 +28,6 @@
     "ProjectTemplate": null,
     "CsProjName": "",
     "HttpAllowList": [
-      "https://i.pinimg.com/",
-      "https://www.youtube.com/",
       "https://cinema-api.fly.dev/"
     ]
   }

@@ -14,4 +14,11 @@ public partial class CinemaZone : BaseTrigger
     public EntityTarget Projector { get; set; }
 
     public ProjectorEntity ProjectorEntity => Projector.GetTarget<ProjectorEntity>();
+
+    public override void Spawn()
+    {
+        base.Spawn();
+        Transmit = TransmitType.Always;
+
+    }
 }

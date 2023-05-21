@@ -35,7 +35,11 @@ public partial class ProjectorEntity : Entity
         Rotation = Rotation.FromYaw(90);
 
         Components.Create<MediaController>();
+    }
 
+    [GameEvent.Entity.PostSpawn]
+    protected void PostSpawn()
+    {
         Areas = All.OfType<CinemaZone>().Where(area => area.ProjectorEntity == this).ToList();
     }
 

@@ -158,7 +158,6 @@ partial class Player : AnimatedEntity, IEyes
                 var closestProjector = Entity.All.OfType<ProjectorEntity>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
                 if (closestProjector != null)
                 {
-                    Log.Info($"Found a projector {closestProjector}");
                     UI.MovieQueue.Instance.Controller = closestProjector.Controller;
                     UI.MovieQueue.Instance.Visible = true;
                 }

@@ -51,7 +51,6 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         }
 
         var media = await Media.CreateFromRequest(movie);
-        Log.Info($"Media request: {media}");
         RequestQueue.Add(media);
     }
 
@@ -80,7 +79,6 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 
     public void StartNext()
     {
-        Log.Info("Playing next media");
         var next = NextMedia;
         if (Queue.Count > 0)
             Queue.RemoveAt(0);

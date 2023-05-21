@@ -8,7 +8,7 @@ public partial class ProjectorEntity
 {
     private WebSurface WebSurface;
 
-    public string WebSurfaceUrl => WebSurface.Url;
+    public string WebSurfaceUrl => WebSurface?.Url;
     public string WebSurfaceVideoId { get; protected set; }
 
     public string CurrentVideoId
@@ -44,7 +44,6 @@ public partial class ProjectorEntity
 
     private void InitProjection()
     {
-        Log.Info("init projection");
         RenderWorld ??= new SceneWorld();
         RenderCamera ??= new SceneCamera()
         {
@@ -62,15 +61,26 @@ public partial class ProjectorEntity
             PanelBounds = new Rect(-ProjectionResolution / 2f, ProjectionResolution)
         };
 
-        WebSurface = Game.CreateWebSurface();
-        WebSurface.Size = ProjectionResolution;
-        WebSurface.InBackgroundMode = false;
-        WebSurface.OnTexture = UpdateWebTexture;
-        WebSurface.Url = "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
+        SetWebSurfaceUrl();
 
         ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
 
         SetupProjectionLight();
+    }
+
+    private void SetWebSurfaceUrl(string url = null)
+    {
+        if (WebSurface != null)
+        {
+            WebSurface.Url = url;
+            return;
+        };
+
+        WebSurface = Game.CreateWebSurface();
+        WebSurface.Size = ProjectionResolution;
+        WebSurface.InBackgroundMode = false;
+        WebSurface.OnTexture = UpdateWebTexture;
+        WebSurface.Url = url ?? "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
     }
 
     public void SetStaticImage(string url)
@@ -78,7 +88,6 @@ public partial class ProjectorEntity
         if (CurrentStaticUrl == url) return;
 
         CurrentStaticUrl = url;
-        CurrentVideoId = null;
 
         PlayContentOnProjector();
     }
@@ -88,7 +97,6 @@ public partial class ProjectorEntity
         if (CurrentVideoId == id) return;
 
         CurrentVideoId = id;
-        CurrentStaticUrl = null;
 
         PlayContentOnProjector();
     }
@@ -106,48 +114,40 @@ public partial class ProjectorEntity
 
     public void PlayContentOnProjector()
     {
-        // if (!CanSeeProjector(Game.LocalPawn.Position))
-        // {
-        //     //WebSurface.Url = null;
-        //     WebSurfaceVideoId = null;
-        //     return;
-        // }
+        if (!CanSeeProjector(Game.LocalPawn.Position))
+        {
+            WebSurface?.Dispose();
+            WebSurface = null;
+            WebSurfaceVideoId = null;
+            return;
+        }
 
         if (PlayingYouTubeVideo && WebSurfaceVideoId != CurrentVideoId)
         {
+            SetWebSurfaceUrl($"https://cinema-api.fly.dev/player.html?dt={CurrentVideoId}&vol=100");
             WebSurfaceVideoId = CurrentVideoId;
-            WebSurface.Url = $"https://cinema-api.fly.dev/player.html?dt={CurrentVideoId}&vol=100";
-            WebSurface.TellMouseMove(Vector2.One);
-            WebSurface.TellMouseButton(MouseButtons.Left, true);
-            SpamMouseClicks();
             return;
         }
 
-        if (ShowingStaticImage && WebSurface.Url != CurrentStaticUrl)
+        if (ShowingStaticImage && WebSurface?.Url != CurrentStaticUrl)
         {
             WebSurfaceVideoId = null;
-            WebSurface.Url = CurrentStaticUrl;
+            SetWebSurfaceUrl(CurrentStaticUrl);
             return;
         }
     }
+
+    private bool clickedDown = false;
 
     [GameEvent.Tick.Client]
     protected void TickClient()
     {
+        clickedDown = !clickedDown;
+        if (WebSurface != null)
+        {
+            WebSurface.TellMouseButton(MouseButtons.Left, clickedDown);
+        }
         PlayContentOnProjector();
-    }
-
-    private async void SpamMouseClicks()
-    {
-        WebSurface.TellMouseMove(Vector2.One * 10);
-        WebSurface.TellMouseButton(MouseButtons.Left, true);
-        await GameTask.Delay(10);
-        WebSurface.TellMouseMove(Vector2.One * 30);
-        WebSurface.TellMouseButton(MouseButtons.Left, false);
-        await GameTask.Delay(100);
-        WebSurface.TellMouseButton(MouseButtons.Left, true);
-        await GameTask.Delay(100);
-        WebSurface.TellMouseButton(MouseButtons.Left, false);
     }
 
     private void SetupProjectionLight()
@@ -174,7 +174,6 @@ public partial class ProjectorEntity
     {
         if (WebSurfaceTexture == null || WebSurfaceTexture.Size != size)
         {
-            Log.Info("Updating projection texture");
             WebSurfaceTexture?.Dispose();
             WebSurfaceTexture = Texture.Create((int)size.x, (int)size.y, ImageFormat.BGRA8888)
                                         .WithName("web-surface-texture")
@@ -183,7 +182,6 @@ public partial class ProjectorEntity
             RenderWorldPanel.Style.SetBackgroundImage(WebSurfaceTexture);
         }
 
-        Log.Info("texture");
         WebSurfaceTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
 
