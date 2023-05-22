@@ -34,9 +34,9 @@ public partial class FakeBounceLight
     private void InitRendering()
     {
         // Don't unnecessarily recreate textures if light cookie size isn't default.
-        if (BounceLightCookieSize != _previousLightCookieSize)
+        if (BounceLightCookieSize != _PreviousLightCookieSize)
         {
-            _previousLightCookieSize = BounceLightCookieSize;
+            _PreviousLightCookieSize = BounceLightCookieSize;
         }
         CreateAllShaderTextures();
     }
@@ -99,12 +99,12 @@ public partial class FakeBounceLight
 
     private void HandleCookieSizeUpdate()
     {
-        if (_previousLightCookieSize != BounceLightCookieSize)
+        if (_PreviousLightCookieSize != BounceLightCookieSize)
         {
             CreateAllShaderTextures();
             BounceSpotlight.LightCookie = BounceLightCookie;
         }
-        _previousLightCookieSize = BounceLightCookieSize;
+        _PreviousLightCookieSize = BounceLightCookieSize;
     }
 
     /// <summary>

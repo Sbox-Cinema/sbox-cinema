@@ -31,11 +31,10 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// A higher resolution may be more temporally stable, preventing some light flickering, but 
     /// also being less realistic.
     /// </summary>
-
     [ConVar.Client("projector.bounce.cookiesize")]
     public static int BounceLightCookieSize { get; set; } = 32;
     // We use this instance field to check if the cookie size has changed since the last frame.
-    private int _previousLightCookieSize = 32;
+    private int _PreviousLightCookieSize = 32;
     /// <summary>
     /// A factor that shall be applied at the end of brightness calculations to make the bounce
     /// light brighter or dimmer.
