@@ -150,7 +150,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         ActiveController?.FrameSimulate(cl);
 
-        if (Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f)
+        if (Input.Pressed("reload") && TimeSinceMenuPressed > 0.1f)
         {
             TimeSinceMenuPressed = 0;
             if (!UI.MovieQueue.Instance.Visible)

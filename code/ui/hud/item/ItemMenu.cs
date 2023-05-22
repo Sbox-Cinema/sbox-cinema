@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Cinema.UI;
 
-[StyleSheet("/ui/hud/item/ItemMenu.scss")]
+[StyleSheet("/ui/main.scss")]
 public partial class ItemMenu : RadialMenu
 {
 
