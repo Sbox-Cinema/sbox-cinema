@@ -12,11 +12,11 @@ public partial class ProjectorEntity : Entity
     [Property(Title = "Projector Name")]
     public string ProjectorName { get; set; } = "Projector";
 
-    [Property(Title = "Projection Resolution (Pixels)")]
-    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024, 1024);
+    [Net, Property(Title = "Projection Resolution (Pixels)")]
+    public Vector2 ProjectionResolution { get; set; }
 
-    [Property(Title = "Projection Size (Units)")]
-    public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
+    [Net, Property(Title = "Projection Size (Units)")]
+    public Vector2 ProjectionSize { get; set; }
 
     public Projection ProjectionImage { get; set; }
     public WebMediaSource MediaSrc { get; set; }
@@ -28,6 +28,15 @@ public partial class ProjectorEntity : Entity
         base.Spawn();
 
         Transmit = TransmitType.Always;
+
+        if (ProjectionResolution == default)
+        {
+            ProjectionResolution = new Vector2(1024);
+        }
+        if (ProjectionSize == default)
+        {
+            ProjectionSize = new Vector2(240, 135);
+        }
 
         Controller = new MediaController()
         {

@@ -59,6 +59,13 @@ public partial class Projection : Entity
         ProjectionLight.Components.Create<FakeBounceLight>();
     }
 
+    [GameEvent.Tick.Client]
+    public void OnClientTick()
+    {
+        ProjectionLight.OrthoLightWidth = ProjectorEntity.ProjectionSize.x;
+        ProjectionLight.OrthoLightHeight = ProjectorEntity.ProjectionSize.y;
+    }
+
     [GameEvent.PreRender]
     private void RenderScene()
     {
