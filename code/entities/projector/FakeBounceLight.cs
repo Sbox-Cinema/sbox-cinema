@@ -10,46 +10,70 @@ namespace Cinema;
 
 public partial class FakeBounceLight : EntityComponent, ISingletonComponent
 {
+    /// <summary>
+    /// If enabled, a fake bounce light effect will be applied to all projectors.
+    /// </summary>
     [ConVar.Client("projector.bounce.enable")]
     public static bool EnableBounce { get; set; } = true;
+    /// <summary>
+    /// Depending on the setting, displays debug information about the fake bounce light.<br/>
+    /// 0 - No debug info<br/>
+    /// 1 - Displays the positions of the projector and the bounce light plus path between them.<br/>
+    /// 2 - Displays all previously mentioned info and also the contents of the various textures 
+    /// used by the shaders.
+    /// </summary>
     [ConVar.Client("projector.bounce.debug")]
     public static int BounceDebug { get; set; } = 0;
     // You won't actually see this update in-game until issue #3288 is resolved.
     // For more details: https://github.com/sboxgame/issues/issues/3288
+    /// <summary>
+    /// Determines the size of the texture used as the light cookie of <c>BounceSpotlight</c>.
+    /// A higher resolution may be more temporally stable, preventing some light flickering, but 
+    /// also being less realistic.
+    /// </summary>
+
     [ConVar.Client("projector.bounce.cookiesize")]
     public static int BounceLightCookieSize { get; set; } = 32;
+    // We use this instance field to check if the cookie size has changed since the last frame.
     private int _previousLightCookieSize = 32;
+    /// <summary>
+    /// A factor that shall be applied at the end of brightness calculations to make the bounce
+    /// light brighter or dimmer.
+    /// </summary>
     [ConVar.Client("projector.bounce.brightnessfactor")]
     public static float BounceLightBrightnessFactor { get; set; } = 1f;
+    /// <summary>
+    /// Used to set the <c>FadeDistanceMin</c> of <c>BounceSpotlight</c>.
+    /// </summary>
     [ConVar.Client("projector.bounce.fadedistancemin")]
     public static float FadeDistanceMin { get; set; } = 1500f;
+    /// <summary>
+    /// Used to set the <c>FadeDistanceMax</c> of <c>BounceSpotlight</c>.
+    /// </summary>
     [ConVar.Client("projector.bounce.fadedistancemax")]
     public static float FadeDistanceMax { get; set; } = 2000f;
     
+    /// <summary>
+    /// The texture that shall be copied from when rendering the bounce light. 
+    /// Generally, this should be the <c>LightCookie</c> of a light that represents
+    /// the projector.
+    /// </summary>
     public Texture SourceTexture { get; set; }
-    public SpotLightEntity BounceSpotlight { get; set; }
+    /// <summary>
+    /// The light that projects the <c>BounceLightCookie</c> away from the screen to create the
+    /// fake bounce light effect.
+    /// </summary>
+    public SpotLightEntity BounceSpotlight { get; private set; }
+    /// <summary>
+    /// The distance between <c>Entity</c> and the screen on to which it projects.
+    /// </summary>
+    public float ScreenDistanceFromProjector { get; private set; }
 
-    protected Texture DownscaledTexture { get; set; }
-    protected Texture MultiplicandTexture { get; set; }
-    protected Texture ProductTexture { get; set; }
-    protected Texture BounceLightCookie { get; set; }
-
-    private ComputeShader DownscaleShader { get; set; }
-    private ComputeShader MultiplyShader { get; set; }
-    private ComputeShader BlurShader { get; set; }
-    private float BaseBounceLightBrightness { get; set; } = 10f;
-    private float ScreenDistanceFromProjector { get; set; }
-
+    private float BaseBounceLightBrightness { get; init; } = 10f;
 
     public FakeBounceLight()
     {
-        // Don't unnecessarily recreate textures if light cookie size isn't default.
-        if (BounceLightCookieSize != _previousLightCookieSize)
-        {
-            _previousLightCookieSize = BounceLightCookieSize;
-        }
-        CreateAllShaders();
-        CreateAllTextures();
+        InitRendering();
     }
 
     protected override void OnActivate()
@@ -66,6 +90,8 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
             Brightness = CalculateBounceBrightness(),
             Transform = Entity.Transform,
             Range = 1000,
+            FadeDistanceMin = FadeDistanceMin,
+            FadeDistanceMax = FadeDistanceMax,
             InnerConeAngle = 50f,
             OuterConeAngle = 80f,
             DynamicShadows = true,
@@ -74,39 +100,6 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         };
         spotlight.SetParent(Entity);
         return spotlight;
-    }
-
-    /// <summary>
-    /// Instantiates all of the shaders required for bounce light calculation.
-    /// </summary>
-    private void CreateAllShaders()
-    {
-        DownscaleShader = new ComputeShader("downscale_cs");
-        MultiplyShader = new ComputeShader("multiplytexture_cs");
-        BlurShader = new ComputeShader("gaussianblur_cs");
-    }
-
-    /// <summary>
-    /// Instantiates all of the textures objects required for bounce light calculation.
-    /// </summary>
-    private void CreateAllTextures()
-    {
-        DownscaledTexture   = CreateTexture();
-        MultiplicandTexture = CreateTexture();
-        ProductTexture      = CreateTexture();
-        BounceLightCookie   = CreateTexture();
-        // Downscale the mask texture to the size of the bounce light cookie.
-        var largeMaskTex = Texture.Load(FileSystem.Mounted, "materials/lightcookies/box_soft.vtex");
-        DownscaleTexture(largeMaskTex, MultiplicandTexture);
-    }
-
-    private Texture CreateTexture()
-    {
-        return Texture.Create(BounceLightCookieSize, BounceLightCookieSize)
-            .WithUAVBinding()
-            .WithFormat(ImageFormat.RGBA8888)
-            .WithDynamicUsage()
-            .Finish();
     }
 
     [GameEvent.Tick.Client]
@@ -145,122 +138,14 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         }
     }
 
-    public float CalculateBounceBrightness()
-    {
-        var attenuated = Math.Clamp(100f / ScreenDistanceFromProjector, 0, 1);
-        return attenuated * BaseBounceLightBrightness * BounceLightBrightnessFactor;
-    }
-
-    [GameEvent.Client.Frame]
-    public void OnClientFrame()
-    {
-        if (!EnableBounce)
-        {
-            return;
-        }
-
-        HandleCookieSizeUpdate();
-
-        if (!EnsureSourceIsNotNull())
-        {
-            return;
-        }
-
-        UpdateBounceLightCookie();
-        if (BounceDebug > 0)
-        {
-            ProjectorDebugOverlay();
-            if (BounceDebug > 1)
-            {
-                TextureDebugOverlay();
-            }
-        }
-    }
-
-    public void HandleCookieSizeUpdate()
-    {
-        if (_previousLightCookieSize != BounceLightCookieSize)
-        {
-            CreateAllTextures();
-            BounceSpotlight.LightCookie = BounceLightCookie;
-        }
-        _previousLightCookieSize = BounceLightCookieSize;
-    }
-
     /// <summary>
-    /// If <c>SourceTexture</c> is null, tries to set it to the <c>LightCookie</c> of
-    /// <c>Entity</c>, if <c>Entity</c> is a light that supports light cookies. 
-    /// Returns true if source texture is not null.
+    /// Returns the appropriate brightness for <c>BounceSpotlight</c> based on 
+    /// <c>ScreenDistanceFromProjector</c> and <c>BounceLightBrightnessFactor</c>.
     /// </summary>
     /// <returns></returns>
-    private bool EnsureSourceIsNotNull()
+    public float CalculateBounceBrightness()
     {
-        if (SourceTexture != null)
-        {
-            return true;
-        }
-        SourceTexture = Entity switch
-        {
-            OrthoLightEntity ortho => ortho.LightCookie,
-            SpotLightEntity spot => spot.LightCookie,
-            _ => null
-        };
-        return SourceTexture != null;
-    }
-
-    private void UpdateBounceLightCookie()
-    {
-        /* 
-         *  Here we daisy-chain three compute shaders to downscale, multiply, and blur the
-         *  main projector texture in order to create a fake bounce light effect.
-         *  I am CERTAIN that this is not the most efficient way to do this, but it works
-         *  for now, and someone with more HLSL knowledge could probably do it all in one shader.
-         *  
-         *  Our saving grace is that in a real theater, only one of these effects are likely to be
-         *  visible at a time. God help us if someone decides to put a bunch of projectors in a small room.
-         */
-        DownscaleTexture(SourceTexture, DownscaledTexture);
-        MultiplyTexture(DownscaledTexture, MultiplicandTexture, ProductTexture);
-        BlurTexture(ProductTexture, BounceLightCookie);
-    }
-
-    private void DownscaleTexture(Texture fromTex, Texture toTex)
-    {
-        DownscaleShader.Attributes.Set("InputTexture", fromTex);
-        DownscaleShader.Attributes.Set("OutputTexture", toTex);
-        DownscaleShader.Dispatch(toTex.Width, toTex.Height, 1);
-    }
-
-    private void MultiplyTexture(Texture fromTex, Texture multTex, Texture toTex)
-    {
-        MultiplyShader.Attributes.Set("InputTexture", fromTex);
-        MultiplyShader.Attributes.Set("MultiplicandTexture", multTex);
-        MultiplyShader.Attributes.Set("OutputTexture", toTex);
-        MultiplyShader.Dispatch(toTex.Width, toTex.Height, 1);
-    }
-
-    private void BlurTexture(Texture fromTex, Texture toTex)
-    {
-        BlurShader.Attributes.Set("InputTexture", fromTex);
-        BlurShader.Attributes.Set("OutputTexture", toTex);
-        BlurShader.Dispatch(toTex.Width, toTex.Height, 1);
-    }
-
-    private void ProjectorDebugOverlay()
-    {
-        DebugOverlay.Sphere(Entity.Position, 5f, Color.Blue);
-        DebugOverlay.Line(Entity.Position, BounceSpotlight.Position, Color.Yellow);
-        DebugOverlay.Circle(BounceSpotlight.Position, BounceSpotlight.Rotation, BounceSpotlight.OuterConeAngle, Color.Red);
-    }
-
-    private void TextureDebugOverlay()
-    {
-        DebugOverlay.Texture(SourceTexture, new Vector2(0, 0));
-        int texPosY = 0;
-        DebugOverlay.Texture(DownscaledTexture, new Vector2(SourceTexture.Width, texPosY));
-        texPosY += DownscaledTexture.Height;
-        DebugOverlay.Texture(ProductTexture, new Vector2(SourceTexture.Width, texPosY));
-        texPosY += ProductTexture.Height;
-        DebugOverlay.Texture(BounceLightCookie, new Vector2(SourceTexture.Width, texPosY));
+        var attenuation = Math.Clamp(100f / ScreenDistanceFromProjector, 0, 1);
+        return attenuation * BaseBounceLightBrightness * BounceLightBrightnessFactor;
     }
 }
