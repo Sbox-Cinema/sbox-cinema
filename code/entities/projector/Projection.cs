@@ -6,11 +6,11 @@ public partial class Projection : Entity
 {
     public ProjectorEntity ProjectorEntity { get; set; }
     public WebMediaSource MediaSource { get; set; }
+
     private SceneWorld ProjectorSceneWorld { get; set; }
     private SceneCamera ProjectorSceneCamera { get; set; }
     private Texture ProjectionTexture { get; set; }
     private OrthoLightEntity ProjectionLight { get; set; }
-    public FakeBounceLight FakeBounceLight { get; set; }
 
     public Projection(ProjectorEntity ent, WebMediaSource mediaSrc)
     {
@@ -57,12 +57,6 @@ public partial class Projection : Entity
 
         ProjectionLight.UseFog();
         ProjectionLight.Components.Create<FakeBounceLight>();
-    }
-
-    [GameEvent.Client.Frame]
-    private void OnFrame()
-    {
-
     }
 
     [GameEvent.PreRender]

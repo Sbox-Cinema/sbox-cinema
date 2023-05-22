@@ -9,14 +9,14 @@ namespace Cinema;
 [SupportsSolid]
 public partial class ProjectorEntity : Entity
 {
-    [Net, Property(Title = "Projector Name")]
+    [Property(Title = "Projector Name")]
     public string ProjectorName { get; set; } = "Projector";
 
-    [Net, Property(Title = "Projection Resolution (Pixels)")]
-    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024);
+    [Property(Title = "Projection Resolution (Pixels)")]
+    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024, 1024);
 
-    [Net, Property(Title = "Projection Size (Units)")]
-    public Vector3 ProjectionSize { get; set; } = new Vector3(240, 135);
+    [Property(Title = "Projection Size (Units)")]
+    public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
 
     public Projection ProjectionImage { get; set; }
     public WebMediaSource MediaSrc { get; set; }
@@ -26,15 +26,6 @@ public partial class ProjectorEntity : Entity
     public override void Spawn()
     {
         base.Spawn();
-
-        if (ProjectionResolution == default)
-        {
-            ProjectionResolution = new Vector2(1024);
-        }
-        if (ProjectionSize == default)
-        {
-            ProjectionSize = new Vector3(240, 135);
-        }
 
         Transmit = TransmitType.Always;
 
