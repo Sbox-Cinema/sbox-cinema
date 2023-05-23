@@ -134,6 +134,7 @@ public partial class ProjectorEntity
         };
 
         ProjectionLight.UseFog();
+        ProjectionLight.Components.Create<FakeBounceLight>();
     }
 
     private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
