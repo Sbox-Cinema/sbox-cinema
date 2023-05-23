@@ -1,0 +1,19 @@
+﻿GridInventory {
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
+    height: 100%;
+
+    & > GridCell {
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 22%;
+        background-color: color(1,1,1,0.02);
+        border-color: color(1,1,1,0.05);
+        border-width: 3px;
+        border-radius: 15px;
+        max-width: 25%;
+        margin: 5px;
+    }
+}

@@ -22,10 +22,33 @@
 {
     public CitizenPanelScene Scene { get; set; }
 
+    public Vector3 OrbitPosition 
+    { 
+        get => _OrbitPosition;
+        set
+        {
+            _OrbitPosition = value;
+            Scene.OrbitPosition = value;
+        }
+    }
+    private Vector3 _OrbitPosition = new Vector3(0, 0, 64);
+    public Vector3 CameraOffset 
+    {
+        get => _CameraOffset;
+        set
+        {
+            _CameraOffset = value;
+            Scene.CameraOffset = value;
+        }
+    }
+    private Vector3 _CameraOffset = new Vector3(72, -20, -10);
+
     public CitizenPanel()
     {
         SetClass("avatar", true);
-       
+
         Scene = AddChild<CitizenPanelScene>();
+        Scene.OrbitPosition = OrbitPosition;
+        Scene.CameraOffset = CameraOffset;
     }
 }

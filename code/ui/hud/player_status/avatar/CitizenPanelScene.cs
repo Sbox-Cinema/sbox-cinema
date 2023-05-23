@@ -4,6 +4,8 @@ using Sandbox.UI;
 namespace Cinema.UI;
 public partial class CitizenPanelScene : ScenePanel
 {
+    public Vector3 OrbitPosition { get; set; }
+    public Vector3 CameraOffset { get; set; }
     private SceneModel CitizenModel { get; set; }
     private ClothingContainer CitizenClothing { get; set; } = new ClothingContainer();
 
@@ -68,8 +70,8 @@ public partial class CitizenPanelScene : ScenePanel
 
     private void UpdateSceneCamera()
     {
-        var eyePosition = new Vector3(0, 0, 64);
-        var offset = new Vector3(72, -20, -10);
+        var eyePosition = OrbitPosition;
+        var offset = CameraOffset;
 
         Camera.Position = eyePosition + offset;
         Camera.Rotation = Rotation.LookAt((eyePosition - Camera.Position).Normal, Vector3.Up);

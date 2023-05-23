@@ -5,11 +5,26 @@
 
 @attribute [StyleSheet("ui/main.scss")]
 <root>
-    <PlayerCard />
-    <StoreInterface />
+    <PlayerCard @ref=PlayerCard/>
+    <StoreInterface @ref=StoreInterface/>
     <div class="center">
         <ItemMenu />
     </div>
     <ChatBox />
-    <MovieQueue />
+    <MovieQueue @ref=MovieQueue/>
+    <PlayerInventory @ref=PlayerInventory/>
 </root>
+
+@code {
+    public PlayerCard PlayerCard { get; set; }
+    public StoreInterface StoreInterface { get; set; }
+    public MovieQueue MovieQueue { get; set; }
+    public PlayerInventory PlayerInventory { get; set; }
+
+    public static Hud Instance { get; set; }
+
+    public Hud()
+    {
+        Instance = this;
+    }
+}

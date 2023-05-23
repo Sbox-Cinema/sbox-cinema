@@ -1,2 +1,18 @@
-﻿@import "hud/_hud.scss";
+﻿@import "components/grid-inventory/_gridInventory.scss";
+@import "components/need-icon/_needIcon.scss";
+@import "hud/_hud.scss";
 @import "hud/item/_itemMenu.scss";
+@import "movie-queue/_movieQueue.scss";
+@import "player-inventory/_playerInventory.scss";
+
+.icon-button {
+    width: 70px;
+    height: 70px;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+    font-size: 48px;
+    font-family: "Material Icons";
+}

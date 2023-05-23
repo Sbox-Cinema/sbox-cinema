@@ -1,0 +1,14 @@
+﻿@inherits Panel
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@attribute [StyleSheet("ui/main.scss")]
+<root>
+    <p>@IconName</p>
+</root>
+
+@code {
+    public string IconName { get; set; }
+}

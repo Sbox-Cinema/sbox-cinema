@@ -1,0 +1,41 @@
+﻿@inherits Panel
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@attribute [StyleSheet("ui/main.scss")]
+<root>
+    <div id="mainArea">
+        <div id="inventoryPanel">
+            <GridInventory Width=@(5) Height=@(4)/>
+            <Money/>
+        </div>
+        <div id="characterPanel">
+            <CitizenPanel OrbitPosition="@(new Vector3(0, 0, 35))" CameraOffset="@(new Vector3(115, -20, 0))"/>
+            <div id="socialInfo">
+                <h2 id="playerName">ducc</h2>
+                <div id="socialLevelPanel">
+                    <h2 id="socialLevel">16</h2>
+                </div>
+            </div>
+        </div>
+
+        <div id="iconSidebar">
+            <div id="needSummary">
+                <NeedIcon IconName="heart_broken"/>
+                <NeedIcon IconName="local_drink"/>
+                <NeedIcon IconName="restaurant"/>
+                <NeedIcon IconName="wash"/>
+                <NeedIcon IconName="wc"/>
+            </div>
+            <div id="bottomIcons">
+                <button id="btnNotifications" class="icon-button">notifications</button>
+                <button id="btnSettings" class="icon-button">settings</button>
+            </div>
+        </div>
+    </div>
+    <div id="infoArea">
+
+    </div>
+</root>
