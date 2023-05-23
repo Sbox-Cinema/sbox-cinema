@@ -6,6 +6,7 @@ public partial class Projection : Entity
 {
     public ProjectorEntity ProjectorEntity { get; set; }
     public WebMediaSource MediaSource { get; set; }
+
     private SceneWorld ProjectorSceneWorld { get; set; }
     private SceneCamera ProjectorSceneCamera { get; set; }
     private Texture ProjectionTexture { get; set; }
@@ -55,9 +56,17 @@ public partial class Projection : Entity
         };
 
         ProjectionLight.UseFog();
+        ProjectionLight.Components.Create<FakeBounceLight>();
     }
 
-    [Event.PreRender]
+    [GameEvent.Tick.Client]
+    public void OnClientTick()
+    {
+        ProjectionLight.OrthoLightWidth = ProjectorEntity.ProjectionSize.x;
+        ProjectionLight.OrthoLightHeight = ProjectorEntity.ProjectionSize.y;
+    }
+
+    [GameEvent.PreRender]
     private void RenderScene()
     {
         Graphics.RenderToTexture(ProjectorSceneCamera, ProjectionTexture);
