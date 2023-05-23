@@ -1,6 +1,4 @@
-﻿using Sandbox;
-
-namespace Cinema;
+﻿namespace Cinema;
 
 public partial class HotdogRoller
 {

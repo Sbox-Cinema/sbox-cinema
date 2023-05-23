@@ -9,5 +9,5 @@ namespace Cinema;
 [EditorModel("models/hotdogroller/hotdogroller.vmdl")]
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
-    [Net] public IDictionary<string, Cookable.Hotdog> Hotdogs {get; set;}
+    [Net] public IDictionary<string, Hotdog> Hotdogs {get; set;}
 }
