@@ -14,11 +14,11 @@ public partial class ProjectorEntity : Entity
     [Property(Title = "Projector Name")]
     public string ProjectorName { get; set; } = "Projector";
 
-    [Property(Title = "Projection Resolution (Pixels)")]
-    public Vector2 ProjectionResolution { get; set; } = new Vector2(1024, 1024);
+    [Net, Property(Title = "Projection Resolution (Pixels)")]
+    public Vector2 ProjectionResolution { get; set; }
 
-    [Property(Title = "Projection Size (Units)")]
-    public Vector2 ProjectionSize { get; set; } = new Vector2(480, 256);
+    [Net, Property(Title = "Projection Size (Units)")]
+    public Vector2 ProjectionSize { get; set; }
 
     [BindComponent]
     public MediaController Controller { get; }
@@ -32,7 +32,14 @@ public partial class ProjectorEntity : Entity
 
         Transmit = TransmitType.Always;
 
-        Rotation = Rotation.FromYaw(90);
+        if (ProjectionResolution == default)
+        {
+            ProjectionResolution = new Vector2(1024);
+        }
+        if (ProjectionSize == default)
+        {
+            ProjectionSize = new Vector2(240, 135);
+        }
 
         Components.Create<MediaController>();
     }
@@ -53,6 +60,23 @@ public partial class ProjectorEntity : Entity
     {
         WebSurface?.Dispose();
         WebSurfaceTexture?.Dispose();
+    }
+
+    public static void DrawGizmos(EditorContext context)
+    {
+        if (!context.IsSelected)
+        {
+            return;
+        }
+
+        var projectionSizeProp = context.Target.GetProperty("ProjectionSize");
+        var projectionSize = projectionSizeProp.As.Vector3;
+
+        var length = 3000f;
+        var mins = new Vector3(0, -(projectionSize.x / 2), -(projectionSize.y / 2));
+        var maxs = new Vector3(length, projectionSize.x / 2, projectionSize.y / 2);
+        var bbox = new BBox(mins, maxs);
+        Gizmo.Draw.LineBBox(bbox);
     }
 }
 
