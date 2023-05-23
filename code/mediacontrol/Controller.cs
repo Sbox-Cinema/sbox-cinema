@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Sandbox;
 
 namespace Cinema;
@@ -16,10 +15,11 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 
     public static string WaitingImage => "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
 
-    public Media NextMedia => Queue.FirstOrDefault();
+    public Media NextMedia => Queue.OrderBy(m => m.ListScore).FirstOrDefault();
 
     [Net]
     public Media PlayingMedia { get; set; }
+
     [Net]
     public TimeSince TimeSinceStartedPlaying { get; set; }
 
@@ -30,6 +30,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         {
             var request = RequestQueue.First();
             RequestQueue.RemoveAt(0);
+            request.ListScore = Queue.Count;
             Queue.Add(request);
         }
 
@@ -85,6 +86,16 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         StartPlayingMedia(next);
     }
 
+    public void RemoveMediaAtIndex(int index, IClient remover)
+    {
+        var media = Queue.ElementAtOrDefault(index);
+        if (media is null) return;
+
+        if (media.Requestor != remover) return;
+
+        Queue.RemoveAt(index);
+    }
+
     protected void PlayCurrentMediaOnProjector(bool forceUpdate = false)
     {
         if (PlayingMedia?.YouTubeId == null)
@@ -93,7 +104,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
             return;
         }
 
-        PlayYouTubeVideo(PlayingMedia.YouTubeId, forceUpdate);
+        PlayYouTubeVideo(PlayingMedia.YouTubeId, PlayingMedia.Nonce, TimeSinceStartedPlaying, forceUpdate);
     }
 
     private void StartPlayingMedia(Media media)
@@ -132,27 +143,36 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
             return;
         }
 
-        Projector.SetStaticImage(WaitingImage);
+        var media = new PlayingMedia()
+        {
+            Url = WaitingImage
+        };
+
+        Projector.SetMedia(media);
     }
 
-    private void PlayYouTubeVideo(string youtubeId, bool forceUpdate = true)
+    private void PlayYouTubeVideo(string youtubeId, int nonce, float timeSinceStarted, bool forceUpdate = true)
     {
         if (Game.IsServer)
         {
-            ClientPlayYouTubeVideo(youtubeId, forceUpdate);
+            ClientPlayYouTubeVideo(youtubeId, nonce, timeSinceStarted, forceUpdate);
             return;
         }
 
-        if (Projector.CurrentVideoId == youtubeId && !forceUpdate)
-            return;
+        var media = new PlayingYouTubeMedia()
+        {
+            VideoId = youtubeId,
+            TimeSinceStartedPlaying = timeSinceStarted,
+            Nonce = nonce
+        };
 
-        Projector.PlayYouTubeVideo(youtubeId);
+        Projector.SetMedia(media);
     }
 
     [ClientRpc]
-    private void ClientPlayYouTubeVideo(string url, bool forceUpdate = true)
+    private void ClientPlayYouTubeVideo(string url, int nonce, float timeSinceStarted, bool forceUpdate = true)
     {
-        PlayYouTubeVideo(url, forceUpdate);
+        PlayYouTubeVideo(url, nonce, timeSinceStarted, forceUpdate);
     }
 
     [ClientRpc]
@@ -161,10 +181,34 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         SetWaitingImage();
     }
 
+    private void DebugQueueToLog()
+    {
+        Log.Info($"Debug {Projector.Name}");
+        foreach (var media in Queue.OrderBy(m => m.ListScore))
+        {
+            Log.Info($"({media.ListScore}) {media.Title}");
+        }
+    }
 
-    //Hacky, @todo: make this cleaner and target specific controllers
+    [ConCmd.Client("controller.debug.queue.client")]
+    public static void DebugQueueClient()
+    {
+        var controller = Sandbox.Entity.All.OfType<ProjectorEntity>().OrderBy(e => e.Position.DistanceSquared(Game.LocalPawn.Position)).FirstOrDefault()?.Components.Get<MediaController>();
 
-    [ConCmd.Server("queue")]
+        if (controller is null) return;
+        controller.DebugQueueToLog();
+    }
+
+    [ConCmd.Server("controller.debug.queue.server")]
+    public static void DebugQueueServer()
+    {
+        var controller = Sandbox.Entity.All.OfType<ProjectorEntity>().OrderBy(e => e.Position.DistanceSquared(ConsoleSystem.Caller.Pawn.Position)).FirstOrDefault()?.Components.Get<MediaController>();
+
+        if (controller is null) return;
+        controller.DebugQueueToLog();
+    }
+
+    [ConCmd.Server]
     public static void RequestAddMedia(int projectorId, string youtubeId)
     {
         var projector = Sandbox.Entity.FindByIndex(projectorId);
@@ -178,7 +222,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         });
     }
 
-    [ConCmd.Server("skip")]
+    [ConCmd.Server]
     public static void Skip(int projectorId)
     {
         var projector = Sandbox.Entity.FindByIndex(projectorId);
@@ -186,5 +230,43 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         if (controller is null) return;
 
         controller.StartNext();
+    }
+
+    [ConCmd.Server]
+    public static void RemoveMedia(int projectorId, int index)
+    {
+        var projector = Sandbox.Entity.FindByIndex(projectorId);
+        var controller = projector?.Components.Get<MediaController>();
+        if (controller is null) return;
+
+        controller.RemoveMediaAtIndex(index, ConsoleSystem.Caller);
+    }
+
+    [ConCmd.Server]
+    public static void VoteForMedia(int projectorId, int nonce, bool upvote)
+    {
+        var projector = Sandbox.Entity.FindByIndex(projectorId);
+        var controller = projector?.Components.Get<MediaController>();
+
+        if (controller is null) return;
+
+        var media = controller.Queue.Where(m => m.Nonce == nonce).FirstOrDefault();
+        if (media is null) return;
+
+        media.VoteFor(ConsoleSystem.Caller, upvote);
+    }
+
+    [ConCmd.Server]
+    public static void GiveMediaLike(int projectorId, int nonce, bool like)
+    {
+        var projector = Sandbox.Entity.FindByIndex(projectorId);
+        var controller = projector?.Components.Get<MediaController>();
+
+        if (controller is null) return;
+
+        var media = controller.PlayingMedia;
+        if (media?.Nonce != nonce) return;
+
+        media.GiveLike(ConsoleSystem.Caller, like);
     }
 }

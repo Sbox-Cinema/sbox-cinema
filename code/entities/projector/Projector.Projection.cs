@@ -6,38 +6,36 @@ namespace Cinema;
 
 public partial class ProjectorEntity
 {
+    /// <summary>
+    /// The media we want to be playing (but might not be)
+    /// </summary>
+    public PlayingMedia CurrentMedia { get; protected set; }
+
+    public void SetMedia(PlayingMedia media)
+    {
+        CurrentMedia = media;
+        PlayContentOnProjector();
+    }
+
+    public bool CanSeeProjector(Vector3 pos)
+    {
+        foreach (var area in Areas)
+        {
+            var inside = area.WorldSpaceBounds.Contains(pos);
+            if (inside) return true;
+        }
+
+        return false;
+    }
+
     private WebSurface WebSurface;
-
-    public string WebSurfaceUrl => WebSurface?.Url;
-    public string WebSurfaceVideoId { get; protected set; }
-
-    public string CurrentVideoId
-    {
-        get => _CurrentVideoId;
-        protected set
-        {
-            _CurrentVideoId = value;
-            _CurrentStaticUrl = null;
-        }
-    }
-    private string _CurrentVideoId;
-    public string CurrentStaticUrl
-    {
-        get => _CurrentStaticUrl;
-        protected set
-        {
-            _CurrentStaticUrl = value;
-            _CurrentVideoId = null;
-        }
-    }
-    private string _CurrentStaticUrl;
-    public bool PlayingYouTubeVideo => CurrentVideoId != null;
-    public bool ShowingStaticImage => CurrentStaticUrl != null;
-
-    private Texture WebSurfaceTexture { get; set; }
+    /// <summary>
+    /// The media on our web surface (if we have one)
+    /// </summary>
+    private PlayingMedia WebSurfaceMedia { get; set; }
+    public Texture WebSurfaceTexture { get; protected set; }
     private OrthoLightEntity ProjectionLight { get; set; }
-    private Texture ProjectionTexture { get; set; }
-
+    public Texture ProjectionTexture { get; protected set; }
     private SceneWorld RenderWorld { get; set; }
     private SceneCamera RenderCamera { get; set; }
     private WorldPanel RenderWorldPanel { get; set; }
@@ -61,92 +59,60 @@ public partial class ProjectorEntity
             PanelBounds = new Rect(-ProjectionResolution / 2f, ProjectionResolution)
         };
 
-        SetWebSurfaceUrl();
+        var waitingImage = new PlayingMedia()
+        {
+            Url = MediaController.WaitingImage
+        };
+
+        SetMedia(waitingImage);
 
         ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
 
         SetupProjectionLight();
     }
 
-    private void SetWebSurfaceUrl(string url = null)
+    private void PlayMediaOnWebSurface(PlayingMedia media)
     {
-        if (WebSurface != null)
-        {
-            WebSurface.Url = url;
-            return;
-        };
+        CreateWebSurfaceIfNotExists();
 
+        WebSurfaceMedia = media;
+        WebSurface.Url = WebSurfaceMedia.Url;
+    }
+
+    private void CreateWebSurfaceIfNotExists()
+    {
+        if (WebSurface != null) return;
         WebSurface = Game.CreateWebSurface();
         WebSurface.Size = ProjectionResolution;
         WebSurface.InBackgroundMode = false;
         WebSurface.OnTexture = UpdateWebTexture;
-        WebSurface.Url = url ?? "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
     }
 
-    public void SetStaticImage(string url)
+    private void PlayContentOnProjector()
     {
-        if (CurrentStaticUrl == url) return;
+        if (!Game.LocalPawn.IsValid()) return;
 
-        CurrentStaticUrl = url;
-
-        PlayContentOnProjector();
-    }
-
-    public void PlayYouTubeVideo(string id)
-    {
-        if (CurrentVideoId == id) return;
-
-        CurrentVideoId = id;
-
-        PlayContentOnProjector();
-    }
-
-    public bool CanSeeProjector(Vector3 pos)
-    {
-        foreach (var area in Areas)
-        {
-            var inside = area.WorldSpaceBounds.Contains(pos);
-            if (inside) return true;
-        }
-
-        return false;
-    }
-
-    public void PlayContentOnProjector()
-    {
         if (!CanSeeProjector(Game.LocalPawn.Position))
         {
             WebSurface?.Dispose();
             WebSurface = null;
-            WebSurfaceVideoId = null;
+            WebSurfaceMedia = null;
             return;
         }
 
-        if (PlayingYouTubeVideo && WebSurfaceVideoId != CurrentVideoId)
-        {
-            SetWebSurfaceUrl($"https://cinema-api.fly.dev/player.html?dt={CurrentVideoId}&vol=100");
-            WebSurfaceVideoId = CurrentVideoId;
+        if (WebSurfaceMedia == CurrentMedia)
             return;
-        }
 
-        if (ShowingStaticImage && WebSurface?.Url != CurrentStaticUrl)
-        {
-            WebSurfaceVideoId = null;
-            SetWebSurfaceUrl(CurrentStaticUrl);
-            return;
-        }
+        PlayMediaOnWebSurface(CurrentMedia);
     }
 
-    private bool clickedDown = false;
+    private bool _WebSurfaceMouseClickedDown = false;
 
     [GameEvent.Tick.Client]
     protected void TickClient()
     {
-        clickedDown = !clickedDown;
-        if (WebSurface != null)
-        {
-            WebSurface.TellMouseButton(MouseButtons.Left, clickedDown);
-        }
+        _WebSurfaceMouseClickedDown = !_WebSurfaceMouseClickedDown;
+        WebSurface?.TellMouseButton(MouseButtons.Left, _WebSurfaceMouseClickedDown);
         PlayContentOnProjector();
     }
 

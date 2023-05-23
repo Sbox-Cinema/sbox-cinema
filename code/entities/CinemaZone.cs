@@ -19,6 +19,5 @@ public partial class CinemaZone : BaseTrigger
     {
         base.Spawn();
         Transmit = TransmitType.Always;
-
     }
 }

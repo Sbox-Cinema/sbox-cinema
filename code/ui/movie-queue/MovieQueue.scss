@@ -46,20 +46,6 @@ MovieQueue {
     }
 }
 
-// .container {
-//     background-color: #222;
-//     border-radius: 4px;
-//     border: 2px solid #1112;
-//     width: 100%;
-//     height: 100%;
-//     padding: 8px;
-//     flex-direction: column;
-
-//     >
-// }
-
-
-
 .footer {
     height: 10%;
     background-color: #222;
@@ -68,7 +54,6 @@ MovieQueue {
 .contents {
     flex-direction: column;
     overflow: hidden;
-    //flex-shrink: 0;
     height: 80%;
     padding: 32px;
     width: 80%;
@@ -91,7 +76,6 @@ MovieQueue {
     }
     
     &.outline {
-        //border: 2px solid #5555;
         background-color: rgba(30, 30, 30, 0.5);
     }
 
@@ -114,7 +98,6 @@ MovieQueue {
 
     &.scroll {
         overflow: scroll;
-        //
     }
 }
 
@@ -147,7 +130,6 @@ MovieQueue {
 
     &.small {
         padding: 0px 4px;
-        //min-width: 40px;
     }
 
     &.close-btn {
@@ -167,6 +149,12 @@ MovieQueue {
 
     &.fill {
         width: 100%;
+    }
+
+    &.remove {
+        margin-left: 6px;
+        color: #C55;
+        font-size: 18px;
     }
 
 }
@@ -190,19 +178,20 @@ MovieQueue {
     max-height: 42px;
     margin: 4px 0px;
 
-    &.header {
-        //font-weight: 800;
-    }
-
     border-top: 1px solid #5555;
     border-bottom: 1px solid #5555;
-    //border-radius: 4px;
+
     background-color: rgba(30, 30, 30, 0.8);
 
     &:hover {
         border-top: 1px solid #555F;
         border-bottom: 1px solid #555F;
         background-color: rgba(50, 50, 50, 0.8);
+    }
+
+    >.count {
+        margin-right: 12px;
+        color: #ccc;
     }
 
     >.title {
@@ -250,28 +239,42 @@ MovieQueue {
             &.like {
                 background-color: #262;
 
-                &:hover {
-                    background-color: #282;
-                    border: 1px solid #6665;
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #282;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #595;
+                        border: 1px solid #7775;
+                    }
                 }
-            
-                &:active {
-                    background-color: #595;
-                    border: 1px solid #7775;
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
                 }
             }
 
             &.dislike {
                 background-color: #622;
 
-                &:hover {
-                    background-color: #822;
-                    border: 1px solid #6665;
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #822;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #955;
+                        border: 1px solid #7775;
+                    }
                 }
-            
-                &:active {
-                    background-color: #955;
-                    border: 1px solid #7775;
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
                 }
             }
 
@@ -295,7 +298,6 @@ MovieQueue {
         flex-grow: 1;
         background-color: #BBB;
         margin: 8px 8px;
-        //width: 100%;
         height: 32px;
         color: #000;
         align-items: center;
@@ -343,28 +345,42 @@ MovieQueue {
             &.like {
                 background-color: #262;
 
-                &:hover {
-                    background-color: #282;
-                    border: 1px solid #6665;
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #282;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #595;
+                        border: 1px solid #7775;
+                    }
                 }
-            
-                &:active {
-                    background-color: #595;
-                    border: 1px solid #7775;
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
                 }
             }
 
             &.dislike {
                 background-color: #622;
 
-                &:hover {
-                    background-color: #822;
-                    border: 1px solid #6665;
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #822;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #955;
+                        border: 1px solid #7775;
+                    }
                 }
-            
-                &:active {
-                    background-color: #955;
-                    border: 1px solid #7775;
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
                 }
             }
 

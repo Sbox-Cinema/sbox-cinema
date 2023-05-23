@@ -140,9 +140,6 @@ partial class Player : AnimatedEntity, IEyes
         SimulateActiveChild(cl);
     }
 
-    // @TODO: remove when facepunch fixes input.pressed
-    private TimeSince TimeSinceMenuPressed = 0;
-
     /// <summary>
     /// Called every frame on the client
     /// </summary>
@@ -150,9 +147,8 @@ partial class Player : AnimatedEntity, IEyes
     {
         ActiveController?.FrameSimulate(cl);
 
-        if (Input.Pressed("menu") && TimeSinceMenuPressed > 0.1f)
+        if (Input.Pressed("menu"))
         {
-            TimeSinceMenuPressed = 0;
             if (!UI.MovieQueue.Instance.Visible)
             {
                 var closestProjector = Entity.All.OfType<ProjectorEntity>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
@@ -164,7 +160,6 @@ partial class Player : AnimatedEntity, IEyes
             }
             else
             {
-                Log.Info("Closing media player");
                 UI.MovieQueue.Instance.Visible = false;
                 UI.MovieQueue.Instance.Controller = null;
             }
