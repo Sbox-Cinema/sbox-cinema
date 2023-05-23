@@ -1,9 +1,4 @@
 ﻿using Sandbox;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinema;
 
@@ -26,7 +21,7 @@ public partial class FakeBounceLight
     /// texture is the result of applying a gaussian blur to <c>ProductTexture</c>.
     /// </summary>
     private Texture BounceLightCookie { get; set; }
-    
+
 
     /// <summary>
     /// This is where the shaders and textures are created for the first time.

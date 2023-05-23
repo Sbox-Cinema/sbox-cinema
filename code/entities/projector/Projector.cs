@@ -70,7 +70,7 @@ public partial class ProjectorEntity : Entity
         }
 
         var projectionSizeProp = context.Target.GetProperty("ProjectionSize");
-        var projectionSize = projectionSizeProp.As.Vector3;
+        var projectionSize = projectionSizeProp.GetValue<Vector2>();
 
         var length = 3000f;
         var mins = new Vector3(0, -(projectionSize.x / 2), -(projectionSize.y / 2));
