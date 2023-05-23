@@ -2,26 +2,19 @@
 
 namespace Cinema;
 
-public partial class Hotdog : WeaponBase
+public partial class HotdogBoxed : WeaponBase
 {
-    public override string Name => "Hotdog";
-    public override string Description => "A raw hotdog";
+    public override string Name => "Hotdog (Boxed)";
+    public override string Description => "As the Germans say: 'Heißer Hund'";
     public override string Icon => "ui/icons/hotdog.png";
-    public override Model WorldModel => Model.Load("models/hotdog/hotdog_roller.vmdl");
-    public override string ViewModelPath => "models/hotdog/v_hotdog_roller.vmdl";
+    public override Model WorldModel => Model.Load("models/hotdog/w_hotdog_boxed.vmdl");
+    public override string ViewModelPath => "models/hotdog/v_hotdog_boxed.vmdl";
     public override float PrimaryFireRate => 1.35f;
     public override int BaseUses => 4;
-
-    [BindComponent] public Rotator Rotator { get; }
-    [BindComponent] public Rotator Steam { get; }
 
     public override void Spawn()
     {
         base.Spawn();
-
-        SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
-
-        Tags.Add("cookable");
     }
 
     public override void PrimaryFire()
@@ -40,7 +33,7 @@ public partial class Hotdog : WeaponBase
             var projectile = new Projectile()
             {
                 Owner = WeaponHolder,
-                Model = Model.Load("models/hotdog/hotdog_roller.vmdl"),
+                Model = Model.Load("models/hotdog/w_hotdog_boxed.vmdl"),
                 Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
                 Rotation = WeaponHolder.EyeRotation,
             };
