@@ -27,6 +27,8 @@
     "LeaderboardType": "None",
     "ProjectTemplate": null,
     "CsProjName": "",
-    "HttpAllowList": null
+    "HttpAllowList": [
+      "https://cinema-api.fly.dev/"
+    ]
   }
 }

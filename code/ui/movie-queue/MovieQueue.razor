@@ -4,75 +4,101 @@
 
 @namespace Cinema.UI
 
-@attribute [StyleSheet("ui/main.scss")]
-<root class="@(Visible ? "visible" : "")">
-    <div class="placement">
-        <div class="container">
-            <div class="header">
-                <div class="title">
-                    Media Player
-                </div>
-                <div class="close-btn button" @onclick=@OnClose>
-                    Close
+@attribute [StyleSheet("ui/movie-queue/MovieQueue.scss")]
+<root class="@VisibleClass">
+    <div class="placement container">
+        <div class="header">
+            <div class="title">
+                Media Player
+            </div>
+            <div class="close-btn button" @onclick=@OnClose>
+                Close
+            </div>
+        </div>
+        <div class="contents">
+            <div class="section outline">
+                <div class="add-queue-container">
+                    <div class="title">
+                        Add To Queue (Youtube ID):
+                    </div>
+                    <TextEntry @ref=MovieIDEntry CaretColor="#555" />
+                    <div class="button" @onclick=@OnQueue >
+                        Add
+                    </div>
                 </div>
             </div>
-            <div class="contents">
-                <div class="section">
-                    <div class="control-bar">
+            <div class="section clear grow scroll">
+                <div class="rows scrollable">
+                    @foreach (var (movie, index) in Queue.WithIndex())
+                    {
+                                                                    <div class="row">
+                                                                        <div class="count">@(index + 1)</div>
+                                                                        <div class="title">
+                                                                        <div class="text">@movie.Title</div>
+                                @if (CanRemoveMedia(movie))
+                                {
+                                                    <div class="button fit small remove" @onclick=@(() => OnRemove(movie))>Remove</div>
+                                }
+                                                                        </div>
+                                                                        <div class="duration">
+                                @movie.DurationFormatted
+                                                                        </div>
+                                                                        <div class="requestor">
+                                @movie.Requestor.Name
+                                                                        </div>
+                                                                        <div class="voting-buttons">
+                                                                            <div class="button like @(CanVoteFor(movie, true) ? "" : "disabled")" @onclick=@(() => OnVote(movie, true))>@(CanVoteFor(movie, true) ? "👍" : "😀")</div>
+                                                                            <div class="button dislike @(CanVoteFor(movie, false) ? "" : "disabled")" @onclick=@(() => OnVote(movie, false))>@(CanVoteFor(movie, false) ? "👎" : "🥲")</div>
+                                                                        </div>
+                                                                    </div>
+                    }
+                </div>
+            </div>
+            <div class="section outline as-rows">
+                @if (NowPlaying != null)
+                {
+                                                                <div class="now-playing-block">
+                                                                    <div class="stats">
+                                                                        <div class="thumbnail" @ref=Thumbnail > </div>
+                                                                        <div class="details">
+                                                                            <div class="title">
+                                    @NowPlaying.Title
+                                                                            </div>
+                                                                            <div class="time">
+                                    @NowPlayingTimeString
+                                                                            </div>
+                                                                            <div class="requestor">
+                                    @NowPlaying.Requestor.Name
+                                                                            </div>
+                                                                            <div class="voting-buttons">
+                                                                                <div class="button like @(CanGiveLike(NowPlaying, true) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, true))>Like</div>
+                                                                                <div class="button dislike @(CanGiveLike(NowPlaying, false) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, false))>Dislike</div>
+
+                                                                                @if (CanRemoveMedia(NowPlaying))
+                                {
+                                                    <div class="button remove" @onclick=@(() => OnSkip())>Skip</div>
+                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                }
+                <div class="admin-control-bar">
+                    <div class="header">
+                        Admin
+                    </div>
+                    <div class="controls">
                         <div class="button" @onclick=@OnSkip>
                             Skip Current Movie
                         </div>
-                    </div>
-                </div>
-                <div class="section grow outline">
-                    <div class="title center">
-                        Queue
-                    </div>
-                    <div class="row header">
-                        <div class="title">
-                            Url
-                        </div>
-                        <div class="requestor">
-                            Added By
-                        </div>
-                        <div class="controls">
-
-                        </div>
-                    </div>
-                    <div class="rows scrollable">
-                        @foreach (var movie in Queue)
-
-
-
-                        {
-                                    <div class="row">
-                                        <div class="title">
-                                    @movie.Url
-                                        </div>
-                                        <div class="requestor">
-                                    @movie.Requestor.Name
-                                        </div>
-                                        <div class="controls">
-                                            <div class="button">
-                                                Remove
-                                            </div>
-                                        </div>
-                                    </div>
-                        }
-                    </div>
-                </div>
-                <div class="section">
-                    <div class="add-queue-container">
-                        <div class="title">
-                            Add To Queue (Youtube ID):
-                        </div>
-                        <TextEntry @ref=MovieIDEntry CaretColor="#555" />
-                        <div class="button" @onclick=@OnQueue >
-                            Add
-                        </div>
-                    </div>
+                    <div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
+    <div class="footer">
+
+    </div>
     </div>
 </root>

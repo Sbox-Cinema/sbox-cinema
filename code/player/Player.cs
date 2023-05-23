@@ -1,6 +1,4 @@
 ﻿using Sandbox;
-using Sandbox.UI;
-using Cinema.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,32 +138,7 @@ partial class Player : AnimatedEntity, IEyes
         }
 
         SimulateActiveChild(cl);
-
-        if (Game.IsServer)
-        {
-            return;
-        }
-
-        if (Input.Pressed("score"))
-        {
-            var inventory = Hud.Instance.PlayerInventory;
-            var playerCard = Hud.Instance.PlayerCard;
-            var displayed = inventory.Style.Display == DisplayMode.Flex;
-            if (displayed)
-            {
-                playerCard.Style.Display = DisplayMode.Flex;
-                inventory.Style.Display = DisplayMode.None;
-            }
-            else
-            {
-                playerCard.Style.Display = DisplayMode.None;
-                inventory.Style.Display = DisplayMode.Flex;
-            }
-        }
     }
-
-    // @TODO: remove when facepunch fixes input.pressed
-    private TimeSince TimeSinceMenuPressed = 0;
 
     /// <summary>
     /// Called every frame on the client
@@ -174,22 +147,19 @@ partial class Player : AnimatedEntity, IEyes
     {
         ActiveController?.FrameSimulate(cl);
 
-        if (Input.Pressed("reload") && TimeSinceMenuPressed > 0.1f)
+        if (Input.Pressed("menu"))
         {
-            TimeSinceMenuPressed = 0;
             if (!UI.MovieQueue.Instance.Visible)
             {
-                var closestMoviePlayer = Entity.All.OfType<MediaController>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
-                if (closestMoviePlayer != null)
+                var closestProjector = Entity.All.OfType<ProjectorEntity>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
+                if (closestProjector != null)
                 {
-                    Log.Info($"Found a movie player {closestMoviePlayer}");
-                    UI.MovieQueue.Instance.Controller = closestMoviePlayer;
+                    UI.MovieQueue.Instance.Controller = closestProjector.Controller;
                     UI.MovieQueue.Instance.Visible = true;
                 }
             }
             else
             {
-                Log.Info("Closing media player");
                 UI.MovieQueue.Instance.Visible = false;
                 UI.MovieQueue.Instance.Controller = null;
             }
