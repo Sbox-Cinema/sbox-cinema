@@ -1,7 +1,5 @@
-﻿using Sandbox;
-
-public interface IProjectionSource
+﻿public interface IProjectionSource
 {
-	void InitProjectionImage();
-	void ResetProjectionImage();
+    void InitProjectionImage();
+    void ResetProjectionImage();
 }

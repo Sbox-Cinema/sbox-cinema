@@ -1,10 +1,5 @@
 ﻿using Sandbox;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cinema;
 
@@ -51,7 +46,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// </summary>
     [ConVar.Client("projector.bounce.fadedistancemax")]
     public static float FadeDistanceMax { get; set; } = 2000f;
-    
+
     /// <summary>
     /// The texture that shall be copied from when rendering the bounce light. 
     /// Generally, this should be the <c>LightCookie</c> of a light that represents
@@ -102,7 +97,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     }
 
     [GameEvent.Tick.Client]
-    public void OnClientTick() 
+    public void OnClientTick()
     {
         // Trace forward from the projector light to find the surface it projects on to.
         var traceStart = Entity.Position;

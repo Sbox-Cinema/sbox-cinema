@@ -1,4 +1,6 @@
-﻿using Editor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Editor;
 using Sandbox;
 
 namespace Cinema;
@@ -18,10 +20,11 @@ public partial class ProjectorEntity : Entity
     [Net, Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; }
 
-    public Projection ProjectionImage { get; set; }
-    public WebMediaSource MediaSrc { get; set; }
+    [BindComponent]
+    public MediaController Controller { get; }
 
-    public MediaController Controller { get; set; }
+    [Net]
+    public IList<CinemaZone> Areas { get; set; }
 
     public override void Spawn()
     {
@@ -38,17 +41,25 @@ public partial class ProjectorEntity : Entity
             ProjectionSize = new Vector2(240, 135);
         }
 
-        Controller = new MediaController()
-        {
-            Projector = this
-        };
-        Controller.Parent = this;
+        Components.Create<MediaController>();
     }
+
+    [GameEvent.Entity.PostSpawn]
+    protected void PostSpawn()
+    {
+        Areas = All.OfType<CinemaZone>().Where(area => area.ProjectorEntity == this).ToList();
+    }
+
     public override void ClientSpawn()
     {
         base.ClientSpawn();
+        InitProjection();
+    }
 
-        ProjectionImage = new Projection(this, MediaSrc);
+    protected override void OnDestroy()
+    {
+        WebSurface?.Dispose();
+        WebSurfaceTexture?.Dispose();
     }
 
     public static void DrawGizmos(EditorContext context)
@@ -59,7 +70,7 @@ public partial class ProjectorEntity : Entity
         }
 
         var projectionSizeProp = context.Target.GetProperty("ProjectionSize");
-        var projectionSize = projectionSizeProp.As.Vector3;
+        var projectionSize = projectionSizeProp.GetValue<Vector2>();
 
         var length = 3000f;
         var mins = new Vector3(0, -(projectionSize.x / 2), -(projectionSize.y / 2));
