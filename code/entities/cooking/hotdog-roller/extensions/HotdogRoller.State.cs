@@ -1,6 +1,4 @@
-﻿using Sandbox;
-
-namespace Cinema;
+﻿namespace Cinema;
 
 public partial class HotdogRoller
 {
@@ -10,8 +8,8 @@ public partial class HotdogRoller
         On
     }
 
-    [Net] public State MachineState { get; set; } = State.Off;
-
+    public State MachineState { get; set; }
+   
     /// <summary>
     ///
     /// </summary>
@@ -28,6 +26,30 @@ public partial class HotdogRoller
                 break;
         }
     }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /*
+    private void HandleState()
+    {
+        switch (MachineState)
+        {
+            case State.BothOff:
+                HandleBothOffState();
+                break;
+            case State.BothOn:
+                HandleBothOnState();
+                break;
+            case State.LeftOn:
+                HandleLeftOnState();
+                break;
+            case State.RightOn:
+                HandleRightOnState();
+                break;
+        }
+    }
+    */
     /// <summary>
     ///
     /// </summary>
@@ -45,13 +67,15 @@ public partial class HotdogRoller
         // Power Lights
         SetMaterialGroup(0);
 
-        // Power Switches
-        SetAnimParameter("toggle_left", false);
-        SetAnimParameter("toggle_right", false);
+        foreach (var powerSwitch in Components.GetAll<Switch>())
+        {
+            powerSwitch.SetPos(0);
+        }
 
-        // Control Knobs
-        SetAnimParameter("LeftHandleState", 0);
-        SetAnimParameter("RightHandleState", 0);
+        foreach (var knob in Components.GetAll<Knob>())
+        {
+            knob.SetPos(0);
+        }
 
         // Hotdogs
         foreach (var element in Hotdogs)
@@ -71,13 +95,16 @@ public partial class HotdogRoller
         SetMaterialGroup(1);
 
         // Power Switches
-        SetAnimParameter("toggle_left", true);
-        SetAnimParameter("toggle_right", true);
+        foreach (var powerSwitch in Components.GetAll<Switch>())
+        {
+            powerSwitch.SetPos(1);
+        }
 
-        // Control Knobs
-        SetAnimParameter("LeftHandleState", 3);
-        SetAnimParameter("RightHandleState", 3);
-
+        foreach (var knob in Components.GetAll<Knob>())
+        {
+            knob.SetPos(3);
+        }
+        
         // Hotdogs
         foreach (var element in Hotdogs)
         {
@@ -86,5 +113,37 @@ public partial class HotdogRoller
             hotdog.Components.Create<Rotator>();
             hotdog.Components.Create<Cooking>();
         }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void HandleBothOffState()
+    {
+        SetMaterialGroup(0);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void HandleBothOnState()
+    {
+        SetMaterialGroup(1);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void HandleLeftOnState()
+    {
+        SetMaterialGroup(3);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void HandleRightOnState()
+    {
+        SetMaterialGroup(4);
     }
 }

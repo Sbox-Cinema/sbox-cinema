@@ -4,11 +4,14 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
+    private int MaxRollerItems = 22;
     public override void Spawn()
     {
         base.Spawn();
 
         SetupModel();
+
+        SetInitState();
 
         TestHotDogs();
     }
@@ -30,9 +33,22 @@ public partial class HotdogRoller
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 
+        Components.Add(new Knob(Knob.Side.Left));
+        Components.Add(new Knob(Knob.Side.Right));
+
+        Components.Add(new Switch(Switch.Side.Left));
+        Components.Add(new Switch(Switch.Side.Right));
+
         Tags.Add("interactable");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    private void SetInitState()
+    {
+        TransitionStateTo(State.Off);
+    }
     /// <summary>
     /// Sets up the UI when the machine is interacted with
     /// </summary>
@@ -43,15 +59,16 @@ public partial class HotdogRoller
 
     private void TestHotDogs()
     { 
-        for (int i = 0; i < 22; i++)
+        for (int i = 0; i < MaxRollerItems; i++)
         {
-            Hotdogs.Add($"S{i + 1}F", new Cookable.Hotdog());
-            Hotdogs.Add($"S{i + 1}B", new Cookable.Hotdog());
+            Hotdogs.Add($"S{i + 1}F", new Hotdog());
+            Hotdogs.Add($"S{i + 1}B", new Hotdog());
         }
 
         foreach(var hotdog in Hotdogs)
         {
             AttachEntity(hotdog.Key, hotdog.Value);
+            EntityExtensions.SetGlow(hotdog.Value, true);
         }
     }
 
