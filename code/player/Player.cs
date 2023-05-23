@@ -1,7 +1,9 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cinema.UI;
 
 namespace Cinema;
 
@@ -138,6 +140,28 @@ partial class Player : AnimatedEntity, IEyes
         }
 
         SimulateActiveChild(cl);
+
+        if (Game.IsServer)
+        {
+            return;
+        }
+
+        if (Input.Pressed("score"))
+        {
+            var inventory = Hud.Instance.PlayerInventory;
+            var playerCard = Hud.Instance.PlayerCard;
+            var displayed = inventory.Style.Display == DisplayMode.Flex;
+            if (displayed)
+            {
+                playerCard.Style.Display = DisplayMode.Flex;
+                inventory.Style.Display = DisplayMode.None;
+            }
+            else
+            {
+                playerCard.Style.Display = DisplayMode.None;
+                inventory.Style.Display = DisplayMode.Flex;
+            }
+        }
     }
 
     /// <summary>
@@ -147,7 +171,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         ActiveController?.FrameSimulate(cl);
 
-        if (Input.Pressed("menu"))
+        if (Input.Pressed("reload"))
         {
             if (!UI.MovieQueue.Instance.Visible)
             {
