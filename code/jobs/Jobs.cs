@@ -87,6 +87,8 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
 
     public bool HasAbility(JobAbilities ability) => Abilities.HasFlag(ability);
 
+    public bool HasResponsibility(JobResponsibilities responsibility) => Responsibilities.HasFlag(responsibility);
+
     public static PlayerJob CreateFromDetails(JobDetails details)
     {
         var job = new PlayerJob

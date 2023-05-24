@@ -1,3 +1,4 @@
+using System.Linq;
 using Sandbox;
 using Cinema.Jobs;
 
@@ -7,7 +8,9 @@ namespace Cinema;
 public partial class PopcornStorage : Machine
 {
     public static float PopcornStorageTime => 1.0f;
+    public static RangedFloat PopcornDecayTime => new(5f, 10f);
     public static int PopcornStoragePaymentAmount => 10;
+    public static int PopcornOutOfStockPenaltyAmount => 50;
 
     public override string Name => "Popcorn Storage";
 
@@ -20,6 +23,12 @@ public partial class PopcornStorage : Machine
 
     [Net]
     public TimeUntil TimeUntilPopcornStored { get; private set; }
+
+    [Net]
+    public TimeUntil TimeUntilPopcornDecays { get; private set; } = PopcornDecayTime.GetValue();
+
+    [Net]
+    public int PopcornStored { get; private set; } = 0;
 
     public bool IsStoringPopcorn => BeingUsedBy is not null;
 
@@ -58,6 +67,37 @@ public partial class PopcornStorage : Machine
         BeingUsedBy = null;
     }
 
+    [GameEvent.Tick.Server]
+    private void Tick()
+    {
+        HandlePopcornDecay();
+    }
+
+    private void HandlePopcornDecay()
+    {
+        if (TimeUntilPopcornDecays > 0) return;
+
+        if (PopcornStored > 0)
+        {
+            --PopcornStored;
+        }
+        else
+        {
+            OnNoPopcornLeft();
+        }
+
+        TimeUntilPopcornDecays = PopcornDecayTime.GetValue();
+    }
+
+    private static void OnNoPopcornLeft()
+    {
+        var stockers = All.OfType<Player>().Where(p => p.Job.HasResponsibility(JobResponsibilities.PopcornStocking));
+        foreach (var stocker in stockers)
+        {
+            stocker.TakeMoney(PopcornOutOfStockPenaltyAmount);
+        }
+    }
+
     private void StartStoringPopcorn(Player player)
     {
         BeingUsedBy = player;
@@ -69,6 +109,7 @@ public partial class PopcornStorage : Machine
         // Remove the popcorn the player is holding
         BeingUsedBy.Inventory.RemoveWeapon(BeingUsedBy.ActiveChild, false);
         BeingUsedBy.AddMoney(PopcornStoragePaymentAmount);
+        ++PopcornStored;
         BeingUsedBy = null;
     }
 }
