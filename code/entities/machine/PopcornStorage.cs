@@ -75,7 +75,7 @@ public partial class PopcornStorage : Machine
 
     private void HandlePopcornDecay()
     {
-        if (TimeUntilPopcornDecays > 0) return;
+        if (TimeUntilPopcornDecays.Relative > 0) return;
 
         if (PopcornStored > 0)
         {

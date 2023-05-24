@@ -68,7 +68,7 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails {
             Name = "Concession Worker",
             Abilities = JobAbilities.MakePopcorn,
-            Responsibilities = 0
+            Responsibilities = JobResponsibilities.PopcornStocking
         }
     };
 }
