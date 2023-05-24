@@ -33,7 +33,7 @@ public partial class Popcorn : WeaponBase
             var projectile = new Projectile()
             {
                 Owner = WeaponHolder,
-                Model = Model.Load("models/popcorn_tub/w_popcorn_tub_01.vmdl"),
+                Model = Model,
                 Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
                 Rotation = WeaponHolder.EyeRotation,
             };

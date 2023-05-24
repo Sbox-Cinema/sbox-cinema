@@ -33,7 +33,7 @@ public partial class Nachos : WeaponBase
             var projectile = new Projectile()
             {
                 Owner = WeaponHolder,
-                Model = Model.Load("models/nachos_tray/nachos_tray.vmdl"),
+                Model = Model,
                 Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
                 Rotation = WeaponHolder.EyeRotation,
             };

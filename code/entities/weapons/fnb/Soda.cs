@@ -33,7 +33,7 @@ public partial class Soda : WeaponBase
             var projectile = new Projectile()
             {
                 Owner = WeaponHolder,
-                Model = Model.Load("models/papercup/papercup.vmdl"),
+                Model = Model,
                 Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
                 Rotation = WeaponHolder.EyeRotation,
             };

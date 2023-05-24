@@ -33,7 +33,7 @@ public partial class Hotdog : WeaponBase
             var projectile = new Projectile()
             {
                 Owner = WeaponHolder,
-                Model = Model.Load("models/hotdog/w_hotdog_boxed.vmdl"),
+                Model = Model,
                 Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
                 Rotation = WeaponHolder.EyeRotation,
             };
