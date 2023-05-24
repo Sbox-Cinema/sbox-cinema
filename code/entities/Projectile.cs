@@ -29,6 +29,13 @@ public class Projectile : ModelEntity
 
         if (Math.Abs(eventData.Normal.z) >= MinZBreak)
         {
+            Trash trash = new Trash()
+            {
+                Model = Model,
+            };
+
+            trash.SetUp(eventData.Position);
+
             Delete();
         }
     }

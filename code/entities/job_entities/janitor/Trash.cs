@@ -17,7 +17,9 @@ public partial class Trash : Prop, IUse
 
     [Net] DecayEnum decayStatus { get; set; } = DecayEnum.Clean;
 
-    float decayInterval => 45.0f;
+    [ConVar.Server("cinema.itemdecay.interval")]
+    public static double DecayInterval { get; set; } = 45.0;
+
     TimeSince decayTime;
     Glow glow;
     bool canUpdate;
@@ -82,11 +84,11 @@ public partial class Trash : Prop, IUse
     protected void ServerTick()
     {
         //if its been a second since a decay update, reset the bool for the next
-        if (Math.Round(decayTime) % decayInterval == 1.0f && !canUpdate)
+        if (Math.Round(decayTime) % DecayInterval == 1.0f && !canUpdate)
             canUpdate = true;
 
         //If its been the decay interval and isn't rotten
-        if (Math.Round(decayTime) % decayInterval == 0 && decayStatus != DecayEnum.Rotten)
+        if (Math.Round(decayTime) % DecayInterval == 0 && decayStatus != DecayEnum.Rotten)
         {
             //Can't update, probably because its been updated in a previous server tick
             if (!canUpdate) return;
@@ -121,15 +123,16 @@ public partial class Trash : Prop, IUse
         //The decaying stages
         if (decayStatus == DecayEnum.Spoiled)
         {
-
+            RenderColor = new Color(0.85f, 0.85f, 0.85f);
         }
         else if (decayStatus == DecayEnum.Infested)
         {
+            RenderColor = new Color(0.50f, 0.50f, 0.50f);
             flies = Particles.Create("particles/flies/fly_swarm.vpcf", this);
         }
         else if (decayStatus == DecayEnum.Rotten)
         {
-
+            RenderColor = new Color(0.30f, 0.30f, 0.30f);
         }
     }
 
@@ -140,7 +143,7 @@ public partial class Trash : Prop, IUse
         glow.Color = Color.Green;
         //Make the glow not appear through the world
         glow.ObscuredColor = Color.Transparent;
-        glow.Width = 2;
+        glow.Width = 0.25f;
     }
 
     void UpdateGlow()
