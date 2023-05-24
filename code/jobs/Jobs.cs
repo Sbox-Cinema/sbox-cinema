@@ -33,11 +33,6 @@ public partial class JobDetails : BaseNetworkable
     public JobAbilities Abilities { get; set; }
 
     /// <summary>
-    /// How much does this job pay for each successful task
-    /// </summary>
-    public int PayRate;
-
-    /// <summary>
     /// The interval for a job fail to be forgiven
     /// </summary>
     public float ForgiveInterval;
@@ -80,7 +75,6 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Guest",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
-            PayRate = -1,
             FailAllowance = -1,
             BaseLeaveCooldown = -1,
             Responsibilities = JobResponsibilities.UniversalIncome,
@@ -93,9 +87,9 @@ public partial class JobDetails : BaseNetworkable
         {
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
-            PayRate = 1,
             FailAllowance = -1,
-            BaseLeaveCooldown = 15
+            BaseLeaveCooldown = 15,
+            Responsibilities = JobResponsibilities.PerTaskIncome,
         },    
     };
 }

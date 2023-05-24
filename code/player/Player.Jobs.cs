@@ -86,7 +86,13 @@ public partial class Player
     public void SuccessJobTask()
     {
         //Give payment to the employee
-        AddMoney(Job.JobDetails.PayRate);
+
+        switch(Job.JobDetails.Responsibilities)
+        {
+            case JobResponsibilities.PerTaskIncome:
+                AddMoney(5);
+                break;
+        }
     }
 
     /// <summary>
@@ -105,7 +111,7 @@ public partial class Player
 
         //The employee has failed too many times past the allowance, fire them
         if (Job.JobDetails.Fails >= Job.JobDetails.FailAllowance)
-            LeaveJob(true);
+            LeaveJob();
     }
 
     //Removes any active job fails
@@ -119,19 +125,13 @@ public partial class Player
     /// <summary>
     /// Leaves the active job
     /// </summary>
-    /// <param name="wasFired">Was the employee fired for bad performance?</param>
-    public void LeaveJob(bool wasFired = false)
+    public void LeaveJob()
     {
         //The player's doesn't have a proper job (is a guest)
         if (Job.HasAbility(JobAbilities.Guest))
             throw new System.Exception("Tried to leave current job as a guest");
 
-        if (wasFired)
-            //put the player on job cooldown by a lengthy amount (surely this can be improved on -ItsRifter)
-            TimeUntilStartNewJob = Job.JobDetails.BaseLeaveCooldown * 6;
-        else
-            //If they left with any remaining fails, multiply with job cooldown (add 1 to prevent multiplying by 0)
-            TimeUntilStartNewJob = Job.JobDetails.BaseLeaveCooldown * (Job.JobDetails.Fails + 1);
+        TimeUntilStartNewJob = Job.JobDetails.BaseLeaveCooldown * (Job.JobDetails.Fails + 1);
 
         //TODO: Cleanup any task in progress
 

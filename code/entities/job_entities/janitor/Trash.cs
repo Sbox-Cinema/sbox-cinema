@@ -140,6 +140,7 @@ public partial class Trash : Prop, IUse
         glow.Color = Color.Green;
         //Make the glow not appear through the world
         glow.ObscuredColor = Color.Transparent;
+        glow.Width = 2;
     }
 
     void UpdateGlow()
