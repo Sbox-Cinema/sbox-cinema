@@ -16,6 +16,8 @@ public enum JobAbilities : ulong
     PurchaseConcessions = 1 << 1,
     // Can this job pickup garbage
     PickupGarbage = 1 << 2,
+    // Can this job make popcorn
+    MakePopcorn = 1 << 3
 }
 
 public partial class JobDetails : BaseNetworkable
@@ -59,6 +61,14 @@ public partial class JobDetails : BaseNetworkable
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
             Responsibilities = 0,
+        },
+        /// <summary>
+        /// Concession worker who can make and store popcorn
+        /// </summary>
+        new JobDetails {
+            Name = "Concession Worker",
+            Abilities = JobAbilities.MakePopcorn,
+            Responsibilities = 0
         }
     };
 }
