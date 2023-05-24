@@ -1,3 +1,4 @@
+using System;
 using Sandbox;
 using Cinema.Jobs;
 
@@ -21,6 +22,8 @@ public partial class PopcornMaker : Machine
     public TimeUntil TimeUntilPopcornFinished { get; private set; }
 
     public bool IsMakingPopcorn => BeingUsedBy is not null;
+
+    public override float TimedUsePercentage => IsMakingPopcorn ? Math.Min(TimeUntilPopcornFinished.Passed / PopcornCreationTime, 1) : 0;
 
     public override bool IsUsable(Entity user)
     {

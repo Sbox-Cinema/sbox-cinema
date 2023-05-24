@@ -1,7 +1,7 @@
 using System.Linq;
 using Sandbox;
 using Cinema.Jobs;
-
+using System;
 
 namespace Cinema;
 
@@ -31,6 +31,8 @@ public partial class PopcornStorage : Machine
     public int PopcornStored { get; private set; } = 0;
 
     public bool IsStoringPopcorn => BeingUsedBy is not null;
+
+    public override float TimedUsePercentage => IsStoringPopcorn ? Math.Min(TimeUntilPopcornStored.Passed / PopcornStorageTime, 1) : 0;
 
     public override bool IsUsable(Entity user)
     {
