@@ -24,9 +24,7 @@ public partial class CinemaGame
 
     public static bool ValidateUser(long steamID)
     {
-        if (DevIDs.Contains(steamID)) return true;
-
-        return false;
+        return DevIDs.Contains(steamID);
     }
 
     [ClientRpc]
@@ -48,7 +46,7 @@ public partial class CinemaGame
         return true;
     }
 
-    [ConCmd.Server("game.reset")]
+    [ConCmd.Server("cinema.game.reset")]
     public static void ResetGame()
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -87,7 +85,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("ent.delete")]
+    [ConCmd.Server("cinema.ent.delete")]
     public static void DeleteEntity()
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -102,7 +100,7 @@ public partial class CinemaGame
             tr.Entity.Delete();
     }
 
-    [ConCmd.Server("ent.create")]
+    [ConCmd.Server("cinema.ent.create")]
     public static void SpawnEntity(string entName)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -136,7 +134,7 @@ public partial class CinemaGame
         ent.Rotation = Rotation.From(new Angles(0, owner.AimRay.Forward.EulerAngles.yaw, 0));
     }
 
-    [ConCmd.Server("weapon.create")]
+    [ConCmd.Server("cinema.weapon.create")]
     public static void SpawnWeaponCMD(string wepName, bool inInv = false)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -161,7 +159,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("player.bring")]
+    [ConCmd.Server("cinema.player.bring")]
     public static void BringPlayerCMD(string playerName)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -185,7 +183,7 @@ public partial class CinemaGame
         (client.Pawn as Player).ResetInterpolation();
     }
 
-    [ConCmd.Server("money.give")]
+    [ConCmd.Server("cinema.money.give")]
     public static void GivePlayerCashCMD(int amt, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -210,7 +208,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("money.take")]
+    [ConCmd.Server("cinema.money.take")]
     public static void TakePlayerCashCMD(int amt, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -235,7 +233,7 @@ public partial class CinemaGame
         }
     }
 
-    [ConCmd.Server("player.job.set")]
+    [ConCmd.Server("cinema.player.job.set")]
     public static void SetJob(string jobName, string playerName = "")
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
@@ -264,7 +262,7 @@ public partial class CinemaGame
         target.SetJob(details);
     }
 
-    [ConCmd.Client("player.job.debug.client")]
+    [ConCmd.Client("cinema.player.job.debug.client")]
     public static void DebugJobClient()
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
