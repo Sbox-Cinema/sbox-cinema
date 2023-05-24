@@ -7,6 +7,7 @@ namespace Cinema;
 public partial class PopcornStorage : Machine
 {
     public static float PopcornStorageTime => 1.0f;
+    public static int PopcornStoragePaymentAmount => 10;
 
     public override string Name => "Popcorn Storage";
 
@@ -67,6 +68,7 @@ public partial class PopcornStorage : Machine
     {
         // Remove the popcorn the player is holding
         BeingUsedBy.Inventory.RemoveWeapon(BeingUsedBy.ActiveChild, false);
+        BeingUsedBy.AddMoney(PopcornStoragePaymentAmount);
         BeingUsedBy = null;
     }
 }
