@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 
 namespace Cinema.UI;
 public partial class Tooltip
@@ -11,7 +12,7 @@ public partial class Tooltip
         Text = text;
 
         Transform = ent.Transform;
-        Position += Vector3.Up * 32.0f;
+        Position += Vector3.Up * 24.0f;
     }
     public void ShouldOpen(bool open)
     {
@@ -19,10 +20,16 @@ public partial class Tooltip
 
         StateHasChanged();
     }
+
+    public void SetText(string text)
+    {
+        Text = text;
+    }
+
     public override void Tick()
     {
         base.Tick();
-   
+   /*
         if (Game.LocalPawn is Player player)
         {
             TraceResult tr = Trace.Ray(player.AimRay, 1024)
@@ -38,8 +45,13 @@ public partial class Tooltip
             {
                 ShouldOpen(false);
             }
-
+   */
             Rotation = Rotation.LookAt(Camera.Rotation.Forward * -1.0f, Vector3.Up);
-        }
+     //   }
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(Text);
     }
 }

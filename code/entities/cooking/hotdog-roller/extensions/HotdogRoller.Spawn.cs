@@ -13,7 +13,7 @@ public partial class HotdogRoller
 
         SetInitState();
 
-        TestHotDogs();
+        //TestHotDogs();
     }
     public override void ClientSpawn()
     {
@@ -42,21 +42,6 @@ public partial class HotdogRoller
         Tags.Add("interactable");
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void SetInitState()
-    {
-        TransitionStateTo(State.Off);
-    }
-    /// <summary>
-    /// Sets up the UI when the machine is interacted with
-    /// </summary>
-    private void SetupUI()
-    {
-        Tooltip = new UI.Tooltip(this, UseText);
-    }
-
     private void TestHotDogs()
     { 
         for (int i = 0; i < MaxRollerItems; i++)
@@ -68,7 +53,6 @@ public partial class HotdogRoller
         foreach(var hotdog in Hotdogs)
         {
             AttachEntity(hotdog.Key, hotdog.Value);
-            EntityExtensions.SetGlow(hotdog.Value, true);
         }
     }
 

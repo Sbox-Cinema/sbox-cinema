@@ -9,7 +9,17 @@ public partial class HotdogRoller
     }
 
     public State MachineState { get; set; }
-   
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void SetInitState()
+    {
+        TransitionStateTo(State.Off);
+        TransitionStateTo(State.On);
+        TransitionStateTo(State.Off);
+    }
+
     /// <summary>
     ///
     /// </summary>

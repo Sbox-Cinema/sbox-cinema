@@ -2,13 +2,22 @@
 using Sandbox.ModelEditor;
 using System.Text.Json.Serialization;
 
-[GameData("Interactable Area", AllowMultiple = true)]
-[Box(dimensionsKey: nameof(size), Angles = nameof(rotation), Origin = nameof(origin))]
+[GameData("Interactable Volume", AllowMultiple = true)]
+[Box("dimensions", Bone = "bonename", Angles = "offset_angles", Origin = "offset_origin")]
+[Axis(Bone = "bonename", Origin = "offset_origin", Angles = "offset_angles")]
 public class ModelInteract
 {
-    public Vector3 size { get; set; }
-    public Vector3 origin { get; set; }
-    public Vector3 rotation { get; set; }
+    [FGDType("model_bone")]
+    public string BoneName { get; set; }
+
+    [ScaleBoneRelative, DefaultValue("10 10 10")]
+    public Vector3 Dimensions { get; set; }
+
+    [JsonPropertyName("offset_origin"), ScaleBoneRelative]
+    public Vector3 Origin { get; set; }
+
+    [JsonPropertyName("offset_angles")]
+    public Angles Angles { get; set; }
 
     [JsonPropertyName("attachment_point"), FGDType("model_attachment")]
     public string AttachmentPoint { get; set; }
