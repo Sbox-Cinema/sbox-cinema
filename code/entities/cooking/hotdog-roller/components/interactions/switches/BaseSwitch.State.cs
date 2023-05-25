@@ -1,14 +1,13 @@
 ﻿namespace Cinema;
 
-public partial class Switch
+public partial class BaseSwitch
 {
     public enum State : int
     {
         Off,
         On
     }
-    
-    public State SwitchState { get; set; }
+    public State SwitchState { get; set; } = State.Off;
     
     /// <summary>
     ///
@@ -37,31 +36,15 @@ public partial class Switch
     /// <summary>
     ///
     /// </summary>
-    private void HandleOffState()
+    protected virtual void HandleOffState()
     {
-        if (SwitchSide == Side.Left)
-        {
-            Machine.SetAnimParameter("toggle_left", false);
-        }
-
-        if (SwitchSide == Side.Right)
-        {
-            Machine.SetAnimParameter("toggle_right", false);
-        }
+       
     }
     /// <summary>
     ///
     /// </summary>
-    private void HandleOnState()
+    protected virtual void HandleOnState()
     {
-        if (SwitchSide == Side.Left)
-        {
-            Machine.SetAnimParameter("toggle_left", true);
-        }
-
-        if (SwitchSide == Side.Right)
-        {
-            Machine.SetAnimParameter("toggle_right", true);
-        }
+       
     }
 }

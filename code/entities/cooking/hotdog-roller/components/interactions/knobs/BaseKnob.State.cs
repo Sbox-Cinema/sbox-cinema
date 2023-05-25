@@ -1,6 +1,6 @@
 ﻿namespace Cinema;
 
-public partial class Knob
+public partial class BaseKnob
 {
     public enum State : int
     {
@@ -14,12 +14,12 @@ public partial class Knob
         PosSeven
     }
 
-    private State KnobState { get; set; }
+    private State KnobState { get; set; } = State.PosZero;
 
     /// <summary>
     ///
     /// </summary>
-    private void HandleState()
+    protected virtual void HandleState()
     {
         switch (KnobState)
         {
@@ -52,7 +52,7 @@ public partial class Knob
     /// <summary>
     ///
     /// </summary>
-    public void TransitionStateTo(State state)
+    protected virtual void TransitionStateTo(State state)
     {
         KnobState = state;
 
@@ -62,16 +62,8 @@ public partial class Knob
     /// <summary>
     ///
     /// </summary>
-    private void HandlePosState(State state)
+    protected virtual void HandlePosState(State state)
     {
-        if (KnobSide == Side.Left)
-        {
-            Machine.SetAnimParameter("LeftHandleState", (int) state);
-        }
-
-        if (KnobSide == Side.Right)
-        {
-            Machine.SetAnimParameter("RightHandleState", (int) state);
-        }
+        
     }
 }

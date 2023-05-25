@@ -23,8 +23,6 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
-        OnMachineUse();
-
         Input.Clear("use"); // Why?
 
         return false;
@@ -38,10 +36,5 @@ public partial class HotdogRoller
     public void OnStopUse(Entity user)
     {
         
-    }
-
-    protected virtual void OnMachineUse()
-    {
-        TogglePower();
     }
 }

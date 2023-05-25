@@ -1,9 +1,10 @@
-﻿namespace Cinema;
+﻿using Sandbox;
+
+namespace Cinema;
 
 public partial class HotdogRoller
 {
     public UI.Tooltip Tooltip { get; set; }
-
     public string Interaction { get; set; } = "Hotdog Roller";
     public string UseText { get; set; } = $"Press E to use";
 
@@ -55,6 +56,53 @@ public partial class HotdogRoller
                 Tooltip.SetText($"{UseText} {Interaction}");
                 break;
 
+        }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    [GameEvent.Tick]
+    public void Update()
+    {
+        if (Game.LocalPawn is Player player)
+        {
+            TraceResult tr = Trace.Ray(player.AimRay, 2000)
+                            .EntitiesOnly()
+                            .Ignore(player)
+                            .WithoutTags("cookable")
+                            .Run();
+
+            if (tr.Hit)
+            {
+                foreach (var body in PhysicsGroup.Bodies)
+                {
+                    if (body.GroupName != "" && body.GroupName != tr.Body.GroupName)
+                    {
+                        DebugOverlay.Box(body.GetBounds(), Color.White);
+                    }
+                    else if (body.GroupName != "")
+                    {
+                        DebugOverlay.Box(body.GetBounds(), Color.Cyan);
+                        DebugOverlay.Sphere(tr.EndPosition, 0.5f, Color.Cyan);
+
+                        OnInteractionVolumeHover(body.GroupName);
+                    }
+                }
+
+                if (tr.Body.GroupName == "")
+                {
+                    Tooltip.ShouldOpen(false);
+                }
+                else
+                {
+                    Tooltip.ShouldOpen(true);
+                }
+            }
+            else
+            {
+                Tooltip.ShouldOpen(false);
+            }
         }
     }
 }

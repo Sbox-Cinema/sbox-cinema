@@ -10,52 +10,42 @@ namespace Cinema;
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     [Net] public IDictionary<string, Hotdog> Hotdogs {get; set;}
-
-    [GameEvent.Tick]
-    public void Update()
+    [BindComponent] public LeftKnob LeftKnob { get; }
+    [BindComponent] public LeftKnob RightKnob { get; }
+    [BindComponent] public LeftSwitch LeftSwitch { get; }
+    [BindComponent] public RightSwitch RightSwitch { get; }
+    public override void Spawn()
     {
-        if (Game.LocalPawn is Player player)
-        {
-            TraceResult tr = Trace.Ray(player.AimRay, 2000)
-                            .EntitiesOnly()
-                            .Ignore(player)
-                            .WithoutTags("cookable")
-                            .Run();
+        base.Spawn();
 
-            if (tr.Hit)
-            {
-                foreach (var body in PhysicsGroup.Bodies)
-                {
-                    
-                    if (body.GroupName != "" && body.GroupName != tr.Body.GroupName)
-                    {
-                        DebugOverlay.Box(body.GetBounds(), Color.White);
-                    } 
-                    else if(body.GroupName != "")
-                    {
-                        DebugOverlay.Box(body.GetBounds(), Color.Cyan);
-                        DebugOverlay.Sphere(tr.EndPosition, 0.5f, Color.Cyan);
+        SetupModel();
 
-                        OnInteractionVolumeHover(body.GroupName);
-                    } 
-                }
+        SetInitState();
+    }
+    public override void ClientSpawn()
+    {
+        base.ClientSpawn();
 
-                if (tr.Body.GroupName == "")
-                {
-                    Tooltip.ShouldOpen(false);
-                }
-                else
-                {
-                    Tooltip.ShouldOpen(true);
-                }
-            }  
-            else
-            {
-                Tooltip.ShouldOpen(false);
-            }
-        }
-        
+        SetupUI();
+    }
 
-        
+    /// <summary>
+    /// Sets up the model when spawned by the server
+    /// </summary>
+    private void SetupModel()
+    {
+        Transmit = TransmitType.Always;
+
+        SetModel("models/hotdogroller/hotdogroller.vmdl");
+
+        SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
+
+        Components.GetOrCreate<LeftKnob>();
+        Components.GetOrCreate<RightKnob>();
+
+        Components.GetOrCreate<LeftSwitch>();
+        Components.GetOrCreate<RightSwitch>();
+
+        Tags.Add("interactable");
     }
 }

@@ -4,43 +4,22 @@ public partial class HotdogRoller
 {
     public enum State : int
     {
-        Off,
-        On
+        BothOff,
+        BothOn,
+        FrontOn,
+        BackOn
     }
-
     public State MachineState { get; set; }
-
     /// <summary>
     /// 
     /// </summary>
     private void SetInitState()
     {
-        TransitionStateTo(State.Off);
-        TransitionStateTo(State.On);
-        TransitionStateTo(State.Off);
+        TransitionStateTo(State.BothOff);
     }
-
     /// <summary>
     ///
     /// </summary>
-    private void HandleState()
-    {
-        switch (MachineState)
-        {
-            case State.Off:
-                HandleOffState();
-                break;
-
-            case State.On:
-                HandleOnState();
-                break;
-        }
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /*
     private void HandleState()
     {
         switch (MachineState)
@@ -51,15 +30,14 @@ public partial class HotdogRoller
             case State.BothOn:
                 HandleBothOnState();
                 break;
-            case State.LeftOn:
+            case State.BackOn:
                 HandleLeftOnState();
                 break;
-            case State.RightOn:
+            case State.FrontOn:
                 HandleRightOnState();
                 break;
         }
     }
-    */
     /// <summary>
     ///
     /// </summary>
@@ -72,67 +50,10 @@ public partial class HotdogRoller
     /// <summary>
     ///
     /// </summary>
-    private void HandleOffState()
-    {
-        // Power Lights
-        SetMaterialGroup(0);
-
-        foreach (var powerSwitch in Components.GetAll<Switch>())
-        {
-            powerSwitch.SetPos(0);
-        }
-
-        foreach (var knob in Components.GetAll<Knob>())
-        {
-            knob.SetPos(0);
-        }
-
-        // Hotdogs
-        foreach (var element in Hotdogs)
-        {
-            var hotdog = element.Value;
-
-            hotdog.Components.RemoveAll();
-        }
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    private void HandleOnState()
-    {
-        // Power Lights
-        SetMaterialGroup(1);
-
-        // Power Switches
-        foreach (var powerSwitch in Components.GetAll<Switch>())
-        {
-            powerSwitch.SetPos(1);
-        }
-
-        foreach (var knob in Components.GetAll<Knob>())
-        {
-            knob.SetPos(3);
-        }
-        
-        // Hotdogs
-        foreach (var element in Hotdogs)
-        {
-            var hotdog = element.Value;
-
-            hotdog.Components.Create<Rotator>();
-            hotdog.Components.Create<Cooking>();
-        }
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
     private void HandleBothOffState()
     {
         SetMaterialGroup(0);
     }
-
     /// <summary>
     ///
     /// </summary>
@@ -140,7 +61,6 @@ public partial class HotdogRoller
     {
         SetMaterialGroup(1);
     }
-
     /// <summary>
     ///
     /// </summary>
@@ -148,7 +68,6 @@ public partial class HotdogRoller
     {
         SetMaterialGroup(3);
     }
-
     /// <summary>
     ///
     /// </summary>
