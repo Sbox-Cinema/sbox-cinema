@@ -100,7 +100,7 @@ public partial class WeaponBase : Carriable
         if (DeployTime > 0.0f) return false;
 
         return LastPrimaryFire >= PrimaryFireRate &&
-            (AutoPrimary ? Input.Down("attack2") : Input.Pressed("attack2"));
+            (AutoSecondary ? Input.Down("attack2") : Input.Pressed("attack2"));
     }
 
     //Can the holder reload (if any)
@@ -154,6 +154,12 @@ public partial class WeaponBase : Carriable
         IsReloading = false;
     }
 
+    [ClientRpc]
+    public virtual void AnimateAttack(bool isAlt = false, bool force = false)
+    {
+
+    }
+
     public override void CreateViewModel()
     {
         Game.AssertClient();
@@ -166,6 +172,13 @@ public partial class WeaponBase : Carriable
         ViewModelEntity.Owner = Owner;
         ViewModelEntity.EnableViewmodelRendering = true;
         ViewModelEntity.SetModel(ViewModelPath);
+
+        BaseViewModel arms = new BaseViewModel();
+        arms.Position = Camera.Position;
+        arms.Owner = Owner;
+        arms.EnableViewmodelRendering = true;
+        arms.SetModel("models/first_person_citizen/vmdl-first_person_citizen.vmdl");
+        arms.SetParent(ViewModelEntity, true);
     }
 }
 

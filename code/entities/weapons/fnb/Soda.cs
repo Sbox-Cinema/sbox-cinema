@@ -17,16 +17,24 @@ public partial class Soda : WeaponBase
         base.Spawn();
     }
 
+    public override void Simulate(IClient cl)
+    {
+        base.Simulate(cl);
+
+        AnimateAttack(false, Input.Down("attack1"));
+    }
+
     public override void PrimaryFire()
     {
         base.PrimaryFire();
-
-        PlaySound("placeholder_drinking");
+        AnimateAttack();
     }
 
     public override void SecondaryFire()
     {
         if (Game.IsClient) return;
+
+        AnimateAttack(true);
 
         using (Prediction.Off())
         {
@@ -41,6 +49,15 @@ public partial class Soda : WeaponBase
             projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
             projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
         }
+    }
+
+    [ClientRpc]
+    public override void AnimateAttack(bool isAlt = false, bool force = false)
+    {
+        if (!isAlt)
+            ViewModelEntity?.SetAnimParameter("use", force);
+        else
+            ViewModelEntity?.SetAnimParameter("throw", true);
     }
 
     public override void Reload()
