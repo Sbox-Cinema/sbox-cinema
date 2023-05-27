@@ -4,6 +4,7 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
+    public Player Player => Game.LocalPawn as Player;
     public void TryInteraction(string groupName)
     {
         switch (groupName)
@@ -69,24 +70,24 @@ public partial class HotdogRoller
     [GameEvent.Tick]
     void UpdateInteractions()
     {
-        if (Game.LocalClient.Pawn is Player player)
-        {
-            TraceResult tr = Trace.Ray(player.AimRay, 2000)
-                            .EntitiesOnly()
-                            .Ignore(player)
-                            .WithoutTags("cookable")
-                            .Run();
+        if (Game.IsServer) return;
 
-            if (tr.Hit)
+        TraceResult tr = Trace.Ray(Player.AimRay, 2000)
+                        .EntitiesOnly()
+                        .Ignore(Player)
+                        .WithoutTags("cookable")
+                        .Run();
+
+        if (tr.Hit)
+        {
+            if (tr.Body is PhysicsBody body)
             {
-                if (tr.Body is PhysicsBody body)
+                if (Input.Pressed("use"))
                 {
-                    if (Input.Pressed("use"))
-                    {
-                        TryInteraction(body.GroupName);
-                    }
+                    TryInteraction(body.GroupName);
                 }
             }
         }
+        
     }
 }

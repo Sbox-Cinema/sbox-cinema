@@ -14,6 +14,12 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
     [BindComponent] public LeftKnob RightKnob { get; }
     [BindComponent] public LeftSwitch LeftSwitch { get; }
     [BindComponent] public RightSwitch RightSwitch { get; }
+
+    /// <summary>
+    /// Sets up the model when spawned by the server
+    /// Sets model
+    /// Sets initial state
+    /// </summary>
     public override void Spawn()
     {
         base.Spawn();
@@ -22,15 +28,20 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 
         SetInitState();
     }
+    /// <summary>
+    /// Sets up the model when spawned by the server
+    /// Sets clientside UI
+    /// </summary>
     public override void ClientSpawn()
     {
         base.ClientSpawn();
 
         SetupUI();
     }
-
     /// <summary>
     /// Sets up the model when spawned by the server
+    /// Sets attached entity components
+    /// Adds tags
     /// </summary>
     private void SetupModel()
     {

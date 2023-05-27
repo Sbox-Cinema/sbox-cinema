@@ -5,7 +5,6 @@ namespace Cinema;
 public partial class HotdogRoller
 {
     private int MaxRollerItems = 22;
-    
     private void TestHotDogs()
     {
         for (int i = 0; i < MaxRollerItems; i++)

@@ -1,6 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-
-namespace Cinema;
+﻿namespace Cinema;
 
 public partial class LeftKnob
 {
@@ -11,11 +9,9 @@ public partial class LeftKnob
     {
         Log.Info($"Handling Left Knob Position State {state}");
 
-        if (Entity is HotdogRoller hr)
-        {
-            hr.SetAnimParameter("LeftHandleState", (int)state);
+        HotdogRoller.SetAnimParameter("LeftHandleState", (int)state);
 
-            Log.Info($"Left Knob Position State {hr.GetAnimParameterInt("LeftHandleState")}");
-        }
+        Log.Info($"Left Knob Position State {HotdogRoller.GetAnimParameterInt("LeftHandleState")}");
+        
     }
 }

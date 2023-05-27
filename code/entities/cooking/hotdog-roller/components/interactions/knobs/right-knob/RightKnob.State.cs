@@ -9,9 +9,8 @@ public partial class RightKnob
     {
         Log.Info($"Handling Right Knob Position State {state}");
 
-        if (Entity is HotdogRoller hr)
-        {
-            hr.SetAnimParameter("RightHandleState", (int)state);
-        }
+        HotdogRoller.SetAnimParameter("RightHandleState", (int)state);
+
+        Log.Info($"Right Knob Position State {HotdogRoller.GetAnimParameterInt("RightHandleState")}");
     }
 }

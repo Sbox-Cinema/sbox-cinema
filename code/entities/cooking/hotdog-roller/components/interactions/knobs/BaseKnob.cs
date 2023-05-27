@@ -2,8 +2,16 @@
 
 namespace Cinema;
 
-public partial class BaseKnob : EntityComponent
+public partial class BaseKnob : EntityComponent<HotdogRoller>
 {
+    [Net] public HotdogRoller HotdogRoller { get; set; }
+
+    protected override void OnActivate()
+    {
+        base.OnActivate();
+
+        HotdogRoller = Entity as HotdogRoller;
+    }
     public void SetPos(int pos)
     {
         State state = (State)pos;
