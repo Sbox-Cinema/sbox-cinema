@@ -1,0 +1,39 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+<style >
+	Cursor {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translateX(-50%) translateY(50%);
+		
+		opacity: 0;
+		transition: opacity 0.2s ease-in-out;
+		
+		.element
+		{
+			transform: translateX(-50%) translateY(-50%);
+			position: absolute;
+			background-color: rgba(white, 0.75);
+			box-shader: 1px 1px 1px rgba(black, 0.75);
+		}
+
+		.dot 
+		{
+			width: 4px;
+			height: 4px;
+		}
+
+		&.visible {
+			opacity: 1;
+		}
+
+	}
+</style>
+
+<root class="@(Visible ? "visible" : "" )">
+	<div class="dot element"></div>
+</root>
