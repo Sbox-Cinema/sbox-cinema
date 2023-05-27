@@ -13,6 +13,8 @@ MovieQueue {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 
+    backdrop-filter: blur(8px) brightness(50%);
+
     &.visible {
         opacity: 1;
         pointer-events: all;
@@ -21,78 +23,114 @@ MovieQueue {
 
 .placement {
     width: 100%;
-    max-width: 800px;
-    height: 60%;
+    height: 100%;
+    flex-direction: column;
 }
 
 .container {
-    background-color: #222;
-    border-radius: 4px;
-    border: 2px solid #1112;
-    width: 100%;
-    height: 100%;
-    padding: 8px;
-    flex-direction: column;
-
     >.header {
         flex-direction: column;
-        align-items: center;
+        //align-items: center;
+        justify-content: center;
         font-size: 36px;
         padding-bottom: 8px;
-
+        padding-left: 32px;
+        height: 10%;
+        background-color: #222;
+    
         .close-btn {
             position: absolute;
             right: 8px;
+            top: 8px;
         }
     }
 }
 
+.footer {
+    height: 10%;
+    background-color: #222;
+}
+
 .contents {
     flex-direction: column;
-    height: 100%;
+    overflow: hidden;
+    height: 80%;
+    padding: 32px;
+    width: 80%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .section {
-    padding-bottom: 8px;
     flex-direction: column;
-    flex-shrink: 0;
-   
-    margin: 8px;
-    padding: 2px;
+    
+    margin: 4px;
 
+    &.as-rows {
+        flex-direction: row;
+    }
+
+    &:not(.clear) {
+        padding: 8px;
+    }
+    
     &.outline {
-        border: 2px solid #1115;
-        background-color: #333;
+        background-color: rgba(30, 30, 30, 0.5);
+    }
+
+    >.title {
+        font-size: 24px;
+        padding-bottom: 4px;
+
+        &.center {
+            justify-content: center;
+        }
+    }
+
+    &:not(.grow) {
+        flex-shrink: 0;
     }
 
     &.grow {
         flex-grow: 1;
     }
 
-    >.title {
-        font-size: 24px;
-        padding-bottom: 4px;
-        font-weight: 600;
-
-        &.center {
-            justify-content: center;
-        }
+    &.scroll {
+        overflow: scroll;
     }
 }
 
-.control-bar {
-    flex-direction: row;
-    justify-content: center;
+.admin-control-bar {
+    flex-direction: column;
+    margin-left: auto;
+
+    >.header {
+        justify-content: center;
+        margin-bottom: 2px;
+    }
+
+    .controls {
+        flex-direction: row;
+        font-size: 14px;
+    }
 }
 
 .button {
-    background-color: #444;
-    padding: 4px 8px;
+    padding: 2px 8px;
     border-radius: 4px;
-    border: 2px solid #1115;
-
-    min-width: 100px;
+    border: 1px solid #5555;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
+
+    &:not(.fit) {
+        min-width: 80px;
+    }
+
+    &.small {
+        padding: 0px 4px;
+    }
 
     &.close-btn {
         background-color: #533;
@@ -100,20 +138,30 @@ MovieQueue {
     }
 
     &:hover {
-        background-color: #555;
-        border: 2px solid #2225;
+        background-color: #333;
+        border: 1px solid #6665;
     }
 
     &:active {
-        background-color: #666;
-        border: 2px solid #3335;
+        background-color: #444;
+        border: 1px solid #7775;
     }
 
-    
+    &.fill {
+        width: 100%;
+    }
+
+    &.remove {
+        margin-left: 6px;
+        color: #C55;
+        font-size: 18px;
+    }
+
 }
 
 .rows {
     flex-direction: column;
+    flex-shrink: 0;
 
     &.scroll {
         overflow: scroll;
@@ -125,20 +173,43 @@ MovieQueue {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px 2px;
+    padding: 2px 12px;
+    height: 42px;
     max-height: 42px;
+    margin: 4px 0px;
 
-    &.header {
-        font-weight: 800;
+    border-top: 1px solid #5555;
+    border-bottom: 1px solid #5555;
+
+    background-color: rgba(30, 30, 30, 0.8);
+
+    &:hover {
+        border-top: 1px solid #555F;
+        border-bottom: 1px solid #555F;
+        background-color: rgba(50, 50, 50, 0.8);
+    }
+
+    >.count {
+        margin-right: 12px;
+        color: #ccc;
     }
 
     >.title {
-        color: #CCC;
         flex-grow: 1;
         max-width: 65%;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        align-items: center;
+        flex-direction: row;
+
+        >.text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+    }
+
+    >.duration {
+        color: #ddd;
     }
 
     >.requestor {
@@ -146,11 +217,73 @@ MovieQueue {
         justify-content: center;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: #ddd;
     }
 
     >.controls {
         min-width: 15%;
         justify-content: flex-end;
+    }
+
+    >.voting-buttons {
+
+        flex-direction: row;
+
+        >.button {
+            font-size: 16px;
+            min-width: 30px;
+            padding: 0px;
+            margin: 0px;
+            border-radius: 2px;
+
+            &.like {
+                background-color: #262;
+
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #282;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #595;
+                        border: 1px solid #7775;
+                    }
+                }
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
+                }
+            }
+
+            &.dislike {
+                background-color: #622;
+
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #822;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #955;
+                        border: 1px solid #7775;
+                    }
+                }
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
+                }
+            }
+
+            
+
+            &:first-child {
+                margin-right: 8px;
+            }
+        }
     }
 }
 
@@ -159,15 +292,111 @@ MovieQueue {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 8px;
 
     TextEntry {
         flex-grow: 1;
         background-color: #BBB;
-        margin: 2px 8px;
-        max-width: 60%;
+        margin: 8px 8px;
         height: 32px;
         color: #000;
         align-items: center;
-        padding: 0px 4px;
+        padding: 0px 8px;
+    }
+}
+
+.now-playing-block {
+    flex-direction: column;
+
+    .stats {
+        flex-direction: row;
+    }
+
+    .details {
+        flex-direction: column;
+        margin-left: 12px;
+
+        .title {
+            font-weight: 500;
+        }
+
+        .time {
+            color: #ddd;
+            font-weight: 100;
+            font-size: 14px;
+        }
+
+        .requestor {
+            color: #ddd;
+            font-weight: 100;
+            font-size: 14px;
+        }
+    }
+
+    .voting-buttons {
+        flex-direction: row;
+        margin-top: 8px;
+
+        >.button {
+            font-size: 16px;
+            min-width: 60px;
+            padding: 0px;
+
+            &.like {
+                background-color: #262;
+
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #282;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #595;
+                        border: 1px solid #7775;
+                    }
+                }
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
+                }
+            }
+
+            &.dislike {
+                background-color: #622;
+
+                &:not(.disabled) {
+                    &:hover {
+                        background-color: #822;
+                        border: 1px solid #6665;
+                    }
+                
+                    &:active {
+                        background-color: #955;
+                        border: 1px solid #7775;
+                    }
+                }
+
+                &.disabled {
+                    color: #888;
+                    background-color: #222;
+                }
+            }
+
+            
+
+            &:first-child {
+                margin-right: 8px;
+            }
+        }
+    }
+    
+
+    .thumbnail {
+        width: 130px;
+        height: 100px;
+        background-image: url("https://i.ytimg.com/vi/EbnH3VHzhu8/default.jpg");
+        background-size: 100%;
     }
 }

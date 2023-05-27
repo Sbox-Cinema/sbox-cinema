@@ -273,4 +273,16 @@ public partial class CinemaGame
         Log.Info($"Abilities: {player.Job.Abilities.ToString()}");
         Log.Info($"Responsibilities: {player.Job.Responsibilities.ToString()}");
     }
+
+    [ConCmd.Client("hud.enable")]
+    public static void EnableHud(bool enable)
+    {
+        if (Game.RootPanel == null)
+        {
+            return;
+        }
+        Game.RootPanel.Style.Display = enable 
+            ? Sandbox.UI.DisplayMode.Flex
+            : Sandbox.UI.DisplayMode.None;
+    }
 }
