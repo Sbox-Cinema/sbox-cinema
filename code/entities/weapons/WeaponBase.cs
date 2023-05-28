@@ -177,7 +177,7 @@ public partial class WeaponBase : Carriable
         arms.Position = Camera.Position;
         arms.Owner = Owner;
         arms.EnableViewmodelRendering = true;
-        arms.SetModel("models/first_person_citizen/vmdl-first_person_citizen.vmdl");
+        arms.SetModel("models/first_person_citizen/first_person_citizen.vmdl");
         arms.SetParent(ViewModelEntity, true);
     }
 }
