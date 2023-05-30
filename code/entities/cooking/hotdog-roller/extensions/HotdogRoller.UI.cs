@@ -4,16 +4,14 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
-    public UI.Tooltip Tooltip { get; set; }
-    public string Interaction { get; set; } = "Hotdog Roller";
-    public string UseText { get; set; } = $"Press E to use";
+    public string UseText { get; set; }
 
     /// <summary>
     /// Sets up the UI when the machine is interacted with
     /// </summary>
     private void SetupUI()
     {
-        Tooltip = new UI.Tooltip(this, UseText);
+        UseText = "Use Hotdog Roller";
     }
 
     /// <summary>
@@ -24,26 +22,21 @@ public partial class HotdogRoller
         switch(groupName)
         {
             case "hotdog_roller":
-                Interaction = "Hotdog Roller";
-                Tooltip.SetText($"{Interaction}");
+                UseText = "Use Hotdog Roller";
                 break;
 
             case "l_handle":
-                Interaction = "Back Roller Temperature Knob";
-                Tooltip.SetText($"{UseText} {Interaction}");
+                UseText = "Use Back Roller Temperature Knob";
                 break;
 
             case "r_handle":
-                Interaction = "Front Roller Temperature Knob";
-                Tooltip.SetText($"{UseText} {Interaction}");
+                UseText = "Use Front Roller Temperature Knob";
                 break;
             case "l_switch":
-                Interaction = "Back Roller Power";
-                Tooltip.SetText($"{UseText} {Interaction}");
+                UseText = "Use Back Roller Power";
                 break;
             case "r_switch":
-                Interaction = "Front Roller Power";
-                Tooltip.SetText($"{UseText} {Interaction}");
+                UseText = "Use Front Roller Power";
                 break;
             case "roller1":
             case "roller2":
@@ -55,8 +48,7 @@ public partial class HotdogRoller
             case "roller8":
             case "roller9":
             case "roller10":
-                Interaction = "Roller";
-                Tooltip.SetText($"{UseText} {Interaction}");
+                UseText = "Use Roller";
                 break;
 
         }
@@ -95,17 +87,10 @@ public partial class HotdogRoller
 
                 if (tr.Body.GroupName == "")
                 {
-                    Tooltip.ShouldOpen(false);
-                }
-                else
-                {
-                    Tooltip.ShouldOpen(true);
+                    UseText = "Use Hotdog Roller";
                 }
             }
-            else
-            {
-                Tooltip.ShouldOpen(false);
-            }
+          
         }
     }
 
