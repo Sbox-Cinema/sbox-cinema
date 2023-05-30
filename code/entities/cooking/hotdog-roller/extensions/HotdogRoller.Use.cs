@@ -23,6 +23,22 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
+        TraceResult tr = Trace.Ray(user.AimRay, 2000)
+                            .EntitiesOnly()
+                            .Ignore(user)
+                            .WithoutTags("cookable")
+                            .Run();
+
+        if (tr.Hit)
+        {
+            if (tr.Body is PhysicsBody body)
+            {
+
+                TryInteraction(body.GroupName);
+
+            }
+        }
+
         Input.Clear("use"); // Why?
 
         return false;

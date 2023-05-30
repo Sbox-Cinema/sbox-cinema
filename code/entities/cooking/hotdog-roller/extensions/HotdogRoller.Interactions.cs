@@ -1,10 +1,10 @@
-﻿using Sandbox;
-
-namespace Cinema;
+﻿namespace Cinema;
 
 public partial class HotdogRoller
 {
-    public Player Player => Game.LocalPawn as Player;
+    /// <summary>
+    ///
+    /// </summary>
     public void TryInteraction(string groupName)
     {
         switch (groupName)
@@ -13,81 +13,79 @@ public partial class HotdogRoller
                 break;
 
             case "l_handle":
-                var leftKnob = Components.Get<LeftKnob>();
+                LeftKnob.IncrementPos();
 
-                if(leftKnob != null)
-                {
-                    leftKnob.IncrementPos();
-                }
-                
                 break;
 
             case "r_handle":
-                var rightKnob = Components.Get<RightKnob>();
-
-                if (rightKnob != null)
-                {
-                    rightKnob.IncrementPos();
-                }
+                RightKnob.IncrementPos();
+                
                 break;
 
-
             case "l_switch":
-                var leftSwitch = Components.Get<LeftSwitch>();
+                LeftSwitch.TogglePos();
 
-                if (leftSwitch != null)
-                {
-                    leftSwitch.TogglePos();
-                }
+                UpdatePowerState();
                 
                 break;
 
             case "r_switch":
-                var rightSwitch = Components.Get<RightSwitch>();
+                RightSwitch.TogglePos();
 
-                if (rightSwitch != null)
-                {
-                    rightSwitch.TogglePos();
-                }
+                UpdatePowerState();
                 
                 break;
 
             case "roller1":
+                Roller.AddHotdog(1);
+
+                break;
+
             case "roller2":
+                Roller.AddHotdog(2);
+
+                break;
+
             case "roller3":
+
+                Roller.AddHotdog(3);
+                break;
+
             case "roller4":
-            case "roller5":
+                Roller.AddHotdog(4);
+
+                break;
+
+            case "roller5": 
+                Roller.AddHotdog(5);
+                
+                break;
+
             case "roller6":
+                Roller.AddHotdog(6);
+                
+                break;
+
             case "roller7":
+                Roller.AddHotdog(7);
+                
+                break;
+
             case "roller8":
+                Roller.AddHotdog(8);
+                
+                break;
+
             case "roller9":
+                Roller.AddHotdog(9);
+                
+                break;
+
             case "roller10":
+                Roller.AddHotdog(10);
+
                 break;
 
         }
-    }
-
-    [GameEvent.Tick]
-    void UpdateInteractions()
-    {
-        if (Game.IsServer) return;
-
-        TraceResult tr = Trace.Ray(Player.AimRay, 2000)
-                        .EntitiesOnly()
-                        .Ignore(Player)
-                        .WithoutTags("cookable")
-                        .Run();
-
-        if (tr.Hit)
-        {
-            if (tr.Body is PhysicsBody body)
-            {
-                if (Input.Pressed("use"))
-                {
-                    TryInteraction(body.GroupName);
-                }
-            }
-        }
-        
     }
 }

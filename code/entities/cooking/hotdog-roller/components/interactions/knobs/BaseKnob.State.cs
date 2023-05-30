@@ -1,4 +1,6 @@
-﻿namespace Cinema;
+﻿using Sandbox;
+
+namespace Cinema;
 
 public partial class BaseKnob
 {
@@ -13,8 +15,7 @@ public partial class BaseKnob
         PosSix,
         PosSeven
     }
-
-    private State KnobState { get; set; } = State.PosZero;
+    public State KnobState { get; set; } 
 
     /// <summary>
     ///

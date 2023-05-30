@@ -1,6 +1,5 @@
 ﻿using Editor;
 using Sandbox;
-using System.Collections.Generic;
 
 namespace Cinema;
 
@@ -9,11 +8,11 @@ namespace Cinema;
 [EditorModel("models/hotdogroller/hotdogroller.vmdl")]
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
-    [Net] public IDictionary<string, Hotdog> Hotdogs {get; set;}
     [BindComponent] public LeftKnob LeftKnob { get; }
-    [BindComponent] public LeftKnob RightKnob { get; }
+    [BindComponent] public RightKnob RightKnob { get; }
     [BindComponent] public LeftSwitch LeftSwitch { get; }
     [BindComponent] public RightSwitch RightSwitch { get; }
+    [BindComponent] public Roller Roller { get; }
 
     /// <summary>
     /// Sets up the model when spawned by the server
@@ -51,12 +50,14 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 
-        Components.GetOrCreate<LeftKnob>();
-        Components.GetOrCreate<RightKnob>();
+        Components.Create<LeftKnob>();
+        Components.Create<RightKnob>();
 
-        Components.GetOrCreate<LeftSwitch>();
-        Components.GetOrCreate<RightSwitch>();
+        Components.Create<LeftSwitch>();
+        Components.Create<RightSwitch>();
 
+        Components.Create<Roller>();
+        
         Tags.Add("interactable");
     }
 }

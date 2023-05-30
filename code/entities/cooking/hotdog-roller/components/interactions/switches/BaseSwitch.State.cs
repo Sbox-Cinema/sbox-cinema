@@ -7,7 +7,7 @@ public partial class BaseSwitch
         Off,
         On
     }
-    public State SwitchState { get; set; } = State.Off;
+    public State SwitchState { get; set; }
     
     /// <summary>
     ///

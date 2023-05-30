@@ -16,6 +16,9 @@ public partial class HotdogRoller
         Tooltip = new UI.Tooltip(this, UseText);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     private void OnInteractionVolumeHover(string groupName)
     {
         switch(groupName)
@@ -106,6 +109,9 @@ public partial class HotdogRoller
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     private void DrawVolume(PhysicsBody body, bool active)
     {
         BBox bbox = body.GetBounds();
@@ -134,7 +140,7 @@ public partial class HotdogRoller
                     if (pt2.y < 0)
                     {
                         //DebugOverlay.Sphere(pt, 0.15f, Color.Red);
-                        
+
                         DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
@@ -147,7 +153,6 @@ public partial class HotdogRoller
                         DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-
                     }
                 }
 
@@ -162,8 +167,6 @@ public partial class HotdogRoller
                         DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Down * lineLength), !active ? inactiveColor : activeColor);
-
-
                     }
 
                     // Left
@@ -178,7 +181,7 @@ public partial class HotdogRoller
 
                 }
             }
-
+            
             // Front points
             if (distance > 0)
             {
@@ -203,7 +206,6 @@ public partial class HotdogRoller
                         DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Left * lineLength), !active ? inactiveColor : activeColor);
                         DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-
                     }
                 }
 
@@ -234,6 +236,9 @@ public partial class HotdogRoller
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     private void DrawCursor(Vector3 pos)
     {
         DebugOverlay.Sphere(pos, 0.25f, Color.White);

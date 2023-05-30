@@ -2,10 +2,8 @@
 
 namespace Cinema;
 
-public partial class BaseSwitch : EntityComponent
+public partial class BaseSwitch : EntityComponent<HotdogRoller>
 {
-    public HotdogRoller Machine => Entity as HotdogRoller;
-  
     public void SetPos(int pos)
     {
         State state = (State)pos;
@@ -27,5 +25,10 @@ public partial class BaseSwitch : EntityComponent
 
             return;
         }
+    }
+
+    public bool IsOn()
+    {
+        return SwitchState == State.On;
     }
 }

@@ -17,6 +17,41 @@ public partial class HotdogRoller
     {
         TransitionStateTo(State.BothOff);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void UpdatePowerState()
+    {
+        if (!LeftSwitch.IsOn() && !RightSwitch.IsOn())
+        {
+            TransitionStateTo(State.BothOff);
+
+            return;
+        }
+
+        if (LeftSwitch.IsOn() && RightSwitch.IsOn())
+        {
+            TransitionStateTo(State.BothOn);
+
+            return;
+        }
+
+        if (LeftSwitch.IsOn() && !RightSwitch.IsOn())
+        {
+            TransitionStateTo(State.BackOn);
+
+            return;
+        }
+
+        if (!LeftSwitch.IsOn() && RightSwitch.IsOn())
+        {
+            TransitionStateTo(State.FrontOn);
+
+            return;
+        }
+    }
+
     /// <summary>
     ///
     /// </summary>
@@ -31,10 +66,10 @@ public partial class HotdogRoller
                 HandleBothOnState();
                 break;
             case State.BackOn:
-                HandleLeftOnState();
+                HandleBackOnState();
                 break;
             case State.FrontOn:
-                HandleRightOnState();
+                HandleFrontOnState();
                 break;
         }
     }
@@ -53,6 +88,8 @@ public partial class HotdogRoller
     private void HandleBothOffState()
     {
         SetMaterialGroup(0);
+
+        Roller.SetPos(0);
     }
     /// <summary>
     ///
@@ -60,19 +97,27 @@ public partial class HotdogRoller
     private void HandleBothOnState()
     {
         SetMaterialGroup(1);
+
+        Roller.SetPos(1);         
     }
+
     /// <summary>
     ///
     /// </summary>
-    private void HandleLeftOnState()
+    private void HandleFrontOnState()
+    {
+        SetMaterialGroup(2);
+
+        Roller.SetPos(2);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    private void HandleBackOnState()
     {
         SetMaterialGroup(3);
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    private void HandleRightOnState()
-    {
-        SetMaterialGroup(4);
+
+        Roller.SetPos(3);
     }
 }
