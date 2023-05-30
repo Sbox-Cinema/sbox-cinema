@@ -107,6 +107,8 @@ public partial class Media : BaseNetworkable
     [Net]
     public IList<IClient> Dislikes { get; set; }
 
+    public int TotalLikes => Likes.Count - Dislikes.Count;
+
     public void VoteFor(IClient voter, bool upvote)
     {
         var originalScore = ListScore;
