@@ -1,0 +1,14 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+@attribute [StyleSheet( "InteractPrompt.scss" )]
+@inherits Panel
+
+<root>
+    
+    <div class="prompt @(Hidden ? "hidden" : "")">
+        <div @ref=UseBar class="long-use-bar" />
+        <div class="label">@PromptText</div>
+    </div>
+</root>
