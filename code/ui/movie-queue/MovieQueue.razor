@@ -71,18 +71,28 @@
                                     @NowPlaying.Requestor.Name
                                                                             </div>
                                                                             <div class="voting-buttons">
-                                                                                <div class="button like @(CanGiveLike(NowPlaying, true) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, true))>Like</div>
-                                                                                <div class="button dislike @(CanGiveLike(NowPlaying, false) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, false))>Dislike</div>
-
-                                                                                @if (CanRemoveMedia(NowPlaying))
-                                {
-                                                    <div class="button remove" @onclick=@(() => OnSkip())>Skip</div>
-                                }
+                                                                                @if(IsPlayer(NowPlaying)) {
+                                                                                    <div class="button like @(CanGiveLike(NowPlaying, true) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, true))>Like</div>
+                                                                                    <div class="button dislike @(CanGiveLike(NowPlaying, false) ? "" : "disabled")" @onclick=@(() => OnLike(NowPlaying, false))>Dislike</div>
+                                                                                }
+                                                                                @if (CanRemoveMedia(NowPlaying)) {
+                                                                                    <div class="button remove" @onclick=@(() => OnSkip())>Skip</div>
+                                                                                }
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                 }
+                <div class="votes-area">
+                    @if (NowPlaying != null) {
+                        <div class="count">
+                            10
+                        </div>
+                        <div class="tip">
+                            Likes
+                        </div>
+                    }
+                </div>
                 <div class="admin-control-bar">
                     <div class="header">
                         Admin
