@@ -83,7 +83,7 @@ public partial class Player
     /// <summary>
     /// Find a usable entity for this player to use
     /// </summary>
-    protected virtual Entity FindUsable(bool includeUnable = false)
+    public virtual Entity FindUsable(bool includeUnable = false)
     {
         if (IsUseDisabled())
             return null;
