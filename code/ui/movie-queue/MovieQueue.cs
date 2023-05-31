@@ -35,7 +35,12 @@ public partial class MovieQueue : Panel
 
     protected static bool CanRemoveMedia(Media media)
     {
-        return media.Requestor == Game.LocalClient;
+        return media.CanRemove(Game.LocalClient);
+    }
+
+    protected static bool IsPlayer(Media media)
+    {
+        return media.IsPlayer(Game.LocalClient);
     }
 
     protected static bool CanVoteFor(Media media, bool upvote)

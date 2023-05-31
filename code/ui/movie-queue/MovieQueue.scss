@@ -101,6 +101,23 @@ MovieQueue {
     }
 }
 
+.votes-area {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 18px;
+
+    .count {
+        font-size: 32px;
+    }
+    .tip {
+        margin-left: 8px;
+        font-size: 20px;
+        color: #ccc;
+    }
+}
+
 .admin-control-bar {
     flex-direction: column;
     margin-left: auto;
