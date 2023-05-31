@@ -9,7 +9,7 @@
     <div class="placement container">
         <div class="header">
             <div class="title">
-                Media Player
+                <span class="deco">H</span><span class="text">Media Player</span><span class="deco">G</span>
             </div>
             <div class="close-btn button" @onclick=@OnClose>
                 Close
@@ -47,8 +47,8 @@
                                 @movie.Requestor.Name
                             </div>
                             <div class="voting-buttons">
-                                <div class="button like @(CanVoteFor(movie, true) ? "" : "disabled")" @onclick=@(() => OnVote(movie, true))>@(CanVoteFor(movie, true) ? "👍" : "😀")</div>
-                                <div class="button dislike @(CanVoteFor(movie, false) ? "" : "disabled")" @onclick=@(() => OnVote(movie, false))>@(CanVoteFor(movie, false) ? "👎" : "🥲")</div>
+                                <div class="button like @(CanVoteFor(movie, true) ? "" : "disabled")" @onclick=@(() => OnVote(movie, true))>@(CanVoteFor(movie, true) ? "👍" : "-")</div>
+                                <div class="button dislike @(CanVoteFor(movie, false) ? "" : "disabled")" @onclick=@(() => OnVote(movie, false))>@(CanVoteFor(movie, false) ? "👎" : "-")</div>
                             </div>
                         </div>
                     }
