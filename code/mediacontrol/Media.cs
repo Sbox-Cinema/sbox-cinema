@@ -107,6 +107,8 @@ public partial class Media : BaseNetworkable
     [Net]
     public IList<IClient> Dislikes { get; set; }
 
+    public int TotalLikes => Likes.Count - Dislikes.Count;
+
     public void VoteFor(IClient voter, bool upvote)
     {
         var originalScore = ListScore;
@@ -151,7 +153,8 @@ public partial class Media : BaseNetworkable
         }
     }
 
-    public bool CanRemove(IClient client) => client == Requestor;
+    public bool IsPlayer(IClient client) => client == Requestor;
+    public bool CanRemove(IClient client) => IsPlayer(client);
     public bool CanUpVote(IClient client) => !VotesFor.Contains(client);
     public bool CanDownVote(IClient client) => !VotesAgainst.Contains(client);
     public bool CanLike(IClient client) => !Likes.Contains(client);

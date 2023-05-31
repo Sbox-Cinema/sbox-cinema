@@ -1,0 +1,43 @@
+﻿InteractPrompt {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 50%;
+    left: 0px;
+    top: 50%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    z-index: -1;
+}
+
+.prompt {
+    min-width: 120px;
+    min-height: 32px;
+    padding: 12px;
+    backdrop-filter: blur(2px) saturate(80%) brightness(80%);
+    border: solid 1px rgba(80, 80, 80, 0.2);
+    border-radius: 8px;
+    transition: opacity 0.25s ease-in;
+    opacity: 1;
+
+    .long-use-bar {
+        position: absolute;
+        left: 0;
+        width: 0%;
+        height: 100%;
+        background-color: rgba(176, 46, 102, 0.2);
+        border-radius: 8px;
+        //transition: width linear 0.01s;
+    }
+
+    .label {
+        font-size: 24px;
+        text-shadow: 1px 1px 2px 2px rgba(40, 40, 40, 0.9);
+    }
+
+    &.hidden {
+        opacity: 0;
+    }
+}
