@@ -4,6 +4,9 @@ namespace Cinema;
 
 public partial class BaseSwitch : EntityComponent<HotdogRoller>
 {
+    /// <summary>
+    /// Sets switch state
+    /// </summary>
     public void SetPos(int pos)
     {
         State state = (State)pos;
@@ -11,6 +14,9 @@ public partial class BaseSwitch : EntityComponent<HotdogRoller>
         TransitionStateTo(state);
     }
 
+    /// <summary>
+    /// Toggles state between State On and State Off
+    /// </summary>
     public void TogglePos()
     {
         if(SwitchState == State.Off)
@@ -27,6 +33,9 @@ public partial class BaseSwitch : EntityComponent<HotdogRoller>
         }
     }
 
+    /// <summary>
+    /// Checks if state is On
+    /// </summary>
     public bool IsOn()
     {
         return SwitchState == State.On;

@@ -10,8 +10,9 @@ public partial class HotdogRoller
         BackOn
     }
     public State MachineState { get; set; }
+    
     /// <summary>
-    /// 
+    /// Sets initial state for the Hotdog Roller. Default is both rollers off
     /// </summary>
     private void SetInitState()
     {
@@ -19,7 +20,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    /// 
+    /// Updates the power state when one of the power switches changes state
     /// </summary>
     private void UpdatePowerState()
     {
@@ -53,7 +54,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Handles state for the hotdog roller
     /// </summary>
     private void HandleState()
     {
@@ -74,7 +75,7 @@ public partial class HotdogRoller
         }
     }
     /// <summary>
-    ///
+    /// Handles transition to new state
     /// </summary>
     private void TransitionStateTo(State state)
     {
@@ -83,7 +84,7 @@ public partial class HotdogRoller
         HandleState();
     }
     /// <summary>
-    ///
+    /// Handles state for both rollers off
     /// </summary>
     private void HandleBothOffState()
     {
@@ -92,7 +93,7 @@ public partial class HotdogRoller
         Roller.SetPos(0);
     }
     /// <summary>
-    ///
+    /// Handles state for both rollers on
     /// </summary>
     private void HandleBothOnState()
     {
@@ -102,7 +103,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Handles state for front roller on
     /// </summary>
     private void HandleFrontOnState()
     {
@@ -112,7 +113,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Handles state for back roller on
     /// </summary>
     private void HandleBackOnState()
     {

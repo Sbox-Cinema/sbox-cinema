@@ -18,7 +18,7 @@ public partial class BaseKnob
     public State KnobState { get; set; } 
 
     /// <summary>
-    ///
+    /// Handles knob state
     /// </summary>
     protected virtual void HandleState()
     {
@@ -51,7 +51,7 @@ public partial class BaseKnob
         }
     }
     /// <summary>
-    ///
+    /// Transition to new state
     /// </summary>
     protected virtual void TransitionStateTo(State state)
     {
@@ -61,7 +61,7 @@ public partial class BaseKnob
     }
 
     /// <summary>
-    ///
+    /// Handles knob position state
     /// </summary>
     protected virtual void HandlePosState(State state)
     {

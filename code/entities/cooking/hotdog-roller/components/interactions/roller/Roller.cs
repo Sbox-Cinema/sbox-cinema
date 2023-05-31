@@ -6,18 +6,30 @@ namespace Cinema;
 public partial class Roller : EntityComponent<HotdogRoller>
 {
     private Dictionary<string, Hotdog> Hotdogs { get; set; } = new();
+
+    /// <summary>
+    /// Called when this component is activated
+    /// </summary>
     protected override void OnActivate()
     {
         base.OnActivate();
 
         TransitionStateTo(State.BothOff);
     }
+
+    /// <summary>
+    /// Sets the roller's state
+    /// </summary>
     public void SetPos(int pos)
     {
         State state = (State) pos;
 
         TransitionStateTo(state);
     }
+
+    /// <summary>
+    /// Adds hotdog by roller id
+    /// </summary>
     public void AddHotdog(int rollerid)
     {
         switch(rollerid)
@@ -128,6 +140,9 @@ public partial class Roller : EntityComponent<HotdogRoller>
        
     }
 
+    /// <summary>
+    /// Attaches hotdog by attachment point
+    /// </summary>
     private void AttachEntity(string attach, Entity ent)
     {
         if (Entity.GetAttachment(attach) is Transform t)

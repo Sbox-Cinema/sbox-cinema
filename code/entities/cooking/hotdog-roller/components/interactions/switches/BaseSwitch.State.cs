@@ -1,4 +1,6 @@
-﻿namespace Cinema;
+﻿using Sandbox;
+
+namespace Cinema;
 
 public partial class BaseSwitch
 {
@@ -10,7 +12,7 @@ public partial class BaseSwitch
     public State SwitchState { get; set; }
     
     /// <summary>
-    ///
+    /// Handles Switch State
     /// </summary>
     private void HandleState()
     {
@@ -24,8 +26,9 @@ public partial class BaseSwitch
                 break;
         }
     }
+
     /// <summary>
-    ///
+    /// Transition to new state
     /// </summary>
     private void TransitionStateTo(State state)
     {
@@ -34,14 +37,14 @@ public partial class BaseSwitch
         HandleState();
     }
     /// <summary>
-    ///
+    /// Handles Off State
     /// </summary>
     protected virtual void HandleOffState()
     {
        
     }
     /// <summary>
-    ///
+    /// Handles On State
     /// </summary>
     protected virtual void HandleOnState()
     {

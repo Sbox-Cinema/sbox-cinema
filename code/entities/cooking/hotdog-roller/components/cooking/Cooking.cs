@@ -6,17 +6,21 @@ public partial class Cooking : EntityComponent
     private TimeSince SinceCooking { get; set; }
 
     private float TimeToCook = 8.0f;
+
+    /// <summary>
+    /// Called when activated
+    /// Sets initial state
+    /// </summary>
     protected override void OnActivate()
     {
         base.OnActivate();
 
         SetInitState();
     }
-    protected override void OnDeactivate()
-    {
-        base.OnDeactivate();
-    }
 
+    /// <summary>
+    /// Sets initial state default (Raw)
+    /// </summary>
     private void SetInitState()
     {
         SinceCooking = 0.0f;
@@ -24,6 +28,9 @@ public partial class Cooking : EntityComponent
         TransitionStateTo(CookState.Raw);
     }
 
+    /// <summary>
+    /// Checks for raw to cooked state transition
+    /// </summary>
     [GameEvent.Tick]
     private void OnTick()
     {

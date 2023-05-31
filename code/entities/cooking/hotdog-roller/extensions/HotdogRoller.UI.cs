@@ -15,7 +15,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Called when the player intersects with an interaction volume
     /// </summary>
     private void OnInteractionVolumeHover(string groupName)
     {
@@ -55,7 +55,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Raycast to see if player is in contact with any interactables
     /// </summary>
     [GameEvent.Tick]
     public void Update()
@@ -95,7 +95,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Draws interaction volume
     /// </summary>
     private void DrawVolume(PhysicsBody body, bool active)
     {
@@ -222,7 +222,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    ///
+    /// Draws interaction cursor
     /// </summary>
     private void DrawCursor(Vector3 pos)
     {

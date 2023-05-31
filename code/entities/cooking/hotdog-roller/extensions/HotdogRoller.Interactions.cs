@@ -3,7 +3,7 @@
 public partial class HotdogRoller
 {
     /// <summary>
-    ///
+    /// Try interact with an interact volume
     /// </summary>
     public void TryInteraction(string groupName)
     {

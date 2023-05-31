@@ -12,7 +12,7 @@ public partial class Roller
     public State RollerState { get; set; }
 
     /// <summary>
-    ///
+    /// Handles roller's state
     /// </summary>
     protected virtual void HandleState()
     {
@@ -33,8 +33,9 @@ public partial class Roller
 
         }
     }
+
     /// <summary>
-    ///
+    /// Transition to new state
     /// </summary>
     protected virtual void TransitionStateTo(State state)
     {
@@ -44,7 +45,7 @@ public partial class Roller
     }
 
     /// <summary>
-    ///
+    /// Handles roller's BothOn state
     /// </summary>
     protected virtual void HandleBothOnState()
     {
@@ -58,7 +59,7 @@ public partial class Roller
     }
 
     /// <summary>
-    ///
+    /// Handles roller's BothOff state
     /// </summary>
     protected virtual void HandleBothOffState()
     {
@@ -72,7 +73,7 @@ public partial class Roller
     }
 
     /// <summary>
-    ///
+    /// Handles roller's FrontOn state
     /// </summary>
     protected virtual void HandleFrontOnState()
     {
@@ -92,7 +93,7 @@ public partial class Roller
     }
 
     /// <summary>
-    ///
+    /// Handles roller's BackOn state
     /// </summary>
     protected virtual void HandleBackOnState()
     {

@@ -9,6 +9,9 @@ public partial class Cooking
     }
     private CookState State { get; set; }
 
+    /// <summary>
+    /// Handles state for cooking
+    /// </summary>
     private void HandleState()
     {
         switch (State)
@@ -21,6 +24,10 @@ public partial class Cooking
                 break;
         }
     }
+
+    /// <summary>
+    /// Handles transition to new state
+    /// </summary>
     private void TransitionStateTo(CookState state)
     {
         State = state;
