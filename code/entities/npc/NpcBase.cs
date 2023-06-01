@@ -54,7 +54,7 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     public virtual bool OnUse(Entity user)
     {
         if (user is not Player player) return false;
-        TriggerOnClientUse(player);
+        TriggerOnClientUse(To.Single(user.Client), player);
         return false;
     }
 
