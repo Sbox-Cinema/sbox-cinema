@@ -12,7 +12,7 @@ public partial class ItemMenu : RadialMenu
 
     public static List<WeaponBase> Weapons => (Game.LocalPawn as Player)?.Inventory.Weapons.Where(x => x is WeaponBase).Cast<WeaponBase>().ToList();
 
-    public override string Button => "menu";
+    public override string Button => "hotwheel";
 
     public override void Populate()
     {
