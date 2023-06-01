@@ -11,7 +11,7 @@ public partial class BaseKnob : EntityComponent<HotdogRoller>
     {
         base.OnActivate();
 
-        TransitionStateTo(State.PosZero);
+        TransitionStateTo(State.Zero);
     }
 
     /// <summary>
@@ -31,9 +31,9 @@ public partial class BaseKnob : EntityComponent<HotdogRoller>
     {
         KnobState++;
 
-        if((int) KnobState > (int) State.PosSeven)
+        if((int) KnobState > (int) State.Seven)
         {
-            TransitionStateTo(State.PosZero);
+            TransitionStateTo(State.Zero);
         } 
         else
         {

@@ -6,14 +6,14 @@ public partial class BaseKnob
 {
     public enum State : int
     {
-        PosZero,
-        PosOne,
-        PosTwo,
-        PosThree,
-        PosFour,
-        PosFive,
-        PosSix,
-        PosSeven
+        Zero,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven
     }
     public State KnobState { get; set; } 
 
@@ -24,29 +24,29 @@ public partial class BaseKnob
     {
         switch (KnobState)
         {
-            case State.PosZero:
-                HandlePosState(State.PosZero);
+            case State.Zero:
+                HandlePosState(State.Zero);
                 break;
-            case State.PosOne:
-                HandlePosState(State.PosOne);
+            case State.One:
+                HandlePosState(State.One);
                 break;
-            case State.PosTwo:
-                HandlePosState(State.PosTwo);
+            case State.Two:
+                HandlePosState(State.Two);
                 break;
-            case State.PosThree:
-                HandlePosState(State.PosThree);
+            case State.Three:
+                HandlePosState(State.Three);
                 break;
-            case State.PosFour:
-                HandlePosState(State.PosFour);
+            case State.Four:
+                HandlePosState(State.Four);
                 break;
-            case State.PosFive:
-                HandlePosState(State.PosFive);
+            case State.Five:
+                HandlePosState(State.Five);
                 break;
-            case State.PosSix:
-                HandlePosState(State.PosSix);
+            case State.Six:
+                HandlePosState(State.Six);
                 break;
-            case State.PosSeven:
-                HandlePosState(State.PosSeven);
+            case State.Seven:
+                HandlePosState(State.Seven);
                 break;
         }
     }
