@@ -4,6 +4,7 @@ namespace Cinema;
 
 public partial class Steam : EntityComponent
 {
+    static private Vector3 AttachmentOffset = new Vector3(0, 0, 8);
     private Particles Particle {get; set;}
 
     /// <summary>
@@ -16,7 +17,7 @@ public partial class Steam : EntityComponent
 
         Particle = Particles.Create("particles/food_steam/hotdogsteam.vpcf");
 
-        Particle.SetEntityAttachment(0, Entity, "steam", new Vector3(0, 0, 8), ParticleAttachment.Origin);
+        Particle.SetEntityAttachment(0, Entity, "steam", AttachmentOffset, ParticleAttachment.Origin);
     }
 
     /// <summary>
