@@ -23,7 +23,6 @@ public partial class HotdogRoller
                 break;
 
             case "l_switch":
-
                 Switches.ToggleBackRollerPower();
              
                 break;
@@ -34,52 +33,52 @@ public partial class HotdogRoller
                 break;
 
             case "roller1":
-                Roller.AddHotdog(1);
+                Rollers.AddHotdog(1);
 
                 break;
 
             case "roller2":
-                Roller.AddHotdog(2);
+                Rollers.AddHotdog(2);
 
                 break;
 
             case "roller3":
+                Rollers.AddHotdog(3);
 
-                Roller.AddHotdog(3);
                 break;
 
             case "roller4":
-                Roller.AddHotdog(4);
+                Rollers.AddHotdog(4);
 
                 break;
 
             case "roller5": 
-                Roller.AddHotdog(5);
+                Rollers.AddHotdog(5);
                 
                 break;
 
             case "roller6":
-                Roller.AddHotdog(6);
+                Rollers.AddHotdog(6);
                 
                 break;
 
             case "roller7":
-                Roller.AddHotdog(7);
+                Rollers.AddHotdog(7);
                 
                 break;
 
             case "roller8":
-                Roller.AddHotdog(8);
+                Rollers.AddHotdog(8);
                 
                 break;
 
             case "roller9":
-                Roller.AddHotdog(9);
+                Rollers.AddHotdog(9);
                 
                 break;
 
             case "roller10":
-                Roller.AddHotdog(10);
+                Rollers.AddHotdog(10);
 
                 break;
 

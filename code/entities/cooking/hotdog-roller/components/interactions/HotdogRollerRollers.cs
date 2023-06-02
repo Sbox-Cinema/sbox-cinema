@@ -3,36 +3,30 @@ using System.Collections.Generic;
 
 namespace Cinema;
 
-public partial class Roller : EntityComponent<HotdogRoller>
+public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
 {
+    private bool IsFrontRollerPowerOn => Entity.Switches.IsFrontRollerPoweredOn();
+    private bool IsBackRollerPowerOn => Entity.Switches.IsBackRollerPoweredOn();
     private Dictionary<string, Hotdog> Hotdogs { get; set; } = new();
-
-    /// <summary>
-    /// Called when this component is activated
-    /// </summary>
     protected override void OnActivate()
     {
         base.OnActivate();
-
-        TransitionStateTo(State.BothOff);
     }
 
-    /// <summary>
-    /// Sets the roller's state
-    /// </summary>
-    public void SetPos(int pos)
+    protected override void OnDeactivate()
     {
-        State state = (State) pos;
-
-        TransitionStateTo(state);
+        base.OnDeactivate();
     }
 
-    /// <summary>
-    /// Adds hotdog by roller id
-    /// </summary>
+    [GameEvent.Tick]
+    private void OnTick()
+    {
+        if (Game.IsClient) return;
+    }
+
     public void AddHotdog(int rollerid)
     {
-        switch(rollerid)
+        switch (rollerid)
         {
             case 1:
                 var hotdog1 = Hotdogs.GetOrCreate<string, Hotdog>("S1F");
@@ -137,7 +131,6 @@ public partial class Roller : EntityComponent<HotdogRoller>
                 break;
 
         }
-       
     }
 
     /// <summary>

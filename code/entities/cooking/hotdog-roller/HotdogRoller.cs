@@ -10,7 +10,7 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     [BindComponent] public HotdogRollerKnobs Knobs { get; }
     [BindComponent] public HotdogRollerSwitches Switches { get; }
-    [BindComponent] public Roller Roller { get; }
+    [BindComponent] public HotdogRollerRollers Rollers { get; }
 
     /// <summary>
     /// Sets up the model when spawned by the server
@@ -22,8 +22,6 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
         base.Spawn();
 
         SetupModel();
-
-        SetInitState();
     }
     /// <summary>
     /// Sets up the model when spawned by the server
@@ -50,8 +48,7 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 
         Components.Create<HotdogRollerKnobs>();
         Components.Create<HotdogRollerSwitches>();
-        
-        Components.Create<Roller>();
+        Components.Create<HotdogRollerRollers>();
         
         Tags.Add("interactable");
     }

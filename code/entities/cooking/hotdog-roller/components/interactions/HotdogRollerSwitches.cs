@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
 {
-    private enum IndicatorLightGroup: int
+    private enum IndicatorLightGroup : int
     {
         BothOff,
         BothOn,
@@ -14,11 +14,12 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
 
     private bool FrontRollerPowerOn { get; set; }
     private bool BackRollerPowerOn { get; set; }
+    private IndicatorLightGroup IndicatorLight => GetIndicatorLightGroup();
 
     protected override void OnActivate()
     {
         base.OnActivate();
-        
+
         FrontRollerPowerOn = false;
         BackRollerPowerOn = false;
     }
@@ -51,7 +52,7 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
         return BackRollerPowerOn;
     }
 
-    [GameEvent.Tick] 
+    [GameEvent.Tick]
     private void OnTick()
     {
         if (Game.IsClient) return;
@@ -61,24 +62,27 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
         Entity.SetAnimParameter("toggle_left", BackRollerPowerOn);
 
         // Update Power Light Indicator Material
-        if(FrontRollerPowerOn && BackRollerPowerOn)
+        Entity.SetMaterialGroup((int)IndicatorLight);
+    }
+
+    private IndicatorLightGroup GetIndicatorLightGroup()
+    {
+        if (FrontRollerPowerOn && BackRollerPowerOn)
         {
-            Entity.SetMaterialGroup((int)IndicatorLightGroup.BothOn);
+            return IndicatorLightGroup.BothOn;
         }
 
         else if (FrontRollerPowerOn && !BackRollerPowerOn)
         {
-            Entity.SetMaterialGroup((int)IndicatorLightGroup.FrontOn);
+            return IndicatorLightGroup.FrontOn;
         }
 
         else if (!FrontRollerPowerOn && BackRollerPowerOn)
         {
-            Entity.SetMaterialGroup((int)IndicatorLightGroup.BackOn);
+            return IndicatorLightGroup.BackOn;
         }
-      
-        else
-        {
-            Entity.SetMaterialGroup((int)IndicatorLightGroup.BothOff);
-        }
+
+        return IndicatorLightGroup.BothOff;
+        
     }
 }
