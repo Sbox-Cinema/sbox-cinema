@@ -11,6 +11,8 @@ public partial class Soda : WeaponBase
     public override string ViewModelPath => "models/papercup/v_papercup.vmdl";
     public override float PrimaryFireRate => 1.35f;
     public override int BaseUses => 8;
+    public override ActionEnum InputActionType => ActionEnum.HoldToUse;
+    public override float PerHeldInterval => 2.0f;
 
     public override void Spawn()
     {
@@ -21,13 +23,32 @@ public partial class Soda : WeaponBase
     {
         base.Simulate(cl);
 
-        AnimateAttack(false, Input.Down("attack1"));
+        AnimateAttack(false, IsHolding);
+    }
+
+    public override void DoFireHolding()
+    {
+        if (IsStillHolding())
+        {
+            if (HeldFire >= PerHeldInterval)
+            {
+                UsesRemaining--;
+                PlayFireSounds(IsAltHold);
+                HeldFire = 0.0f;
+            }
+        }
+        else
+        {
+            AnimateAttack(IsAltHold, false);
+
+            IsHolding = false;
+            IsAltHold = false;
+        }
     }
 
     public override void PrimaryFire()
     {
         base.PrimaryFire();
-        AnimateAttack();
     }
 
     public override void SecondaryFire()

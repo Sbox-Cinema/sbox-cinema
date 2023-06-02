@@ -15,16 +15,31 @@ public partial class WeaponBase : Carriable
     public virtual bool AutoPrimary => false;
     public virtual bool AutoSecondary => false;
     public Player WeaponHolder => Owner as Player;
+
+    public enum ActionEnum
+    {
+        Unspecified,
+        ClickToUse,
+        HoldToUse
+    }
+
+    public virtual ActionEnum InputActionType => ActionEnum.Unspecified;
+    public virtual float PerHeldInterval => 2.0f;
     [Net] public bool IsReloading { get; set; } = false;
     [Net, Predicted] public TimeUntil DeployTime { get; set; }
     [Net, Predicted] public TimeUntil ReloadTime { get; set; }
     [Net, Predicted] public TimeSince LastPrimaryFire { get; set; }
     [Net, Predicted] public TimeSince LastSecondaryFire { get; set; }
+    [Net, Predicted] public TimeSince HeldFire { get; set; }
 
     //How many uses (when spawned) does this weapon have before expiring/dropping
     public virtual int BaseUses => 1;
 
     public int UsesRemaining;
+
+    public bool IsHolding { get; set; }
+
+    public bool IsAltHold = false;
 
     public override void Spawn()
     {
@@ -32,11 +47,19 @@ public partial class WeaponBase : Carriable
 
         Model = WorldModel;
         UsesRemaining = BaseUses;
+
+        IsHolding = false;
     }
 
     public override void Simulate(IClient cl)
     {
         base.Simulate(cl);
+
+        if (IsHolding)
+        {
+            DoFireHolding();
+            return;
+        }
 
         //If the holder is reloading, wait until the reload is finished
         if (IsReloading)
@@ -114,17 +137,64 @@ public partial class WeaponBase : Carriable
     //Primary fire
     public virtual void PrimaryFire()
     {
-        UsesRemaining--;
+        if (InputActionType == ActionEnum.HoldToUse)
+        {
+            SetUpFireHolding();
+        } 
+        else
+        {
+            UsesRemaining--;
 
-        LastPrimaryFire = 0;
-        LastSecondaryFire = 0;
+            LastPrimaryFire = 0;
+            LastSecondaryFire = 0;
+
+            PlayFireSounds();
+        }
+    }
+
+    public virtual void PlayFireSounds(bool altFire = false)
+    {
+
     }
 
     //Secondary fire
     public virtual void SecondaryFire()
     {
-        LastPrimaryFire = 0;
-        LastSecondaryFire = 0;
+        if(InputActionType == ActionEnum.HoldToUse)
+        {
+            SetUpFireHolding(true);
+        } 
+        else
+        {
+            LastPrimaryFire = 0;
+            LastSecondaryFire = 0;
+
+            PlayFireSounds(true);
+        }
+    }
+
+    public bool IsStillHolding()
+    {
+        if (!Owner.IsValid || (Owner as Player).ActiveChild != this) return false;
+
+        if (UsesRemaining <= 0) return false;
+
+        if (IsAltHold)
+            return Input.Down("attack2");
+
+        return Input.Down("attack1");
+    }
+
+    protected void SetUpFireHolding(bool wasAlt = false)
+    {
+        IsHolding = true;
+        IsAltHold = wasAlt;
+        HeldFire = 0.0f;
+    }
+
+    public virtual void DoFireHolding()
+    {
+
     }
 
     //Reloading, this can be left empty if not required
