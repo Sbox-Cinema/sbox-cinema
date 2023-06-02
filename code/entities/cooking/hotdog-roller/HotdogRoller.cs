@@ -10,8 +10,7 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
     [BindComponent] public LeftKnob LeftKnob { get; }
     [BindComponent] public RightKnob RightKnob { get; }
-    [BindComponent] public LeftSwitch LeftSwitch { get; }
-    [BindComponent] public RightSwitch RightSwitch { get; }
+    [BindComponent] public HotdogRollerSwitches Switches { get; }
     [BindComponent] public Roller Roller { get; }
 
     /// <summary>
@@ -53,9 +52,8 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
         Components.Create<LeftKnob>();
         Components.Create<RightKnob>();
 
-        Components.Create<LeftSwitch>();
-        Components.Create<RightSwitch>();
-
+        Components.Create<HotdogRollerSwitches>();
+        
         Components.Create<Roller>();
         
         Tags.Add("interactable");

@@ -24,28 +24,28 @@ public partial class HotdogRoller
     /// </summary>
     private void UpdatePowerState()
     {
-        if (!LeftSwitch.IsOn() && !RightSwitch.IsOn())
+        if (!Switches.IsBackRollerPoweredOn() && !Switches.IsFrontRollerPoweredOn())
         {
             TransitionStateTo(State.BothOff);
 
             return;
         }
 
-        if (LeftSwitch.IsOn() && RightSwitch.IsOn())
+        if (Switches.IsBackRollerPoweredOn() && Switches.IsFrontRollerPoweredOn())
         {
             TransitionStateTo(State.BothOn);
 
             return;
         }
 
-        if (LeftSwitch.IsOn() && !RightSwitch.IsOn())
+        if (Switches.IsBackRollerPoweredOn() && !Switches.IsFrontRollerPoweredOn())
         {
             TransitionStateTo(State.BackOn);
 
             return;
         }
 
-        if (!LeftSwitch.IsOn() && RightSwitch.IsOn())
+        if (!Switches.IsBackRollerPoweredOn() && Switches.IsFrontRollerPoweredOn())
         {
             TransitionStateTo(State.FrontOn);
 

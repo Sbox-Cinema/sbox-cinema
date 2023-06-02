@@ -23,14 +23,15 @@ public partial class HotdogRoller
                 break;
 
             case "l_switch":
-                LeftSwitch.TogglePos();
 
+                Switches.ToggleBackRollerPower();
+                
                 UpdatePowerState();
                 
                 break;
 
             case "r_switch":
-                RightSwitch.TogglePos();
+                Switches.ToggleFrontRollerPower();
 
                 UpdatePowerState();
                 
