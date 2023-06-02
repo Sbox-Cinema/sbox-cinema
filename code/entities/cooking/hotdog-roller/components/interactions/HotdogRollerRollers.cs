@@ -7,7 +7,7 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
 {
     private bool IsFrontRollerPowerOn => Entity.Switches.IsFrontRollerPoweredOn();
     private bool IsBackRollerPowerOn => Entity.Switches.IsBackRollerPoweredOn();
-    private Dictionary<string, Hotdog> Hotdogs { get; set; } = new();
+    private Dictionary<string, HotdogCookable> Hotdogs { get; set; } = new();
     protected override void OnActivate()
     {
         base.OnActivate();
@@ -29,8 +29,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
         switch (rollerid)
         {
             case 1:
-                var hotdog1 = Hotdogs.GetOrCreate<string, Hotdog>("S1F");
-                var hotdog2 = Hotdogs.GetOrCreate<string, Hotdog>("S2F");
+                var hotdog1 = Hotdogs.GetOrCreate<string, HotdogCookable>("S1F");
+                var hotdog2 = Hotdogs.GetOrCreate<string, HotdogCookable>("S2F");
 
                 if (hotdog1.IsValid && hotdog2.IsValid)
                 {
@@ -40,8 +40,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
 
                 break;
             case 2:
-                var hotdog3 = Hotdogs.GetOrCreate<string, Hotdog>("S3F");
-                var hotdog4 = Hotdogs.GetOrCreate<string, Hotdog>("S4F");
+                var hotdog3 = Hotdogs.GetOrCreate<string, HotdogCookable>("S3F");
+                var hotdog4 = Hotdogs.GetOrCreate<string, HotdogCookable>("S4F");
 
                 if (hotdog3.IsValid && hotdog4.IsValid)
                 {
@@ -50,8 +50,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 3:
-                var hotdog5 = Hotdogs.GetOrCreate<string, Hotdog>("S5F");
-                var hotdog6 = Hotdogs.GetOrCreate<string, Hotdog>("S6F");
+                var hotdog5 = Hotdogs.GetOrCreate<string, HotdogCookable>("S5F");
+                var hotdog6 = Hotdogs.GetOrCreate<string, HotdogCookable>("S6F");
 
                 if (hotdog5.IsValid && hotdog6.IsValid)
                 {
@@ -60,8 +60,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 4:
-                var hotdog7 = Hotdogs.GetOrCreate<string, Hotdog>("S7F");
-                var hotdog8 = Hotdogs.GetOrCreate<string, Hotdog>("S8F");
+                var hotdog7 = Hotdogs.GetOrCreate<string, HotdogCookable>("S7F");
+                var hotdog8 = Hotdogs.GetOrCreate<string, HotdogCookable>("S8F");
 
                 if (hotdog7.IsValid && hotdog8.IsValid)
                 {
@@ -70,8 +70,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 5:
-                var hotdog9 = Hotdogs.GetOrCreate<string, Hotdog>("S9F");
-                var hotdog10 = Hotdogs.GetOrCreate<string, Hotdog>("S10F");
+                var hotdog9 = Hotdogs.GetOrCreate<string, HotdogCookable>("S9F");
+                var hotdog10 = Hotdogs.GetOrCreate<string, HotdogCookable>("S10F");
 
                 if (hotdog9.IsValid && hotdog10.IsValid)
                 {
@@ -80,8 +80,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 6:
-                var hotdog11 = Hotdogs.GetOrCreate<string, Hotdog>("S9B");
-                var hotdog12 = Hotdogs.GetOrCreate<string, Hotdog>("S10B");
+                var hotdog11 = Hotdogs.GetOrCreate<string, HotdogCookable>("S9B");
+                var hotdog12 = Hotdogs.GetOrCreate<string, HotdogCookable>("S10B");
 
                 if (hotdog11.IsValid && hotdog12.IsValid)
                 {
@@ -90,8 +90,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 7:
-                var hotdog13 = Hotdogs.GetOrCreate<string, Hotdog>("S8B");
-                var hotdog14 = Hotdogs.GetOrCreate<string, Hotdog>("S7B");
+                var hotdog13 = Hotdogs.GetOrCreate<string, HotdogCookable>("S8B");
+                var hotdog14 = Hotdogs.GetOrCreate<string, HotdogCookable>("S7B");
 
                 if (hotdog13.IsValid && hotdog14.IsValid)
                 {
@@ -100,8 +100,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 8:
-                var hotdog15 = Hotdogs.GetOrCreate<string, Hotdog>("S6B");
-                var hotdog16 = Hotdogs.GetOrCreate<string, Hotdog>("S5B");
+                var hotdog15 = Hotdogs.GetOrCreate<string, HotdogCookable>("S6B");
+                var hotdog16 = Hotdogs.GetOrCreate<string, HotdogCookable>("S5B");
 
                 if (hotdog15.IsValid && hotdog16.IsValid)
                 {
@@ -110,8 +110,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 9:
-                var hotdog17 = Hotdogs.GetOrCreate<string, Hotdog>("S4B");
-                var hotdog18 = Hotdogs.GetOrCreate<string, Hotdog>("S3B");
+                var hotdog17 = Hotdogs.GetOrCreate<string, HotdogCookable>("S4B");
+                var hotdog18 = Hotdogs.GetOrCreate<string, HotdogCookable>("S3B");
 
                 if (hotdog17.IsValid && hotdog18.IsValid)
                 {
@@ -120,8 +120,8 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
                 }
                 break;
             case 10:
-                var hotdog19 = Hotdogs.GetOrCreate<string, Hotdog>("S2B");
-                var hotdog20 = Hotdogs.GetOrCreate<string, Hotdog>("S1B");
+                var hotdog19 = Hotdogs.GetOrCreate<string, HotdogCookable>("S2B");
+                var hotdog20 = Hotdogs.GetOrCreate<string, HotdogCookable>("S1B");
 
                 if (hotdog19.IsValid && hotdog20.IsValid)
                 {

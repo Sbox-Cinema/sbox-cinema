@@ -12,16 +12,9 @@ public partial class Hotdog : WeaponBase
     public override float PrimaryFireRate => 1.35f;
     public override int BaseUses => 4;
 
-    [BindComponent] public Rotator Rotator { get; }
-    [BindComponent] public Rotator Steam { get; }
-
     public override void Spawn()
     {
         base.Spawn();
-
-        SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
-
-        Tags.Add("cookable");
     }
 
     public override void PrimaryFire()
