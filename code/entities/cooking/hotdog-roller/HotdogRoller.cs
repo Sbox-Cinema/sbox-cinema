@@ -8,8 +8,7 @@ namespace Cinema;
 [EditorModel("models/hotdogroller/hotdogroller.vmdl")]
 public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 {
-    [BindComponent] public LeftKnob LeftKnob { get; }
-    [BindComponent] public RightKnob RightKnob { get; }
+    [BindComponent] public HotdogRollerKnobs Knobs { get; }
     [BindComponent] public HotdogRollerSwitches Switches { get; }
     [BindComponent] public Roller Roller { get; }
 
@@ -49,9 +48,7 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 
-        Components.Create<LeftKnob>();
-        Components.Create<RightKnob>();
-
+        Components.Create<HotdogRollerKnobs>();
         Components.Create<HotdogRollerSwitches>();
         
         Components.Create<Roller>();

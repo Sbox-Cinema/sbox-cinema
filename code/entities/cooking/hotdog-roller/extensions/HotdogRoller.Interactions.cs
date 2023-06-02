@@ -13,27 +13,23 @@ public partial class HotdogRoller
                 break;
 
             case "l_handle":
-                LeftKnob.IncrementPos();
+                Knobs.IncrementBackRollerKnobPos();
 
                 break;
 
             case "r_handle":
-                RightKnob.IncrementPos();
-                
+                Knobs.IncrementFrontRollerKnobPos();
+
                 break;
 
             case "l_switch":
 
                 Switches.ToggleBackRollerPower();
-                
-                UpdatePowerState();
-                
+             
                 break;
 
             case "r_switch":
                 Switches.ToggleFrontRollerPower();
-
-                UpdatePowerState();
                 
                 break;
 

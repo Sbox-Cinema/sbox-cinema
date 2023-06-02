@@ -88,8 +88,6 @@ public partial class HotdogRoller
     /// </summary>
     private void HandleBothOffState()
     {
-        SetMaterialGroup(0);
-
         Roller.SetPos(0);
     }
     /// <summary>
@@ -97,8 +95,6 @@ public partial class HotdogRoller
     /// </summary>
     private void HandleBothOnState()
     {
-        SetMaterialGroup(1);
-
         Roller.SetPos(1);         
     }
 
@@ -107,8 +103,6 @@ public partial class HotdogRoller
     /// </summary>
     private void HandleFrontOnState()
     {
-        SetMaterialGroup(2);
-
         Roller.SetPos(2);
     }
 
@@ -117,8 +111,6 @@ public partial class HotdogRoller
     /// </summary>
     private void HandleBackOnState()
     {
-        SetMaterialGroup(3);
-
         Roller.SetPos(3);
     }
 }
