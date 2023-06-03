@@ -52,6 +52,11 @@ public partial class HotdogRoller
     [GameEvent.Tick]
     public void Update()
     {
+        FindInteractable();
+    }
+
+    private void FindInteractable()
+    {
         if (Game.LocalPawn is Player player)
         {
             TraceResult tr = Trace.Ray(player.AimRay, 2000)
@@ -82,7 +87,7 @@ public partial class HotdogRoller
                     UseText = "For Hotdog Roller Info";
                 }
             }
-          
+
         }
     }
 

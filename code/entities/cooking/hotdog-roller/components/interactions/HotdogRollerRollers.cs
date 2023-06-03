@@ -10,21 +10,40 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
     private bool IsBackRollerPowerOn => Entity.Switches.IsBackRollerPoweredOn();
     [Net] private IList<HotdogCookable> FrontRollerHotdogs { get; set; }
     [Net] private IList<HotdogCookable> BackRollerHotdogs { get; set; }
-    protected override void OnActivate()
-    {
-        base.OnActivate();
-    }
-    protected override void OnDeactivate()
-    {
-        base.OnDeactivate();
-    }
-
+   
     [GameEvent.Tick]
     private void OnTick()
     {
         if (Game.IsClient) return;
-    }
 
+        foreach (var hotdog in FrontRollerHotdogs)
+        {
+            if (IsFrontRollerPowerOn)
+            {
+                hotdog.Components.GetOrCreate<Cooking>();
+                hotdog.Components.GetOrCreate<Rotator>();
+            }
+            else if (!IsFrontRollerPowerOn)
+            {
+                hotdog.Components.RemoveAny<Cooking>();
+                hotdog.Components.RemoveAny<Rotator>();
+            }
+        }
+
+        foreach(var hotdog in BackRollerHotdogs)
+        {
+            if (IsBackRollerPowerOn)
+            {
+                hotdog.Components.GetOrCreate<Cooking>();
+                hotdog.Components.GetOrCreate<Rotator>();
+            }
+            else if (!IsBackRollerPowerOn)
+            {
+                hotdog.Components.RemoveAny<Cooking>();
+                hotdog.Components.RemoveAny<Rotator>();
+            }
+        }
+    }
     public void AddFrontRollerHotdog()
     {
         if(FrontRollerHotdogs.Count < MaxHotDogsPerRollers)
@@ -38,7 +57,6 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
             FrontRollerHotdogs.Add(hotdog);
         }
     }
-
     public void AddBackRollerHotdog()
     {
         if (BackRollerHotdogs.Count < MaxHotDogsPerRollers)
@@ -54,13 +72,10 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
             BackRollerHotdogs.Add(hotdog);
         }
     }
-
     private void AttachEntity(string attach, Entity ent)
     {
         if (Entity.GetAttachment(attach) is Transform t)
         {
-            Log.Info($"Attaching {attach}");
-
             ent.Transform = t;
 
             ent.Position += (Vector3.Up * 0.5f);

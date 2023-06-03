@@ -11,26 +11,9 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
         FrontOn,
         BackOn,
     }
-
-    private bool FrontRollerPowerOn { get; set; }
-    private bool BackRollerPowerOn { get; set; }
+    private bool FrontRollerPowerOn { get; set; } = false;
+    private bool BackRollerPowerOn { get; set; } = false;
     private IndicatorLightGroup IndicatorLight => GetIndicatorLightGroup();
-
-    protected override void OnActivate()
-    {
-        base.OnActivate();
-
-        FrontRollerPowerOn = false;
-        BackRollerPowerOn = false;
-    }
-
-    protected override void OnDeactivate()
-    {
-        base.OnDeactivate();
-
-        FrontRollerPowerOn = false;
-        BackRollerPowerOn = false;
-    }
 
     public void ToggleFrontRollerPower()
     {

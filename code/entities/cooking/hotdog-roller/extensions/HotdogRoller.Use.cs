@@ -23,21 +23,7 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
-        TraceResult tr = Trace.Ray(user.AimRay, 2000)
-                            .EntitiesOnly()
-                            .Ignore(user)
-                            .WithoutTags("cookable")
-                            .Run();
-
-        if (tr.Hit)
-        {
-            if (tr.Body is PhysicsBody body)
-            {
-
-                TryInteraction(body.GroupName);
-
-            }
-        }
+        TryInteractions(user);
 
         Input.Clear("use"); // Why?
 
@@ -52,5 +38,21 @@ public partial class HotdogRoller
     public void OnStopUse(Entity user)
     {
         
+    }
+
+    private void TryInteractions(Entity user)
+    {
+        TraceResult tr = Trace.Ray(user.AimRay, 2000)
+                            .EntitiesOnly()
+                            .Ignore(user)
+                            .WithoutTags("cookable")
+                            .Run();
+        if (tr.Hit)
+        {
+            if (tr.Body is PhysicsBody body)
+            {
+                TryInteraction(body.GroupName);
+            }
+        }
     }
 }
