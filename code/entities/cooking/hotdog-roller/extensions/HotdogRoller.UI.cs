@@ -11,7 +11,7 @@ public partial class HotdogRoller
     /// </summary>
     private void SetupUI()
     {
-        UseText = "Use Hotdog Roller";
+        
     }
 
     /// <summary>
@@ -22,20 +22,20 @@ public partial class HotdogRoller
         switch(groupName)
         {
             case "hotdog_roller":
-                UseText = "Hotdog Roller Info";
+                // Ignore
                 break;
             case "l_handle":
-                UseText = "Use Back Roller Temperature Knob";
+                UseText = "Change Back Roller Temperature";
                 break;
 
             case "r_handle":
-                UseText = "Use Front Roller Temperature Knob";
+                UseText = "Change Front Roller Temperature";
                 break;
             case "l_switch":
-                UseText = "Use Back Roller Power";
+                UseText = "Toggle Back Roller Power";
                 break;
             case "r_switch":
-                UseText = "Use Front Roller Power";
+                UseText = "Toggle Front Roller Power";
                 break;
             case "roller1":
                 UseText = "Add Front Roller Hotdog";
@@ -79,7 +79,7 @@ public partial class HotdogRoller
 
                 if (tr.Body.GroupName == "")
                 {
-                    UseText = "Use Hotdog Roller";
+                    UseText = "For Hotdog Roller Info";
                 }
             }
           
