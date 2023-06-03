@@ -22,9 +22,8 @@ public partial class HotdogRoller
         switch(groupName)
         {
             case "hotdog_roller":
-                UseText = "Use Hotdog Roller";
+                UseText = "Hotdog Roller Info";
                 break;
-
             case "l_handle":
                 UseText = "Use Back Roller Temperature Knob";
                 break;
@@ -39,18 +38,11 @@ public partial class HotdogRoller
                 UseText = "Use Front Roller Power";
                 break;
             case "roller1":
-            case "roller2":
-            case "roller3":
-            case "roller4":
-            case "roller5":
-            case "roller6":
-            case "roller7":
-            case "roller8":
-            case "roller9":
-            case "roller10":
-                UseText = "Use Roller";
+                UseText = "Add Front Roller Hotdog";
                 break;
-
+            case "roller6":
+                UseText = "Add Back Roller Hotdog";
+                break;
         }
     }
 

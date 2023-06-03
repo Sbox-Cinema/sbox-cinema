@@ -15,7 +15,6 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
     /// <summary>
     /// Sets up the model when spawned by the server
     /// Sets model
-    /// Sets initial state
     /// </summary>
     public override void Spawn()
     {
