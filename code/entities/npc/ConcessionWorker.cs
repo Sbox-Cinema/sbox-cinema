@@ -38,12 +38,16 @@ public partial class ConcessionWorker : NpcBase
 
     public override void OnClientUse(Player player)
     {
-        UI.StoreInterface.Instance.OpenForStore(Store);
+        var storeMenu = UI.StoreInterface.Instance;
+        storeMenu.OpenForStore(Store);
+        player.ActiveMenu = storeMenu;
     }
 
     public override void OnClientStopUse(Player player)
     {
-        UI.StoreInterface.Instance.Close();
+        var storeMenu = UI.StoreInterface.Instance;
+        storeMenu.Close();
+        player.ActiveMenu = null;
     }
 
 }
