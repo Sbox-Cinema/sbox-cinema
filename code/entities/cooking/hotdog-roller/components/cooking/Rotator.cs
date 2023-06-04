@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class Rotator : EntityComponent
 {
-    private float RotatorDegrees { get; set; } = 0.0f;
+    private float RotatorDegrees { get; set; } = 180.0f;
     static private float RotatorSpeed { get; set; } = 2.0f;
 
     /// <summary>
@@ -37,9 +37,9 @@ public partial class Rotator : EntityComponent
     { 
         RotatorDegrees -= RotatorSpeed;
 
-        if (RotatorDegrees < 0.0f)
+        if (RotatorDegrees < -180.0f)
         {
-            RotatorDegrees = 360.0f;
+            RotatorDegrees = 180.0f;
         }
     }
 
@@ -48,6 +48,6 @@ public partial class Rotator : EntityComponent
     /// </summary>
     private void UpdateEntity()
     {
-        Entity.Rotation = Rotation.FromRoll(RotatorDegrees);
+        Entity.Rotation = Rotation.From(new Angles(Entity.Rotation.Pitch(), Entity.Rotation.Yaw(), RotatorDegrees));
     }
 }
