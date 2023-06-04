@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Cinema;
 
 [Library("cinema_concessionworker"), HammerEntity]
+[EditorModel("models/citizen/citizen.vmdl", staticColor: "red")]
 [Title("Concession Worker"), Category("Cinema"), Icon("fastfood")]
 public partial class ConcessionWorker : NpcBase
 {
@@ -51,8 +52,6 @@ public partial class ConcessionWorker : NpcBase
 
     public static void DrawGizmos(EditorContext context)
     {
-        Gizmo.Draw.Color = Color.Red.WithAlpha(0.8f);
-        Gizmo.Draw.Model("models/citizen/citizen.vmdl");
         Gizmo.Draw.Color = Color.White;
         Gizmo.Draw.Text("fastfood", new Transform().WithPosition(Vector3.Up * 80), "Material Icons", 24f);
     }
