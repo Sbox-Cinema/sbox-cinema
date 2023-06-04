@@ -1,8 +1,11 @@
+using Editor;
 using Sandbox;
 using System.Collections.Generic;
 
 namespace Cinema;
 
+[Library("cinema_concessionworker"), HammerEntity]
+[Title("Concession Worker"), Category("Cinema"), Icon("fastfood")]
 public partial class ConcessionWorker : NpcBase
 {
     public override string Name => "Concession Employee";
@@ -46,4 +49,11 @@ public partial class ConcessionWorker : NpcBase
         UI.StoreInterface.Instance.Close();
     }
 
+    public static void DrawGizmos(EditorContext context)
+    {
+        Gizmo.Draw.Color = Color.Red.WithAlpha(0.8f);
+        Gizmo.Draw.Model("models/citizen/citizen.vmdl");
+        Gizmo.Draw.Color = Color.White;
+        Gizmo.Draw.Text("fastfood", new Transform().WithPosition(Vector3.Up * 80), "Material Icons", 24f);
+    }
 }
