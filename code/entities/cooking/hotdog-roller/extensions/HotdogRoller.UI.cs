@@ -95,127 +95,13 @@ public partial class HotdogRoller
     /// Draws interaction volume
     /// </summary>
     private void DrawVolume(PhysicsBody body, bool active)
-    {
+    {   
         BBox bbox = body.GetBounds();
 
-        foreach (var pt in bbox.Corners)
-        {
-            var pt2 = pt.Cross(bbox.Center).Normal;
-            
-            var planePos = bbox.Center;
-            var planeNormal = planePos + new Vector3(0, 0, 1);
+        Color inactiveColor = Color.Gray;
+        Color activeColor = Color.White;
 
-            float distance = planeNormal.Dot(pt - planePos);
-
-            float lineLength = 0.5f;
-
-            Color inactiveColor = Color.Gray;
-            Color activeColor = Color.White;
-
-            //Back Points
-            if(distance < 0)
-            {
-                //Bottom 
-                if (pt2.x < 0)
-                {
-                    // Right
-                    if (pt2.y < 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Red);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-                    }
-                    // Left
-                    if (pt2.y > 0)
-                    { 
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Green);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-                    }
-                }
-
-                // Top
-                if (pt2.x > 0)
-                {
-                    // Right
-                    if (pt2.y < 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Cyan);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Down * lineLength), !active ? inactiveColor : activeColor);
-                    }
-
-                    // Left
-                    if (pt2.y > 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Magenta);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Right * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Down * lineLength), !active ? inactiveColor : activeColor);
-                    }
-
-                }
-            }
-            
-            // Front points
-            if (distance > 0)
-            {
-                // Bottom 
-                if (pt2.x < 0)
-                {
-                    // Right
-                    if (pt2.y < 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Red);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Left * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-                    }
-
-                    // Left
-                    if (pt2.y > 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Green);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Left * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Up * lineLength), !active ? inactiveColor : activeColor);
-                    }
-                }
-
-                // Top
-                if (pt2.x > 0)
-                {
-                    // Right
-                    if (pt2.y < 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Cyan);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Backward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Left * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Down * lineLength), !active ? inactiveColor : activeColor);
-                    }
-
-                    // Left
-                    if (pt2.y > 0)
-                    {
-                        //DebugOverlay.Sphere(pt, 0.15f, Color.Magenta);
-
-                        DebugOverlay.Line(pt, pt + (Vector3.Forward * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Left * lineLength), !active ? inactiveColor : activeColor);
-                        DebugOverlay.Line(pt, pt + (Vector3.Down * lineLength), !active ? inactiveColor : activeColor);
-                    }
-                }
-            }
-        }
+        DebugOverlay.Box(bbox.Mins, bbox.Maxs, !active ? inactiveColor : activeColor);
     }
 
     /// <summary>
