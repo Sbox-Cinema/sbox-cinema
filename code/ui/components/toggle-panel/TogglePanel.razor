@@ -1,0 +1,37 @@
+﻿@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Razor;
+
+@inherits Panel;
+@attribute [StyleSheet];
+
+<root>
+
+</root>
+
+@code {
+    public virtual string VisibleClass => "visible";
+    public bool IsOpen => HasClass(VisibleClass);
+
+    public event EventHandler OnOpened;
+    public event EventHandler OnClosed;
+
+    public virtual void Open()
+    {
+        // Let stylesheets decide how to handle showing the panel.
+        SetClass(VisibleClass, true);
+        OnOpened?.Invoke(this, EventArgs.Empty);
+    }
+
+    public virtual void Close()
+    {
+        SetClass(VisibleClass, false);
+        OnClosed?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected override int BuildHash()
+    {
+        return IsOpen.GetHashCode();
+    }
+}
