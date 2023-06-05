@@ -34,7 +34,7 @@ public partial class ProjectorEntity
     /// </summary>
     private PlayingMedia WebSurfaceMedia { get; set; }
     public Texture WebSurfaceTexture { get; protected set; }
-    private OrthoLightEntity ProjectionLight { get; set; }
+    private SpotLightEntity ProjectionLight { get; set; }
     public Texture ProjectionTexture { get; protected set; }
     private SceneWorld RenderWorld { get; set; }
     private SceneCamera RenderCamera { get; set; }
@@ -69,6 +69,35 @@ public partial class ProjectorEntity
         ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
 
         SetupProjectionLight();
+    }
+
+    [GameEvent.Tick.Client]
+    public void OnClientTick()
+    {
+        if (ProjectionLight == null)
+            return;
+
+        // Trace forward from the projector light to find the surface it projects on to.
+        var traceStart = ProjectionLight.Position;
+        var traceEnd = ProjectionLight.Position + ProjectionLight.Rotation.Forward * 5000f;
+        var tr = Trace.Ray(traceStart, traceEnd)
+            .WorldOnly()
+            .Run();
+        if (!tr.Hit)
+        {
+            return;
+        }
+
+        var screenDistanceFromProjector = tr.Distance;
+        ProjectionLight.OuterConeAngle = CalculateProjectionAngle(screenDistanceFromProjector);
+        ProjectionLight.InnerConeAngle = ProjectionLight.OuterConeAngle * 0.8f;
+    }
+
+    private float CalculateProjectionAngle(float screenDistanceFromProjector)
+    {
+        var circleSize = MathF.Min(ProjectionSize.x, ProjectionSize.y);
+        var angle = MathF.Atan(circleSize / screenDistanceFromProjector);
+        return MathX.RadianToDegree(angle / 2);
     }
 
     private void PlayMediaOnWebSurface(PlayingMedia media)
@@ -120,17 +149,18 @@ public partial class ProjectorEntity
     {
         ProjectionLight?.Delete();
 
-        ProjectionLight = new OrthoLightEntity
+        ProjectionLight = new SpotLightEntity
         {
             Parent = this,
             Position = Position,
             Rotation = Rotation,
             LightCookie = ProjectionTexture,
-            Brightness = 1.0f,
+            Brightness = 20.0f,
             Range = 1024.0f,
-            OrthoLightWidth = ProjectionSize.x,
-            OrthoLightHeight = ProjectionSize.y,
+            OuterConeAngle = 20.0f,
+            InnerConeAngle = 15.0f,
             DynamicShadows = true,
+            FogStrength = 2.0f
         };
 
         ProjectionLight.UseFog();

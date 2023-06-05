@@ -143,7 +143,8 @@ public partial class FakeBounceLight
     {
         DebugOverlay.Sphere(Entity.Position, 5f, Color.Blue);
         DebugOverlay.Line(Entity.Position, BounceSpotlight.Position, Color.Yellow);
-        DebugOverlay.Circle(BounceSpotlight.Position, BounceSpotlight.Rotation, BounceSpotlight.OuterConeAngle, Color.Red);
+        var bounceCirclePosition = BounceSpotlight.Position + BounceSpotlight.Rotation.Forward * 5f;
+        DebugOverlay.Circle(bounceCirclePosition, BounceSpotlight.Rotation, BounceSpotlight.OuterConeAngle, Color.Yellow.WithAlpha(0.01f));
     }
 
     /// <summary>

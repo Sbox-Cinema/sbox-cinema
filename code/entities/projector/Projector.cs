@@ -26,6 +26,9 @@ public partial class ProjectorEntity : Entity
     [Net]
     public IList<CinemaZone> Areas { get; set; }
 
+    public Vector3 ScreenPosition { get; set; }
+    public Vector3 ScreenDistance { get; set; }
+
     public override void Spawn()
     {
         base.Spawn();

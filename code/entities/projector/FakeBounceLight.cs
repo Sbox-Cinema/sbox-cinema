@@ -63,7 +63,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// </summary>
     public float ScreenDistanceFromProjector { get; private set; }
 
-    private float BaseBounceLightBrightness { get; init; } = 10f;
+    private float BaseBounceLightBrightness { get; init; } = 25f;
 
     public FakeBounceLight()
     {
