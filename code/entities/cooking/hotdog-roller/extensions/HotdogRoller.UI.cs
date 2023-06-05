@@ -60,7 +60,7 @@ public partial class HotdogRoller
                             .WithTag("interactable")
                             .Run();
 
-            if (tr.Hit)
+            if (tr.Hit && tr.Entity == this)
             {
                 foreach (var volume in InteractionVolumes)
                 {
