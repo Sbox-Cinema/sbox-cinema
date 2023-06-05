@@ -55,21 +55,29 @@ public partial class HotdogRoller
     {
         if (Game.LocalPawn is Player player)
         {
-            foreach (var volume in InteractionVolumes)
+            TraceResult tr = Trace.Ray(player.AimRay, 1000)
+                            .EntitiesOnly()
+                            .WithTag("interactable")
+                            .Run();
+
+            if (tr.Hit)
             {
-                var name = volume.Key;
-                var bounds = volume.Value;
-
-                if(bounds.Trace(player.AimRay, 1000, out float distance))
+                foreach (var volume in InteractionVolumes)
                 {
-                    DrawVolume(bounds, true);
-                    DrawCursor(player.AimRay.Position + (player.AimRay.Forward * distance));
+                    var name = volume.Key;
+                    var bounds = volume.Value;
 
-                    OnInteractionVolumeHover(name);
-                } 
-                else
-                {
-                    DrawVolume(bounds, false);
+                    if (bounds.Trace(player.AimRay, 1000, out float distance))
+                    {
+                        DrawVolume(bounds, true);
+                        DrawCursor(player.AimRay.Position + (player.AimRay.Forward * distance));
+
+                        OnInteractionVolumeHover(name);
+                    }
+                    else
+                    {
+                        DrawVolume(bounds, false);
+                    }
                 }
             }
         }
