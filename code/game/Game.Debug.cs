@@ -24,7 +24,6 @@ public partial class CinemaGame
 
     public static bool ValidateUser(long steamID)
     {
-        return true;
         if (DevIDs.Contains(steamID)) return true;
 
         return false;
