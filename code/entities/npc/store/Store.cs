@@ -5,6 +5,7 @@ namespace Cinema;
 
 public partial class Store : BaseNetworkable, INetworkSerializer
 {
+    public string Name { get; set; }
     public ulong StoreId { get; set; }
 
     public List<StoreItem> ItemsForSale { get; set; } = new();
@@ -49,6 +50,7 @@ public partial class Store : BaseNetworkable, INetworkSerializer
 
     public void Write(NetWrite write)
     {
+        write.Write(Name);
         write.Write(StoreId);
         write.Write(ItemsForSale.Count);
         foreach (var item in ItemsForSale)
@@ -62,6 +64,7 @@ public partial class Store : BaseNetworkable, INetworkSerializer
 
     public void Read(ref NetRead read)
     {
+        Name = read.ReadString();
         StoreId = read.Read<ulong>();
         ItemsForSale = new List<StoreItem>();
         var count = read.Read<int>();

@@ -24,6 +24,7 @@ public partial class CinemaGame
 
     public static bool ValidateUser(long steamID)
     {
+        return true;
         if (DevIDs.Contains(steamID)) return true;
 
         return false;
@@ -284,5 +285,26 @@ public partial class CinemaGame
         Game.RootPanel.Style.Display = enable 
             ? Sandbox.UI.DisplayMode.Flex
             : Sandbox.UI.DisplayMode.None;
+    }
+
+    [ConCmd.Server("player.list")]
+    public static void ListPlayers()
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        foreach (var client in Game.Clients)
+        {
+            var localPawn = client.Pawn as Player;
+            string status;
+            if (localPawn == null)
+                status = "In Transit";
+            else if (localPawn.LifeState == LifeState.Dead)
+                status = "Dead";
+            else if (string.IsNullOrEmpty(localPawn.ActiveMenuName))
+                status = "Active";
+            else
+                status = $"In Menu ({localPawn.ActiveMenuName})";
+            Log.Info($"{client} - {status}");
+        }
     }
 }

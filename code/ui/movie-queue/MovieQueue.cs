@@ -3,12 +3,16 @@ using System;
 using System.Collections.Generic;
 using Sandbox;
 using Sandbox.UI;
+using System.Collections;
 
 namespace Cinema.UI;
 
-public partial class MovieQueue : Panel
+public partial class MovieQueue : Panel, IMenuScreen
 {
     public static MovieQueue Instance { get; set; }
+    
+    public string Name => "Movie Queue";
+    public bool IsOpen => Visible;
 
     public MovieQueue()
     {
@@ -32,6 +36,29 @@ public partial class MovieQueue : Panel
     public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.Duration):hh\\:mm\\:ss}";
 
     public TextEntry MovieIDEntry { get; set; }
+
+    public bool Open()
+    {
+        var localPawn = Game.LocalPawn;
+        var closestProjector = Entity
+            .All
+            .OfType<ProjectorEntity>()
+            .OrderBy(x => x.Position.Distance(localPawn.Position))
+            .FirstOrDefault();
+
+        if (closestProjector == null)
+            return false;
+
+        Controller = closestProjector.Controller;
+        Visible = true;
+        return true;
+    }
+
+    public void Close()
+    {
+        Visible = false;
+        Controller = null;
+    }
 
     protected static bool CanRemoveMedia(Media media)
     {
