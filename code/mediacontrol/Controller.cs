@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
@@ -14,6 +15,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
     public IList<Media> Queue { get; set; }
 
     public static string WaitingImage => "https://i.pinimg.com/originals/62/c7/c2/62c7c28439ff95418a16b0d0c907fa18.jpg";
+    public static int MoneyPerLikePerMinute => 30;
 
     public Media NextMedia => Queue.OrderBy(m => m.ListScore).FirstOrDefault();
 
@@ -107,8 +109,27 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
         PlayYouTubeVideo(PlayingMedia.YouTubeId, PlayingMedia.Nonce, TimeSinceStartedPlaying, forceUpdate);
     }
 
+    private void OnFinishedPlayingMedia(Media media)
+    {
+        var totalLikes = media.Likes.Where(c => c != media.Requestor).Count() - media.Dislikes.Where(c => c != media.Requestor).Count();
+        if (totalLikes <= 0) return;
+        if (media.Requestor?.Pawn is not Player player) return;
+
+        var timePlayed = TimeSinceStartedPlaying.Relative;
+        var minutesPlayed = (int)Math.Max(1, Math.Floor(timePlayed / 60));
+        var moneyEarned = totalLikes * minutesPlayed * MoneyPerLikePerMinute;
+
+        Log.Info($"Awarded {media.Requestor.Name} ${moneyEarned} for playing {media.Title} and getting {totalLikes} likes.");
+        player.AddMoney(moneyEarned);
+    }
+
     private void StartPlayingMedia(Media media)
     {
+        if (PlayingMedia?.YouTubeId != null)
+        {
+            OnFinishedPlayingMedia(PlayingMedia);
+        }
+
         // new media is playing
         PlayingMedia = media;
         TimeSinceStartedPlaying = 0;

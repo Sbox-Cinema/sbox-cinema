@@ -6,9 +6,11 @@ MovieQueue {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    //Chi-TownNF
     
-    font-family: SourceSansPro;
-    font-size: 20px;
+    font-family: engebrechtre-rg;
+    font-size: 22px;
     color: #EEE;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
@@ -30,25 +32,40 @@ MovieQueue {
 .container {
     >.header {
         flex-direction: column;
-        //align-items: center;
+        align-items: center;
         justify-content: center;
-        font-size: 36px;
-        padding-bottom: 8px;
+        font-size: 100px;
         padding-left: 32px;
-        height: 10%;
-        background-color: #222;
+        //background: linear-gradient(#860204, #230105);
+        background-image: url("ui/curtain-red.png");
+        background-size: cover;
+        box-shadow: 0px 0px 8px 4px #0e0505;
+        font-family: manbow-lines; //breamcatcher-rg; //Vintage; //Chi-TownNF;
+        color: #fffD;
+        text-shadow: 1px 1px 2px rgb(148, 125, 58);
+
+        
+
+        >.title {
+            >.deco {
+                align-items: center;
+                flex-direction: row;
+                margin-left: 16px;
+                margin-right: 16px;
+                font-size: 80px;
+                font-family: DecoBordersNF;
+            }
+            >.text {
+                position: relative;
+            }  
+        }
     
         .close-btn {
             position: absolute;
-            right: 8px;
-            top: 8px;
+            right: 24px;
+            top: 24px;
         }
     }
-}
-
-.footer {
-    height: 10%;
-    background-color: #222;
 }
 
 .contents {
@@ -98,6 +115,23 @@ MovieQueue {
 
     &.scroll {
         overflow: scroll;
+    }
+}
+
+.votes-area {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 18px;
+
+    .count {
+        font-size: 32px;
+    }
+    .tip {
+        margin-left: 8px;
+        font-size: 20px;
+        color: #ccc;
     }
 }
 
