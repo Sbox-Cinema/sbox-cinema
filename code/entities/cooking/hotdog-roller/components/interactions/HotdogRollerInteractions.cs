@@ -31,6 +31,8 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 
     private void SetupInteractions()
     {
+        if (Game.IsClient) return;
+
         var physBodies = Entity.PhysicsGroup.Bodies.Where((body) => body.GroupName != "");
 
         foreach (var body in physBodies)
