@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Numerics;
 
 namespace Cinema;
 
@@ -42,17 +43,16 @@ public partial class HotdogRoller
 
     private void TryInteractions(Entity user)
     {
-        TraceResult tr = Trace.Ray(user.AimRay, 2000)
-                            .EntitiesOnly()
-                            .Ignore(user)
-                            .WithoutTags("cookable")
-                            .Run();
-        if (tr.Hit)
+        foreach (var volume in InteractionVolumes)
         {
-            if (tr.Body is PhysicsBody body)
+            var name = volume.Key;
+            var bounds = volume.Value;
+
+            if (bounds.Trace(user.AimRay, 1000, out float distance))
             {
-                TryInteraction(body.GroupName);
+                TryInteraction(name);
             }
+            
         }
     }
 }

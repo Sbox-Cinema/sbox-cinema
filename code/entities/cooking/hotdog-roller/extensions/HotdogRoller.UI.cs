@@ -11,7 +11,7 @@ public partial class HotdogRoller
     /// </summary>
     private void SetupUI()
     {
-        
+       
     }
 
     /// <summary>
@@ -21,13 +21,9 @@ public partial class HotdogRoller
     {
         switch(groupName)
         {
-            case "hotdog_roller":
-                // Ignore
-                break;
             case "l_handle":
                 UseText = "Change Back Roller Temperature";
                 break;
-
             case "r_handle":
                 UseText = "Change Front Roller Temperature";
                 break;
@@ -59,49 +55,35 @@ public partial class HotdogRoller
     {
         if (Game.LocalPawn is Player player)
         {
-            TraceResult tr = Trace.Ray(player.AimRay, 2000)
-                            .EntitiesOnly()
-                            .Ignore(player)
-                            .WithoutTags("cookable")
-                            .Run();
-
-            if (tr.Hit)
+            foreach (var volume in InteractionVolumes)
             {
-                foreach (var body in PhysicsGroup.Bodies)
-                {
-                    if (body.GroupName != "" && body.GroupName != tr.Body.GroupName)
-                    {
-                        DrawVolume(body, false);
-                    }
-                    else if (body.GroupName != "")
-                    {
-                        DrawVolume(body, true);
-                        DrawCursor(tr.EndPosition);
+                var name = volume.Key;
+                var bounds = volume.Value;
 
-                        OnInteractionVolumeHover(body.GroupName);
-                    }
-                }
-
-                if (tr.Body.GroupName == "")
+                if(bounds.Trace(player.AimRay, 1000, out float distance))
                 {
-                    UseText = "For Hotdog Roller Info";
+                    DrawVolume(bounds, true);
+                    DrawCursor(player.AimRay.Position + (player.AimRay.Forward * distance));
+
+                    OnInteractionVolumeHover(name);
+                } 
+                else
+                {
+                    DrawVolume(bounds, false);
                 }
             }
-
         }
     }
 
     /// <summary>
     /// Draws interaction volume
     /// </summary>
-    private void DrawVolume(PhysicsBody body, bool active)
+    private void DrawVolume(BBox bounds, bool active)
     {   
-        BBox bbox = body.GetBounds();
-
         Color inactiveColor = Color.Gray;
         Color activeColor = Color.White;
 
-        DebugOverlay.Box(bbox.Mins, bbox.Maxs, !active ? inactiveColor : activeColor);
+        DebugOverlay.Box(bounds.Mins, bounds.Maxs, !active ? inactiveColor : activeColor);
     }
 
     /// <summary>

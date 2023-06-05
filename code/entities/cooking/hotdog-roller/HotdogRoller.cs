@@ -1,5 +1,7 @@
 ﻿using Editor;
 using Sandbox;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cinema;
 
@@ -11,16 +13,19 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
     [BindComponent] public HotdogRollerKnobs Knobs { get; }
     [BindComponent] public HotdogRollerSwitches Switches { get; }
     [BindComponent] public HotdogRollerRollers Rollers { get; }
+    [Net] private IDictionary<string, BBox> InteractionVolumes { get; set; }
 
     /// <summary>
-    /// Sets up the model when spawned by the server
-    /// Sets model
+    /// Set up the model when spawned by the server
+    /// Setup model
+    /// Setup interactions
     /// </summary>
     public override void Spawn()
     {
         base.Spawn();
 
         SetupModel();
+        SetupInteractions();
     }
     /// <summary>
     /// Sets up the model when spawned by the server
@@ -50,5 +55,18 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
         Components.Create<HotdogRollerRollers>();
         
         Tags.Add("interactable");
+    }
+
+    /// <summary>
+    /// Sets up the interactions when spawned by the server
+    /// </summary>
+    private void SetupInteractions()
+    {
+        var physBodies = PhysicsGroup.Bodies.Where((body) => body.GroupName != "");
+
+        foreach (var body in physBodies)
+        {
+            InteractionVolumes.Add(body.GroupName, body.GetBounds());
+        }
     }
 }
