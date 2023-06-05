@@ -1,17 +1,77 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cinema;
 
-public partial class HotdogRoller
+public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 {
-    public string UseText { get; set; }
+    [Net] private IDictionary<string, BBox> InteractionVolumes { get; set; }
 
-    /// <summary>
-    /// Sets up the UI when the machine is interacted with
-    /// </summary>
-    private void SetupUI()
+    protected override void OnActivate()
     {
-       
+        base.OnActivate();
+
+        SetupInteractions();
+    }
+
+    public void TryInteractions(Entity user)
+    {
+        foreach (var volume in InteractionVolumes)
+        {
+            var name = volume.Key;
+            var bounds = volume.Value;
+
+            if (bounds.Trace(user.AimRay, 1000, out float distance))
+            {
+                TryInteraction(name);
+            }
+        }
+    }
+
+    private void SetupInteractions()
+    {
+        var physBodies = Entity.PhysicsGroup.Bodies.Where((body) => body.GroupName != "");
+
+        foreach (var body in physBodies)
+        {
+            InteractionVolumes.Add(body.GroupName, body.GetBounds());
+        }
+    }
+
+    public void TryInteraction(string interactionName)
+    {
+        switch (interactionName)
+        {
+            case "l_handle":
+                Entity.Knobs.IncrementBackRollerKnobPos();
+                break;
+
+            case "r_handle":
+                Entity.Knobs.IncrementFrontRollerKnobPos();
+
+                break;
+
+            case "l_switch":
+                Entity.Switches.ToggleBackRollerPower();
+
+                break;
+
+            case "r_switch":
+                Entity.Switches.ToggleFrontRollerPower();
+
+                break;
+
+            case "roller1":
+                Entity.Rollers.AddFrontRollerHotdog();
+
+                break;
+
+            case "roller6":
+                Entity.Rollers.AddBackRollerHotdog();
+
+                break;
+        }
     }
 
     /// <summary>
@@ -19,25 +79,25 @@ public partial class HotdogRoller
     /// </summary>
     private void OnInteractionVolumeHover(string groupName)
     {
-        switch(groupName)
+        switch (groupName)
         {
             case "l_handle":
-                UseText = "Change Back Roller Temperature";
+                Entity.UseText = "Change Back Roller Temperature";
                 break;
             case "r_handle":
-                UseText = "Change Front Roller Temperature";
+                Entity.UseText = "Change Front Roller Temperature";
                 break;
             case "l_switch":
-                UseText = "Toggle Back Roller Power";
+                Entity.UseText = "Toggle Back Roller Power";
                 break;
             case "r_switch":
-                UseText = "Toggle Front Roller Power";
+                Entity.UseText = "Toggle Front Roller Power";
                 break;
             case "roller1":
-                UseText = "Add Front Roller Hotdog";
+                Entity.UseText = "Add Front Roller Hotdog";
                 break;
             case "roller6":
-                UseText = "Add Back Roller Hotdog";
+                Entity.UseText = "Add Back Roller Hotdog";
                 break;
         }
     }
@@ -60,7 +120,7 @@ public partial class HotdogRoller
                             .WithTag("interactable")
                             .Run();
 
-            if (tr.Hit && tr.Entity == this)
+            if (tr.Hit && tr.Entity == Entity)
             {
                 foreach (var volume in InteractionVolumes)
                 {
@@ -87,7 +147,7 @@ public partial class HotdogRoller
     /// Draws interaction volume
     /// </summary>
     private void DrawVolume(BBox bounds, bool active)
-    {   
+    {
         Color inactiveColor = Color.Gray;
         Color activeColor = Color.White;
 

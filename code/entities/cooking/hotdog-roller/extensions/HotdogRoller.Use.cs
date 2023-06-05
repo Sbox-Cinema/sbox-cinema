@@ -4,6 +4,8 @@ namespace Cinema;
 
 public partial class HotdogRoller
 {
+    public string UseText { get; set; }
+
     /// <summary>
     /// Whether this Hotdog Roller is usable or not
     /// </summary>
@@ -23,7 +25,7 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
-        TryInteractions(user);
+        Interactions.TryInteractions(user);
 
         Input.Clear("use"); // Why?
 
@@ -38,20 +40,5 @@ public partial class HotdogRoller
     public void OnStopUse(Entity user)
     {
         
-    }
-
-    private void TryInteractions(Entity user)
-    {
-        foreach (var volume in InteractionVolumes)
-        {
-            var name = volume.Key;
-            var bounds = volume.Value;
-
-            if (bounds.Trace(user.AimRay, 1000, out float distance))
-            {
-                TryInteraction(name);
-            }
-            
-        }
     }
 }
