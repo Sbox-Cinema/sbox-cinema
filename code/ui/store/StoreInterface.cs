@@ -8,7 +8,7 @@ namespace Cinema.UI;
 public partial class StoreInterface : IMenuScreen
 {
     public static StoreInterface Instance { get; set; }
-    public bool IsOpen => Visible;
+    public bool IsOpen { get; protected set; }
     public string Name => $"Store: {Store.Name}";
 
     public Store Store
@@ -32,8 +32,6 @@ public partial class StoreInterface : IMenuScreen
 
     public StoreItem HoveredItem { get; set; }
 
-    public bool Visible { get; protected set; } = false;
-
     public StoreInterface()
     {
         Instance = this;
@@ -41,14 +39,14 @@ public partial class StoreInterface : IMenuScreen
 
     public bool Open()
     {
-        Visible = true;
+        IsOpen = true;
         return true;
     }
 
     public void Close()
     {
         Store = null;
-        Visible = false;
+        IsOpen = false;
     }
 
     public void OnItemClicked(StoreItem item)
@@ -77,6 +75,6 @@ public partial class StoreInterface : IMenuScreen
             hash = hash * 31 + item.GetHashCode();
         }
 
-        return HashCode.Combine(Visible, hash, Store?.StoreId);
+        return HashCode.Combine(IsOpen, hash, Store?.StoreId);
     }
 }

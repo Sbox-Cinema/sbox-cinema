@@ -12,7 +12,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     public static MovieQueue Instance { get; set; }
     
     public string Name => "Movie Queue";
-    public bool IsOpen => Visible;
+    public bool IsOpen { get; protected set; }
 
     public MovieQueue()
     {
@@ -21,9 +21,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public Panel Thumbnail { get; set; }
 
-    public bool Visible { get; set; } = false;
-
-    public string VisibleClass => Visible ? "visible" : "";
+    public string VisibleClass => IsOpen ? "visible" : "";
 
     public MediaController Controller { get; set; } = null;
 
@@ -50,13 +48,13 @@ public partial class MovieQueue : Panel, IMenuScreen
             return false;
 
         Controller = closestProjector.Controller;
-        Visible = true;
+        IsOpen = true;
         return true;
     }
 
     public void Close()
     {
-        Visible = false;
+        IsOpen = false;
         Controller = null;
     }
 
@@ -109,7 +107,7 @@ public partial class MovieQueue : Panel, IMenuScreen
             }
         }
 
-        return HashCode.Combine(Visible, Queue.Count, NowPlaying, queueHash, NowPlayingTimeString);
+        return HashCode.Combine(IsOpen, Queue.Count, NowPlaying, queueHash, NowPlayingTimeString);
     }
 
     public override void Tick()
@@ -144,7 +142,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     protected void OnClose()
     {
-        Visible = false;
+        IsOpen = false;
         Controller = null;
     }
 }
