@@ -25,7 +25,7 @@ public partial class ItemMenu : RadialMenu
     protected override bool ShouldOpen()
     {
         var player = Game.LocalPawn as Player;
-        return player.IsValid() && player.ActiveMenu is null;
+        return player.IsValid() && !player.IsMenuOpen;
     }
 
     private static void SelectItem(WeaponBase selected)
