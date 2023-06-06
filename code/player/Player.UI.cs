@@ -9,14 +9,14 @@ public partial class Player
     /// On the server and client, this will be true if the client has a menu open. 
     /// </summary>
     [ClientInput]
-    public bool IsMenuOpen { get; set; }
+    public bool IsMenuOpen { get; protected set; }
 
     /// <summary>
     /// On the server and client, this will be the name of the currently open menu, or <c>string.Empty</c> 
     /// if no menu is open.
     /// </summary>
     [ClientInput]
-    public string ActiveMenuName { get; set; }
+    public string ActiveMenuName { get; protected set; }
 
     /// <summary>
     /// On the client, this is the active menu. On the server this will be
