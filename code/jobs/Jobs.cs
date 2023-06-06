@@ -15,7 +15,7 @@ public enum JobAbilities : ulong
     // Can this job purchase concessions
     PurchaseConcessions = 1 << 1,
     // Can this job pickup garbage
-    PickupGarbage = 1 << 2,
+    PickupTrash = 1 << 2,
     // Can this job make popcorn
     MakePopcorn = 1 << 3
 }
@@ -59,7 +59,7 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails
         {
             Name = "Usher",
-            Abilities = JobAbilities.PickupGarbage,
+            Abilities = JobAbilities.PickupTrash,
             Responsibilities = 0,
         },
         /// <summary>
