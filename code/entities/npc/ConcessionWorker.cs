@@ -22,6 +22,7 @@ public partial class ConcessionWorker : NpcBase
 
         Store = new Store()
         {
+            Name = $"Concession Worker # {NetworkIdent}",
             ItemsForSale = new List<StoreItem> {
                 StoreItem.Weapon("Hotdog", "99% Beef", "ui/icons/hotdog.png", 10, "Hotdog"),
                 StoreItem.Weapon("Nachos", "Not your cheese!", "ui/icons/nachos.png", 20, "Nachos"),
@@ -42,12 +43,15 @@ public partial class ConcessionWorker : NpcBase
 
     public override void OnClientUse(Player player)
     {
-        UI.StoreInterface.Instance.OpenForStore(Store);
+        var storeMenu = UI.StoreInterface.Instance;
+        storeMenu.Store = Store;
+        player.OpenMenu(storeMenu);
     }
 
     public override void OnClientStopUse(Player player)
     {
-        UI.StoreInterface.Instance.Close();
+        var storeMenu = UI.StoreInterface.Instance;
+        player.CloseMenu(storeMenu);
     }
 
     public static void DrawGizmos(EditorContext context)

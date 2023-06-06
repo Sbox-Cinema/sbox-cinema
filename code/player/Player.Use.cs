@@ -17,7 +17,8 @@ public partial class Player
 
     public bool IsUseDisabled()
     {
-        return ActiveChild is IUse use && use.IsUsable(this);
+        var heldItemIsUsable = ActiveChild is IUse use && use.IsUsable(this);
+        return IsMenuOpen || heldItemIsUsable;
     }
 
     protected virtual void TickPlayerUse()
