@@ -6,15 +6,16 @@ namespace Cinema;
 
 public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 {
+    
+    private float InteractionDistance = 64.0f;
     [Net] private IDictionary<string, BBox> InteractionVolumes { get; set; }
-
+    
     protected override void OnActivate()
     {
         base.OnActivate();
 
         SetupInteractions();
     }
-
     public void TryInteractions(Entity user)
     {
         foreach (var volume in InteractionVolumes)
@@ -22,13 +23,12 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
             var name = volume.Key;
             var bounds = volume.Value;
 
-            if (bounds.Trace(user.AimRay, 1000, out float distance))
+            if (bounds.Trace(user.AimRay, 1024.0f, out float distance))
             {
                 TryInteraction(name);
             }
         }
     }
-
     private void SetupInteractions()
     {
         if (Game.IsClient) return;
@@ -40,7 +40,6 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
             InteractionVolumes.Add(body.GroupName, body.GetBounds());
         }
     }
-
     public void TryInteraction(string interactionName)
     {
         switch (interactionName)
@@ -110,6 +109,8 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
     [GameEvent.Tick]
     public void Update()
     {
+        if (Game.IsServer) return;
+
         FindInteractable();
     }
 
@@ -117,7 +118,7 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
     {
         if (Game.LocalPawn is Player player)
         {
-            TraceResult tr = Trace.Ray(player.AimRay, 1000)
+            TraceResult tr = Trace.Ray(player.AimRay, InteractionDistance)
                             .EntitiesOnly()
                             .WithTag("interactable")
                             .Run();
@@ -129,7 +130,7 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
                     var name = volume.Key;
                     var bounds = volume.Value;
 
-                    if (bounds.Trace(player.AimRay, 1000, out float distance))
+                    if (bounds.Trace(player.AimRay, InteractionDistance, out float distance))
                     {
                         DrawVolume(bounds, true);
                         DrawCursor(player.AimRay.Position + (player.AimRay.Forward * distance));

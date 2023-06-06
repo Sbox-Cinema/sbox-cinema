@@ -15,7 +15,7 @@ public partial class HotdogCookable : AnimatedEntity
         base.Spawn();
 
         SetupModel();
-
+        
         Tags.Add("cookable");
     }
     /// <summary>
@@ -25,6 +25,9 @@ public partial class HotdogCookable : AnimatedEntity
     {
         base.ClientSpawn();
     }
+    /// <summary>
+    /// 
+    /// </summary>
     private void SetupModel()
     {
         Transmit = TransmitType.Always;
@@ -32,5 +35,20 @@ public partial class HotdogCookable : AnimatedEntity
         SetModel("models/hotdog/hotdog_roller.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Show()
+    {
+        EnableDrawing = true;
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Hide()
+    {
+        EnableDrawing = false;
     }
 }

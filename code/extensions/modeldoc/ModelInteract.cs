@@ -7,6 +7,12 @@ using System.Text.Json.Serialization;
 [Axis(Bone = "bonename", Origin = "offset_origin", Angles = "offset_angles")]
 public class ModelInteract
 {
+    [JsonPropertyName("interact_name")]
+    public string InteractionName { get; set; }
+
+    [JsonPropertyName("interact_use_text")]
+    public string UseText { get; set; }
+
     [FGDType("model_bone")]
     public string BoneName { get; set; }
 
@@ -21,5 +27,8 @@ public class ModelInteract
 
     [JsonPropertyName("attachment_point"), FGDType("model_attachment")]
     public string AttachmentPoint { get; set; }
+
+    public BBox Bounds => BBox.FromPositionAndSize(Origin, Dimensions); 
+    
 }
 

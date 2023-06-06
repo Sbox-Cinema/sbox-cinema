@@ -8,16 +8,25 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
     private int MaxHotDogsPerRollers = 10;
     private bool IsFrontRollerPowerOn => Entity.Switches.IsFrontRollerPoweredOn();
     private bool IsBackRollerPowerOn => Entity.Switches.IsBackRollerPoweredOn();
-    [Net] private IList<HotdogCookable> FrontRollerHotdogs { get; set; }
+    [Net] private IDictionary<string, HotdogCookable> FrontRollerHotdogs { get; set; }
     [Net] private IList<HotdogCookable> BackRollerHotdogs { get; set; }
-   
+
+    protected override void OnActivate()
+    {
+        base.OnActivate();
+
+    }
+
     [GameEvent.Tick]
     private void OnTick()
     {
         if (Game.IsClient) return;
 
-        foreach (var hotdog in FrontRollerHotdogs)
+        foreach (var obj in FrontRollerHotdogs)
         {
+            var attachment = obj.Key;
+            var hotdog = obj.Value;
+
             if (IsFrontRollerPowerOn)
             {
                 hotdog.Components.GetOrCreate<Cooking>();
@@ -54,7 +63,17 @@ public partial class HotdogRollerRollers : EntityComponent<HotdogRoller>
 
             AttachEntity(attachment, hotdog);
             
-            FrontRollerHotdogs.Add(hotdog);
+            FrontRollerHotdogs.Add(attachment, hotdog);
+        }
+    }
+
+    public void RemoveFrontRollerHotdog()
+    {
+        var attachment = $"S{FrontRollerHotdogs.Count + 1}F";
+
+        if(FrontRollerHotdogs.TryGetValue(attachment, out HotdogCookable hotdog))
+        {
+            hotdog.Hide();
         }
     }
     public void AddBackRollerHotdog()
