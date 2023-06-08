@@ -10,6 +10,8 @@ public class Projectile : Prop
     {
         base.Spawn();
         SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
+        // Remove the solid tag so that the projectile doesn't collide with the owner.
+        Tags.Remove("solid");
     }
 
     [GameEvent.Tick.Server]
