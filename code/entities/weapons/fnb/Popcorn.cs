@@ -32,14 +32,10 @@ public partial class Popcorn : WeaponBase
         {
             var projectile = new Projectile()
             {
-                Owner = WeaponHolder,
                 Model = Model.Load("models/popcorn_tub/w_popcorn_tub_01.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
             };
 
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
+            projectile.LaunchFromEntityViewpoint(WeaponHolder);
         }
     }
 
