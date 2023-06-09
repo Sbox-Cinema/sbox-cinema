@@ -21,13 +21,6 @@ public partial class HotdogCookable : AnimatedEntity
     /// <summary>
     /// 
     /// </summary>
-    public override void ClientSpawn()
-    {
-        base.ClientSpawn();
-    }
-    /// <summary>
-    /// 
-    /// </summary>
     private void SetupModel()
     {
         Transmit = TransmitType.Always;
@@ -35,20 +28,5 @@ public partial class HotdogCookable : AnimatedEntity
         SetModel("models/hotdog/hotdog_roller.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Show()
-    {
-        EnableDrawing = true;
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Hide()
-    {
-        EnableDrawing = false;
     }
 }

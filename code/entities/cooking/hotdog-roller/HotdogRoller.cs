@@ -52,4 +52,20 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
         
         Tags.Add("interactable");
     }
+
+    [GameEvent.Tick]
+    private void OnTick()
+    {
+        Simulate(Game.LocalClient);
+    }
+
+    public override void Simulate(IClient cl)
+    {
+        base.Simulate(cl);
+
+        Interactions?.Simulate();
+        Switches?.Simulate();
+        Knobs?.Simulate();
+        Rollers?.Simulate();
+    }
 }

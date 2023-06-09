@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace Cinema;
 
@@ -125,6 +126,22 @@ partial class Player : AnimatedEntity, IEyes
         }
 
         TickPlayerUse();
+
+        if(Input.Pressed("attack2"))
+        {
+            if(Game.IsServer)
+            {
+                TraceResult tr = Trace.Ray(AimRay, 1024.0f)
+                            .EntitiesOnly()
+                            .WithTag("interactable")
+                            .Run();
+
+                if(tr.Entity is HotdogRoller hotdogRoller)
+                {
+                    hotdogRoller.Interactions.TryHotdogRemoval(this);
+                }
+            }   
+        }
 
         ActiveController?.Simulate(cl);
 

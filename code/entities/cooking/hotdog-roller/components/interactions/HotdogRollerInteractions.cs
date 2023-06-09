@@ -4,11 +4,31 @@ using System.Linq;
 
 namespace Cinema;
 
+public partial class InteractionVolume : BaseNetworkable
+{
+    public PhysicsBody InteractionBody { get; set; }
+    [Net] public Entity Parent { get; set; }
+    public string Name { get; set; }
+    [Net] public BBox Bounds { get; set; }
+    [Net] public string UseText {get; set;}
+    public InteractionVolume()
+    {
+
+    }
+    public InteractionVolume(PhysicsBody body)
+    {
+        InteractionBody = body;
+
+        Bounds = InteractionBody.GetBounds();
+        Name = InteractionBody.GroupName;
+        Parent = InteractionBody.GetEntity();
+    }
+}
+
 public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 {
-    
     private float InteractionDistance = 64.0f;
-    [Net] private IDictionary<string, BBox> InteractionVolumes { get; set; }
+    [Net] private IList<InteractionVolume> InteractionVolumes { get; set; }
     
     protected override void OnActivate()
     {
@@ -16,19 +36,7 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 
         SetupInteractions();
     }
-    public void TryInteractions(Entity user)
-    {
-        foreach (var volume in InteractionVolumes)
-        {
-            var name = volume.Key;
-            var bounds = volume.Value;
 
-            if (bounds.Trace(user.AimRay, 1024.0f, out float distance))
-            {
-                TryInteraction(name);
-            }
-        }
-    }
     private void SetupInteractions()
     {
         if (Game.IsClient) return;
@@ -37,9 +45,50 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
 
         foreach (var body in physBodies)
         {
-            InteractionVolumes.Add(body.GroupName, body.GetBounds());
+            InteractionVolumes.Add(new InteractionVolume(body));
         }
     }
+
+    /// <summary>
+    /// Raycast to see if player is in contact with any interactables
+    /// </summary>
+    public void Simulate()
+    {
+        if (Game.IsServer) return;
+
+        FindInteractable();
+    }
+
+    public void TryInteractions(Entity user)
+    {
+        foreach (var volume in InteractionVolumes)
+        {
+            if (volume.Bounds.Trace(user.AimRay, 1024.0f, out float distance))
+            {
+                TryInteraction(volume.Name);
+            }
+        }
+    }
+
+    public void TryHotdogRemoval(Entity user)
+    {
+        foreach (var volume in InteractionVolumes)
+        {
+            if (volume.Bounds.Trace(user.AimRay, 1024.0f, out float distance))
+            {
+                if(volume.Name == "roller1")
+                {
+                    Entity.Rollers.RemoveFrontRollerHotdog();
+                }
+
+                if(volume.Name == "roller6")
+                {
+                    Entity.Rollers.RemoveBackRollerHotdog();
+                }
+            }
+        }
+    }
+    
     public void TryInteraction(string interactionName)
     {
         switch (interactionName)
@@ -47,73 +96,23 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
             case "l_handle":
                 Entity.Knobs.IncrementBackRollerKnobPos();
                 break;
-
             case "r_handle":
                 Entity.Knobs.IncrementFrontRollerKnobPos();
-
                 break;
-
             case "l_switch":
                 Entity.Switches.ToggleBackRollerPower();
-
                 break;
-
             case "r_switch":
                 Entity.Switches.ToggleFrontRollerPower();
-
                 break;
-
             case "roller1":
                 Entity.Rollers.AddFrontRollerHotdog();
-
                 break;
-
             case "roller6":
                 Entity.Rollers.AddBackRollerHotdog();
-
                 break;
         }
     }
-
-    /// <summary>
-    /// Called when the player intersects with an interaction volume
-    /// </summary>
-    private void OnInteractionVolumeHover(string groupName)
-    {
-        switch (groupName)
-        {
-            case "l_handle":
-                Entity.UseText = "Change Back Roller Temperature";
-                break;
-            case "r_handle":
-                Entity.UseText = "Change Front Roller Temperature";
-                break;
-            case "l_switch":
-                Entity.UseText = "Toggle Back Roller Power";
-                break;
-            case "r_switch":
-                Entity.UseText = "Toggle Front Roller Power";
-                break;
-            case "roller1":
-                Entity.UseText = "Add Front Roller Hotdog";
-                break;
-            case "roller6":
-                Entity.UseText = "Add Back Roller Hotdog";
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Raycast to see if player is in contact with any interactables
-    /// </summary>
-    [GameEvent.Tick]
-    public void Update()
-    {
-        if (Game.IsServer) return;
-
-        FindInteractable();
-    }
-
     private void FindInteractable()
     {
         if (Game.LocalPawn is Player player)
@@ -127,19 +126,14 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
             {
                 foreach (var volume in InteractionVolumes)
                 {
-                    var name = volume.Key;
-                    var bounds = volume.Value;
-
-                    if (bounds.Trace(player.AimRay, InteractionDistance, out float distance))
+                    if (volume.Bounds.Trace(player.AimRay, InteractionDistance, out float distance))
                     {
-                        DrawVolume(bounds, true);
+                        DrawVolume(volume, true);
                         DrawCursor(player.AimRay.Position + (player.AimRay.Forward * distance));
-
-                        OnInteractionVolumeHover(name);
                     }
                     else
                     {
-                        DrawVolume(bounds, false);
+                        DrawVolume(volume, false);
                     }
                 }
             }
@@ -149,12 +143,12 @@ public partial class HotdogRollerInteractions : EntityComponent<HotdogRoller>
     /// <summary>
     /// Draws interaction volume
     /// </summary>
-    private void DrawVolume(BBox bounds, bool active)
+    private void DrawVolume(InteractionVolume volume, bool active)
     {
         Color inactiveColor = Color.Gray;
         Color activeColor = Color.White;
 
-        DebugOverlay.Box(bounds.Mins, bounds.Maxs, !active ? inactiveColor : activeColor);
+        DebugOverlay.Box(volume.Bounds.Mins, volume.Bounds.Maxs, !active ? inactiveColor : activeColor);
     }
 
     /// <summary>

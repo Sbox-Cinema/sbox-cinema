@@ -19,24 +19,19 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
     {
         FrontRollerPowerOn = !FrontRollerPowerOn;
     }
-
     public void ToggleBackRollerPower()
     {
         BackRollerPowerOn = !BackRollerPowerOn;
     }
-
     public bool IsFrontRollerPoweredOn()
     {
         return FrontRollerPowerOn;
     }
-
     public bool IsBackRollerPoweredOn()
     {
         return BackRollerPowerOn;
     }
-
-    [GameEvent.Tick]
-    private void OnTick()
+    public void Simulate()
     {
         if (Game.IsClient) return;
 
@@ -47,7 +42,6 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
         // Update Power Light Indicator Material
         Entity.SetMaterialGroup((int)IndicatorLight);
     }
-
     private IndicatorLightGroup GetIndicatorLightGroup()
     {
         if (FrontRollerPowerOn && BackRollerPowerOn)
@@ -66,6 +60,5 @@ public partial class HotdogRollerSwitches : EntityComponent<HotdogRoller>
         }
 
         return IndicatorLightGroup.BothOff;
-        
     }
 }

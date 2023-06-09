@@ -17,12 +17,10 @@ public partial class HotdogRollerKnobs : EntityComponent<HotdogRoller>
     {
         FrontRollerKnobPosition = pos;
     }
-
     public void SetBackRollerKnobPos(int pos)
     {
         BackRollerKnobPosition = pos;
     }
-
     public void IncrementFrontRollerKnobPos()
     {
         FrontRollerKnobPosition++;
@@ -32,7 +30,6 @@ public partial class HotdogRollerKnobs : EntityComponent<HotdogRoller>
             FrontRollerKnobPosition = 0;
         }
     }
-
     public void IncrementBackRollerKnobPos()
     {
         BackRollerKnobPosition++;
@@ -42,9 +39,7 @@ public partial class HotdogRollerKnobs : EntityComponent<HotdogRoller>
             BackRollerKnobPosition = 0;
         }
     }
-
-    [GameEvent.Tick]
-    private void OnTick()
+    public void Simulate()
     {
         if (Game.IsClient) return;
 
