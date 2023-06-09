@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Cinema;
+namespace Cinema.Interactables;
 
 public partial class HotdogRoller
 {
@@ -25,7 +25,7 @@ public partial class HotdogRoller
     {
         if (Game.IsClient) return false;
 
-        Interactions.TryInteractions(user);
+        // TODO : HANDLE
 
         Input.Clear("use"); // Why?
 

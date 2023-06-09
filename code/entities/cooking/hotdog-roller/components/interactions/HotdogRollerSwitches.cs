@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Cinema.Interactables;
 
 namespace Cinema;
 
