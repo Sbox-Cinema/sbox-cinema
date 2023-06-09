@@ -66,6 +66,13 @@ public class PlayingYouTubeMedia : PlayingMedia
 
 public partial class Media : BaseNetworkable
 {
+    /// <summary>
+    /// This is a workaround to Github issue #41 (https://github.com/tech-nawar/sbox-cinema/issues/41), or it
+    /// can be used to prevent clients from accessing cinema-api directly for whatever reason.
+    /// </summary>
+    [ConVar.Replicated("youtube.enableidvalidation")] 
+    public static bool ValidateYoutubeIds { get; set; } = true;
+
     [Net]
     public int Nonce { get; set; }
 
@@ -220,6 +227,9 @@ public partial class Media : BaseNetworkable
 
     public static async Task<bool> VerifyYouTubeId(string youTubeId)
     {
+        if (!ValidateYoutubeIds)
+            return true;
+
         ParseApiResponse response;
 
         try
