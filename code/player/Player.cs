@@ -127,21 +127,7 @@ partial class Player : AnimatedEntity, IEyes
 
         TickPlayerUse();
 
-        if(Input.Pressed("attack2"))
-        {
-            if(Game.IsServer)
-            {
-                TraceResult tr = Trace.Ray(AimRay, 1024.0f)
-                            .EntitiesOnly()
-                            .WithTag("interactable")
-                            .Run();
-
-                if(tr.Entity is HotdogRoller hotdogRoller)
-                {
-                    hotdogRoller.Interactions.TryHotdogRemoval(this);
-                }
-            }   
-        }
+        TickPlayerInteract();
 
         ActiveController?.Simulate(cl);
 
@@ -179,6 +165,35 @@ partial class Player : AnimatedEntity, IEyes
             {
                 UI.MovieQueue.Instance.Visible = false;
                 UI.MovieQueue.Instance.Controller = null;
+            }
+        }
+    }
+
+    private void TickPlayerInteract()
+    {
+        if (Input.Pressed("attack2"))
+        {
+            if (Game.IsServer)
+            {
+                TraceResult tr = Trace.Ray(AimRay, 1024.0f)
+                            .EntitiesOnly()
+                            .WithTag("interactable")
+                            .Run();
+
+                if (tr.Entity is HotdogRoller hotdogRoller)
+                {
+                    hotdogRoller.Interactions.TryHotdogRemoval(this);
+
+                    var weapon = Entity.CreateByName<Carriable>("Hotdog");
+
+                    if (!weapon.IsValid())
+                    {
+                        Log.Error($"Failed to create weapon of class {"Hotdog"}");
+                        return;
+                    }
+
+                    this.Inventory.AddWeapon(weapon, true);
+                }
             }
         }
     }
