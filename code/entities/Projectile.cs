@@ -22,6 +22,10 @@ public class Projectile : Prop
 
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
+        // Don't break on the chair you're sitting in.
+        if (eventData.Other.Entity is CinemaChair chair && chair.Occupant == Owner)
+            return;
+
         base.OnPhysicsCollision(eventData);
 
         if (eventData.Other.Entity is not WorldEntity || eventData.Other.Entity == this) return;
