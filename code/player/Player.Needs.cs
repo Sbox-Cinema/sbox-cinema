@@ -22,5 +22,7 @@ public partial class Player
         NumberTwo = Components.Create<Defecation>();
         NumberOne = Components.Create<Urination>();
         Hygiene = Components.Create<Hygiene>();
+
+        Components.Create<Stomach>();
     }
 }

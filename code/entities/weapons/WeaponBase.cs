@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace Cinema;
 
@@ -166,6 +167,26 @@ public partial class WeaponBase : Carriable
         ViewModelEntity.Owner = Owner;
         ViewModelEntity.EnableViewmodelRendering = true;
         ViewModelEntity.SetModel(ViewModelPath);
+    }
+
+    public void RemoveFromHolder()
+    {
+        if (!WeaponHolder.IsValid())
+            return;
+
+        WeaponHolder.Inventory.RemoveWeapon(this, false);
+        // Get the next weapon of the same type
+        var nextWeapon = WeaponHolder
+            .Inventory
+            .Weapons
+            .FirstOrDefault(w => (w as WeaponBase).Name == this.Name);
+        // If there is no next weapon of the same type, just get whatever's left.
+        if (nextWeapon == null)
+        {
+            nextWeapon = WeaponHolder.Inventory.GetBestWeapon();
+        }
+        // Set the active weapon to whatever weapon we found.
+        WeaponHolder.ActiveChild = nextWeapon;
     }
 }
 

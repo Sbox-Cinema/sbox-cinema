@@ -2,7 +2,7 @@
 
 namespace Cinema;
 
-public partial class Nachos : WeaponBase
+public partial class Nachos : FoodBase
 {
     public override string Name => "Box of Nachos";
     public override string Description => "Its nacho business";
@@ -11,39 +11,6 @@ public partial class Nachos : WeaponBase
     public override string ViewModelPath => "models/nachos_tray/v_nachos_tray.vmdl";
     public override float PrimaryFireRate => 0.65f;
     public override int BaseUses => 26;
-
-    public override void Spawn()
-    {
-        base.Spawn();
-    }
-
-    public override void PrimaryFire()
-    {
-        base.PrimaryFire();
-
-        PlaySound("placeholder_eating");
-    }
-
-    public override void SecondaryFire()
-    {
-        if (Game.IsClient) return;
-
-        using (Prediction.Off())
-        {
-            var projectile = new Projectile()
-            {
-                Owner = WeaponHolder,
-                Model = Model.Load("models/nachos_tray/w_nachos_tray.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
-            };
-
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
-        }
-    }
-
-    public override void Reload()
-    {
-    }
+    public override float NutritionGain => 10;
+    public override float HydrationGain => -2;
 }

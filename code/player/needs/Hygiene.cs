@@ -10,4 +10,5 @@ public class Hygiene : BaseNeed
 {
     public override string DisplayName => "Hygiene";
     public override string IconPath => "shower";
+    public override float SatisfactionPercent => 100f;
 }
