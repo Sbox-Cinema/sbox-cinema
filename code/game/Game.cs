@@ -25,6 +25,10 @@ public partial class CinemaGame : GameManager
     {
         base.ClientJoined(client);
 
+        // TODO: Persist this data on the client.
+        var accessibilitySettings = new ClientAccessibilitySettings();
+        client.Components.Add(accessibilitySettings);
+
         // Create a pawn for this client to play with
         var pawn = new Player();
         client.Pawn = pawn;

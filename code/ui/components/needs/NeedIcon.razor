@@ -1,0 +1,44 @@
+﻿@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@using Cinema;
+
+@attribute [StyleSheet]
+@inherits Panel
+
+<root class=@GetClass()>
+    <p style="text-shadow: 0px 0px @GetShadowBlur()px 5px @GetShadowColor()" class="need-text" @ref=@NeedTextPanel>@NeedInfo.IconPath</p>
+</root>
+
+@code {
+    public INeedInfo NeedInfo { get; set; }
+    public Panel NeedTextPanel { get; set; }
+    public ClientAccessibilitySettings Accessibility { get; set; }
+
+    public NeedIcon()
+    {
+        Accessibility = Game.LocalClient.Components.Get<ClientAccessibilitySettings>();
+    }
+
+    private string GetClass() => NeedInfo.SatisfactionPercent < 100f ? "active" : "";
+
+    private string GetShadowBlur()
+    {
+        var amount = NeedInfo.SatisfactionPercent / 100f;
+        var blur = MathX.Lerp(20, 0, amount);
+        return blur.ToString();
+    }
+
+    private string GetShadowColor(){
+        var amount = NeedInfo.SatisfactionPercent / 100f;
+        var badColor = Color.Parse(Accessibility.ColorStatusBad).Value;
+        var goodColor = Color.Parse(Accessibility.ColorStatusGood).Value;
+        var color = Color.Lerp(badColor, goodColor, amount);
+        return color.Hex;
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(NeedInfo.SatisfactionPercent);
+    }
+}

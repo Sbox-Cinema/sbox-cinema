@@ -75,6 +75,7 @@ partial class Player : AnimatedEntity, IEyes
         EnableDrawing = true;
         Children.OfType<ModelEntity>().ToList().ForEach(x => x.EnableDrawing = true);
 
+        SetupNeeds();
         SetupBodyController();
         BodyController.Active = true;
 

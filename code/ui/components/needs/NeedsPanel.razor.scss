@@ -1,0 +1,14 @@
+﻿NeedsPanel {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    padding: 10px;
+    background-color: black;
+    border-radius: 10px;
+    justify-content: center;
+
+    &.horizontal {
+        flex-direction: row;
+        align-items: center;
+    }
+}

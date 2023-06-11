@@ -1,0 +1,18 @@
+﻿NeedIcon {
+    transition: opacity 2s ease-out;
+    opacity: 1;
+
+    .need-text {
+        font-size: 64px;
+        color: color(1, 1, 1, 0.8);
+        font-family: Material Icons;
+    }
+
+    &.active {
+        opacity: 1;
+    }
+
+    &:not(active) {
+        opacity: 0.05;
+    }
+}
