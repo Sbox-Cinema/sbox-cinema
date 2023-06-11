@@ -150,23 +150,7 @@ partial class Player : AnimatedEntity, IEyes
     {
         ActiveController?.FrameSimulate(cl);
 
-        if (Input.Pressed("reload"))
-        {
-            if (!UI.MovieQueue.Instance.Visible)
-            {
-                var closestProjector = Entity.All.OfType<ProjectorEntity>().OrderBy(x => x.Position.Distance(Game.LocalPawn.Position)).FirstOrDefault();
-                if (closestProjector != null)
-                {
-                    UI.MovieQueue.Instance.Controller = closestProjector.Controller;
-                    UI.MovieQueue.Instance.Visible = true;
-                }
-            }
-            else
-            {
-                UI.MovieQueue.Instance.Visible = false;
-                UI.MovieQueue.Instance.Controller = null;
-            }
-        }
+        SimulateUI();
     }
 
     private void TickPlayerInteract()

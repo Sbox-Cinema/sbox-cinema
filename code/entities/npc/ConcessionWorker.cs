@@ -1,8 +1,12 @@
+using Editor;
 using Sandbox;
 using System.Collections.Generic;
 
 namespace Cinema;
 
+[Library("cinema_concessionworker"), HammerEntity]
+[EditorModel("models/citizen/citizen.vmdl", staticColor: "red")]
+[Title("Concession Worker"), Category("Cinema"), Icon("fastfood")]
 public partial class ConcessionWorker : NpcBase
 {
     public override string Name => "Concession Employee";
@@ -18,6 +22,7 @@ public partial class ConcessionWorker : NpcBase
 
         Store = new Store()
         {
+            Name = $"Concession Worker # {NetworkIdent}",
             ItemsForSale = new List<StoreItem> {
                 StoreItem.Weapon("Hotdog", "99% Beef", "ui/icons/hotdog.png", 10, "Hotdog"),
                 StoreItem.Weapon("Nachos", "Not your cheese!", "ui/icons/nachos.png", 20, "Nachos"),
@@ -38,12 +43,20 @@ public partial class ConcessionWorker : NpcBase
 
     public override void OnClientUse(Player player)
     {
-        UI.StoreInterface.Instance.OpenForStore(Store);
+        var storeMenu = UI.StoreInterface.Instance;
+        storeMenu.Store = Store;
+        player.OpenMenu(storeMenu);
     }
 
     public override void OnClientStopUse(Player player)
     {
-        UI.StoreInterface.Instance.Close();
+        var storeMenu = UI.StoreInterface.Instance;
+        player.CloseMenu(storeMenu);
     }
 
+    public static void DrawGizmos(EditorContext context)
+    {
+        Gizmo.Draw.Color = Color.White;
+        Gizmo.Draw.Text("fastfood", new Transform().WithPosition(Vector3.Up * 80), "Material Icons", 24f);
+    }
 }
