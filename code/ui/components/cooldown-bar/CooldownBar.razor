@@ -1,0 +1,52 @@
+﻿@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@using Cinema;
+
+@attribute [StyleSheet]
+@inherits Panel;
+
+<root class="@GetClass()">
+    <div style="width: @GetFillWidth()%" class="fill"/>
+</root>
+
+@code {
+    public float CooldownProgress { get; protected set; }
+    public bool IsInCooldown { get; protected set; } = false;
+    public TimeSince CooldownStart { get; protected set; }
+    public float CooldownLength { get; protected set; }
+
+    private string GetClass() => IsInCooldown && CooldownProgress < 1 ? "active" : "";
+    private float GetFillWidth() => 100 - CooldownProgress * 100;
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (Game.LocalPawn is not Cinema.Player player) 
+            return;
+
+        if (player.ActiveChild is not WeaponBase weapon)
+            return;
+
+        var inCooldown = weapon.LastPrimaryFire < weapon.PrimaryFireRate;
+        var cooldownStarted = inCooldown && !IsInCooldown;
+        IsInCooldown = inCooldown;
+        if (cooldownStarted)
+        {
+            CooldownProgress = 0;
+            CooldownStart = 0;
+            CooldownLength = weapon.PrimaryFireRate;
+            return;
+        }
+        else if (IsInCooldown)
+        {
+            CooldownProgress = CooldownStart / CooldownLength;
+        }
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(CooldownProgress);
+    }
+}

@@ -4,6 +4,7 @@ namespace Cinema;
 
 public class FoodBase : WeaponBase
 {
+    public virtual string EatSound => "placeholder_eating";
     public virtual float NutritionGain { get; }
     public virtual float HydrationGain { get; }
     public float NutritionPerUse => NutritionGain / BaseUses;
@@ -37,14 +38,17 @@ public class FoodBase : WeaponBase
     {
         base.PrimaryFire();
 
-        
-        PlaySound("placeholder_eating");
         WeaponHolder.Components.Get<Stomach>().Ingest(this);
 
         if (UsesRemaining <= 0)
         {
+            PlaySound("placeholder_eating");
             // TODO: Turn this food in to garbage.
             RemoveFromHolder();
+        }
+        else
+        {
+            PlaySound(EatSound);
         }
     }
 

@@ -27,7 +27,7 @@ public partial class Nutrition : BaseNeed, ISingletonComponent
     [Net]
     public float NutritionLevel { get; set; } = 10;
     [Net]
-    public float NutritionDecayPerSecond { get; set; } = 0.4f / 60f;
+    public float NutritionDecayPerSecond { get; set; } = 1.0f / 60f;
     [Net]
     public float NutritionFillThreshold { get; set; } = 0.8f;
 

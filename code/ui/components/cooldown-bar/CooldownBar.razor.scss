@@ -1,0 +1,18 @@
+﻿CooldownBar {
+    background-color: color(0, 0, 0, 0.95);
+    border-radius: 10%;
+    padding: 5%;
+    transition: opacity 0.25s ease-out;
+    opacity: 0;
+
+    &.active {
+        opacity: 1;
+    }
+
+    >.fill {
+        background-color: color(0.8, 0.8, 0.8, 0.95);
+        border-radius: 10%;
+        width: 100%;
+        height: 100%;
+    }
+}

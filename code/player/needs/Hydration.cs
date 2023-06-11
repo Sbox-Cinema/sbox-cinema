@@ -28,7 +28,7 @@ public partial class Hydration : BaseNeed, ISingletonComponent
     [Net]
     public float HydrationLevel { get; set; } = 10;
     [Net]
-    public float HydrationDecayPerSecond { get; set; } = 0.8f / 60f;
+    public float HydrationDecayPerSecond { get; set; } = 1.6f / 60f;
     [Net]
     public float HydrationFillThreshold { get; set; } = 0.8f;
 

@@ -1,0 +1,12 @@
+{
+  "UI": false,
+  "Volume": "1.00,1.00,0",
+  "Pitch": "0.98,1.19,1",
+  "Decibels": 60,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "sounds/placeholder_eating.vsnd"
+  ],
+  "MaximumDistance": 848.93066,
+  "MinimumDistance": 42.446533
+}

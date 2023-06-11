@@ -1,13 +1,14 @@
 {
   "Title": "Cinema",
   "Type": "game",
-  "Org": "local",
+  "Org": "cinemateam",
   "Ident": "cinema",
   "Tags": null,
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": [],
+  "Resources": "",
+  "MenuResources": null,
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [
