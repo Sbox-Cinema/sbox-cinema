@@ -40,6 +40,11 @@ public partial class Player
         {
             clothing[i].Delete();
         }
+        var bodyPartCount = Model.BodyPartCount;
+        for (int i = 0; i < bodyPartCount; i++)
+        {
+            SetBodyGroup(i, 1);
+        }
     }
 
 }
