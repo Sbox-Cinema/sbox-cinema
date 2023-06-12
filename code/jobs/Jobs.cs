@@ -43,7 +43,7 @@ public partial class JobDetails : BaseNetworkable
 
     /// <summary>
     /// The set of clothing that will automatically be applied to any player
-    /// who selects this job.
+    /// who selects this job. If null, the player's avatar clothing will be use.
     /// </summary>
     [Net]
     public string Uniform { get; set; }
@@ -113,6 +113,8 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
     {
         base.OnActivate();
 
+        // It is assumed that whenever this component is activated on a player, their job
+        // is being changed to the job described by this component.
         Event.Run(CinemaEvent.JobChanged, Entity);
     }
 }

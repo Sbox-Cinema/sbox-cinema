@@ -23,6 +23,10 @@ public class JobUniform : GameResource
     /// </summary>
     public bool HatShouldReplaceHair { get; set; } = true;
 
+    /// <summary>
+    /// Returns the uniform with the given name, or null if no such uniform exists.
+    /// </summary>
+    /// <param name="name">A filename without an extension.</param>
     public static JobUniform Get(string name)
     {
         var uniformName = name.Split('.').First();
@@ -32,6 +36,12 @@ public class JobUniform : GameResource
             .FirstOrDefault();
     }
 
+    /// <summary>
+    /// Returns a <c>ClothingContainer</c> that represents the outfit that will be worn by a 
+    /// player or NPC who wears this uniform. If <paramref name="existing"/> is set, the clothing
+    /// from that <c>ClothingContainer</c> will be added to the returned <c>ClothingContainer</c>.
+    /// </summary>
+    /// <param name="existing">An existing set of clothing that shall be merged with the outfit.</param>
     public ClothingContainer GetOutfit(ClothingContainer existing = null)
     {
         var finalClothing = new ClothingContainer();

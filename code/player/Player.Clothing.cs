@@ -33,6 +33,9 @@ public partial class Player
         AvatarClothing.DressEntity(this);
     }
 
+    /// <summary>
+    /// Deletes all clothing currently worn by a player and makes all body groups visible.
+    /// </summary>
     public void Undress()
     {
         var clothing = Children.Where(e => e.Tags.Has("clothes")).ToList();

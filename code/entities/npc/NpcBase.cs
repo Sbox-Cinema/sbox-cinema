@@ -13,6 +13,10 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     /// Description of the NPC, displayed over head
     /// </summary>
     public virtual string Description => "";
+    /// <summary>
+    /// The name of an outfit resource that will be worn by this NPC when it spawns.
+    /// If null, the NPC will be naked.
+    /// </summary>
     public virtual string Uniform => "usher";
     /// <summary>
     /// Whether using the NPC is toggleable
