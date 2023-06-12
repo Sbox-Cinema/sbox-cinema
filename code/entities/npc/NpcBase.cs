@@ -13,6 +13,7 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     /// Description of the NPC, displayed over head
     /// </summary>
     public virtual string Description => "";
+    public virtual string Uniform => "usher";
     /// <summary>
     /// Whether using the NPC is toggleable
     /// </summary>
@@ -26,6 +27,12 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
 
         SetModel("models/citizen/citizen.vmdl");
         SetupPhysicsFromAABB(PhysicsMotionType.Keyframed, new Vector3(-16, -16, 0), new Vector3(16, 16, 72));
+        var uniform = JobUniform.Get(Uniform);
+        if (uniform != null)
+        {
+            var uniformClothing = uniform.GetOutfit(null);
+            uniformClothing.DressEntity(this);
+        }
     }
 
     public override void ClientSpawn()

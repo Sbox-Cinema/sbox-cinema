@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Cinema.Jobs;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Cinema.UI;
@@ -45,6 +46,34 @@ public partial class CitizenPanelScene : ScenePanel
     {
         CitizenModel?.Delete();
         CitizenModel = null;
+    }
+
+    [CinemaEvent.JobChanged]
+    public void SetJobClothing(Player player)
+    {
+        if (player != Game.LocalPawn)
+            return;
+
+        InitScene();
+
+        var uniformName = player.Job.JobDetails.Uniform;
+
+        if (string.IsNullOrWhiteSpace(uniformName))
+        {
+            SetupClothing();
+        }
+        else
+        {
+            var uniformData = JobUniform.Get(uniformName);
+
+            if (uniformData != null)
+            {
+                CitizenClothing = uniformData.GetOutfit(CitizenClothing);
+            }
+        }
+
+        UpdateClothing();
+        RenderNextFrame();
     }
 
     private void SetupClothing()

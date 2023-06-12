@@ -1,3 +1,4 @@
+using Cinema.Jobs;
 using Sandbox;
 
 namespace Cinema;
@@ -15,6 +16,24 @@ public partial class Player
 
         Components.RemoveAny<Jobs.PlayerJob>();
         Components.Add(Jobs.PlayerJob.CreateFromDetails(newJob));
+
+        if (Job.JobDetails.Uniform == null)
+        {
+            LoadAvatarClothing();
+            return;
+        }
+
+        var jobUniform = JobUniform.Get(Job.JobDetails.Uniform);
+        if (jobUniform == null)
+        {
+            Log.Error($"Could not find uniform with name: {Job.JobDetails.Uniform}");
+            return;
+        }
+
+        // Delete existing clothing so we don't overlap.
+        Undress();
+        var uniformOutfit = jobUniform.GetOutfit(AvatarClothing);
+        uniformOutfit.DressEntity(this);
     }
 
     /// <summary>
