@@ -44,6 +44,7 @@ public partial class CitizenPanelScene : ScenePanel
 
     private void Cleanup()
     {
+        CitizenClothing.ClearEntities();
         CitizenModel?.Delete();
         CitizenModel = null;
     }
@@ -54,7 +55,7 @@ public partial class CitizenPanelScene : ScenePanel
         if (player != Game.LocalPawn)
             return;
 
-        InitScene();
+        Update();
 
         var uniformName = player.Job.JobDetails.Uniform;
 
