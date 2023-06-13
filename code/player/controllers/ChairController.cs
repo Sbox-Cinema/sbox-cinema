@@ -97,8 +97,8 @@ public partial class ChairController : PlayerController
         LookInput = (LookInput + Input.AnalogLook).Normal;
         LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
 
-        var eyeAttachment = Entity.GetAttachment("eyes");
-        LookPosition = eyeAttachment.Value.Position;
+        var eyeOffset = new Vector3(-6, 0, 40);
+        LookPosition = Entity.Transform.PointToWorld(eyeOffset);
 
         if (ChairDebug && Chair.IsValid())
         {
