@@ -2,14 +2,14 @@
 .gamemainmenu
 {
 	background-color: #343948;
-	padding: 0 170px;
+	//padding: 0 170px;
 	opacity: 1;
 	flex-direction: column;
 	font-size: 25px;
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	transition: all 0.3s ease-out;
+	transition: all 0.3s ease-in;
 	color: white;
 
 	&:intro
@@ -24,30 +24,26 @@
 	}
 }
 
-.button, .block
-{
+.button, .block {
 	padding: 4px 16px;
-
 	opacity: 0.8;
-
-	font-size: 28px;
-	font-family: Poppins;
+	border-radius: 3px;
+	font-size: 40px;
+	font-family: engebrechtre-rg;
 	font-weight: 700;
 	flex-shrink: 0;
 }
 
-.button
-{
+.button {
 	background-color: #000a;
+ 
 	cursor: pointer;
 
-	&:hover
-	{
+	&:hover {
 		opacity: 1;
 	}
 
-	&:active
-	{
+	&:active {
 		left: 2px;
 		top: 3px;
 	}

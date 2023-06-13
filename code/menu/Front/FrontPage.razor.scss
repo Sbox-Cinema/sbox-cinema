@@ -1,18 +1,35 @@
+.root {
+	width: 100%;
+}
 
-.gamemainmenu frontpage
-{
-	margin: 100px 100px;
-	gap: 100px;
+.background {
+	transition: opacity 2s linear;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: url("ui/curtain-red.png");
+	backdrop-filter: blur(5px);
+	display: flex;
+	background-size: cover;
+	opacity: 1;
 
-	.game-title
-	{
-		font-family: Poppins;
+	&.ingame {
+		background-image: none;
+	}
+}
+
+.frontpage {
+
+	.game-title {
+		font-family: manbow-lines;
+		margin: 70px 160px;
+		gap: 10px;
 		font-weight: 700;
-		font-size: 70px;
+		font-size: 100px;
 	}
 
-	.controls
-	{
+	.controls {
+		margin: 140px 150px;
 		flex-direction: column;
 		gap: 8px;
 		align-items: flex-start;
