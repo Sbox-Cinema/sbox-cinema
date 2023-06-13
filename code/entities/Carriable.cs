@@ -1,5 +1,7 @@
 using Sandbox;
 
+using Conna.Inventory;
+
 namespace Cinema;
 
 [Title("Carriable"), Icon("luggage")]
@@ -7,6 +9,12 @@ public partial class Carriable : AnimatedEntity, IUse
 {
     public virtual string ViewModelPath => null;
     public BaseViewModel ViewModelEntity { get; protected set; }
+
+    public IHandheldItem Item =>
+        InternalItem.IsValid() ? InternalItem.Value as IHandheldItem : null;
+
+    [Net]
+    private NetInventoryItem InternalItem { get; set; }
 
     public override void Spawn()
     {
@@ -155,7 +163,7 @@ public partial class Carriable : AnimatedEntity, IUse
 
         if (user is Player player)
         {
-            player.Inventory.AddWeapon(this, true);
+            //player.Inventory.AddWeapon(this, true);
         }
 
         return false;
@@ -171,4 +179,11 @@ public partial class Carriable : AnimatedEntity, IUse
     public virtual void DestroyHudElements() { }
 
     public virtual void AdjustInput() { }
+
+    public void SetWeaponItem(InventoryItem item)
+    {
+        if (item is not IHandheldItem) return;
+
+        InternalItem = new NetInventoryItem(item);
+    }
 }

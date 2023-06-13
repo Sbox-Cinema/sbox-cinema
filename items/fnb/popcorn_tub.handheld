@@ -1,0 +1,9 @@
+{
+  "ClassName": "Popcorn",
+  "ItemName": "Popcorn Tub",
+  "UniqueId": "popcorn_tub",
+  "Description": "Tasty popcorn delights",
+  "Icon": "ui/icons/popcorn.png",
+  "WorldModel": "models/popcorn_tub/w_popcorn_tub_01.vmdl",
+  "Tags": []
+}

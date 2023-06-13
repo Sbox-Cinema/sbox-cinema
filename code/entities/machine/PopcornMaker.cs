@@ -66,7 +66,7 @@ public partial class PopcornMaker : Machine
 
     private void FinishMakingPopcorn()
     {
-        BeingUsedBy.Inventory.AddWeapon(new Popcorn(), true);
+        //BeingUsedBy.Inventory.AddWeapon(new Popcorn(), true);
         BeingUsedBy = null;
     }
 }

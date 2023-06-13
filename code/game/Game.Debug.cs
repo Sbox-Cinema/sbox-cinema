@@ -127,7 +127,7 @@ public partial class CinemaGame
 
         if (inInv)
         {
-            player.Inventory.AddWeapon(wep, true);
+            //player.Inventory.AddWeapon(wep, true);
         }
         else
         {
@@ -260,7 +260,7 @@ public partial class CinemaGame
         {
             return;
         }
-        Game.RootPanel.Style.Display = enable 
+        Game.RootPanel.Style.Display = enable
             ? Sandbox.UI.DisplayMode.Flex
             : Sandbox.UI.DisplayMode.None;
     }

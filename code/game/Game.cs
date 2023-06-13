@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Conna.Inventory;
+using Sandbox;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -18,6 +19,18 @@ public partial class CinemaGame : GameManager
     {
     }
 
+    public override void Spawn()
+    {
+        InventorySystem.Initialize();
+        base.Spawn();
+    }
+
+    public override void ClientSpawn()
+    {
+        InventorySystem.Initialize();
+        Game.RootPanel = new UI.Hud();
+    }
+
     /// <summary>
     /// A client has joined the server. Make them a pawn to play with
     /// </summary>
@@ -31,10 +44,4 @@ public partial class CinemaGame : GameManager
         pawn.Money = 500; // @TEMP: Give players money when they join
         pawn.Respawn();
     }
-
-    public override void ClientSpawn()
-    {
-        Game.RootPanel = new UI.Hud();
-    }
-
 }

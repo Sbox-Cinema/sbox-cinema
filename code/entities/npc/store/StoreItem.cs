@@ -33,7 +33,7 @@ public class StoreItem
                 return;
             }
 
-            player.Inventory.AddWeapon(weapon, true);
+            //player.Inventory.AddWeapon(weapon, true);
         };
 
         return this;
