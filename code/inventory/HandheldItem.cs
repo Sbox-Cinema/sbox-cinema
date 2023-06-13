@@ -1,4 +1,6 @@
+using System.IO;
 using Conna.Inventory;
+using Sandbox;
 
 namespace Cinema;
 
@@ -22,7 +24,7 @@ public class HandheldItem : ResourceItem<HandheldResource, HandheldItem>, IHandh
 
     public WeaponBase CreateWeaponEntity()
     {
-        if (Weapon.IsValid)
+        if (Weapon.IsValid())
             return Weapon;
 
         Weapon = TypeLibrary.Create<WeaponBase>(WeaponClassName);
@@ -41,4 +43,20 @@ public class HandheldItem : ResourceItem<HandheldResource, HandheldItem>, IHandh
         Weapon = null;
         IsDirty = true;
     }
+
+    public override void Write( BinaryWriter writer )
+	{
+		if ( Weapon.IsValid() )
+			writer.Write( Weapon.NetworkIdent );
+		else
+			writer.Write( 0 );
+
+		base.Write( writer );
+	}
+
+    public override void Read( BinaryReader reader )
+	{
+		Weapon = Entity.FindByIndex( reader.ReadInt32() ) as WeaponBase;
+		base.Read( reader );
+	}
 }

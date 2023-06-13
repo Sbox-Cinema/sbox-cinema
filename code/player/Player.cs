@@ -33,6 +33,11 @@ partial class Player : AnimatedEntity, IEyes
         }
     }
 
+    public void MakePawnOf(IClient client) {
+        client.Pawn = this;
+        Inventory.AddConnection(client);
+    }
+
     /// <summary>
     /// Called when the entity is first created
     /// </summary>
@@ -48,7 +53,6 @@ partial class Player : AnimatedEntity, IEyes
         EnableHitboxes = true;
         TimeSinceJoinedServer = 0;
 
-        Components.Create<PlayerInventory>();
         SetJob(Jobs.JobDetails.DefaultJob);
 
         Tags.Add("player");

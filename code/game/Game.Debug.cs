@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Conna.Inventory;
 using Sandbox;
 
 namespace Cinema;
@@ -115,29 +116,17 @@ public partial class CinemaGame
         ent.Rotation = Rotation.From(new Angles(0, owner.AimRay.Forward.EulerAngles.yaw, 0));
     }
 
-    [ConCmd.Server("weapon.create")]
-    public static void SpawnWeaponCMD(string wepName, bool inInv = false)
+    [ConCmd.Server("item.give")]
+    public static void SpawnWeaponCMD(string itemId)
     {
         if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
 
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
 
-        var wep = CreateByName<WeaponBase>(wepName);
-        if (wep == null) return;
+        var item = InventorySystem.CreateItem(itemId);
+        if (item == null) return;
 
-        if (inInv)
-        {
-            //player.Inventory.AddWeapon(wep, true);
-        }
-        else
-        {
-            var tr = Trace.Ray(player.EyePosition, player.EyePosition + player.EyeRotation.Forward * 999)
-                .Ignore(player)
-                .WorldOnly()
-                .Run();
-
-            wep.Position = tr.EndPosition;
-        }
+        player.Inventory.Give(item);
     }
 
     [ConCmd.Server("player.bring")]
@@ -284,5 +273,30 @@ public partial class CinemaGame
                 status = $"In Menu ({localPawn.ActiveMenuName})";
             Log.Info($"{client} - {status}");
         }
+    }
+
+    public static void ListItems(Player player)
+    {
+        foreach (var item in player.Inventory.ItemList.WithIndex().Where(x => x.item.IsValid()))
+        {
+            Log.Info($"{item.index}: {item.item.UniqueId}");
+        }
+    }
+
+
+    [ConCmd.Client("item.list.cl")]
+    public static void ListItemsClient()
+    {
+        if (ConsoleSystem.Caller.Pawn is not Player player) return;
+
+        ListItems(player);
+    }
+
+    [ConCmd.Server("item.list.sv")]
+    public static void ListItemsServer()
+    {
+        if (ConsoleSystem.Caller.Pawn is not Player player) return;
+
+        ListItems(player);
     }
 }

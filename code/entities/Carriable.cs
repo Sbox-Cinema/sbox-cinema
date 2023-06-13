@@ -161,11 +161,6 @@ public partial class Carriable : AnimatedEntity, IUse
     {
         if (!IsUsable(user)) return false;
 
-        if (user is Player player)
-        {
-            //player.Inventory.AddWeapon(this, true);
-        }
-
         return false;
     }
 
@@ -180,10 +175,8 @@ public partial class Carriable : AnimatedEntity, IUse
 
     public virtual void AdjustInput() { }
 
-    public void SetWeaponItem(InventoryItem item)
+    public void SetWeaponItem(IHandheldItem item)
     {
-        if (item is not IHandheldItem) return;
-
         InternalItem = new NetInventoryItem(item);
     }
 }

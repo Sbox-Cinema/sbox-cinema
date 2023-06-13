@@ -1,7 +1,7 @@
 using System;
 using Sandbox;
 using Cinema.Jobs;
-
+using Conna.Inventory;
 
 namespace Cinema;
 
@@ -25,10 +25,13 @@ public partial class PopcornMaker : Machine
 
     public override float TimedUsePercentage => IsMakingPopcorn ? Math.Min(TimeUntilPopcornFinished.Passed / PopcornCreationTime, 1) : 0;
 
+    public static string PopcornItemId => "popcorn_tub";
+
     public override bool IsUsable(Entity user)
     {
         if (user is not Player player) return false;
         if (IsMakingPopcorn) return BeingUsedBy == player;
+        if (!player.HasInventorySpace) return false;
         return player.Job.HasAbility(JobAbilities.MakePopcorn);
     }
 
@@ -66,7 +69,12 @@ public partial class PopcornMaker : Machine
 
     private void FinishMakingPopcorn()
     {
-        //BeingUsedBy.Inventory.AddWeapon(new Popcorn(), true);
+        var player = BeingUsedBy;
         BeingUsedBy = null;
+        if (!player.HasInventorySpace) return;
+
+        var item = InventorySystem.CreateItem(PopcornItemId);
+        player.PickupItem(item);
+
     }
 }
