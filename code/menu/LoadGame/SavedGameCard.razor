@@ -1,0 +1,46 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using System;
+@using Sandbox.UI.GameMenu;
+@using System.Threading.Tasks;
+
+@inherits Panel
+
+@if ( SavedGame == null || MapPackage == null ) return;
+
+<root class="card card-vertical card-savedgame">
+
+    <div class="card-image" style="background-image: url( @MapPackage.Thumb )">
+        <div class="hover-overlay">
+            <i>@HoverIcon</i>
+        </div>
+    </div>
+    
+    <div class="card-body"> 
+        <div class="nowrap faded">@GetDateTimeString()</div>
+        <div class="nowrap">@SavedGame.Name</div>
+    </div>
+
+</root>
+
+@code
+{
+    public SavedGame SavedGame { get; set; }
+    public Package MapPackage { get; set; }
+    public string HoverIcon { get; set; } = "play_arrow";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        MapPackage = await Package.FetchAsync( SavedGame.Map, true );
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine( SavedGame, MapPackage );
+    }
+
+    private string GetDateTimeString()
+    {
+        return $"{SavedGame.Time.ToShortDateString()} {SavedGame.Time.ToShortTimeString()}";
+    }
+ }
