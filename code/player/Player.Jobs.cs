@@ -23,14 +23,14 @@ public partial class Player
             return;
         }
 
-        Undress();
-
         var jobUniform = JobUniform.Get(Job.JobDetails.Uniform);
         if (jobUniform == null)
         {
             Log.Error($"Could not find uniform with name: {Job.JobDetails.Uniform}");
             return;
         }
+
+        Undress();
 
         var uniformOutfit = jobUniform.GetOutfit(AvatarClothing);
         uniformOutfit.DressEntity(this);
