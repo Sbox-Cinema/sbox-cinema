@@ -7,11 +7,11 @@ namespace Conna.Inventory;
 public static partial class BinaryReaderExtension
 {
 	/// <summary>
-	/// Read an <see cref="InventoryItem"/> from a reader.
+	/// Read an <see cref="IInventoryItem"/> from a reader.
 	/// </summary>
 	/// <param name="buffer"></param>
 	/// <returns></returns>
-	public static InventoryItem ReadInventoryItem( this BinaryReader buffer )
+	public static IInventoryItem ReadInventoryItem( this BinaryReader buffer )
 	{
 		var uniqueId = buffer.ReadString();
 

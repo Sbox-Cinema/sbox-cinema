@@ -7,11 +7,11 @@ namespace Conna.Inventory;
 public static partial class BinaryWriterExtension
 {
 	/// <summary>
-	/// Write an <see cref="InventoryItem"/> into a writer.
+	/// Write an <see cref="IInventoryItem"/> into a writer.
 	/// </summary>
 	/// <param name="self"></param>
 	/// <param name="item"></param>
-	public static void Write( this BinaryWriter self, InventoryItem item )
+	public static void Write( this BinaryWriter self, IInventoryItem item )
 	{
 		if ( item != null )
 		{

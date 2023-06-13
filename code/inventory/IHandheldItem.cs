@@ -1,6 +1,8 @@
+using Conna.Inventory;
+
 namespace Cinema;
 
-public interface IHandheldItem
+public interface IHandheldItem : IInventoryItem
 {
     public string WeaponClassName { get; }
     public WeaponBase Weapon { get; }

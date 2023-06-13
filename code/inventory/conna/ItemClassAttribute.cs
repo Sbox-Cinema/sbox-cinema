@@ -3,7 +3,7 @@
 namespace Conna.Inventory;
 
 /// <summary>
-/// Use this attribute on a class derived from <see cref="ItemResource"/> to tell it what <see cref="InventoryItem"/> class to use.
+/// Use this attribute on a class derived from <see cref="ItemResource"/> to tell it what <see cref="IInventoryItem"/> class to use.
 /// </summary>
 public class ItemClassAttribute : Attribute
 {

@@ -19,8 +19,8 @@ public static partial class InventorySystem
 	}
 
 	private static Dictionary<ulong, InventoryContainer> Containers { get; set; } = new();
-	private static Dictionary<ulong, InventoryItem> Items { get; set; } = new();
-	private static Dictionary<string, InventoryItem> Definitions { get; set; } = new();
+	private static Dictionary<ulong, IInventoryItem> Items { get; set; } = new();
+	private static Dictionary<string, IInventoryItem> Definitions { get; set; } = new();
 	private static List<InventoryContainer> DirtyList { get; set; } = new();
 	private static Queue<ulong> OrphanedItems { get; set; } = new();
 	private static TypeDescription ItemEntityType { get; set; }
@@ -28,7 +28,7 @@ public static partial class InventorySystem
 	private static ulong NextContainerId { get; set; }
 	private static ulong NextItemId { get; set; }
 
-	public static ItemEntity CreateItemEntity( InventoryItem item = null )
+	public static ItemEntity CreateItemEntity( IInventoryItem item = null )
 	{
 		var type = GetItemEntityType();
 		var entity = type.Create<ItemEntity>();
@@ -130,7 +130,7 @@ public static partial class InventorySystem
 		}
 	}
 
-	public static IEnumerable<InventoryItem> GetDefinitions()
+	public static IEnumerable<IInventoryItem> GetDefinitions()
 	{
 		foreach ( var kv in Definitions )
 		{
@@ -156,7 +156,7 @@ public static partial class InventorySystem
 		return containerId;
 	}
 
-	public static List<InventoryItem> Remove( InventoryContainer container, bool destroyItems = true )
+	public static List<IInventoryItem> Remove( InventoryContainer container, bool destroyItems = true )
 	{
 		var containerId = container.ContainerId;
 
@@ -190,18 +190,18 @@ public static partial class InventorySystem
 		return null;
 	}
 
-	public static InventoryItem FindInstance( ulong itemId )
+	public static IInventoryItem FindInstance( ulong itemId )
 	{
 		Items.TryGetValue( itemId, out var instance );
 		return instance;
 	}
 
-	public static T FindInstance<T>( ulong itemId ) where T : InventoryItem
+	public static T FindInstance<T>( ulong itemId ) where T : class, IInventoryItem 
 	{
-		return (FindInstance( itemId ) as T);
+		return FindInstance( itemId ) as T;
 	}
 
-	public static void RemoveItem( InventoryItem instance )
+	public static void RemoveItem( IInventoryItem instance )
 	{
 		var itemId = instance.ItemId;
 
@@ -212,7 +212,7 @@ public static partial class InventorySystem
 		}
 	}
 
-	public static InventoryItem DuplicateItem( InventoryItem item )
+	public static IInventoryItem DuplicateItem( IInventoryItem item )
 	{
 		var duplicate = CreateItem( item.UniqueId );
 		
@@ -237,7 +237,7 @@ public static partial class InventorySystem
 		return duplicate;
 	}
 
-	public static T CreateItem<T>( ulong itemId = 0 ) where T : InventoryItem
+	public static T CreateItem<T>( ulong itemId = 0 ) where T : class, IInventoryItem
 	{
 		if ( itemId > 0 && Items.TryGetValue( itemId, out var instance ) )
 		{
@@ -249,7 +249,7 @@ public static partial class InventorySystem
 			itemId = GenerateItemId();
 		}
 
-		instance = TypeLibrary.Create<InventoryItem>( typeof( T ) );
+		instance = TypeLibrary.Create<IInventoryItem>( typeof( T ) );
 		instance.SetItemId( itemId );
 		instance.IsValid = true;
 		instance.StackSize = instance.DefaultStackSize;
@@ -260,7 +260,7 @@ public static partial class InventorySystem
 		return instance as T;
 	}
 
-	public static InventoryItem GetDefinition( string uniqueId )
+	public static IInventoryItem GetDefinition( string uniqueId )
 	{
 		if ( string.IsNullOrEmpty( uniqueId ) )
 			return null;
@@ -273,7 +273,7 @@ public static partial class InventorySystem
 		return null;
 	}
 
-	public static InventoryItem CreateItem( Type type, ulong itemId = 0 )
+	public static IInventoryItem CreateItem( Type type, ulong itemId = 0 )
 	{
 		if ( itemId > 0 && Items.TryGetValue( itemId, out var instance ) )
 		{
@@ -285,7 +285,7 @@ public static partial class InventorySystem
 			itemId = GenerateItemId();
 		}
 
-		instance = TypeLibrary.Create<InventoryItem>( type );
+		instance = TypeLibrary.Create<IInventoryItem>( type );
 		instance.SetItemId( itemId );
 		instance.IsValid = true;
 		instance.StackSize = instance.DefaultStackSize;
@@ -296,7 +296,7 @@ public static partial class InventorySystem
 		return instance;
 	}
 
-	public static InventoryItem CreateItem( string uniqueId, ulong itemId = 0 )
+	public static IInventoryItem CreateItem( string uniqueId, ulong itemId = 0 )
 	{
 		if ( itemId > 0 && Items.TryGetValue( itemId, out var instance ) )
 		{
@@ -316,7 +316,7 @@ public static partial class InventorySystem
 
 		var definition = Definitions[uniqueId];
 
-		instance = TypeLibrary.Create<InventoryItem>( definition.GetType() );
+		instance = TypeLibrary.Create<IInventoryItem>( definition.GetType() );
 		instance.SetItemId( itemId );
 		instance.IsValid = true;
 		instance.StackSize = instance.DefaultStackSize;
@@ -333,7 +333,7 @@ public static partial class InventorySystem
 		return instance;
 	}
 
-	public static T CreateItem<T>( string uniqueId ) where T : InventoryItem
+	public static T CreateItem<T>( string uniqueId ) where T : class, IInventoryItem
 	{
 		return (CreateItem( uniqueId ) as T);
 	}
@@ -398,7 +398,7 @@ public static partial class InventorySystem
 		}
 	}
 
-	public static void SendGiveItemEvent( To to, InventoryContainer container, ushort slotId, InventoryItem instance )
+	public static void SendGiveItemEvent( To to, InventoryContainer container, ushort slotId, IInventoryItem instance )
 	{
 		using ( var stream = new MemoryStream() )
 		{
@@ -666,7 +666,7 @@ public static partial class InventorySystem
 			if ( attribute == null ) continue;
 
 			var itemType = TypeLibrary.GetType( attribute.Type );
-			var instance = itemType.Create<InventoryItem>();
+			var instance = itemType.Create<IInventoryItem>();
 
 			if ( instance is IResourceItem a )
 			{
@@ -682,20 +682,20 @@ public static partial class InventorySystem
 			AddDefinition( resource.UniqueId, instance );
 		}
 
-		var types = TypeLibrary.GetTypes<InventoryItem>();
+		var types = TypeLibrary.GetTypes<IInventoryItem>();
 
 		foreach ( var type in types )
 		{
 			if ( !type.IsAbstract && !type.IsGenericType )
 			{
-				var instance = type.Create<InventoryItem>();
+				var instance = type.Create<IInventoryItem>();
 				if ( string.IsNullOrEmpty( instance.UniqueId ) ) continue;
 				AddDefinition( instance.UniqueId, instance );
 			}
 		}
 	}
 
-	public static void AddDefinition( string uniqueId, InventoryItem definition )
+	public static void AddDefinition( string uniqueId, IInventoryItem definition )
 	{
 		if ( Definitions.ContainsKey( uniqueId ) )
 		{

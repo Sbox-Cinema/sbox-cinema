@@ -7,7 +7,7 @@ namespace Conna.Inventory;
 /// </summary>
 public class NetInventoryItem : BaseNetworkable, INetworkSerializer, IValid
 {
-	public InventoryItem Value { get; private set; }
+	public IInventoryItem Value { get; private set; }
 
 	public bool IsValid => Value.IsValid();
 	public uint Version { get; private set; }
@@ -17,7 +17,7 @@ public class NetInventoryItem : BaseNetworkable, INetworkSerializer, IValid
 
 	}
 
-	public NetInventoryItem( InventoryItem item )
+	public NetInventoryItem( IInventoryItem item )
 	{
 		Value = item;
 	}

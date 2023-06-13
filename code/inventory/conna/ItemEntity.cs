@@ -11,9 +11,9 @@ public partial class ItemEntity : ModelEntity
 	public TimeSince TimeSinceSpawned { get; set; }
 
 	[Net] private NetInventoryItem InternalItem { get; set; }
-	public InventoryItem Item => InternalItem.Value;
+	public IInventoryItem Item => InternalItem.Value;
 
-	public void SetItem( InventoryItem item )
+	public void SetItem( IInventoryItem item )
 	{
 		var worldModel = !string.IsNullOrEmpty( item.WorldModel ) ? item.WorldModel : "models/sbox_props/burger_box/burger_box.vmdl";
 
@@ -27,7 +27,7 @@ public partial class ItemEntity : ModelEntity
 		item.SetWorldEntity( this );
 	}
 
-	public InventoryItem Take()
+	public IInventoryItem Take()
 	{
 		if ( IsValid && Item.IsValid() )
 		{

@@ -7,14 +7,14 @@ using System.Linq;
 namespace Conna.Inventory;
 
 /// <summary>
-/// An inventory container that can hold multiple <see cref="InventoryItem"/> instances.
+/// An inventory container that can hold multiple <see cref="IInventoryItem"/> instances.
 /// </summary>
 public class InventoryContainer : IValid
 {
-	public delegate void ItemTakenCallback( ushort slot, InventoryItem instance );
-	public delegate void ItemGivenCallback( ushort slot, InventoryItem instance );
+	public delegate void ItemTakenCallback( ushort slot, IInventoryItem instance );
+	public delegate void ItemGivenCallback( ushort slot, IInventoryItem instance );
 	public delegate void SlotChangedCallback( ushort slot );
-	public delegate InventoryContainer TransferHandlerCallback( InventoryItem item );
+	public delegate InventoryContainer TransferHandlerCallback( IInventoryItem item );
 
 	public event SlotChangedCallback SlotChanged;
 	public event SlotChangedCallback DataChanged;
@@ -43,7 +43,7 @@ public class InventoryContainer : IValid
 		}
 	}
 
-	public InventoryItem Parent => InventorySystem.FindInstance( ParentId );
+	public IInventoryItem Parent => InventorySystem.FindInstance( ParentId );
 	public ulong ParentId { get; private set; }
 	public HashSet<string> Blacklist { get; set; } = new();
 	public HashSet<string> Whitelist { get; set; } = new();
@@ -51,7 +51,7 @@ public class InventoryContainer : IValid
 	public bool IsTakeOnly { get; set; }
 	public Entity Entity { get; private set; }
 	public List<IClient> Connections { get; }
-	public List<InventoryItem> ItemList { get; }
+	public List<IInventoryItem> ItemList { get; }
 	public ushort SlotLimit { get; private set; }
 	public bool IsEmpty => !ItemList.Any( i => i.IsValid() );
 	public bool IsValid => ContainerId > 0;
@@ -71,7 +71,7 @@ public class InventoryContainer : IValid
 
 	public InventoryContainer()
 	{
-		ItemList = new List<InventoryItem>();
+		ItemList = new List<IInventoryItem>();
 		Connections = new List<IClient>();
 	}
 
@@ -80,7 +80,7 @@ public class InventoryContainer : IValid
 		Entity = entity;
 	}
 
-	public void SetParent( InventoryItem item )
+	public void SetParent( IInventoryItem item )
 	{
 		ParentId = item.ItemId;
 	}
@@ -168,7 +168,7 @@ public class InventoryContainer : IValid
 		return true;
 	}
 
-	public InventoryItem GetItem( ulong itemId )
+	public IInventoryItem GetItem( ulong itemId )
 	{
 		if ( itemId == 0 )
 		{
@@ -211,7 +211,7 @@ public class InventoryContainer : IValid
 		return Connections.Contains( connection );
 	}
 
-	public InventoryItem GetFromSlot( ushort slot )
+	public IInventoryItem GetFromSlot( ushort slot )
 	{
 		return ItemList[slot];
 	}
@@ -246,7 +246,7 @@ public class InventoryContainer : IValid
 		}
 	}
 
-	public IEnumerable<InventoryItem> FindItems( Type type )
+	public IEnumerable<IInventoryItem> FindItems( Type type )
 	{
 		for ( int i = 0; i < ItemList.Count; i++ )
 		{
@@ -259,11 +259,11 @@ public class InventoryContainer : IValid
 		}
 	}
 
-	public IEnumerable<T> FindItems<T>() where T : InventoryItem
+	public IEnumerable<T> FindItems<T>() where T : class, IInventoryItem
 	{
 		for ( int i = 0; i < ItemList.Count; i++ )
 		{
-			var instance = (ItemList[i] as T);
+			var instance = ItemList[i] as T;
 
 			if ( instance.IsValid() )
 			{
@@ -428,12 +428,12 @@ public class InventoryContainer : IValid
 		return container.Value == this;
 	}
 
-	public InventoryItem Remove( InventoryItem item )
+	public IInventoryItem Remove( IInventoryItem item )
 	{
 		return Remove( item.ItemId );
 	}
 
-	public InventoryItem Remove( ulong itemId )
+	public IInventoryItem Remove( ulong itemId )
 	{
 		if ( itemId == 0 )
 		{
@@ -453,7 +453,7 @@ public class InventoryContainer : IValid
 		return null;
 	}
 
-	public InventoryItem ClearSlot( ushort slot, bool clearItemContainer = true )
+	public IInventoryItem ClearSlot( ushort slot, bool clearItemContainer = true )
 	{
 		if ( Game.IsClient )
 		{
@@ -483,9 +483,9 @@ public class InventoryContainer : IValid
 		return instance;
 	}
 
-	public List<InventoryItem> Give( List<InventoryItem> instances )
+	public List<IInventoryItem> Give( List<IInventoryItem> instances )
 	{
-		var remainder = new List<InventoryItem>();
+		var remainder = new List<IInventoryItem>();
 
 		for ( var i = 0; i < instances.Count; i++ )
 		{
@@ -500,7 +500,7 @@ public class InventoryContainer : IValid
 		return remainder;
 	}
 
-	public bool FindFreeSlot( out ushort slot, InventoryItem instance = null )
+	public bool FindFreeSlot( out ushort slot, IInventoryItem instance = null )
 	{
 		var slotLimit = SlotLimit;
 
@@ -520,7 +520,7 @@ public class InventoryContainer : IValid
 		return false;
 	}
 
-	public bool Give( InventoryItem instance )
+	public bool Give( IInventoryItem instance )
 	{
 		if ( !FindFreeSlot( out var slot, instance ) )
 		{
@@ -530,7 +530,7 @@ public class InventoryContainer : IValid
 		return Give( instance, slot );
 	}
 
-	public InventoryItem Replace( ushort slot, InventoryItem instance )
+	public IInventoryItem Replace( ushort slot, IInventoryItem instance )
 	{
 		if ( Game.IsClient )
 		{
@@ -565,7 +565,7 @@ public class InventoryContainer : IValid
 		return oldItem;
 	}
 
-	public bool Give( InventoryItem instance, ushort slot )
+	public bool Give( IInventoryItem instance, ushort slot )
 	{
 		if ( Game.IsClient )
 		{
@@ -598,7 +598,7 @@ public class InventoryContainer : IValid
 		return true;
 	}
 
-	public ushort Stack( InventoryItem instance, ushort slot )
+	public ushort Stack( IInventoryItem instance, ushort slot )
 	{
 		var item = ItemList[slot];
 
@@ -639,7 +639,7 @@ public class InventoryContainer : IValid
 		return instance.StackSize;
 	}
 
-	public bool CouldTakeAny( InventoryItem instance )
+	public bool CouldTakeAny( IInventoryItem instance )
 	{
 		if ( Parent == instance )
 			return false;
@@ -666,7 +666,7 @@ public class InventoryContainer : IValid
 		return false;
 	}
 
-	public ushort Stack( InventoryItem instance )
+	public ushort Stack( IInventoryItem instance )
 	{
 		if ( Parent == instance )
 			return instance.StackSize;
@@ -710,9 +710,9 @@ public class InventoryContainer : IValid
 		return instance.StackSize;
 	}
 
-	public List<InventoryItem> RemoveAll()
+	public List<IInventoryItem> RemoveAll()
 	{
-		var output = new List<InventoryItem>();
+		var output = new List<IInventoryItem>();
 
 		for ( ushort i = 0; i < ItemList.Count; i++ )
 		{
@@ -727,7 +727,7 @@ public class InventoryContainer : IValid
 		return output;
 	}
 
-	public bool DoesPassFilter( InventoryItem item )
+	public bool DoesPassFilter( IInventoryItem item )
 	{
 		if ( Whitelist.Count > 0 )
 		{
@@ -793,7 +793,7 @@ public class InventoryContainer : IValid
 		return HashCode.Combine( hash, ContainerId, SlotLimit );
 	}
 
-	public virtual InventoryContainer GetTransferTarget( InventoryItem item )
+	public virtual InventoryContainer GetTransferTarget( IInventoryItem item )
 	{
 		if ( TransferHandler == null && Parent.IsValid() && Parent.Parent.IsValid() )
 		{
@@ -839,12 +839,12 @@ public class InventoryContainer : IValid
 		}
 	}
 
-	public virtual bool CanTakeItem( ushort slot, InventoryItem item )
+	public virtual bool CanTakeItem( ushort slot, IInventoryItem item )
 	{
 		return true;
 	}
 
-	public virtual bool CanGiveItem( ushort slot, InventoryItem item )
+	public virtual bool CanGiveItem( ushort slot, IInventoryItem item )
 	{
 		return DoesPassFilter( item );
 	}
@@ -854,17 +854,17 @@ public class InventoryContainer : IValid
 
 	}
 
-	protected virtual void OnItemTaken( ushort slot, InventoryItem item )
+	protected virtual void OnItemTaken( ushort slot, IInventoryItem item )
 	{
 
 	}
 
-	protected virtual void OnItemGiven( ushort slot, InventoryItem item )
+	protected virtual void OnItemGiven( ushort slot, IInventoryItem item )
 	{
 
 	}
 
-	private void SendGiveEvent( ushort slot, InventoryItem instance )
+	private void SendGiveEvent( ushort slot, IInventoryItem instance )
 	{
 		if ( Game.IsClient )
 		{
@@ -884,7 +884,7 @@ public class InventoryContainer : IValid
 		OnItemGiven( slot, instance );
 	}
 
-	private void SendTakeEvent( ushort slot, InventoryItem instance )
+	private void SendTakeEvent( ushort slot, IInventoryItem instance )
 	{
 		if ( Game.IsClient )
 		{
