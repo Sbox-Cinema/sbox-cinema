@@ -12,7 +12,6 @@ namespace Cinema;
 /// </summary>
 public interface IMediaPresentationContext
 {
-    ProjectorEntity TargetProjector { get; }
-    WebSurface UseWebSurface();
-    VideoPlayer UseVideoPlayer();
+    Texture VideoOutput { get; }
+    
 }

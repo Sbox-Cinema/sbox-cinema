@@ -238,7 +238,7 @@ public partial class MediaController : EntityComponent<ProjectorEntity>, ISingle
 
         controller.RequestMedia(new MediaRequest()
         {
-            YouTubeId = youtubeId,
+            RequestData = youtubeId,
             Requestor = ConsoleSystem.Caller
         });
     }

@@ -122,7 +122,7 @@ public partial class Media : BaseNetworkable
 
         try
         {
-            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={request.YouTubeId}", "GET");
+            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={request.RequestData}", "GET");
         }
         catch (Exception e)
         {
@@ -140,7 +140,7 @@ public partial class Media : BaseNetworkable
             CanEmbed = response.CanEmbed,
             Thumbnail = response.Thumbnail,
             Verified = true,
-            YouTubeId = request.YouTubeId,
+            YouTubeId = request.RequestData,
             Requestor = request.Requestor,
             VotesFor = new List<IClient>() { request.Requestor },
         };
