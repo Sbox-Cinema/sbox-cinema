@@ -25,7 +25,6 @@ public class StoreItem
     {
         OnPurchase = (Player player) =>
         {
-            Log.Info($"Purchased {itemUniqueId}");
             var item = InventorySystem.CreateItem(itemUniqueId);
             if (!item.IsValid())
             {
@@ -33,7 +32,6 @@ public class StoreItem
                 return;
             }
 
-            Log.Info($"Giving");
             player.PickupItem(item);
         };
 
