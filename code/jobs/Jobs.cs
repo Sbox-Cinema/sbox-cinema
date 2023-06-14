@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 
 namespace Cinema.Jobs;
@@ -40,6 +41,13 @@ public partial class JobDetails : BaseNetworkable
     [Net]
     public JobResponsibilities Responsibilities { get; set; }
 
+    /// <summary>
+    /// The set of clothing that will automatically be applied to any player
+    /// who selects this job. If null, the player's avatar clothing will be use.
+    /// </summary>
+    [Net]
+    public string Uniform { get; set; }
+
     public static JobDetails DefaultJob => All[0];
 
     public static List<JobDetails> All => new()
@@ -61,6 +69,7 @@ public partial class JobDetails : BaseNetworkable
             Name = "Usher",
             Abilities = JobAbilities.PickupGarbage,
             Responsibilities = 0,
+            Uniform = "usher"
         },
         /// <summary>
         /// Concession worker who can make and store popcorn
@@ -68,7 +77,8 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails {
             Name = "Concession Worker",
             Abilities = JobAbilities.MakePopcorn,
-            Responsibilities = JobResponsibilities.PopcornStocking
+            Responsibilities = JobResponsibilities.PopcornStocking,
+            Uniform = "usher"
         }
     };
 }
@@ -97,5 +107,14 @@ public partial class PlayerJob : EntityComponent<Player>, ISingletonComponent
         };
 
         return job;
+    }
+
+    protected override void OnActivate()
+    {
+        base.OnActivate();
+
+        // It is assumed that whenever this component is activated on a player, their job
+        // is being changed to the job described by this component.
+        Event.Run(CinemaEvent.JobChanged, Entity);
     }
 }

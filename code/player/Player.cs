@@ -78,7 +78,7 @@ partial class Player : AnimatedEntity, IEyes
         SetupBodyController();
         BodyController.Active = true;
 
-        LoadClothing();
+        LoadAvatarClothing();
 
         ClientRespawn(To.Single(Client));
     }
