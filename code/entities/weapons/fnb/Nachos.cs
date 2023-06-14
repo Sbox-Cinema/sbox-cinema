@@ -37,6 +37,8 @@ public partial class Nachos : WeaponBase
             };
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 

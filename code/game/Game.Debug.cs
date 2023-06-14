@@ -8,6 +8,11 @@ public partial class CinemaGame
 {
     public static bool ValidateUser(long steamID) => true;
 
+    private static IClient GetPlayer(string query)
+        => Game.Clients.FirstOrDefault(
+                cl => cl.Name.ToLower().Contains(query.ToLower())
+            );
+
     [ClientRpc]
     public static void CleanupClientEntities()
     {
@@ -285,5 +290,23 @@ public partial class CinemaGame
                 status = $"In Menu ({localPawn.ActiveMenuName})";
             Log.Info($"{client} - {status}");
         }
+    }
+
+    [ConCmd.Server("player.strip.weapons")]
+    public static void StripWeapons(string playerName)
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        var client = GetPlayer(playerName);
+
+        if (client?.Pawn is not Player player)
+            return;
+
+        player
+            .Inventory
+            .Weapons
+            .OfType<WeaponBase>()
+            .ToList()
+            .ForEach(w => w.RemoveFromHolder());
     }
 }

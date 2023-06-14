@@ -36,6 +36,8 @@ public partial class Popcorn : WeaponBase
             };
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 

@@ -36,6 +36,8 @@ public partial class Hotdog : WeaponBase
             };
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 
