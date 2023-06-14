@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using Cinema.Jobs;
+using Conna.Inventory;
 using Sandbox;
 
 namespace Cinema;
@@ -10,9 +13,10 @@ public partial class Player
 
     public void SetJob(JobDetails newJob)
     {
-        if (Game.IsClient) throw new System.Exception("Cannot set job on client!");
+        if (Game.IsClient) throw new Exception("Cannot set job on client!");
 
         UpdateResponsibilities(newJob.Responsibilities);
+        UpdateJobItems(newJob.Items ?? Array.Empty<string>());
 
         Components.RemoveAny<PlayerJob>();
         Components.Add(PlayerJob.CreateFromDetails(newJob));
@@ -64,6 +68,28 @@ public partial class Player
 
             var responsibility = typeDescription.Create<EntityComponent>();
             Components.Add(responsibility);
+        }
+    }
+
+    private void UpdateJobItems(string[] newJobItems)
+    {
+        var currentJobItems = Job?.JobDetails.Items ?? Array.Empty<string>();
+        var toRemove = currentJobItems.Where(e => !newJobItems.Contains(e));
+
+        foreach (var itemId in toRemove)
+        {
+            var item = Inventory.FindItems(itemId).FirstOrDefault();
+            if (!item.IsValid()) continue;
+            Inventory.Remove(item);
+        }
+
+        var toAdd = newJobItems.Where(e => !currentJobItems.Contains(e));
+
+        foreach (var itemId in toAdd)
+        {
+            var item = InventorySystem.CreateItem(itemId);
+            if (!item.IsValid()) continue;
+            Inventory.Give(item);
         }
     }
 }

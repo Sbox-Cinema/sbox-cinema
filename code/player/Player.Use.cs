@@ -51,9 +51,13 @@ public partial class Player
                     return;
                 }
 
-                // This will catch the first OnUse
-                if (Using is IUse usable && usable.OnUse(this))
+                var usable = Using as IUse;
+
+                if (usable.OnUse(this))
                     return;
+
+                StopUsing();
+                return;
             }
 
             if (!Using.IsValid())

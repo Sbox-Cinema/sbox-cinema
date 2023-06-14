@@ -36,6 +36,11 @@ public partial class JobDetails : BaseNetworkable
     public JobAbilities Abilities { get; set; }
 
     /// <summary>
+    /// Unique ID's of items that this job should have
+    /// </summary>
+    public string[] Items { get; set; }
+
+    /// <summary>
     /// What responsibilities this job has
     /// </summary>
     [Net]
@@ -69,7 +74,8 @@ public partial class JobDetails : BaseNetworkable
             Name = "Usher",
             Abilities = JobAbilities.PickupTrash,
             Responsibilities = 0,
-            Uniform = "usher"
+            Uniform = "usher",
+            Items = new[]{"trash_bag"}
         },
         /// <summary>
         /// Concession worker who can make and store popcorn
