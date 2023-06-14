@@ -28,10 +28,60 @@
 		font-size: 100px;
 	}
 
+	.news {
+		position: absolute;
+		width: 500px;
+		height: 60%;
+		top: 20%;
+		right: 120px;
+		background-color: rgb(255, 75, 75, 0.11);
+		border-radius: 10px;
+		flex-direction: column;
+		gap: 10px;
+		padding: 24px;
+		color: black;
+		font-family: Poppins;
+
+		.header {
+			width: 100%;
+			justify-content: center;
+			font-size: 32px;
+			font-weight: 700;
+			animation-name: pulsingred;
+			animation-duration: 4s;
+			animation-iteration-count: infinite;
+			animation-direction: alternate;
+			animation-timing-function: ease-in-out;
+		}
+
+		.content {
+			font-size: 19px;
+			flex-direction: column;
+			font-family: poppins;
+			color: white;
+		}
+
+		.hyperlink {
+			color: rgb(122, 174, 255, 0.76);
+			text-decoration: underline;
+			cursor: pointer;
+		}
+	}
+
 	.controls {
 		margin: 140px 150px;
 		flex-direction: column;
 		gap: 8px;
 		align-items: flex-start;
+	}
+}
+
+@keyframes pulsingred {
+	0% {
+		color: white;
+	}
+
+	100% {
+		color: rgb(146, 0, 0);
 	}
 }
