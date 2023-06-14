@@ -51,7 +51,7 @@ public partial class Player
                     return;
                 }
 
-                var usable = Using as IUse;
+                if (Using is not IUse usable) return;
 
                 if (usable.OnUse(this))
                     return;
@@ -79,6 +79,9 @@ public partial class Player
             }
 
             if (Using is IUse use && use.OnUse(this))
+                return;
+
+            if (Using is ICinemaUse cinemaUse && cinemaUse.ToggleUse)
                 return;
 
             StopUsing();
