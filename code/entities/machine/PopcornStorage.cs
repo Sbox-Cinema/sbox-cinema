@@ -109,7 +109,7 @@ public partial class PopcornStorage : Machine
     private void FinishStoringPopcorn()
     {
         // Remove the popcorn the player is holding
-        BeingUsedBy.Inventory.RemoveWeapon(BeingUsedBy.ActiveChild, false);
+        BeingUsedBy.Inventory.Remove(BeingUsedBy.ActiveChild.Item);
         BeingUsedBy.AddMoney(PopcornStoragePaymentAmount);
         ++PopcornStored;
         BeingUsedBy = null;

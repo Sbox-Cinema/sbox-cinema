@@ -1,3 +1,4 @@
+using Cinema.Jobs;
 using Sandbox;
 
 namespace Cinema;
@@ -5,16 +6,34 @@ namespace Cinema;
 public partial class Player
 {
     [BindComponent]
-    public Jobs.PlayerJob Job { get; }
+    public PlayerJob Job { get; }
 
-    public void SetJob(Jobs.JobDetails newJob)
+    public void SetJob(JobDetails newJob)
     {
         if (Game.IsClient) throw new System.Exception("Cannot set job on client!");
 
         UpdateResponsibilities(newJob.Responsibilities);
 
-        Components.RemoveAny<Jobs.PlayerJob>();
-        Components.Add(Jobs.PlayerJob.CreateFromDetails(newJob));
+        Components.RemoveAny<PlayerJob>();
+        Components.Add(PlayerJob.CreateFromDetails(newJob));
+
+        if (Job.JobDetails.Uniform == null)
+        {
+            LoadAvatarClothing();
+            return;
+        }
+
+        var jobUniform = JobUniform.Get(Job.JobDetails.Uniform);
+        if (jobUniform == null)
+        {
+            Log.Error($"Could not find uniform with name: {Job.JobDetails.Uniform}");
+            return;
+        }
+
+        Undress();
+
+        var uniformOutfit = jobUniform.GetOutfit(AvatarClothing);
+        uniformOutfit.DressEntity(this);
     }
 
     /// <summary>

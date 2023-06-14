@@ -14,6 +14,11 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     /// </summary>
     public virtual string Description => "";
     /// <summary>
+    /// The name of an outfit resource that will be worn by this NPC when it spawns.
+    /// If null, the NPC will be naked.
+    /// </summary>
+    public virtual string Uniform => "usher";
+    /// <summary>
     /// Whether using the NPC is toggleable
     /// </summary>
     public virtual bool ToggleUse => false;
@@ -26,6 +31,12 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
 
         SetModel("models/citizen/citizen.vmdl");
         SetupPhysicsFromAABB(PhysicsMotionType.Keyframed, new Vector3(-16, -16, 0), new Vector3(16, 16, 72));
+        var uniform = JobUniform.Get(Uniform);
+        if (uniform != null)
+        {
+            var uniformClothing = uniform.GetOutfit(null);
+            uniformClothing.DressEntity(this);
+        }
     }
 
     public override void ClientSpawn()

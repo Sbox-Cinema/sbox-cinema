@@ -1,0 +1,9 @@
+{
+  "ClassName": "Nachos",
+  "ItemName": "Nachos",
+  "UniqueId": "nachos",
+  "Description": "It\u0027s nacho business.",
+  "Icon": "ui/icons/nachos.png",
+  "WorldModel": "models/nachos_tray/nachos_tray.vmdl",
+  "Tags": []
+}

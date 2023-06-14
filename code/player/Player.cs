@@ -11,9 +11,6 @@ partial class Player : AnimatedEntity, IEyes
     [BindComponent]
     public PlayerBodyController BodyController { get; }
 
-    [BindComponent]
-    public PlayerInventory Inventory { get; }
-
     public IEnumerable<PlayerController> PlayerControllers => Components.GetAll<PlayerController>();
 
     public PlayerController ActiveController => PlayerControllers.FirstOrDefault((e) => e.Active);
@@ -27,6 +24,19 @@ partial class Player : AnimatedEntity, IEyes
     // How long this player has been on the server
     [Net]
     public TimeSince TimeSinceJoinedServer { get; set; }
+
+    public Player()
+    {
+        if (Game.IsServer)
+        {
+            SetupInventory();
+        }
+    }
+
+    public void MakePawnOf(IClient client) {
+        client.Pawn = this;
+        Inventory.AddConnection(client);
+    }
 
     /// <summary>
     /// Called when the entity is first created
@@ -43,7 +53,6 @@ partial class Player : AnimatedEntity, IEyes
         EnableHitboxes = true;
         TimeSinceJoinedServer = 0;
 
-        Components.Create<PlayerInventory>();
         SetJob(Jobs.JobDetails.DefaultJob);
 
         Tags.Add("player");
@@ -78,7 +87,7 @@ partial class Player : AnimatedEntity, IEyes
         SetupBodyController();
         BodyController.Active = true;
 
-        LoadClothing();
+        LoadAvatarClothing();
 
         ClientRespawn(To.Single(Client));
     }
