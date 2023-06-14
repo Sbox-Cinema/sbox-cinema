@@ -32,14 +32,13 @@ public partial class Nachos : WeaponBase
         {
             var projectile = new Projectile()
             {
-                Owner = WeaponHolder,
-                Model = Model.Load("models/nachos_tray/w_nachos_tray.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
+                Model = Model.Load("models/nachos_tray/nachos_tray.vmdl"),
+                BreakAfterLaunch = true
             };
 
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
+            projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 

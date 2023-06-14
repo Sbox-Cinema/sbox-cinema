@@ -9,6 +9,11 @@ public partial class CinemaGame
 {
     public static bool ValidateUser(long steamID) => true;
 
+    private static IClient GetPlayer(string query)
+        => Game.Clients.FirstOrDefault(
+                cl => cl.Name.ToLower().Contains(query.ToLower())
+            );
+
     [ClientRpc]
     public static void CleanupClientEntities()
     {
@@ -113,7 +118,8 @@ public partial class CinemaGame
         var ent = TypeLibrary.Create<Entity>(entityType);
 
         ent.Position = tr.EndPosition;
-        ent.Rotation = Rotation.From(new Angles(0, owner.AimRay.Forward.EulerAngles.yaw, 0));
+        // Make the spawned entity face the player who spawned it.
+        ent.Rotation = Rotation.From(new Angles(0, (-owner.AimRay.Forward).EulerAngles.yaw, 0));
     }
 
     [ConCmd.Server("item.give")]
@@ -298,5 +304,23 @@ public partial class CinemaGame
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
 
         ListItems(player);
+    }
+
+    [ConCmd.Server("player.strip.weapons")]
+    public static void StripWeapons(string playerName)
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        var client = GetPlayer(playerName);
+
+        if (client?.Pawn is not Player player)
+            return;
+
+        player
+            .Inventory
+            .Weapons
+            .OfType<WeaponBase>()
+            .ToList()
+            .ForEach(w => w.RemoveFromHolder());
     }
 }

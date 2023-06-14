@@ -32,14 +32,12 @@ public partial class Soda : WeaponBase
         {
             var projectile = new Projectile()
             {
-                Owner = WeaponHolder,
-                Model = Model.Load("models/papercup/w_papercup.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
+                Model = Model.Load("models/papercup/papercup.vmdl"),
             };
 
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
+            projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 
