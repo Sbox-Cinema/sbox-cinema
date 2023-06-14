@@ -65,10 +65,11 @@ public partial class ChairController : PlayerController
 
     private void PrimeTest(Armrest.Sides side)
     {
-        var cup = new ModelEntity("models/papercup/w_papercup.vmdl");
-        cup.Tags.Add("solid");
-        cup.SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
-        Chair.Armrests[side]?.TryHoldEntity(cup);
+        var projectile = new Projectile()
+        {
+            Model = Model.Load("models/papercup/papercup.vmdl")
+        };
+        Chair.Armrests[side]?.TryHoldEntity(projectile);
     }
 
     private void SimulateAnimation()
