@@ -20,7 +20,7 @@ public partial class GarbageBin : AnimatedEntity, ICinemaUse
 
     public string CannotUseText => Garbage.GetPlayerGarbageBag(LocalPlayer).Contents.Count == 0 ? "Not carrying any garbage" : "Cannot use";
 
-    public bool ShowCannotUsePrompt => LocalPlayer.Job.HasAbility(Jobs.JobAbilities.PickupTrash);
+    public bool ShowCannotUsePrompt => LocalPlayer.Job.HasAbility(Jobs.JobAbilities.PickupGarbage);
 
     [Net]
     public Player BeingUsedBy { get; private set; }
@@ -45,7 +45,7 @@ public partial class GarbageBin : AnimatedEntity, ICinemaUse
     {
         if (user is not Player player) return false;
         if (IsBeingUsed) return BeingUsedBy == player;
-        if (!player.Job.HasAbility(JobAbilities.PickupTrash)) return false;
+        if (!player.Job.HasAbility(JobAbilities.PickupGarbage)) return false;
         if (Garbage.GetPlayerGarbageBag(player).Contents.Count == 0) return false;
 
         return true;

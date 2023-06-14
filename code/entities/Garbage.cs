@@ -15,7 +15,7 @@ public partial class Garbage : AnimatedEntity, ICinemaUse
     public virtual string ModelPath { get; set; } = "models/sbox_props/bin/rubbish_bag.vmdl_c";
     public string UseText => "Pickup Garbage";
     public string CannotUseText => GetPlayerGarbageBag(LocalPlayer).RemainingSpace <= 0 ? "Garbage bag is full" : "Cannot pickup";
-    public bool ShowCannotUsePrompt => LocalPlayer.Job.HasAbility(Jobs.JobAbilities.PickupTrash);
+    public bool ShowCannotUsePrompt => LocalPlayer.Job.HasAbility(Jobs.JobAbilities.PickupGarbage);
     public string TypeOfGarbage => ModelPath;
     private static Player LocalPlayer => Game.LocalPawn as Player;
 
@@ -41,7 +41,7 @@ public partial class Garbage : AnimatedEntity, ICinemaUse
         if (user is not Player ply)
             return false;
 
-        if (!ply.Job.HasAbility(Jobs.JobAbilities.PickupTrash)) return false;
+        if (!ply.Job.HasAbility(Jobs.JobAbilities.PickupGarbage)) return false;
 
         var bag = GetPlayerGarbageBag(ply);
         if (bag == null) return false;
