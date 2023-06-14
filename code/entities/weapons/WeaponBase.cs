@@ -190,18 +190,13 @@ public partial class WeaponBase : Carriable
         if (!WeaponHolder.IsValid())
             return;
 
-        WeaponHolder.Inventory.RemoveWeapon(this, false);
-        // Get the next weapon of the same type
+        // Get the next weapon of the same type if we have one
         var nextWeapon = WeaponHolder
-            .Inventory
             .Weapons
-            .FirstOrDefault(w => (w as WeaponBase).Name == this.Name);
-        // If there is no next weapon of the same type, just get whatever's left.
-        if (nextWeapon == null)
-        {
-            nextWeapon = WeaponHolder.Inventory.GetBestWeapon();
-        }
-        // Set the active weapon to whatever weapon we found.
+            .FirstOrDefault(w => w.Name == Name);
+        nextWeapon ??= WeaponHolder.GetBestWeapon();
+
+        WeaponHolder.Inventory.Remove(Item);
         WeaponHolder.ActiveChild = nextWeapon;
     }
 }
