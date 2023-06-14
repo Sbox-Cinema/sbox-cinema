@@ -112,7 +112,8 @@ public partial class CinemaGame
         var ent = TypeLibrary.Create<Entity>(entityType);
 
         ent.Position = tr.EndPosition;
-        ent.Rotation = Rotation.From(new Angles(0, owner.AimRay.Forward.EulerAngles.yaw, 0));
+        // Make the spawned entity face the player who spawned it.
+        ent.Rotation = Rotation.From(new Angles(0, (-owner.AimRay.Forward).EulerAngles.yaw, 0));
     }
 
     [ConCmd.Server("weapon.create")]

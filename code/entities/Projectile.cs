@@ -28,6 +28,10 @@ public class Projectile : Prop
     {
         base.Spawn();
         SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
+        
+        // Remove the solid tag so that the projectile doesn't collide with the owner.
+        Tags.Remove("solid");
+
         // We assume that the projectile is in flight from the moment it is spawned.
         TimeSinceSpawned = 0f;
         if (TimeUntilBreak < 0f)
@@ -64,8 +68,13 @@ public class Projectile : Prop
 
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
+
         // Prevent the projectile from immediately breaking on the person who threw it.
         if (TimeSinceSpawned < 0.25f && eventData.Other.Entity == Owner)
+            return;
+
+        // Don't break on the chair you're sitting in.
+        if (eventData.Other.Entity is CinemaChair chair && chair.Occupant == Owner)
             return;
 
         // If the projectile is moving fast enough, break it.
