@@ -317,9 +317,7 @@ public partial class CinemaGame
             return;
 
         player
-            .Inventory
             .Weapons
-            .OfType<WeaponBase>()
             .ToList()
             .ForEach(w => w.RemoveFromHolder());
     }

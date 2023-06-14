@@ -63,7 +63,7 @@ public partial class Player
         weapon.DestroyWeaponEntity();
     }
 
-    private WeaponBase GetBestWeapon()
+    public WeaponBase GetBestWeapon()
     {
         return Weapons.FirstOrDefault();
     }
