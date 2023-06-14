@@ -114,8 +114,9 @@ public partial class Player
         {
             tr = Trace
                 .Ray(EyePosition, EyePosition + EyeRotation.Forward * InteractRange)
-                .Radius(2)
+                .Radius(15)
                 .Ignore(this)
+                .EntitiesOnly()
                 .Run();
 
             // See if any of the parent entities are usable if we ain't.

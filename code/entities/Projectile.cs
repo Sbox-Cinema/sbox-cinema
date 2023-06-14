@@ -1,8 +1,9 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using Sandbox;
 
 namespace Cinema;
 
-public class Projectile : Prop
+public partial class Projectile : BasePhysics
 {
     /// <summary>
     /// In cases where it makes sense for a projectile to automatically break
@@ -28,7 +29,7 @@ public class Projectile : Prop
     {
         base.Spawn();
         SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
-        
+
         // Remove the solid tag so that the projectile doesn't collide with the owner.
         Tags.Remove("solid");
 
@@ -68,6 +69,7 @@ public class Projectile : Prop
 
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
+        lastCollision = eventData;
 
         // Prevent the projectile from immediately breaking on the person who threw it.
         if (TimeSinceSpawned < 0.25f && eventData.Other.Entity == Owner)
@@ -86,5 +88,61 @@ public class Projectile : Prop
 
         // Finally, look for any other reasons this projectile might break.
         base.OnPhysicsCollision(eventData);
+    }
+
+    public void Break()
+    {
+        OnKilled();
+        LifeState = LifeState.Dead;
+        Delete();
+    }
+
+    public override void OnKilled()
+    {
+        if (LifeState != LifeState.Alive)
+            return;
+
+        LifeState = LifeState.Dead;
+
+        if (LastDamage.HasTag("physics_impact"))
+        {
+            Velocity = lastCollision.This.PreVelocity;
+        }
+
+        DoGibs();
+        Delete(); // LifeState.Dead prevents this in OnKilled
+
+        base.OnKilled();
+    }
+
+    CollisionEventData lastCollision;
+
+    DamageInfo LastDamage;
+
+    private void DoGibs()
+    {
+        var result = new Breakables.Result();
+        result.CopyParamsFrom(LastDamage);
+        Breakables.Break(this, result);
+
+        foreach (var gib in result.Props)
+        {
+            var garbage = new Garbage
+            {
+                Position = gib.Position,
+                Rotation = gib.Rotation,
+                Model = gib.Model,
+            };
+
+            var phys = garbage.PhysicsBody;
+
+            if (phys != null && gib.PhysicsBody != null)
+            {
+                phys.Velocity = gib.PhysicsBody.Velocity;
+                phys.AngularVelocity = gib.PhysicsBody.AngularVelocity;
+            }
+
+            gib.Delete();
+        }
     }
 }

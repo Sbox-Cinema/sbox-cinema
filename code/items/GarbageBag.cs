@@ -7,9 +7,9 @@ using Sandbox;
 namespace Cinema;
 
 
-public partial class TrashBag : InventoryItem
+public partial class GarbageBag : InventoryItem
 {
-    public override string Name => "Trash Bag";
+    public override string Name => "Garbage Bag";
     public override string Description => "Used to pickup trash";
     public override string Icon => "";
     public override string UniqueId => "trash_bag";
@@ -25,9 +25,8 @@ public partial class TrashBag : InventoryItem
     /// <param name="item">Name of the trash item</param>
     public bool Add(string item)
     {
-        if (Game.IsClient) throw new System.Exception("Cannot add to trashbag on client");
+        if (Game.IsClient) throw new System.Exception("Cannot add to garbage bag on client");
         if (Contents.Count >= Capacity) return false;
-        Log.Info("adding trash to bag");
         Contents.Add(item);
         IsDirty = true;
         return true;
@@ -100,9 +99,9 @@ public partial class TrashBag : InventoryItem
     protected static void DebugContents()
     {
         if (ConsoleSystem.Caller.Pawn is not Player player) return;
-        var trashBag = player.Inventory.FindItems<TrashBag>().FirstOrDefault();
-        if (trashBag == null) return;
-        Log.Info($"Trash bag contents ({trashBag.Contents.Count}/{trashBag.Capacity}): {string.Join(", ", trashBag.Contents)}");
+        var garbageBag = player.Inventory.FindItems<GarbageBag>().FirstOrDefault();
+        if (garbageBag == null) return;
+        Log.Info($"Trash bag contents ({garbageBag.Contents.Count}/{garbageBag.Capacity}): {string.Join(", ", garbageBag.Contents)}");
     }
 
 }
