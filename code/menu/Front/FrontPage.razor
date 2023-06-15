@@ -1,0 +1,83 @@
+@using System;
+@using Sandbox;
+@using Sandbox.MenuSystem;
+@using System.Linq;
+@using Sandbox.UI;
+@using Sandbox.UI.GameMenu;
+@using System.Threading.Tasks;
+
+@attribute [StyleSheet]
+
+<root class="frontpage">
+
+    <div class="background" @ref="CinemaBG"></div>
+
+    <div class="game-title">
+        @Game.Menu.Package.Title
+    </div>
+
+    <div class="news">
+        <div class="glow header">
+            WORK IN PROGRESS
+        </div>
+
+        <div class="content">
+            This is still a very early beta. Report bugs/issues on our Cinema GitHub:
+            <a class="hyperlink">github.com/tech-nawar/sbox-cinema/issues</a>
+        </div>
+    </div>
+
+    <div class="controls">
+
+        @if (Game.InGame)
+            {
+                <a class="button" href="/active">Current Game</a>
+                <a class="button" onclick=@LeaveGame>Leave Game</a>
+                <span style="height: 20px;"></span>
+            }
+            else if (Game.Menu.Lobby != null)
+            {
+                <a class="button" href="/lobby">Return To Lobby</a>
+                <span style="height: 20px;"></span>
+            }
+            else
+            {
+                <a class="button" onclick=@CreateNewLobby>Begin</a>
+
+                if (Game.Menu.Package.SupportsSavedGames && Game.Menu.SavedGames.Any())
+                {
+                        <a class="button" onclick=@LoadSavedGame>Load Game</a>
+                }
+            }
+
+        <a class="button" href="/servers">Find a Game</a>
+        <a class="button" href="/settings">Options</a>
+
+        <span style="height: 20px;"></span>
+
+        <a class="button" @onclick=@Game.Menu.Close>Exit</a>
+
+    </div>
+
+</root>
+
+@code
+{
+    private Panel CinemaBG;
+
+    void LoadSavedGame()
+    {
+        this.Navigate("/load");
+    }
+
+    async Task CreateNewLobby()
+    {
+        await Game.Menu.CreateLobbyAsync(64, "game", true);
+        // we will navigate to lobby when it's ready
+    }
+
+    void LeaveGame()
+    {
+        Game.Menu.LeaveServer("Leaving");
+    }
+}
