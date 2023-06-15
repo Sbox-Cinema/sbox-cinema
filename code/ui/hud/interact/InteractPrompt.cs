@@ -67,6 +67,7 @@ public partial class InteractPrompt : Panel
     {
         PromptText = text;
         Hidden = false;
+        LongUsePercentage = 0;
     }
 
     public void HidePrompt()
