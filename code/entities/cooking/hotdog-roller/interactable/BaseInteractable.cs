@@ -56,9 +56,6 @@ public partial class BaseInteractable : BaseNetworkable
 
     public virtual void Tick()
     {
-        if (Game.IsServer)
-            return;
 
-        DebugOverlay.Box(Parent.Transform.PointToWorld(Mins), Parent.Transform.PointToWorld(Maxs), Color.Red, 0);
     }
 }

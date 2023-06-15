@@ -46,19 +46,4 @@ public class Switch : BaseInteractable
         if (matGroup != IndicatorLight.BothOff)
             Sound.FromEntity("machine_turn_01", parent);
     }
-
-    public override void Tick()
-    {
-        DebugOverlay.Box(Parent.Transform.PointToWorld(Mins), Parent.Transform.PointToWorld(Maxs), Color.Green, 0);
-
-        var ply = Game.LocalPawn;
-
-        if (!ply.IsValid)
-            return;
-
-        var tr = Trace.Ray(ply.AimRay.Position, ply.AimRay.Forward * 500)
-        .Run();
-
-        DebugOverlay.Line(ply.AimRay.Position, tr.HitPosition);
-    }
 }

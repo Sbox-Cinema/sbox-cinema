@@ -71,9 +71,4 @@ public class Roller : BaseInteractable
     {
         addHotdog();
     }
-
-    public override void Tick()
-    {
-        // Do the hotdog logic
-    }
 }
