@@ -171,30 +171,13 @@ partial class Player : AnimatedEntity, IEyes
 
     private void TickPlayerInteract()
     {
-        if (Input.Pressed("attack2"))
+        if (Input.Pressed("attack2") && Game.IsServer)
         {
-            if (Game.IsServer)
-            {
-                TraceResult tr = Trace.Ray(AimRay, 1024.0f)
-                            .EntitiesOnly()
-                            .WithTag("interactable")
-                            .Run();
+            TraceResult tr = Trace.Ray(AimRay, 1024.0f)
+            .EntitiesOnly()
+            .Run();
 
-                if (tr.Entity is HotdogRoller hotdogRoller)
-                {
-                    hotdogRoller.Interactions.TryHotdogRemoval(this);
-
-                    var weapon = Entity.CreateByName<Carriable>("Hotdog");
-
-                    if (!weapon.IsValid())
-                    {
-                        Log.Error($"Failed to create weapon of class {"Hotdog"}");
-                        return;
-                    }
-
-                    this.Inventory.AddWeapon(weapon, true);
-                }
-            }
+            Event.Run("PlayerAttack2", this, tr.Entity);
         }
     }
 }
