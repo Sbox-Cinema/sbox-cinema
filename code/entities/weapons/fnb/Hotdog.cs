@@ -32,14 +32,12 @@ public partial class Hotdog : WeaponBase
         {
             var projectile = new Projectile()
             {
-                Owner = WeaponHolder,
-                Model = Model.Load("models/hotdog/w_hotdog_boxed.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
+                Model = Model.Load("models/hotdog/w_hotdog_boxed.vmdl")
             };
 
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
+            projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 

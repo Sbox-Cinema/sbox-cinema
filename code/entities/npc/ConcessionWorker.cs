@@ -24,10 +24,10 @@ public partial class ConcessionWorker : NpcBase
         {
             Name = $"Concession Worker # {NetworkIdent}",
             ItemsForSale = new List<StoreItem> {
-                StoreItem.Weapon("Hotdog", "99% Beef", "ui/icons/hotdog.png", 10, "Hotdog"),
-                StoreItem.Weapon("Nachos", "Not your cheese!", "ui/icons/nachos.png", 20, "Nachos"),
-                StoreItem.Weapon("Popcorn", "Pop Pop Pop", "ui/icons/popcorn.png", 30, "Popcorn"),
-                StoreItem.Weapon("Soda", "America Juice", "ui/icons/soda.png", 5, "Soda")
+                StoreItem.Item("Hotdog", "99% Beef", "ui/icons/hotdog.png", 10, "hotdog_cooked"),
+                StoreItem.Item("Nachos", "Not your cheese!", "ui/icons/nachos.png", 20, "nachos"),
+                StoreItem.Item("Popcorn", "Pop Pop Pop", "ui/icons/popcorn.png", 30, "popcorn_tub"),
+                StoreItem.Item("Soda", "America Juice", "ui/icons/soda.png", 5, "soda")
             }
         };
     }
