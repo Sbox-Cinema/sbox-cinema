@@ -1,0 +1,10 @@
+{
+  "Clothing": [
+    "models/citizen/clothing/usher/usherhat.clothing",
+    "models/citizen/clothing/usher/usherjacket.clothing",
+    "models/citizen/clothing/usher/ushertrousers.clothing",
+    "models/citizen_clothes/gloves/long_white_gloves/long_white_gloves.clothing",
+    "models/citizen_clothes/shoes/smartshoes/smartshoes.clothing"
+  ],
+  "HatShouldReplaceHair": false
+}
