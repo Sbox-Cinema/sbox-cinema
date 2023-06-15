@@ -272,6 +272,19 @@ public class InventoryContainer : IValid
 		}
 	}
 
+    public IEnumerable<IInventoryItem> FindItems( string uniqueId )
+	{
+		for ( int i = 0; i < ItemList.Count; i++ )
+		{
+			var item = ItemList[i];
+
+			if ( item.IsValid() && item.UniqueId == uniqueId )
+			{
+				yield return item;
+			}
+		}
+	}
+
 	public bool Split( InventoryContainer target, ushort fromSlot, ushort toSlot )
 	{
 		if ( !IsOccupied( fromSlot ) )

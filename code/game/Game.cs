@@ -17,6 +17,7 @@ public partial class CinemaGame : GameManager
 {
     public CinemaGame()
     {
+        MountAssets();
     }
 
     public override void Spawn()

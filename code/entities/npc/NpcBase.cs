@@ -66,7 +66,7 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     {
         if (user is not Player player) return false;
         TriggerOnClientUse(To.Single(user.Client), player);
-        return false;
+        return true;
     }
 
     // Internal: Triggers OnClientUse
