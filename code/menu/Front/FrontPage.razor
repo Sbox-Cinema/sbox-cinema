@@ -67,12 +67,12 @@
 
     void LoadSavedGame()
     {
-        this.Navigate( "/load" );
+        this.Navigate("/load");
     }
 
     async Task CreateNewLobby()
     {
-        await Game.Menu.CreateLobbyAsync();
+        await Game.Menu.CreateLobbyAsync(64, "game", true);
         // we will navigate to lobby when it's ready
     }
 
