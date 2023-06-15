@@ -1,7 +1,7 @@
 
 .gamemainmenu
 {
-	background-color: #343948;
+	background-color: rgb(38, 38, 38);
 	//padding: 0 170px;
 	opacity: 1;
 	flex-direction: column;
@@ -27,7 +27,6 @@
 .button, .block {
 	padding: 4px 16px;
 	opacity: 0.8;
-	border-radius: 3px;
 	font-size: 40px;
 	font-family: engebrechtre-rg;
 	font-weight: 700;
@@ -35,13 +34,16 @@
 }
 
 .button {
-	background-color: #000a;
- 
+	background-color: rgb(139, 75, 75, 0.20);
+	border-left: 5px solid rgb(139, 75, 75, 0.70);
 	cursor: pointer;
 
 	&:hover {
 		opacity: 1;
+		transform: translateY(5);
+		transition: all 0.2s ease-in-out;
 	}
+
 
 	&:active {
 		left: 2px;
@@ -178,7 +180,7 @@ h2
 	}
 }
 
-$form-row-height: 48px;
+$form-row-height: 58px;
 
 .form
 {
@@ -216,7 +218,7 @@ $form-row-height: 48px;
 	SliderControl, > DropDown, > textentry, SliderControl textentry
 	{
 		flex-grow: 1;
-		font-size: 20px;
+		font-size: 17px;
 		height: $form-row-height;
 	}
 
@@ -251,7 +253,7 @@ $form-row-height: 48px;
 			> .values
 			{
 				position: absolute;
-				padding: 16px;
+				padding: 24px;
 				color: #fffa;
 			}
 
@@ -260,7 +262,7 @@ $form-row-height: 48px;
 				height: 100%;
 				margin: 2px 0px;
 				border-radius: 0;
-				background-color: #ffffff05;
+				background-color: rgb(137, 62, 62, 0.29);
 
 				>.track-active
 				{
