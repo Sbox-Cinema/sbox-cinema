@@ -30,12 +30,13 @@
 	font-size: 40px;
 	font-family: engebrechtre-rg;
 	font-weight: 700;
-	flex-shrink: 0;
+	flex-shrink:0;
 }
 
 .button {
 	background-color: rgb(139, 75, 75, 0.20);
-	border-left: 5px solid rgb(139, 75, 75, 0.70);
+	//border-left: 5px solid rgb(139, 75, 75, 0.70);
+	border-image: url(ui/backgrounds/cinema_borderfilm.jpg) 1 10 fill;
 	cursor: pointer;
 
 	&:hover {
