@@ -13,6 +13,20 @@ public partial class Projectile : BasePhysics
     public static bool AutoRemoveThrown { get; set; } = true;
 
     /// <summary>
+    /// Defines the amount of time after a projectile is thrown by a seated player
+    /// that the NoCollide hinge hack will be applied between the player and projectile.
+    /// </summary>
+    [ConVar.Replicated("fnb.thrown.nocollidetime")]
+    public static float NoCollideTime { get; set; } = 0.25f;
+
+    /// <summary>
+    /// Defines the amount of time after a projectile is thrown by a standing player
+    /// that collisions will be ignored between the player and projectile.
+    /// </summary>
+    [ConVar.Replicated("fnb.thrown.ignorecollisiontime")]
+    public static float IgnoreCollisionTime { get; set; } = 0.25f;
+
+    /// <summary>
     /// In cases where it makes sense for a projectile to automatically break
     /// apart after being launched, this should be set to true.
     /// </summary>
@@ -53,8 +67,11 @@ public partial class Projectile : BasePhysics
         Owner = entity;
         entity ??= this;
 
-        // Use nocollide hinge hack to work around issue where popcorn collides with the thrower.
-        NoCollide.BeginTimed(entity, this, 0.25f);
+        // Use nocollide hinge hack to work around issue where popcorn collides with a seated thrower.
+        if (entity is Player ply && ply.ActiveController is ChairController)
+        {
+            NoCollide.BeginTimed(entity, this, NoCollideTime);
+        }
 
         var forward = entity.AimRay.Forward;
 
@@ -80,6 +97,10 @@ public partial class Projectile : BasePhysics
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
         lastCollision = eventData;
+
+        // Prevent the projectile from breaking on a player who is standing up.
+        if (TimeSinceSpawned <= IgnoreCollisionTime && eventData.Other.Entity == Owner)
+            return;
 
         // Don't break on the chair you're sitting in.
         if (eventData.Other.Entity is CinemaChair chair && chair.Occupant == Owner)
