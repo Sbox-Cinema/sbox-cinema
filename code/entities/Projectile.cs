@@ -6,6 +6,13 @@ namespace Cinema;
 public partial class Projectile : BasePhysics
 {
     /// <summary>
+    /// If true, food and drink items will automatically be removed from
+    /// a player's inventory after being thrown.
+    /// </summary>
+    [ConVar.Replicated("fnb.thrown.autoremove")]
+    public static bool AutoRemoveThrown { get; set; } = true;
+
+    /// <summary>
     /// In cases where it makes sense for a projectile to automatically break
     /// apart after being launched, this should be set to true.
     /// </summary>
@@ -45,6 +52,12 @@ public partial class Projectile : BasePhysics
     {
         Owner = entity;
         entity ??= this;
+
+        // Use nocollide hinge hack to work around issue where popcorn collides with seated thrower.
+        if (entity is Player ply && ply.ActiveController is ChairController)
+        {
+            NoCollide.BeginTimed(ply, this, 0.25f);
+        }
 
         var forward = entity.AimRay.Forward;
 
