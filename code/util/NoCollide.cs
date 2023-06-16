@@ -66,11 +66,6 @@ public static class NoCollide
             Log.Info($"{nameof(NoCollide)}: {nameof(handle)} is not a PhysicsJoint");
             return;
         }
-        // Make sure these entities exist first before ending the no collide.
-        if (!physicsJoint.Body1.GetEntity().IsValid() || !physicsJoint.Body2.GetEntity().IsValid())
-        {
-            return;
-        }
         physicsJoint.Remove();
     }
 }

@@ -53,11 +53,8 @@ public partial class Projectile : BasePhysics
         Owner = entity;
         entity ??= this;
 
-        // Use nocollide hinge hack to work around issue where popcorn collides with seated thrower.
-        if (entity is Player ply && ply.ActiveController is ChairController)
-        {
-            NoCollide.BeginTimed(ply, this, 0.25f);
-        }
+        // Use nocollide hinge hack to work around issue where popcorn collides with the thrower.
+        NoCollide.BeginTimed(entity, this, 0.25f);
 
         var forward = entity.AimRay.Forward;
 
@@ -83,10 +80,6 @@ public partial class Projectile : BasePhysics
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
         lastCollision = eventData;
-
-        // Prevent the projectile from immediately breaking on the person who threw it.
-        if (TimeSinceSpawned < 0.25f && eventData.Other.Entity == Owner)
-            return;
 
         // Don't break on the chair you're sitting in.
         if (eventData.Other.Entity is CinemaChair chair && chair.Occupant == Owner)
