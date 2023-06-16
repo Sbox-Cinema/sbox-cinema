@@ -51,9 +51,13 @@ public partial class Player
                     return;
                 }
 
-                // This will catch the first OnUse
-                if (Using is IUse usable && usable.OnUse(this))
+                if (Using is not IUse usable) return;
+
+                if (usable.OnUse(this))
                     return;
+
+                StopUsing();
+                return;
             }
 
             if (!Using.IsValid())
@@ -75,6 +79,9 @@ public partial class Player
             }
 
             if (Using is IUse use && use.OnUse(this))
+                return;
+
+            if (Using is ICinemaUse cinemaUse && cinemaUse.ToggleUse)
                 return;
 
             StopUsing();
@@ -107,8 +114,9 @@ public partial class Player
         {
             tr = Trace
                 .Ray(EyePosition, EyePosition + EyeRotation.Forward * InteractRange)
-                .Radius(2)
+                .Radius(15)
                 .Ignore(this)
+                .EntitiesOnly()
                 .Run();
 
             // See if any of the parent entities are usable if we ain't.

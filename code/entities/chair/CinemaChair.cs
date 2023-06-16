@@ -86,7 +86,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
             new Vector3(0, 0, 64),
             16f
             );
-        SetupPhysicsFromCapsule(PhysicsMotionType.Keyframed, capsule);
+        SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 
         Armrests[Armrest.Sides.Left] = new Armrest()
         {

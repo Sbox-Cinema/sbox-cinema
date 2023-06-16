@@ -1,0 +1,9 @@
+{
+  "ClassName": "Hotdog",
+  "ItemName": "Hotdog",
+  "UniqueId": "hotdog_cooked",
+  "Description": "As germans say: \u0027Hei\u00DFer Hund\u0027",
+  "Icon": "ui/icons/hotdog.png",
+  "WorldModel": "models/hotdog/w_hotdog_boxed.vmdl",
+  "Tags": []
+}

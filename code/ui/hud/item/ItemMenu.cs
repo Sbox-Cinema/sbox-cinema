@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Conna.RadialMenu;
+﻿using Conna.RadialMenu;
 using Sandbox;
 using Sandbox.UI;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace Cinema.UI;
 public partial class ItemMenu : RadialMenu
 {
 
-    public static List<WeaponBase> Weapons => (Game.LocalPawn as Player)?.Inventory.Weapons.Where(x => x is WeaponBase).Cast<WeaponBase>().ToList();
+    public static List<WeaponBase> Weapons => (Game.LocalPawn as Player)?.Weapons;
 
     public override string Button => "hotwheel";
 

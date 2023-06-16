@@ -1,0 +1,50 @@
+@using System
+@using Sandbox;
+@using Sandbox.MenuSystem;
+@using Sandbox.UI;
+@using Sandbox.UI.GameMenu;
+@using Sandbox.DataModel.Game;
+
+<root style="flex-direction: column;">
+
+    <div class="navbar">
+
+        <div class="left">
+            <a class="button" href="/"> Home </a>
+            <span class="block">&gt;</span>
+            <span class="block">Load Game</span>
+        </div>
+
+        <div class="right">
+        </div>
+
+    </div>
+
+    <div class="savedgames-list">
+        @foreach (var s in Game.Menu.SavedGames)
+        {
+            <SavedGameCard @onclick=@(() => Select( s ) ) SavedGame=@s></SavedGameCard>
+        }
+    </div>
+
+</root>
+
+@code
+{
+    async void Select( SavedGame savedGame )
+    {
+        var networkType = Game.Menu.Package.GetMeta<NetworkType>("GameNetworkType");
+
+        if ( networkType == NetworkType.Singleplayer )
+        {
+            await Game.Menu.CreateLobbyAsync();
+            Game.Menu.Lobby.SavedGame = savedGame?.Name ?? string.Empty;
+            await Game.Menu.EnterServerAsync();
+        }
+        else
+        {
+            await Game.Menu.CreateLobbyAsync();
+            Game.Menu.Lobby.SavedGame = savedGame?.Name ?? string.Empty;
+        }
+    }
+}
