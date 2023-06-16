@@ -16,7 +16,8 @@ public class Roller : BaseInteractable
         }
     }
 
-    private Switch powerSwitch { get; set; }
+    public Knob Knob { get; set; }
+    public Switch Switch { get; set; }
     private bool front;
     private Slot[] slots = new Slot[10];
 
@@ -24,9 +25,10 @@ public class Roller : BaseInteractable
     {
     }
 
-    public Roller(Switch p_switch, bool front = false)
+    public Roller(Switch p_switch, Knob knob, bool front = false)
     {
-        powerSwitch = p_switch;
+        Switch = p_switch;
+        Knob = knob;
         this.front = front;
 
         for (int i = 0; i < 10; i++)
@@ -45,7 +47,7 @@ public class Roller : BaseInteractable
             if (slotData.Entity is null || !slotData.Entity.IsValid)
             {
                 var parent = Parent as HotdogRoller;
-                var hotdog = new HotdogCookable(powerSwitch);
+                var hotdog = new HotdogCookable(this);
 
                 if (parent.GetAttachment(slotData.Attachment) is Transform t)
                 {

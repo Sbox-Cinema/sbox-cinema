@@ -92,25 +92,19 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
             Maxs = new Vector3(15.3539f, 12.0183f, 10.5137f)
         });
 
-        Interactables.Add("F_Roller", new Roller(Interactables["R_Switch"] as Switch, true)
+        Interactables.Add("F_Roller", new Roller(Interactables["R_Switch"] as Switch, Interactables["R_Knob"] as Knob, true)
         {
             Parent = this,
             Mins = new Vector3(15.0759f, -12.073f, 12.4461f),
             Maxs = new Vector3(0.6771f, 11.927f, 16.4461f)
         });
 
-        Interactables.Add("B_Roller", new Roller(Interactables["L_Switch"] as Switch)
+        Interactables.Add("B_Roller", new Roller(Interactables["L_Switch"] as Switch, Interactables["L_Knob"] as Knob)
         {
             Parent = this,
             Mins = new Vector3(-0.6439f, -12.073f, 12.4461f),
             Maxs = new Vector3(-15.0427f, 11.927f, 16.4461f)
         });
-    }
-
-    [Event("PlayerAttack2")]
-    public void PlayerAttack2(Player ply, Entity ent)
-    {
-
     }
 
     [GameEvent.Tick]
