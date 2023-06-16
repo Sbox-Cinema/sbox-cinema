@@ -20,6 +20,8 @@ partial class Player : AnimatedEntity, IEyes
     [Net, Predicted]
     public bool ThirdPersonCamera { get; set; }
 
+    public UI.NameTag HeadTag { get; set; }
+
 
     // How long this player has been on the server
     [Net]
@@ -58,7 +60,10 @@ partial class Player : AnimatedEntity, IEyes
         Tags.Add("player");
     }
 
-    public override void ClientSpawn() { }
+    public override void ClientSpawn() 
+    {
+        HeadTag = new UI.NameTag(this);
+    }
 
     public void Respawn()
     {
