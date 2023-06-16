@@ -195,6 +195,7 @@ public partial class WeaponBase : Carriable
             .Weapons
             .FirstOrDefault(w => w.Name == Name);
         nextWeapon ??= WeaponHolder.GetBestWeapon();
+        Log.Info($"Next weapon: {nextWeapon?.Name}");
 
         WeaponHolder.Inventory.Remove(Item);
         WeaponHolder.ActiveChild = nextWeapon;
