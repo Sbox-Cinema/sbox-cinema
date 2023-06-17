@@ -5,11 +5,13 @@ using Sandbox;
 
 namespace Cinema.UI;
 
-public partial class StoreInterface
+public partial class StoreInterface : IMenuScreen
 {
     public static StoreInterface Instance { get; set; }
+    public bool IsOpen { get; protected set; }
+    public string Name => $"Store: {Store.Name}";
 
-    private Store Store
+    public Store Store
     {
         get { return _Store; }
         set
@@ -30,23 +32,21 @@ public partial class StoreInterface
 
     public StoreItem HoveredItem { get; set; }
 
-    public bool Open { get; protected set; } = false;
-
     public StoreInterface()
     {
         Instance = this;
     }
 
-    public void OpenForStore(Store store)
+    public bool Open()
     {
-        Store = store;
-        Open = true;
+        IsOpen = true;
+        return true;
     }
 
     public void Close()
     {
         Store = null;
-        Open = false;
+        IsOpen = false;
     }
 
     public void OnItemClicked(StoreItem item)
@@ -75,6 +75,6 @@ public partial class StoreInterface
             hash = hash * 31 + item.GetHashCode();
         }
 
-        return HashCode.Combine(Open, hash, Store?.StoreId);
+        return HashCode.Combine(IsOpen, hash, Store?.StoreId);
     }
 }

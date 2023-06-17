@@ -1,3 +1,4 @@
+using Conna.Inventory;
 using Sandbox;
 using System;
 
@@ -20,26 +21,24 @@ public class StoreItem
     /// </summary>
     public Action<Player> OnPurchase { get; set; }
 
-
-    public StoreItem GivesWeapon(string weaponClass)
+    public StoreItem GivesItem(string itemUniqueId)
     {
         OnPurchase = (Player player) =>
         {
-            Log.Info($"Purchased {weaponClass}");
-            var weapon = Entity.CreateByName<Carriable>(weaponClass);
-            if (!weapon.IsValid())
+            var item = InventorySystem.CreateItem(itemUniqueId);
+            if (!item.IsValid())
             {
-                Log.Error($"Failed to create weapon of class {weaponClass}");
+                Log.Error($"Failed to create item with id of {itemUniqueId}");
                 return;
             }
 
-            player.Inventory.AddWeapon(weapon, true);
+            player.PickupItem(item);
         };
 
         return this;
     }
 
-    public static StoreItem Weapon(string name, string description, string icon, int cost, string weaponClass)
+    public static StoreItem Item(string name, string description, string icon, int cost, string itemUniqueId)
     {
         var item = new StoreItem()
         {
@@ -49,7 +48,7 @@ public class StoreItem
             Cost = cost
         };
 
-        item.GivesWeapon(weaponClass);
+        item.GivesItem(itemUniqueId);
 
         return item;
     }

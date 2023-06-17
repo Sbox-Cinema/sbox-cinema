@@ -7,7 +7,7 @@ public partial class Nachos : WeaponBase
     public override string Name => "Box of Nachos";
     public override string Description => "Its nacho business";
     public override string Icon => "ui/icons/nachos.png";
-    public override Model WorldModel => Model.Load("models/nachos_tray/nachos_tray.vmdl");
+    public override Model WorldModel => Model.Load("models/nachos_tray/w_nachos_tray.vmdl");
     public override string ViewModelPath => "models/nachos_tray/v_nachos_tray.vmdl";
     public override float PrimaryFireRate => 0.65f;
     public override int BaseUses => 26;
@@ -32,14 +32,13 @@ public partial class Nachos : WeaponBase
         {
             var projectile = new Projectile()
             {
-                Owner = WeaponHolder,
                 Model = Model.Load("models/nachos_tray/nachos_tray.vmdl"),
-                Position = WeaponHolder.AimRay.Position + WeaponHolder.AimRay.Forward * 5.0f,
-                Rotation = WeaponHolder.EyeRotation,
+                BreakAfterLaunch = true
             };
 
-            projectile.PhysicsBody.Velocity = WeaponHolder.AimRay.Forward * 450.0f + WeaponHolder.Rotation.Up * 250.0f;
-            projectile.PhysicsBody.AngularVelocity = WeaponHolder.EyeRotation.Forward + Vector3.Random * 15;
+            projectile.LaunchFromEntityViewpoint(WeaponHolder);
+            
+            RemoveFromHolder();
         }
     }
 

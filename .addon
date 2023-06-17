@@ -1,13 +1,14 @@
 {
   "Title": "Cinema",
   "Type": "game",
-  "Org": "local",
+  "Org": "cinemateam",
   "Ident": "cinema",
   "Tags": null,
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": [],
+  "Resources": null,
+  "MenuResources": "fonts/*\nmenu/*\n*.png\n*.jpg",
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [
@@ -30,6 +31,13 @@
     "HttpAllowList": [
       "https://cinema-api.fly.dev/"
     ],
+    "Compiler": {
+      "RootNamespace": "Cinema",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "References": [],
+      "DistinctReferences": []
+    },
     "ControlModes": {
       "Keyboard": true
     },
@@ -209,9 +217,54 @@
           "GroupName": "Other"
         },
         {
-          "Name": "HotWheel",
-          "KeyboardCode": "T",
+          "Name": "Holster",
+          "KeyboardCode": "H",
           "GroupName": "Other"
+        }
+      ]
+    },
+    "Collision": {
+      "Defaults": {
+        "solid": "Collide",
+        "trigger": "Trigger",
+        "ladder": "Ignore",
+        "water": "Trigger",
+        "garbage": "Collide",
+        "player": "Collide"
+      },
+      "Pairs": [
+        {
+          "a": "solid",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "playerclip",
+          "r": "Ignore"
+        },
+        {
+          "a": "trigger",
+          "b": "solid",
+          "r": "Trigger"
+        },
+        {
+          "a": "solid",
+          "b": "trigger",
+          "r": "Collide"
+        },
+        {
+          "a": "playerclip",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "garbage",
+          "b": "garbage"
+        },
+        {
+          "a": "solid",
+          "b": "garbage"
         }
       ]
     }

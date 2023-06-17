@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace Cinema;
 
@@ -37,6 +38,12 @@ public partial class WeaponBase : Carriable
     public override void Simulate(IClient cl)
     {
         base.Simulate(cl);
+
+        if (CanHolster())
+        {
+            Holster();
+            return;
+        }
 
         //If the holder is reloading, wait until the reload is finished
         if (IsReloading)
@@ -111,6 +118,11 @@ public partial class WeaponBase : Carriable
         return !IsReloading && Input.Pressed("reload");
     }
 
+    public virtual bool CanHolster()
+    {
+        return Input.Pressed("holster");
+    }
+
     //Primary fire
     public virtual void PrimaryFire()
     {
@@ -132,6 +144,11 @@ public partial class WeaponBase : Carriable
     {
         IsReloading = true;
         ReloadTime = ReloadingTime;
+    }
+
+    public virtual void Holster()
+    {
+        WeaponHolder.ActiveChild = null;
     }
 
     //Finishes reloading
@@ -166,6 +183,21 @@ public partial class WeaponBase : Carriable
         ViewModelEntity.Owner = Owner;
         ViewModelEntity.EnableViewmodelRendering = true;
         ViewModelEntity.SetModel(ViewModelPath);
+    }
+
+    public void RemoveFromHolder()
+    {
+        if (!WeaponHolder.IsValid())
+            return;
+
+        // Get the next weapon of the same type if we have one
+        var nextWeapon = WeaponHolder
+            .Weapons
+            .FirstOrDefault(w => w.Name == Name);
+        nextWeapon ??= WeaponHolder.GetBestWeapon();
+
+        WeaponHolder.Inventory.Remove(Item);
+        WeaponHolder.ActiveChild = nextWeapon;
     }
 }
 
