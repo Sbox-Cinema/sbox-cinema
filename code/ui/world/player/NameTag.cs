@@ -19,7 +19,7 @@ public partial class NameTag
 
     public override void Tick()
     {
-        var DistanceThreshold = Player.Position.Distance(Camera.Position) > FadeDistance;
+        var IsOutOfRange = Player.Position.Distance(Camera.Position) > FadeDistance;
 
         if (!Player.IsValid)
         {
@@ -27,13 +27,20 @@ public partial class NameTag
             return;
         }
 
-        if (Player.IsFirstPersonMode || DistanceThreshold || Player.ActiveController is ChairController)
+        if (Player.IsFirstPersonMode || IsOutOfRange)
         {
             Title.Style.Opacity = 0;
             return;
         }
 
-        Title.Style.Opacity = 1;
+        if (Player.ActiveController is ChairController)
+        {
+            Title.Style.Opacity = 0;
+        } else
+        {
+            Title.Style.Opacity = 1;
+        }
+
         Position = Player.GetBoneTransform("head").Position + Vector3.Up * 20;
         Rotation = Rotation.LookAt(Camera.Rotation.Forward * -1.0f, Vector3.Up);
     }
