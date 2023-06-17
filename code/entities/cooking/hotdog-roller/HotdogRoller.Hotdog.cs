@@ -36,13 +36,11 @@ public partial class HotdogCookable : ModelEntity
     [GameEvent.Tick.Server]
     public void Tick()
     {
-        if (rollerParent.Switch.TogglePower != steam.EnableDrawing)
+        if (rollerParent.Switch.TogglePower != steam.EnableDrawing && currentCook > 30)
             steam.EnableDrawing = rollerParent.Switch.TogglePower;
 
         if (!rollerParent.Switch.TogglePower)
             return;
-
-        var parent =
 
         currentCook += Time.Delta * rollerParent.Knob.KnobRotation;
 
