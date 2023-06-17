@@ -1,6 +1,4 @@
-﻿using Sandbox;
-
-namespace Cinema.Interactables;
+﻿namespace Sandbox.util;
 
 public struct CanTriggerResults
 {
@@ -42,7 +40,7 @@ public partial class BaseInteractable : BaseNetworkable
         return new CanTriggerResults(hit, dist);
     }
 
-    public bool TryTrigger( Ray ray )
+    public bool TryTrigger(Ray ray)
     {
         var canTrigger = CanTrigger(ray);
 

@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Cinema.Interactables;
+using Sandbox.util;
 
 namespace Cinema.HotdogRoller;
 
