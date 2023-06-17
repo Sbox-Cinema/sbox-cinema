@@ -32,7 +32,7 @@
   <PropertyGroup>
 	<OutputPath>..\..\../.vs/output/</OutputPath>
 	<DocumentationFile>..\..\../.vs/output/cinema.xml</DocumentationFile>
-	<RootNamespace>Sandbox</RootNamespace>
+	<RootNamespace>Cinema</RootNamespace>
 	<Nullable>disable</Nullable>
   </PropertyGroup>
 
