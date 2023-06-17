@@ -4,6 +4,12 @@ namespace Cinema.UI;
 
 public partial class NameTag 
 {
+    /// <summary>
+    /// Fade distance of name tags, for all players
+    /// </summary>
+    [ConVar.Replicated("nametag.distance")]
+    public static float FadeDistance { get; set; } = 500f;
+
     public Player Player { get; set; }
 
     public NameTag(Player player)
@@ -13,9 +19,17 @@ public partial class NameTag
 
     public override void Tick()
     {
+        var DistanceThreshold = Player.Position.Distance(Camera.Position) > FadeDistance;
+
         if (!Player.IsValid)
         {
             Delete();
+            return;
+        }
+
+        if (DistanceThreshold)
+        {
+            Title.Style.Opacity = 0;
             return;
         }
 
