@@ -173,6 +173,7 @@ public partial class PlayerBodyController : PlayerController, ISingletonComponen
             .Ray(start, end)
             .Size(mins, maxs)
             .WithAnyTags("solid", "playerclip", "passbullets")
+            .WithoutTags("projectile")
             .Ignore(Player)
             .Run();
 
