@@ -33,19 +33,13 @@ public partial class NameTag
             return;
         }
 
-        if ((Game.LocalPawn as Player)?.ActiveController is ChairController)
+        if ((Game.LocalPawn as Player)?.ActiveController is ChairController && Player.ActiveController is ChairController)
         {
             Title.Style.Opacity = 0;
-        } else {
-            Title.Style.Opacity = 1;
         }
-
-        if (Player.ActiveController is not ChairController)
+        else
         {
             Title.Style.Opacity = 1;
-        } else
-        {
-            Title.Style.Opacity = 0;
         }
 
         Position = Player.GetBoneTransform("head").Position + Vector3.Up * 20;
