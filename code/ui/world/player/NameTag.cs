@@ -23,13 +23,7 @@ public partial class NameTag
 
         if (!Player.IsValid)
         {
-            Delete();
-            return;
-        }
-
-        if (Player.IsFirstPersonMode || IsOutOfRange)
-        {
-            Title.Style.Opacity = 0;
+            Delete(true);
             return;
         }
 
@@ -41,6 +35,16 @@ public partial class NameTag
         {
             Title.Style.Opacity = 1;
         }
+
+        if ((Game.LocalPawn as Player).IsFirstPersonMode || IsOutOfRange)
+        {
+            Title.Style.Opacity = 0;
+        }
+        else
+        {
+            Title.Style.Opacity = 1;
+        }
+
 
         Position = Player.GetBoneTransform("head").Position + Vector3.Up * 20;
         Rotation = Rotation.LookAt(Camera.Rotation.Forward * -1.0f, Vector3.Up);
