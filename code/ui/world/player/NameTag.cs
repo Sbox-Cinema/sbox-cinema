@@ -30,9 +30,7 @@ public partial class NameTag
         if (Player.IsFirstPersonMode || IsOutOfRange)
         {
             Title.Style.Opacity = 0;
-        } else
-        {
-            Title.Style.Opacity = 1;
+            return;
         }
 
         if ((Game.LocalPawn as Player)?.ActiveController is ChairController && Player.ActiveController is ChairController)
