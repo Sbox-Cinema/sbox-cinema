@@ -23,20 +23,15 @@ public partial class NameTag
 
         if (!Player.IsValid)
         {
-            Delete(true);
+            Delete();
             return;
         }
 
-        if ((Game.LocalPawn as Player)?.ActiveController is ChairController && Player.ActiveController is ChairController)
+        if (Player.IsFirstPersonMode || IsOutOfRange)
         {
             Title.Style.Opacity = 0;
         }
-        else
-        {
-            Title.Style.Opacity = 1;
-        }
-
-        if (Player.IsFirstPersonMode || IsOutOfRange)
+        else if ((Game.LocalPawn as Player)?.ActiveController is ChairController && Player.ActiveController is ChairController)
         {
             Title.Style.Opacity = 0;
         }
