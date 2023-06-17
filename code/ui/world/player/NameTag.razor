@@ -18,20 +18,11 @@
             color: rgb(255, 255, 255);
             text-stroke: 10px rgb(47, 47, 47);
         }
-
-        .avatar {
-            width: 35px;
-            height: 35px;
-            margin-right: 15px;
-            border-radius: 100px;
-            background-size: cover;
-        }
     }
 </style>
 
 <root>
     <div class="title" @ref="Title">@Player.Client.Name</div>
-    @*<img src="avatar:@Player.Client.SteamId" class="avatar" />*@
 </root>
 
 @code {
