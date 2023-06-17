@@ -1,11 +1,9 @@
 ﻿using Sandbox;
-using System;
 
 namespace Cinema.HotdogRoller;
 
 public partial class HotdogCookable : ModelEntity
 {
-    // TODO cooking 
     public bool Reversed { get; set; }
     private Roller rollerParent {get; set;}
     private Particles steam { get; set; }
