@@ -18,6 +18,9 @@ public partial class Player
     [ClientInput]
     public string ActiveMenuName { get; protected set; }
 
+    // Players' world panels
+    public NameTag HeadTag { get; set; }
+
     /// <summary>
     /// On the client, this is the active menu. On the server this will be
     /// null, but you can use <c>IsMenuOpen</c> and <c>ActiveMenuName</c> to
@@ -79,6 +82,13 @@ public partial class Player
         {
             OpenMenu(menu);
         }
+    }
+    /// <summary>
+    /// Initializes things like player name tags. Anything that is attached to the player.
+    /// </summary>
+    public void InitializeWorldPanels()
+    {
+        HeadTag = new NameTag(this);
     }
 
     public void SimulateUI()

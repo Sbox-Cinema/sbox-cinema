@@ -58,7 +58,10 @@ partial class Player : AnimatedEntity, IEyes
         Tags.Add("player");
     }
 
-    public override void ClientSpawn() { }
+    public override void ClientSpawn() 
+    {
+        InitializeWorldPanels();
+    }
 
     public void Respawn()
     {

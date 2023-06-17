@@ -1,0 +1,30 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.UI.Construct;
+
+@namespace Cinema.UI
+
+@inherits WorldPanel
+
+<style>
+   NameTag {
+        justify-content: center;
+        align-items: center;
+
+        .title {
+            font-family: SourceSansPro-SemiBold;
+            font-size: 50px;
+            transition: opacity 2s ease-out;
+            color: rgb(255, 255, 255);
+            text-stroke: 10px rgb(47, 47, 47);
+        }
+    }
+</style>
+
+<root>
+    <div class="title" @ref="Title">@Player.Client.Name</div>
+</root>
+
+@code {
+    public Panel Title;
+}
