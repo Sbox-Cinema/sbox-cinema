@@ -68,8 +68,6 @@ public partial class Carriable : AnimatedEntity, IUse
     {
         EnableDrawing = true;
 
-        Log.Info("before start");
-
         //
         // If we're the local player (clientside) create viewmodel
         // and any HUD elements that this weapon wants
@@ -78,7 +76,6 @@ public partial class Carriable : AnimatedEntity, IUse
         {
             DestroyViewModel();
 
-            Log.Info("start");
             CreateViewModel();
             CreateHudElements();
         }

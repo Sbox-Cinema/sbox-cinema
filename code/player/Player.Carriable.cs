@@ -19,7 +19,6 @@ public partial class Player
     {
         if (LastActiveChild != ActiveChild)
         {
-            Log.Info("Active child changed");
             OnActiveChildChanged(LastActiveChild, ActiveChild);
             LastActiveChild = ActiveChild;
         }
@@ -45,7 +44,6 @@ public partial class Player
 
         if (next is Carriable nextBc)
         {
-            Log.Info($"Carriable changed to: {nextBc?.Name}");
             nextBc?.ActiveStart(this);
         }
     }
