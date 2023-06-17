@@ -32,12 +32,19 @@ public partial class NameTag
             Title.Style.Opacity = 0;
             return;
         }
-
+/*
         if (Player.ActiveController is ChairController)
         {
             Title.Style.Opacity = 0;
         } else
         {
+            Title.Style.Opacity = 1;
+        }*/
+
+        if ((Game.LocalPawn as Player)?.ActiveController is ChairController)
+        {
+            Title.Style.Opacity = 0;
+        } else {
             Title.Style.Opacity = 1;
         }
 
