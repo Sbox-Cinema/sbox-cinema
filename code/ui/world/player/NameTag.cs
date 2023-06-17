@@ -40,6 +40,14 @@ public partial class NameTag
             Title.Style.Opacity = 1;
         }
 
+        if (Player.ActiveController is not ChairController)
+        {
+            Title.Style.Opacity = 1;
+        } else
+        {
+            Title.Style.Opacity = 0;
+        }
+
         Position = Player.GetBoneTransform("head").Position + Vector3.Up * 20;
         Rotation = Rotation.LookAt(Camera.Rotation.Forward * -1.0f, Vector3.Up);
     }
