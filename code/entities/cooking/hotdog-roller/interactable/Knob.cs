@@ -17,7 +17,7 @@ public class Knob : BaseInteractable
         this.animName = animName;
     }
 
-    public override void Trigger()
+    public override void Trigger(Player ply)
     {
         KnobRotation += 1;
         KnobRotation = KnobRotation > 7 ? 0 : KnobRotation;

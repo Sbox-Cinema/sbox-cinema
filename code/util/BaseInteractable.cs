@@ -1,15 +1,19 @@
 ﻿namespace Sandbox.util;
 
-public struct CanTriggerResults
+public class CanTriggerResults
 {
-    public CanTriggerResults(bool hit, float dist)
+    public CanTriggerResults(bool hit, float dist, BaseInteractable interactable, Vector3 hitpos)
     {
         Hit = hit;
         Distance = dist;
+        Interactable = interactable;
+        HitPosition= hitpos;
     }
 
     public bool Hit;
     public float Distance;
+    public BaseInteractable Interactable;
+    public Vector3 HitPosition;
 }
 
 public partial class BaseInteractable : BaseNetworkable
@@ -20,24 +24,33 @@ public partial class BaseInteractable : BaseNetworkable
     public Vector3 Mins { get; set; }
     [Net]
     public Vector3 Maxs { get; set; }
-    public float MaxDistance { get; set; } = 90f;
+    public float MaxDistance { get; set; } = 60f;
+    public CanTriggerResults LastTriggerResults {get; set; }
 
     public BaseInteractable()
     {
     }
 
-    public virtual void Trigger()
+    public virtual void Trigger(Cinema.Player ply = null)
     {
     }
 
     public CanTriggerResults CanTrigger(Ray ray)
     {
+        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
+            .WithoutTags("player")
+            .EntitiesOnly()
+            .Run();
+
         var mins = Parent.Transform.PointToWorld(Mins);
         var maxs = Parent.Transform.PointToWorld(Maxs);
-        var bounds = new BBox(mins, maxs);
+        var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
         var hit = bounds.Trace(ray, MaxDistance, out float dist);
+        var trigger_results = new CanTriggerResults(hit, dist, this, tr.HitPosition);
 
-        return new CanTriggerResults(hit, dist);
+        LastTriggerResults = trigger_results;
+
+        return trigger_results;
     }
 
     public bool TryTrigger(Ray ray)

@@ -17,7 +17,7 @@ public class Switch : BaseInteractable
         this.animName = animName;
     }
 
-    public override void Trigger()
+    public override void Trigger(Player ply)
     {
         var parent = Parent as AnimatedEntity;
         var hotdogRoller = Parent as HotdogRoller;

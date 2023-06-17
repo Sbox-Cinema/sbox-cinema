@@ -48,13 +48,13 @@ public partial class HotdogCookable : ModelEntity
 
         switch (currentCook)
         {
-            case <= 10:
+            case <= 50:
                 SetMaterialGroup(1);
             break;
-            case <= 20:
+            case <= 100:
                 SetMaterialGroup(2);
             break;
-            case > 30:
+            case > 150:
                 SetMaterialGroup(3);
             break;
         }
