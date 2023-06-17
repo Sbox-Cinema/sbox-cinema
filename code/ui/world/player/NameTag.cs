@@ -33,6 +33,12 @@ public partial class NameTag
             return;
         }
 
+        if (Player.IsFirstPersonMode)
+        {
+            Title.Style.Opacity = 0;
+            return;
+        }
+
         if (Player.ActiveController is ChairController)
         {
             Title.Style.Opacity = 0;
