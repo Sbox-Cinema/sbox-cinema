@@ -36,7 +36,7 @@ public partial class NameTag
             Title.Style.Opacity = 1;
         }
 
-        if ((Game.LocalPawn as Player).IsFirstPersonMode || IsOutOfRange)
+        if (Player.IsFirstPersonMode || IsOutOfRange)
         {
             Title.Style.Opacity = 0;
         }
