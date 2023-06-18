@@ -9,7 +9,7 @@ namespace Cinema.UI;
 public partial class Scoreboard : Panel, IMenuScreen
 {
     public static Scoreboard Instance { get; set; }
-    public string Name => "Scoreboard";
+    public string Name => Game.Server.ServerTitle;
     public bool IsOpen { get; protected set; }
     public string VisibleClass => IsOpen ? "visible" : "";
     public IReadOnlyCollection<IClient> Clients => Game.Clients;
@@ -17,6 +17,8 @@ public partial class Scoreboard : Panel, IMenuScreen
     public Scoreboard()
     {
         Instance = this;
+
+        
     }
     public bool Open()
     {
