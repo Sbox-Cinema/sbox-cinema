@@ -68,6 +68,10 @@ public class Roller : BaseInteractable
         return hotdog;
     }
 
+    /// <summary>
+    /// This will add or take the hotdog you are pressing closest to, if nothing is close it will just add a hotdog to the nearest possible slot.
+    /// </summary>
+    /// <param name="ply"></param>
     public override void Trigger(Player ply)
     {
         List<SlotDist> slotsIndexed = new List<SlotDist>();

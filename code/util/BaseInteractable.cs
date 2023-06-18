@@ -35,6 +35,11 @@ public partial class BaseInteractable : BaseNetworkable
     {
     }
 
+    /// <summary>
+    /// This one will check if you can trigger.
+    /// </summary>
+    /// <param name="ray"></param>
+    /// <returns></returns>
     public CanTriggerResults CanTrigger(Ray ray)
     {
         var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
@@ -53,6 +58,11 @@ public partial class BaseInteractable : BaseNetworkable
         return trigger_results;
     }
 
+    /// <summary>
+    /// This will check if you can trigger, if it can it will actually trigger.
+    /// </summary>
+    /// <param name="ray"></param>
+    /// <returns></returns>
     public bool TryTrigger(Ray ray)
     {
         var canTrigger = CanTrigger(ray);
