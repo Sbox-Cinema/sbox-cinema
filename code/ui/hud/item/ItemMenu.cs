@@ -11,7 +11,7 @@ public partial class ItemMenu : RadialMenu
 
     public static List<WeaponBase> Weapons => (Game.LocalPawn as Player)?.Weapons;
 
-    public override string Button => "hotwheel";
+    public override string Button => "menu";
 
     public override void Populate()
     {

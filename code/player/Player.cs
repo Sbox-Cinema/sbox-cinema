@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
 namespace Cinema;
 
@@ -136,8 +135,6 @@ partial class Player : AnimatedEntity, IEyes
 
         TickPlayerUse();
 
-        TickPlayerInteract();
-
         ActiveController?.Simulate(cl);
 
         if (ActiveController is PlayerBodyController bodyController)
@@ -160,17 +157,5 @@ partial class Player : AnimatedEntity, IEyes
         ActiveController?.FrameSimulate(cl);
 
         SimulateUI();
-    }
-
-    private void TickPlayerInteract()
-    {
-        if (Input.Pressed("attack2") && Game.IsServer)
-        {
-            TraceResult tr = Trace.Ray(AimRay, 1024.0f)
-            .EntitiesOnly()
-            .Run();
-
-            Event.Run("PlayerAttack2", this, tr.Entity);
-        }
     }
 }

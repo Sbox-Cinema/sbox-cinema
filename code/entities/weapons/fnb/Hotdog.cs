@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class Hotdog : WeaponBase
 {
     public override string Name => "Hotdog";
-    public override string Description => "A raw hotdog";
+    public override string Description => "As the Germans say: 'Heißer Hund'";
     public override string Icon => "ui/icons/hotdog.png";
     public override Model WorldModel => Model.Load("models/hotdog/hotdog_roller.vmdl");
     public override string ViewModelPath => "models/hotdog/v_hotdog_roller.vmdl";
