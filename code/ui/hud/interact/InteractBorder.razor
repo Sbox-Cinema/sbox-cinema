@@ -13,11 +13,7 @@
 @code {
     public string GetClass() => HoveredInteractable != null ? "visible" : "";
     public string GetFadeOutTime() => FadeOutTime.ToString();
-
-    private float FadeOutTime = 0.5f;
-    private TimeSince TimeSinceHoverEnd;
-    private Rect ScreenBounds { get; set; }
-    public Entity HoveredInteractable 
+    public Entity HoveredInteractable
     {
         get => _HoveredInteractable;
         set
@@ -34,7 +30,11 @@
         }
     }
     private Entity _HoveredInteractable;
+
     private BBox HoveredBounds;
+    private float FadeOutTime = 0.5f;
+    private TimeSince TimeSinceHoverEnd;
+    private Rect ScreenBounds { get; set; }
 
     public override void Tick()
     {
@@ -42,6 +42,8 @@
             ? ply.FindUsable(true) 
             : null;
 
+        // We don't stop tracking the interactable until the fade out is finished.
+        // This prevents the border from jumping around when the interactable is removed.
         if (HoveredInteractable == null && TimeSinceHoverEnd >= FadeOutTime)
             return;
 
