@@ -12,14 +12,11 @@ public partial class Scoreboard : Panel, IMenuScreen
     public string Name => "Scoreboard";
     public bool IsOpen { get; protected set; }
     public string VisibleClass => IsOpen ? "visible" : "";
-
     public IReadOnlyCollection<IClient> Clients => Game.Clients;
 
     public Scoreboard()
     {
         Instance = this;
-
-       
     }
     public bool Open()
     {
