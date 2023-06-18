@@ -97,5 +97,10 @@ public partial class Player
         {
             ToggleMenu(MovieQueue.Instance);
         }
+
+        if (Input.Pressed("Score") && ActiveMenu is null or Scoreboard)
+        {
+            ToggleMenu(Scoreboard.Instance);
+        }
     }
 }
