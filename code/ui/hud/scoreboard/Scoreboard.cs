@@ -1,6 +1,8 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cinema.UI;
 
@@ -11,14 +13,18 @@ public partial class Scoreboard : Panel, IMenuScreen
     public bool IsOpen { get; protected set; }
     public string VisibleClass => IsOpen ? "visible" : "";
 
+    public IReadOnlyCollection<IClient> Clients => Game.Clients;
+
     public Scoreboard()
     {
         Instance = this;
+
+       
     }
     public bool Open()
     {
         IsOpen = true;
-
+        
         return true;
     }
     public void Close()
@@ -33,6 +39,6 @@ public partial class Scoreboard : Panel, IMenuScreen
     {
         var queueHash = 11;
 
-        return HashCode.Combine(IsOpen, queueHash);
+        return HashCode.Combine(IsOpen, queueHash, Clients);
     }
 }

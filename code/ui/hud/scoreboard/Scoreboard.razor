@@ -53,6 +53,22 @@
 			background-color: rgba(0,0,0,0.8);
 		}
 
+		.client 
+		{
+			color: white;
+		}
+
+		.client .name 
+		{
+			font-size: 32px;
+			padding: 16px;
+		}
+
+		.client .ping 
+		{
+			font-size: 30px;
+		}
+
 		&.visible
 		{
 			opacity: 1.0;
@@ -68,6 +84,13 @@
 		</div>
 		
 		<div class="section">
+			<div class="client">
+			@foreach (var client in Clients)
+			{
+				<label class="name">@client.Name</label>
+				<label class="ping">@client.Ping</label>
+			}	
+			</div>
 			
 		</div>
 
