@@ -11,6 +11,9 @@ partial class Player : AnimatedEntity, IEyes
     [BindComponent]
     public PlayerBodyController BodyController { get; }
 
+    [BindComponent]
+    public Footstepper Footstepper { get; }
+
     public IEnumerable<PlayerController> PlayerControllers => Components.GetAll<PlayerController>();
 
     public PlayerController ActiveController => PlayerControllers.FirstOrDefault((e) => e.Active);
@@ -87,6 +90,8 @@ partial class Player : AnimatedEntity, IEyes
         EnableDrawing = true;
         Children.OfType<ModelEntity>().ToList().ForEach(x => x.EnableDrawing = true);
 
+        Components.Create<Footstepper>();
+
         SetupBodyController();
         BodyController.Active = true;
 
@@ -161,4 +166,10 @@ partial class Player : AnimatedEntity, IEyes
 
         SimulateUI();
     }
+
+    public override void OnAnimEventFootstep(Vector3 position, int foot, float volume)
+    {
+        Footstepper.DoFootstep(position, foot, volume);
+    }
+        
 }
