@@ -24,7 +24,7 @@
         background-size: 100%;
 
         &.top {
-            background-image: url("ui/interact-border/interact-border-large-top.webp");
+            background-image: url("ui/interact-border/largeTopLeft2.webp");
 
             &.right {
                 transform: scaleX(-1);
@@ -32,7 +32,7 @@
         }
 
         &.bottom {
-            background-image: url("ui/interact-border/interact-border-large-bottom.webp");
+            background-image: url("ui/interact-border/largeBottomLeft2.webp");
 
             &.right {
                 transform: scaleX(-1);
