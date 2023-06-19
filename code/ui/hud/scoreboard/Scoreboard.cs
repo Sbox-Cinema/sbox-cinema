@@ -17,8 +17,6 @@ public partial class Scoreboard : Panel, IMenuScreen
     public Scoreboard()
     {
         Instance = this;
-
-        
     }
     public bool Open()
     {
