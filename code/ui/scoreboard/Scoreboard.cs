@@ -20,7 +20,7 @@ public partial class Scoreboard : Panel, IMenuScreen
     public bool Open()
     {
         IsOpen = true;
-        
+
         return true;
     }
     public void Close()
