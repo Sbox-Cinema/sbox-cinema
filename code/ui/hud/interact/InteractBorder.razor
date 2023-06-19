@@ -7,7 +7,12 @@
 @inherits Panel;
 
 <root style="transition: opacity, @(GetFadeOutTime())s, ease-in;" class=@GetClass()>
-
+    <div class="border-corner top left"/>
+    <div class="border-filler"/>
+    <div class="border-corner top right"/>
+    <div class="border-corner bottom left"/>
+    <div class="border-filler"/>
+    <div class="border-corner bottom right"/>
 </root>
 
 @code {

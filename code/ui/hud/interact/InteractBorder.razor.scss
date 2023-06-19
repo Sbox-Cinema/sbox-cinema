@@ -1,16 +1,42 @@
 ﻿InteractBorder {
     position: absolute;
-    border-width: 2px;
-    border-color: white;
-    box-shadow: 2px 2px 20px 2px white;
-    border-radius: 10px;
     transition: opacity 0.15s ease-in;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
 
     &.visible {
-        opacity: 0.5;
+        opacity: 1;
     }
 
     &:not(.visible) {
         opacity: 0;
+    }
+
+    > .border-filler {
+        width: 79%;
+    }
+
+    > .border-corner {
+        width: 10%;
+        height: 20%;
+        background-size: 100%;
+
+        &.top {
+            background-image: url("ui/interact-border/interact-border-large-top.webp");
+
+            &.right {
+                transform: scaleX(-1);
+            }
+        }
+
+        &.bottom {
+            background-image: url("ui/interact-border/interact-border-large-bottom.webp");
+
+            &.right {
+                transform: scaleX(-1);
+            }
+        }
     }
 }
