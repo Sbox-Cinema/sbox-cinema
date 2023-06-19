@@ -46,6 +46,8 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// </summary>
     [ConVar.Client("projector.bounce.fadedistancemax")]
     public static float FadeDistanceMax { get; set; } = 2000f;
+    public static int Iteration { get; set; } = 0;
+    private int _Iteration = 0;
 
     /// <summary>
     /// The texture that shall be copied from when rendering the bounce light. 
@@ -57,13 +59,22 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// The light that projects the <c>BounceLightCookie</c> away from the screen to create the
     /// fake bounce light effect.
     /// </summary>
-    public SpotLightEntity BounceSpotlight { get; private set; }
+    public SpotLightEntity BounceSpotlight 
+    {
+        get => _BounceSpotlight; 
+        private set
+        {
+            _BounceSpotlight?.Delete();
+            _BounceSpotlight = value;
+        }
+    }
+    private SpotLightEntity _BounceSpotlight;
     /// <summary>
     /// The distance between <c>Entity</c> and the screen on to which it projects.
     /// </summary>
     public float ScreenDistanceFromProjector { get; private set; }
 
-    private float BaseBounceLightBrightness { get; init; } = 25f;
+    private float BaseBounceLightBrightness { get; init; } = 10f;
 
     public FakeBounceLight()
     {
@@ -75,6 +86,18 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         base.OnActivate();
 
         BounceSpotlight ??= CreateSpotlight();
+    }
+
+    [ConCmd.Client("projector.bounce.reload")]
+    public static void ForceReload()
+    {
+        Iteration++;   
+    }
+
+    public void Reload()
+    {
+        InitRendering();
+        BounceSpotlight = CreateSpotlight();
     }
 
     private SpotLightEntity CreateSpotlight()
@@ -92,6 +115,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
             FogStrength = 0.25f,
             LightCookie = BounceLightCookie
         };
+        spotlight.Transmit = TransmitType.Always;
         spotlight.SetParent(Entity);
         return spotlight;
     }
@@ -99,6 +123,12 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     [GameEvent.Tick.Client]
     public void OnClientTick()
     {
+        if (Iteration != _Iteration)
+        {
+            _Iteration = Iteration;
+            Reload();
+        }
+
         // Trace forward from the projector light to find the surface it projects on to.
         var traceStart = Entity.Position;
         var traceEnd = Entity.Position + Entity.Rotation.Forward * 5000f;
