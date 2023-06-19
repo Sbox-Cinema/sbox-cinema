@@ -2,7 +2,6 @@
 using Sandbox.UI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Cinema.UI;
 
@@ -27,10 +26,6 @@ public partial class Scoreboard : Panel, IMenuScreen
     public void Close()
     {
         IsOpen = false;
-    }
-    public override void Tick()
-    {
-        base.Tick();
     }
     protected override int BuildHash()
     {
