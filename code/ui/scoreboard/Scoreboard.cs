@@ -31,6 +31,6 @@ public partial class Scoreboard : Panel, IMenuScreen
     {
         var queueHash = 11;
 
-        return HashCode.Combine(IsOpen, queueHash, Clients);
+        return HashCode.Combine(IsOpen, queueHash, Clients, Clients.Count);
     }
 }
