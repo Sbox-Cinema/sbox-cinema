@@ -184,7 +184,6 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     protected void OnClose()
     {
-        IsOpen = false;
-        Controller = null;
+        (Game.LocalPawn as Player).CloseMenu(this);
     }
 }

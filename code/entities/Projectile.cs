@@ -6,6 +6,20 @@ namespace Cinema;
 public partial class Projectile : BasePhysics
 {
     /// <summary>
+    /// If true, food and drink items will automatically be removed from
+    /// a player's inventory after being thrown.
+    /// </summary>
+    [ConVar.Replicated("fnb.thrown.autoremove")]
+    public static bool AutoRemoveThrown { get; set; } = true;
+
+    /// <summary>
+    /// Defines the amount of time after a projectile is thrown by a seated player
+    /// that the NoCollide hinge hack will be applied between the player and projectile.
+    /// </summary>
+    [ConVar.Replicated("fnb.thrown.nocollidetime")]
+    public static float NoCollideTime { get; set; } = 0.25f;
+
+    /// <summary>
     /// In cases where it makes sense for a projectile to automatically break
     /// apart after being launched, this should be set to true.
     /// </summary>
@@ -30,8 +44,7 @@ public partial class Projectile : BasePhysics
         base.Spawn();
         SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
 
-        // Remove the solid tag so that the projectile doesn't collide with the owner.
-        Tags.Remove("solid");
+        Tags.Add("projectile");
 
         // We assume that the projectile is in flight from the moment it is spawned.
         TimeSinceSpawned = 0f;
@@ -45,6 +58,12 @@ public partial class Projectile : BasePhysics
     {
         Owner = entity;
         entity ??= this;
+
+        // Use nocollide hinge hack to work around issue where popcorn collides the thrower.
+        if (entity is Player)
+        {
+            NoCollide.BeginTimed(entity, this, NoCollideTime);
+        }
 
         var forward = entity.AimRay.Forward;
 
@@ -70,10 +89,6 @@ public partial class Projectile : BasePhysics
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
         lastCollision = eventData;
-
-        // Prevent the projectile from immediately breaking on the person who threw it.
-        if (TimeSinceSpawned < 0.25f && eventData.Other.Entity == Owner)
-            return;
 
         // Don't break on the chair you're sitting in.
         if (eventData.Other.Entity is CinemaChair chair && chair.Occupant == Owner)
