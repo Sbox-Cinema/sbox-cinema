@@ -1,0 +1,70 @@
+@inherits Panel
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@attribute [StyleSheet("/ui/job-menu/JobMenu.scss")]
+<root class="@VisibleClass">
+    <div class="placement container">
+        <div class="header">
+            <div class="title">
+                <span class="deco">M</span><span class="text">Jobs</span><span class="deco">N</span>
+            </div>
+            <div class="close-btn button" @onclick=@OnCloseClicked>
+                Close
+            </div>
+        </div>
+        <div class="contents">
+            <div class="section outline current-job as-rows">
+                <div class="title">
+                    Current Job
+                </div>
+                <div class="current-job-info">
+                    @CurrentJobName
+                </div>
+            </div>
+            <div class="section clear grow scroll">
+                <div class="rows scrollable">
+                    @foreach(var job in AvailableJobs) {
+                        <div class="row @(SelectedJob?.Name == job.Name ? "selected" : "")" @onclick=@(() => SelectJob(job))>
+                            <div class="main-content grow">
+                                <div class="name">
+                                    @job.Name
+                                </div>
+                                <div class="description">
+                                    @job.Description
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                
+                            </div>
+                        </div>
+                    }
+                     
+                </div>
+            </div>
+            <div class="section outline job-info">
+                @if(SelectedJob != null) {
+                    <div class="title">
+                        @SelectedJob.Name
+                    </div>
+                    <div class="selected-job-info">
+                        @SelectedJob.LongDescription
+                    </div>
+                    @if(CurrentJobName != SelectedJob.Name) {
+                        <div class="buttons">
+                            <div class="button" @onclick=@(() => BecomeJob(SelectedJob))>
+                                @($"Become {SelectedJob.Name}")
+                            </div>
+                        </div>
+                    }
+                    
+                } else {
+                    <div class="learn-more">
+                        Select a job
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</root>

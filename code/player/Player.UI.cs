@@ -26,7 +26,7 @@ public partial class Player
     /// null, but you can use <c>IsMenuOpen</c> and <c>ActiveMenuName</c> to
     /// get some information about the client's menu.
     /// </summary>
-    protected IMenuScreen ActiveMenu 
+    protected IMenuScreen ActiveMenu
     {
         get => _ActiveMenu;
         set
@@ -36,7 +36,7 @@ public partial class Player
             // This must be an empty string rather than null, otherwise an exception is thrown by S&box
             // when it tries to network the value.
             ActiveMenuName = value?.Name ?? "";
-        } 
+        }
     }
     private IMenuScreen _ActiveMenu;
 
@@ -96,6 +96,11 @@ public partial class Player
         if (Input.Pressed("reload") && ActiveMenu is null or MovieQueue)
         {
             ToggleMenu(MovieQueue.Instance);
+        }
+
+        if (Input.Pressed("jobmenu") && ActiveMenu is null or JobMenu)
+        {
+            ToggleMenu(JobMenu.Instance);
         }
     }
 }

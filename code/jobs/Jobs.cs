@@ -30,6 +30,17 @@ public partial class JobDetails : BaseNetworkable
     public string Name { get; set; }
 
     /// <summary>
+    /// The short description of the job
+    /// </summary>
+    public string Description { get; set; }
+
+
+    /// <summary>
+    /// The long description of the job
+    /// </summary>
+    public string LongDescription { get; set; }
+
+    /// <summary>
     /// What abilities this job has
     /// </summary>
     [Net]
@@ -63,6 +74,8 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails
         {
             Name = "Guest",
+            Description = "A guest of the cinema",
+            LongDescription = "Sit back and enjoy videos.\nBuy concessions and enjoy the show!",
             Abilities = JobAbilities.Guest | JobAbilities.PurchaseConcessions,
             Responsibilities = JobResponsibilities.UniversalIncome,
         },
@@ -72,6 +85,8 @@ public partial class JobDetails : BaseNetworkable
         new JobDetails
         {
             Name = "Usher",
+            Description = "Cleans up the cinema",
+            LongDescription = "Clean up garbage and keep the cinema clean!\nEarn money by picking up and throwing away garbage.",
             Abilities = JobAbilities.PickupGarbage,
             Responsibilities = 0,
             Uniform = "usher",
@@ -82,6 +97,8 @@ public partial class JobDetails : BaseNetworkable
         /// </summary>
         new JobDetails {
             Name = "Concession Worker",
+            Description = "Keep the concessions stocked",
+            LongDescription = "Stock the concession stand with popcorn, hotdogs, nachos, and soda!\nEarn money by completing tasks.",
             Abilities = JobAbilities.MakePopcorn,
             Responsibilities = JobResponsibilities.PopcornStocking,
             Uniform = "usher"

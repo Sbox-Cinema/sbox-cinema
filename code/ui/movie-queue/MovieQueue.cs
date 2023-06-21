@@ -10,7 +10,7 @@ namespace Cinema.UI;
 public partial class MovieQueue : Panel, IMenuScreen
 {
     public static MovieQueue Instance { get; set; }
-    
+
     public string Name => "Movie Queue";
     public bool IsOpen { get; protected set; }
 
