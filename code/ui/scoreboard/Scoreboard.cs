@@ -29,8 +29,13 @@ public partial class Scoreboard : Panel, IMenuScreen
     }
     protected override int BuildHash()
     {
-        var queueHash = 11;
+        var clientHash = 11;
 
-        return HashCode.Combine(IsOpen, queueHash, Clients, Clients.Count);
+        foreach(var client in Clients)
+        {
+            clientHash = clientHash * 31 + HashCode.Combine(client.Name, client.Ping);
+        }
+
+        return HashCode.Combine(IsOpen, Clients.Count, clientHash);
     }
 }
