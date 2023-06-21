@@ -98,4 +98,10 @@ public partial class Player
             ToggleMenu(MovieQueue.Instance);
         }
     }
+
+    private void CleanupUI()
+    {
+        // The nametag is a worldpanel, so it must be cleaned up manually.
+        HeadTag.Delete(true);
+    }
 }
