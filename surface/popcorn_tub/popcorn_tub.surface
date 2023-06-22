@@ -1,0 +1,18 @@
+{
+  "BaseSurface": "surfaces/plastic.hollow.surface",
+  "AudioMaterial": "surfaces/plastic.audiomat",
+  "Description": "",
+  "Friction": 0.8,
+  "Elasticity": 0.25,
+  "Density": 2000,
+  "Thickness": 0,
+  "Dampening": 0,
+  "BounceThreshold": 40,
+  "ImpactEffects": {
+    "Regular": []
+  },
+  "Sounds": {},
+  "Breakables": {
+    "BreakSound": "sound/impact/popcorn_tub/popcorn_explode.sound"
+  }
+}
