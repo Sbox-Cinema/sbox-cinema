@@ -7,7 +7,8 @@ namespace Cinema;
 [Title("Carriable"), Icon("luggage")]
 public partial class Carriable : AnimatedEntity, IUse
 {
-    public virtual string ViewModelPath => null;
+    [Net]
+    public string ViewModelPath { get; set; } = null;
     public BaseViewModel ViewModelEntity { get; protected set; }
 
     public IHandheldItem Item =>

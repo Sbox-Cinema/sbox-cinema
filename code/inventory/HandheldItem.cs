@@ -29,6 +29,7 @@ public class HandheldItem : ResourceItem<HandheldResource, HandheldItem>, IHandh
 
         Weapon = TypeLibrary.Create<WeaponBase>(WeaponClassName);
         Weapon.SetWeaponItem(this);
+        Weapon.LoadResourceData(Resource);
         IsDirty = true;
 
         return Weapon;

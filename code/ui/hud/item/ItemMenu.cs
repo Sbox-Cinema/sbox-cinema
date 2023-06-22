@@ -17,7 +17,7 @@ public partial class ItemMenu : RadialMenu
     {
         foreach (var wep in Weapons)
         {
-            AddItem(wep.Name, wep.Description, wep.Icon, () => SelectItem(wep));
+            AddItem(wep.WeaponName, wep.Description, wep.Icon, () => SelectItem(wep));
         }
     }
 
