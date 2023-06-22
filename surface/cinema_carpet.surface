@@ -1,0 +1,43 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		BaseSurface = resource:"surfaces/carpet.surface"
+		AudioMaterial = resource:"surfaces/carpet.audiomat"
+		Description = ""
+		Friction = 0.8
+		Elasticity = 0.25
+		Density = 2000
+		Thickness = 0
+		Dampening = 0
+		BounceThreshold = 40
+		ImpactEffects = 
+		{
+			Regular = 
+			[
+				resource:"particles/impact.generic.vpcf",
+			]
+			Bullet = 
+			[
+				resource:"particles/impact.generic.vpcf",
+			]
+			BulletDecal = 
+			[
+				resource:"decals/bullethole.decal",
+			]
+		}
+		Sounds = 
+		{
+			FootLeft = resource:"sound/carpet/carpet_steps.sound"
+			FootRight = resource:"sound/carpet/carpet_steps.sound"
+			FootLaunch = resource:"sound/carpet/carpet_steps.sound"
+			FootLand = resource:"sound/carpet/carpet_steps.sound"
+			Bullet = resource:"sound/carpet/carpet_hit.sound"
+			ImpactHard = resource:"sound/carpet/carpet_hit.sound"
+			ImpactSoft = resource:"sound/carpet/carpet_hit.sound"
+		}
+		Breakables = 
+		{
+		}
+	}
+}

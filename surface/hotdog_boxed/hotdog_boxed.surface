@@ -1,0 +1,18 @@
+{
+  "BaseSurface": "surfaces/flesh.surface",
+  "AudioMaterial": null,
+  "Description": "",
+  "Friction": 0.8,
+  "Elasticity": 0.25,
+  "Density": 2000,
+  "Thickness": 0,
+  "Dampening": 0,
+  "BounceThreshold": 40,
+  "RoughnessFactor": 0.8,
+  "RoughThreshold": 0.5,
+  "ImpactEffects": {},
+  "Sounds": {},
+  "Breakables": {
+    "BreakSound": "sound/impact/hotdog_boxed/hotdog_explode.sound"
+  }
+}
