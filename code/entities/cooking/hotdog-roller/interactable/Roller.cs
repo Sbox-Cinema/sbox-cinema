@@ -63,6 +63,9 @@ public class Roller : BaseInteractable
         hotdog.LocalRotation = hotdog.LocalRotation.RotateAroundAxis(Vector3.Up, reverse ? 180 : 0);
         hotdog.Parent = Parent;
 
+        slot.Entity = hotdog;
+        Slots[slot.Index] = slot;
+
         return hotdog;
     }
 
@@ -97,10 +100,7 @@ public class Roller : BaseInteractable
 
             if (slot.Entity is null || !slot.Entity.IsValid)
             {
-                var hotdog = AddHotdog(this, slot);
-
-                slot.Entity = hotdog;
-                Slots[slot.Index] = slot;
+                AddHotdog(this, slot);
 
                 break;
             }
