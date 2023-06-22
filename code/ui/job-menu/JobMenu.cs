@@ -65,9 +65,9 @@ public partial class JobMenu : Panel, IMenuScreen
         SelectedJob = job;
     }
 
-    public void BecomeJob(JobRow job)
+    protected static void BecomeJob(JobRow job)
     {
-
+        Player.ClientRequestJobChange(job.Name);
     }
 
     protected void OnCloseClicked()

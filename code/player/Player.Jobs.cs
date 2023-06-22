@@ -14,6 +14,7 @@ public partial class Player
     public void SetJob(JobDetails newJob)
     {
         if (Game.IsClient) throw new Exception("Cannot set job on client!");
+        if (Job?.JobDetails.Name == newJob.Name) return;
 
         UpdateResponsibilities(newJob.Responsibilities);
         UpdateJobItems(newJob.Items ?? Array.Empty<string>());
@@ -91,5 +92,25 @@ public partial class Player
             if (!item.IsValid()) continue;
             Inventory.Give(item);
         }
+    }
+
+    [ConCmd.Server]
+    public static void ClientRequestJobChange(string jobName)
+    {
+        if (!Game.IsServer) throw new Exception("Cannot request job change on client!");
+
+        var player = ConsoleSystem.Caller.Pawn as Player;
+
+        if (!player.IsValid()) return;
+
+        var chosenJob = JobDetails.All.FirstOrDefault(e => e.Name == jobName);
+
+        if (chosenJob is null)
+        {
+            Log.Error($"Could not find job with name: {jobName}");
+            return;
+        }
+
+        player.SetJob(chosenJob);
     }
 }
