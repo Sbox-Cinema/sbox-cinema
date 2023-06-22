@@ -1,8 +1,9 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 
 namespace Cinema.UI;
 
-public partial class NameTag 
+public partial class NameTag : WorldPanel
 {
     /// <summary>
     /// Fade distance of name tags, for all players
