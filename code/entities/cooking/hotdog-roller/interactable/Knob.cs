@@ -6,7 +6,7 @@ namespace Cinema.HotdogRoller;
 public class Knob : BaseInteractable
 {
     public int KnobRotation { get; set; } = 0;
-    private string animName { get; set; }
+    private string AnimName { get; set; }
 
     public Knob() // For the compiler...
     {
@@ -14,7 +14,7 @@ public class Knob : BaseInteractable
 
     public Knob(string animName)
     {
-        this.animName = animName;
+        animName = AnimName;
     }
 
     public override void Trigger(Player ply)
@@ -22,7 +22,7 @@ public class Knob : BaseInteractable
         KnobRotation += 1;
         KnobRotation = KnobRotation > 7 ? 0 : KnobRotation;
 
-        (Parent as AnimatedEntity).SetAnimParameter(animName, KnobRotation);
+        (Parent as AnimatedEntity).SetAnimParameter(AnimName, KnobRotation);
 
         Sound.FromEntity("knob_turn_01", Parent);
     }

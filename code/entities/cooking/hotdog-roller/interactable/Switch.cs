@@ -5,7 +5,7 @@ namespace Cinema.HotdogRoller;
 
 public class Switch : BaseInteractable
 {
-    private string animName { get; set; }
+    private string AnimName { get; set; }
     public bool TogglePower { get; set; }
 
     public Switch() // For the compiler...
@@ -14,7 +14,7 @@ public class Switch : BaseInteractable
 
     public Switch(string animName)
     {
-        this.animName = animName;
+        AnimName = animName;
     }
 
     public override void Trigger(Player ply)
@@ -38,7 +38,7 @@ public class Switch : BaseInteractable
             matGroup = IndicatorLight.FrontOn;
         }
 
-        parent.SetAnimParameter(animName, TogglePower);
+        parent.SetAnimParameter(AnimName, TogglePower);
         parent.SetMaterialGroup((int)matGroup);
 
         Sound.FromEntity("switch_press_01", parent);

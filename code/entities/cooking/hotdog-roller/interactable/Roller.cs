@@ -1,7 +1,10 @@
 ﻿using Conna.Inventory;
 using Sandbox;
 using Sandbox.util;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Cinema.HotdogRoller;
 
@@ -11,32 +14,19 @@ public class Roller : BaseInteractable
     {
         public HotdogCookable Entity { get; set; }
         public string Attachment { get; set; }
-
-        public Slot(string attachment)
-        {
-            Attachment = attachment;
-        }
-    }
-
-    private struct SlotDistance
-    {
-        public Slot Slot { get; set; }
-        public float Distance { get; set; }
         public int Index { get; set; }
-        public Transform SlotTransform { get; set; }
 
-        public SlotDistance(Slot slot, float dist, int index, Transform t)
+        public Slot(int index, string attachment)
         {
-            Slot = slot;
-            Distance = dist;
             Index = index;
-            SlotTransform = t;
+            Attachment = attachment;
         }
     }
 
     public Knob Knob { get; set; }
     public Switch Switch { get; set; }
-    private Slot[] slots = new Slot[10];
+    private Slot[] Slots = new Slot[10];
+    private HotdogRoller RollerParent => Parent as HotdogRoller;
 
     public Roller() // For the compiler...
     {
@@ -49,16 +39,26 @@ public class Roller : BaseInteractable
 
         for (int i = 0; i < 10; i++)
         {
-            slots[i] = new Slot($"S{i + 1}{(front ? 'F' : 'B')}");
+            Slots[i] = new Slot(i, $"S{i + 1}{(front ? 'F' : 'B')}");
         }
     }
 
-    private HotdogCookable AddHotdog(Roller parent, Transform t)
+    private Transform GetParentTransform(string attachment)
+    {
+        if (RollerParent.GetAttachment(attachment) is Transform transform)
+        {
+            return transform;
+        }
+
+        return new Transform();
+    }
+
+    private HotdogCookable AddHotdog(Roller parent, Slot slot)
     {
         var hotdog = new HotdogCookable(parent);
         var reverse = Game.Random.Int(1) == 1;
 
-        hotdog.Transform = t;
+        hotdog.Transform = GetParentTransform(slot.Attachment);
         hotdog.LocalRotation = hotdog.LocalRotation.RotateAroundAxis(Vector3.Forward, Game.Random.Float(180));
         hotdog.LocalRotation = hotdog.LocalRotation.RotateAroundAxis(Vector3.Up, reverse ? 180 : 0);
         hotdog.Parent = Parent;
@@ -72,48 +72,47 @@ public class Roller : BaseInteractable
     /// <param name="ply"></param>
     public override void Trigger(Player ply)
     {
-        List<SlotDistance> slotsIndexed = new List<SlotDistance>();
-        var parent = Parent as HotdogRoller;
+        var ray = ply.AimRay;
+        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
+        .WithoutTags("player")
+        .EntitiesOnly()
+        .Run();
+
+        IDictionary<Slot, float> slotsByDistance = new Dictionary<Slot, float>();
 
         for (int i = 0; i < 10; i++)
         {
-            var slotData = slots[i];
+            var slot = Slots[i];
+            var dist = tr.HitPosition.Distance(GetParentTransform(slot.Attachment).Position);
 
-            if (parent.GetAttachment(slotData.Attachment) is Transform t)
-            {
-                var dist = LastTriggerResults.HitPosition.Distance(t.Position);
-
-                slotsIndexed.Add(new SlotDistance(slotData, dist, i, t));
-            }
+            slotsByDistance.Add(slot, dist);
         }
 
-        slotsIndexed.Sort((x, y) => { return x.Distance.CompareTo(y.Distance); });
+        slotsByDistance.ToList().Sort((x, y) => { return x.Value.CompareTo(y.Value); }); ;
 
-        foreach(var slotCompared in slotsIndexed)
+        foreach(var slotDistance in slotsByDistance)
         {
-            var slotData = slotCompared.Slot;
-            if (slotData.Entity is null || !slotData.Entity.IsValid)
-            {
-                var hotdog = AddHotdog(this, slotCompared.SlotTransform);
+            var slot = slotDistance.Key;
+            var distance = slotDistance.Value;
 
-                slotData.Entity = hotdog;
-                slots[slotCompared.Index] = slotData;
+            if (slot.Entity is null || !slot.Entity.IsValid)
+            {
+                var hotdog = AddHotdog(this, slot);
+
+                slot.Entity = hotdog;
+                Slots[slot.Index] = slot;
 
                 break;
             }
-            else if (slotData.Entity.GetMaterialGroup() > 1)
+            else if (slot.Entity.GetMaterialGroup() > 1 && distance < 5)
             {
-                if (slotCompared.Distance < 5)
-                {
-                    slotData.Entity.Delete();
+                slot.Entity.Delete();
 
-                    var hotdogCarriable = InventorySystem.CreateItem("hotdog_cooked");
+                var hotdogCarriable = InventorySystem.CreateItem("hotdog_cooked");
 
-                    ply.PickupItem(hotdogCarriable);
+                ply.PickupItem(hotdogCarriable);
 
-                    break;
-                }
-
+                break;
             }
         }
     }

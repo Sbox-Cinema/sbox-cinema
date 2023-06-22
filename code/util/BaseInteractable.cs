@@ -2,18 +2,16 @@
 
 public class CanTriggerResults
 {
-    public CanTriggerResults(bool hit, float dist, BaseInteractable interactable, Vector3 hitpos)
+    public CanTriggerResults(bool hit, float dist, BaseInteractable interactable)
     {
         Hit = hit;
         Distance = dist;
         Interactable = interactable;
-        HitPosition= hitpos;
     }
 
     public bool Hit;
     public float Distance;
     public BaseInteractable Interactable;
-    public Vector3 HitPosition;
 }
 
 public partial class BaseInteractable : BaseNetworkable
@@ -25,7 +23,6 @@ public partial class BaseInteractable : BaseNetworkable
     [Net]
     public Vector3 Maxs { get; set; }
     public float MaxDistance { get; set; } = 60f;
-    public CanTriggerResults LastTriggerResults {get; set; }
 
     public BaseInteractable()
     {
@@ -42,18 +39,11 @@ public partial class BaseInteractable : BaseNetworkable
     /// <returns></returns>
     public CanTriggerResults CanRayTrigger(Ray ray)
     {
-        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
-            .WithoutTags("player")
-            .EntitiesOnly()
-            .Run();
-
         var mins = Parent.Transform.PointToWorld(Mins);
         var maxs = Parent.Transform.PointToWorld(Maxs);
         var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
         var hit = bounds.Trace(ray, MaxDistance, out float dist);
-        var triggerResults = new CanTriggerResults(hit, dist, this, tr.HitPosition);
-
-        LastTriggerResults = triggerResults;
+        var triggerResults = new CanTriggerResults(hit, dist, this);
 
         return triggerResults;
     }

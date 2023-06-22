@@ -107,11 +107,4 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
             Maxs = new Vector3(-15.0427f, 11.927f, 16.4461f)
         });
     }
-
-    [GameEvent.Tick]
-    public void Tick()
-    {
-        Interactables["F_Roller"].Tick();
-        Interactables["B_Roller"].Tick();
-    }
 }

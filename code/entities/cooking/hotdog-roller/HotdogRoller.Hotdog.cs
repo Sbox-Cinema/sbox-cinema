@@ -4,7 +4,7 @@ namespace Cinema.HotdogRoller;
 
 public partial class HotdogCookable : ModelEntity
 {
-    private enum CookingStates
+    private enum CookingTime
     {
         Raw = 50,
         Cooked = 100,
@@ -54,13 +54,13 @@ public partial class HotdogCookable : ModelEntity
 
         switch (CurrentCook)
         {
-            case <= (int)CookingStates.Raw:
+            case <= (int)CookingTime.Raw:
                 newMaterialGroup = 1;
             break;
-            case <= (int)CookingStates.Cooked:
+            case <= (int)CookingTime.Cooked:
                 newMaterialGroup = 2;
             break;
-            case > (int)CookingStates.Burnt:
+            case > (int)CookingTime.Burnt:
                 newMaterialGroup = 3;
             break;
         }
