@@ -14,7 +14,7 @@ public class Knob : BaseInteractable
 
     public Knob(string animName)
     {
-        animName = AnimName;
+        AnimName = animName;
     }
 
     public override void Trigger(Player ply)
