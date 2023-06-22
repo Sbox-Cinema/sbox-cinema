@@ -4,10 +4,18 @@ namespace Cinema.HotdogRoller;
 
 public partial class HotdogCookable : ModelEntity
 {
+    private enum CookingStates
+    {
+        Raw = 50,
+        Cooked = 100,
+        Burnt = 150
+    }
+
     public bool Reversed { get; set; }
-    private Roller rollerParent {get; set;}
-    private Particles steam { get; set; }
-    private float currentCook = 0;
+    private Roller RollerParent {get; set;}
+    private Particles Steam { get; set; }
+    private float CurrentCook = 0;
+    private int RotationSpeed = 2;
 
     public HotdogCookable()
     {
@@ -15,7 +23,7 @@ public partial class HotdogCookable : ModelEntity
 
     public HotdogCookable(Roller rollerParent)
     {
-        this.rollerParent = rollerParent;
+        RollerParent = rollerParent;
     }
 
     public override void Spawn()
@@ -26,35 +34,41 @@ public partial class HotdogCookable : ModelEntity
 
         SetModel("models/hotdog/hotdog_roller.vmdl");
 
-        steam = Particles.Create("particles/food_steam/hotdogsteam.vpcf", this);
-        steam.SetPosition(0, CollisionWorldSpaceCenter);
-        steam.EnableDrawing = false;
+        Steam = Particles.Create("particles/food_steam/hotdogsteam.vpcf", this);
+        Steam.SetPosition(0, CollisionWorldSpaceCenter);
+        Steam.EnableDrawing = false;
     }
 
     [GameEvent.Tick.Server]
     public void Tick()
     {
-        if (rollerParent.Switch.TogglePower != steam.EnableDrawing && currentCook > 30)
-            steam.EnableDrawing = rollerParent.Switch.TogglePower;
+        if (RollerParent.Switch.TogglePower != Steam.EnableDrawing && CurrentCook > 30)
+            Steam.EnableDrawing = RollerParent.Switch.TogglePower;
 
-        if (!rollerParent.Switch.TogglePower)
+        if (!RollerParent.Switch.TogglePower)
             return;
 
-        currentCook += Time.Delta * rollerParent.Knob.KnobRotation;
+        CurrentCook += Time.Delta * RollerParent.Knob.KnobRotation;
 
-        switch (currentCook)
+        var newMaterialGroup = 0;
+
+        switch (CurrentCook)
         {
-            case <= 50:
-                SetMaterialGroup(1);
+            case <= (int)CookingStates.Raw:
+                newMaterialGroup = 1;
             break;
-            case <= 100:
-                SetMaterialGroup(2);
+            case <= (int)CookingStates.Cooked:
+                newMaterialGroup = 2;
             break;
-            case > 150:
-                SetMaterialGroup(3);
+            case > (int)CookingStates.Burnt:
+                newMaterialGroup = 3;
             break;
         }
 
-        LocalRotation = LocalRotation.RotateAroundAxis(Vector3.Forward, Reversed ? 2 : -2);
+        if (newMaterialGroup != GetMaterialGroup())
+            SetMaterialGroup(newMaterialGroup);
+
+
+        LocalRotation = LocalRotation.RotateAroundAxis(Vector3.Forward, Reversed ? RotationSpeed : -RotationSpeed);
     }
 }

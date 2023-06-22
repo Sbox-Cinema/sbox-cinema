@@ -27,8 +27,6 @@ public partial class HotdogRoller
 
         HandleUse(user);
 
-        Input.Clear("use"); // Why?
-
         return false;
     }
 

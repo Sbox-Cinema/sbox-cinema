@@ -18,14 +18,14 @@ public class Roller : BaseInteractable
         }
     }
 
-    private struct SlotDist
+    private struct SlotDistance
     {
         public Slot Slot { get; set; }
         public float Distance { get; set; }
         public int Index { get; set; }
         public Transform SlotTransform { get; set; }
 
-        public SlotDist(Slot slot, float dist, int index, Transform t)
+        public SlotDistance(Slot slot, float dist, int index, Transform t)
         {
             Slot = slot;
             Distance = dist;
@@ -36,18 +36,16 @@ public class Roller : BaseInteractable
 
     public Knob Knob { get; set; }
     public Switch Switch { get; set; }
-    private bool front;
     private Slot[] slots = new Slot[10];
 
     public Roller() // For the compiler...
     {
     }
 
-    public Roller(Switch p_switch, Knob knob, bool front = false)
+    public Roller(Switch parentSwitch, Knob knob, bool front = false)
     {
-        Switch = p_switch;
+        Switch = parentSwitch;
         Knob = knob;
-        this.front = front;
 
         for (int i = 0; i < 10; i++)
         {
@@ -55,7 +53,7 @@ public class Roller : BaseInteractable
         }
     }
 
-    private HotdogCookable addHotdog(Roller parent, Transform t)
+    private HotdogCookable AddHotdog(Roller parent, Transform t)
     {
         var hotdog = new HotdogCookable(parent);
         var reverse = Game.Random.Int(1) == 1;
@@ -74,7 +72,7 @@ public class Roller : BaseInteractable
     /// <param name="ply"></param>
     public override void Trigger(Player ply)
     {
-        List<SlotDist> slotsIndexed = new List<SlotDist>();
+        List<SlotDistance> slotsIndexed = new List<SlotDistance>();
         var parent = Parent as HotdogRoller;
 
         for (int i = 0; i < 10; i++)
@@ -85,7 +83,7 @@ public class Roller : BaseInteractable
             {
                 var dist = LastTriggerResults.HitPosition.Distance(t.Position);
 
-                slotsIndexed.Add(new SlotDist(slotData, dist, i, t));
+                slotsIndexed.Add(new SlotDistance(slotData, dist, i, t));
             }
         }
 
@@ -96,7 +94,7 @@ public class Roller : BaseInteractable
             var slotData = slotCompared.Slot;
             if (slotData.Entity is null || !slotData.Entity.IsValid)
             {
-                var hotdog = addHotdog(this, slotCompared.SlotTransform);
+                var hotdog = AddHotdog(this, slotCompared.SlotTransform);
 
                 slotData.Entity = hotdog;
                 slots[slotCompared.Index] = slotData;

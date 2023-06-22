@@ -46,10 +46,10 @@ public partial class HotdogRoller : AnimatedEntity, ICinemaUse
         BaseInteractable found = null;
         float nearest = 999999;
 
-        foreach (KeyValuePair<string, BaseInteractable> interactableData in Interactables)
+        foreach (var interactableData in Interactables)
         {
             var interactable = interactableData.Value;
-            var result = interactable.CanTrigger(ply.AimRay);
+            var result = interactable.CanRayTrigger(ply.AimRay);
 
             if (result.Hit && result.Distance < interactable.MaxDistance && result.Distance < nearest)
             {

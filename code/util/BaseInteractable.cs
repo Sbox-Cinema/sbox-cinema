@@ -36,11 +36,11 @@ public partial class BaseInteractable : BaseNetworkable
     }
 
     /// <summary>
-    /// This one will check if you can trigger.
+    /// This one will check if you can trigger, returns a struct with information about the trace.
     /// </summary>
     /// <param name="ray"></param>
     /// <returns></returns>
-    public CanTriggerResults CanTrigger(Ray ray)
+    public CanTriggerResults CanRayTrigger(Ray ray)
     {
         var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
             .WithoutTags("player")
@@ -51,11 +51,11 @@ public partial class BaseInteractable : BaseNetworkable
         var maxs = Parent.Transform.PointToWorld(Maxs);
         var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
         var hit = bounds.Trace(ray, MaxDistance, out float dist);
-        var trigger_results = new CanTriggerResults(hit, dist, this, tr.HitPosition);
+        var triggerResults = new CanTriggerResults(hit, dist, this, tr.HitPosition);
 
-        LastTriggerResults = trigger_results;
+        LastTriggerResults = triggerResults;
 
-        return trigger_results;
+        return triggerResults;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public partial class BaseInteractable : BaseNetworkable
     /// <returns></returns>
     public bool TryTrigger(Ray ray)
     {
-        var canTrigger = CanTrigger(ray);
+        var canTrigger = CanRayTrigger(ray);
 
         if (canTrigger.Hit)
         {
