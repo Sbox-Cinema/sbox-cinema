@@ -1,5 +1,6 @@
 {
   "ClassName": "Hotdog",
+  "ViewModel": "models/hotdog/v_hotdog_boxed.vmdl",
   "ItemName": "Hotdog",
   "UniqueId": "hotdog_cooked",
   "Description": "As germans say: \u0027Hei\u00DFer Hund\u0027",

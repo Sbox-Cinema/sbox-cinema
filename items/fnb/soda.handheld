@@ -1,5 +1,6 @@
 {
   "ClassName": "Soda",
+  "ViewModel": "models/papercup/v_papercup.vmdl",
   "ItemName": "Cup of Soda",
   "UniqueId": "soda",
   "Description": "A delicious taste of soda",

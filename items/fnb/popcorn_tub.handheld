@@ -1,5 +1,6 @@
 {
   "ClassName": "Popcorn",
+  "ViewModel": "models/popcorn_tub/v_popcorn_tub_01.vmdl",
   "ItemName": "Popcorn Tub",
   "UniqueId": "popcorn_tub",
   "Description": "Tasty popcorn delights",

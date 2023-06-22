@@ -5,10 +5,14 @@ namespace Cinema;
 
 public partial class WeaponBase : Carriable
 {
-    new public virtual string Name => "Generic Weapon";
-    public virtual string Description => "A generic weapon's description";
-    public virtual string Icon => "";
-    public virtual Model WorldModel => null;
+    [Net]
+    public string WeaponName { get; protected set; } = "Generic Weapon";
+    [Net]
+    public string Description { get; protected set; } = "A generic weapon's description";
+    [Net]
+    public string Icon { get; protected set; } = "";
+    [Net]
+    public Model WorldModel { get; protected set; } = null;
     public virtual float DeployingTime => 0.25f;
     public virtual float PrimaryFireRate => 0.1f;
     public virtual float SecondaryFireRate => 0.2f;
@@ -33,6 +37,15 @@ public partial class WeaponBase : Carriable
 
         Model = WorldModel;
         UsesRemaining = BaseUses;
+    }
+
+    public virtual void LoadResourceData(HandheldResource resource)
+    {
+        WeaponName = resource.ItemName;
+        Description = resource.Description;
+        Icon = resource.Icon;
+        WorldModel = Model.Load(resource.WorldModel);
+        ViewModelPath = resource.ViewModel;
     }
 
     public override void Simulate(IClient cl)
@@ -194,7 +207,7 @@ public partial class WeaponBase : Carriable
         // Get the next weapon of the same type if we have one
         var nextWeapon = WeaponHolder
             .Weapons
-            .FirstOrDefault(w => w.Name == Name);
+            .FirstOrDefault(w => w.WeaponName == WeaponName);
         nextWeapon ??= WeaponHolder.GetBestWeapon();
         WeaponHolder.ActiveChild = nextWeapon;
     }

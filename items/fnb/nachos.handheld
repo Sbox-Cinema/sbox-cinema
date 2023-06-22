@@ -1,5 +1,6 @@
 {
   "ClassName": "Nachos",
+  "ViewModel": "models/nachos_tray/v_nachos_tray.vmdl",
   "ItemName": "Nachos",
   "UniqueId": "nachos",
   "Description": "It\u0027s nacho business.",

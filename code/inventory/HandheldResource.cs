@@ -9,4 +9,7 @@ public class HandheldResource : ItemResource
 {
     [Property]
     public string ClassName { get; set; }
+
+    [Property, ResourceType("vmdl")]
+    public string ViewModel { get; set; } = "models/dev/error.vmdl_c";
 }
