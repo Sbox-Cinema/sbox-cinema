@@ -37,7 +37,8 @@ public partial class Soda : WeaponBase
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
             
-            RemoveFromHolder();
+            if (Projectile.AutoRemoveThrown)
+                RemoveFromHolder();
         }
     }
 

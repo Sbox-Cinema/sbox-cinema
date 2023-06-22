@@ -97,10 +97,19 @@ public partial class Player
         {
             ToggleMenu(MovieQueue.Instance);
         }
-
         if (Input.Pressed("jobmenu") && ActiveMenu is null or JobMenu)
         {
             ToggleMenu(JobMenu.Instance);
         }
+        if (Input.Pressed("Score") && ActiveMenu is null or Scoreboard)
+        {
+            ToggleMenu(Scoreboard.Instance);
+        }
+    }
+
+    private void CleanupUI()
+    {
+        // The nametag is a worldpanel, so it must be cleaned up manually.
+        HeadTag.Delete(true);
     }
 }

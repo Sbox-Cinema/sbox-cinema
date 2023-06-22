@@ -171,5 +171,15 @@ partial class Player : AnimatedEntity, IEyes
     {
         Footstepper.DoFootstep(position, foot, volume);
     }
-        
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (Game.IsServer)
+            return;
+
+        CleanupUI();
+    }
+
 }
