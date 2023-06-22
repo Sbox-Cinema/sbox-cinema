@@ -91,9 +91,7 @@ public class Roller : BaseInteractable
             slotsByDistance.Add(slot, dist);
         }
 
-        slotsByDistance.ToList().Sort((x, y) => { return x.Value.CompareTo(y.Value); }); ;
-
-        foreach(var slotDistance in slotsByDistance)
+        foreach (var slotDistance in slotsByDistance.OrderBy(x => x.Value))
         {
             var slot = slotDistance.Key;
             var distance = slotDistance.Value;
