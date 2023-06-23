@@ -209,7 +209,7 @@
           "Name": "Menu",
           "KeyboardCode": "Q",
           "GamepadCode": "SwitchRightMenu",
-          "GroupName": "Other"
+          "GroupName": "Game"
         },
         {
           "Name": "Chat",
@@ -220,6 +220,11 @@
           "Name": "Holster",
           "KeyboardCode": "H",
           "GroupName": "Other"
+        },
+        {
+          "Name": "JobMenu",
+          "KeyboardCode": "B",
+          "GroupName": "Game"
         }
       ]
     },
