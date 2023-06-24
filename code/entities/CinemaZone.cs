@@ -12,12 +12,36 @@ public partial class CinemaZone : BaseTrigger
     /// </summary>
     [Property]
     public EntityTarget Projector { get; set; }
-
-    public ProjectorEntity ProjectorEntity => Projector.GetTarget<ProjectorEntity>();
+    [BindComponent]
+    public MediaController MediaController { get; }
+    [Net]
+    public ProjectorEntity ProjectorEntity { get; set; }
 
     public override void Spawn()
     {
         base.Spawn();
         Transmit = TransmitType.Always;
+        ProjectorEntity = Projector.GetTarget<ProjectorEntity>();
+        Components.Create<MediaController>();
+    }
+
+    public override void OnTouchStart(Entity toucher)
+    {
+        base.OnTouchStart(toucher);
+
+        if (toucher is Player ply)
+        {
+            ply.EnterZone(this);
+        }
+    }
+
+    public override void OnTouchEnd(Entity toucher)
+    {
+        base.OnTouchEnd(toucher);
+
+        if (toucher is Player ply)
+        {
+            ply.ExitZone(this);
+        }
     }
 }

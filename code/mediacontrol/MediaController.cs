@@ -5,9 +5,10 @@ using Sandbox;
 
 namespace Cinema;
 
-public partial class MediaController : EntityComponent<ProjectorEntity>, ISingletonComponent
+public partial class MediaController : EntityComponent<CinemaZone>, ISingletonComponent
 {
-    public ProjectorEntity Projector => Entity;
+    public CinemaZone Zone => Entity;
+    public ProjectorEntity Projector => Zone?.ProjectorEntity;
 
     public List<Media> RequestQueue { get; set; } = new List<Media>();
 

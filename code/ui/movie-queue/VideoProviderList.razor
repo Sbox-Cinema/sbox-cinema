@@ -1,0 +1,17 @@
+﻿inherits Panel
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@attribute [StyleSheet]
+<root>
+
+</root>
+
+@code {
+    public void RefreshVideoProviders()
+    {
+        var providers = TypeLibrary.GetTypes<IVideoProvider>();
+    }
+}

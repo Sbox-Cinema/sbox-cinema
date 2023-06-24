@@ -7,21 +7,15 @@ namespace Cinema;
 
 [Library("ent_projector"), HammerEntity]
 [EditorModel("models/editor/ortho", "rgb(0, 255, 192)", "rgb(255, 64, 64)")]
-[Title("Projector"), Category("Gameplay"), Icon("monitor")]
+[Title("Projector"), Category("Cinema"), Icon("monitor")]
 [SupportsSolid]
 public partial class ProjectorEntity : Entity
 {
     [Property(Title = "Projector Name")]
     public string ProjectorName { get; set; } = "Projector";
 
-    [Net, Property(Title = "Projection Resolution (Pixels)")]
-    public Vector2 ProjectionResolution { get; set; }
-
     [Net, Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; }
-
-    [BindComponent]
-    public MediaController Controller { get; }
 
     [Net]
     public IList<CinemaZone> Areas { get; set; }
@@ -32,13 +26,9 @@ public partial class ProjectorEntity : Entity
 
         Transmit = TransmitType.Always;
 
-        if (ProjectionResolution == default)
-        {
-            ProjectionResolution = new Vector2(1024);
-        }
         if (ProjectionSize == default)
         {
-            ProjectionSize = new Vector2(240, 135);
+            ProjectionSize = new Vector2(256, 208);
         }
 
         Components.Create<MediaController>();
@@ -58,8 +48,7 @@ public partial class ProjectorEntity : Entity
 
     protected override void OnDestroy()
     {
-        WebSurface?.Dispose();
-        WebSurfaceTexture?.Dispose();
+        CleanupProjection();
     }
 
     public static void DrawGizmos(EditorContext context)

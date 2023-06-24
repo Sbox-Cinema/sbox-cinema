@@ -10,11 +10,61 @@ public partial class ProjectorEntity
     /// The media we want to be playing (but might not be)
     /// </summary>
     public PlayingMedia CurrentMedia { get; protected set; }
+    private SpotLightEntity ProjectionLight { get; set; }
+    public Texture ProjectionTexture { get; set; }
+    protected Texture LastProjectionTexture { get; set; }
+    [Net]
+    public Vector3 ScreenPosition { get; set; }
+    [Net]
+    public float ScreenDistance { get; set; }
+    protected bool ShouldRemakeLight { get; set; }
 
     public void SetMedia(PlayingMedia media)
     {
         CurrentMedia = media;
-        PlayContentOnProjector();
+        PlayCurrentMedia();
+    }
+
+    private void InitProjection()
+    {
+        var waitingImage = new PlayingMedia()
+        {
+            Url = MediaController.WaitingImage
+        };
+
+        SetMedia(waitingImage);
+
+        SetupProjectionLight();
+    }
+
+    private void SetupProjectionLight()
+    {
+        var outerConeAngle = 60f;
+        var innerConeAngle = 45f;
+        if (ProjectionLight.IsValid())
+        {
+            outerConeAngle = ProjectionLight.OuterConeAngle;
+            innerConeAngle = ProjectionLight.InnerConeAngle;
+        }
+        ProjectionLight?.Delete();
+
+        ProjectionLight = new SpotLightEntity
+        {
+            Parent = this,
+            Position = Position,
+            Rotation = Rotation,
+            LightCookie = ProjectionTexture,
+            Brightness = 20.0f,
+            Range = 1024.0f,
+            OuterConeAngle = outerConeAngle,
+            InnerConeAngle = innerConeAngle,
+            DynamicShadows = true,
+            FogStrength = 1.0f,
+            Transmit = TransmitType.Always,
+        };
+
+        ProjectionLight.UseFog();
+        ProjectionLight.Components.Create<FakeBounceLight>();
     }
 
     public bool CanSeeProjector(Vector3 pos)
@@ -28,133 +78,82 @@ public partial class ProjectorEntity
         return false;
     }
 
-    private WebSurface WebSurface;
-    /// <summary>
-    /// The media on our web surface (if we have one)
-    /// </summary>
-    private PlayingMedia WebSurfaceMedia { get; set; }
-    public Texture WebSurfaceTexture { get; protected set; }
-    private OrthoLightEntity ProjectionLight { get; set; }
-    public Texture ProjectionTexture { get; protected set; }
-    private SceneWorld RenderWorld { get; set; }
-    private SceneCamera RenderCamera { get; set; }
-    private WorldPanel RenderWorldPanel { get; set; }
-
-    private void InitProjection()
+    [GameEvent.Tick.Server]
+    protected void OnServerTick()
     {
-        RenderWorld ??= new SceneWorld();
-        RenderCamera ??= new SceneCamera()
-        {
-            World = RenderWorld,
-            Position = new Vector3(),
-            ZFar = 15000,
-            ZNear = 1
-        };
-
-        RenderWorldPanel?.Delete();
-        RenderWorldPanel = new WorldPanel(RenderWorld)
-        {
-            Position = RenderCamera.Position + Vector3.Forward * 36f,
-            Rotation = Rotation.FromYaw(180f),
-            PanelBounds = new Rect(-ProjectionResolution / 2f, ProjectionResolution)
-        };
-
-        var waitingImage = new PlayingMedia()
-        {
-            Url = MediaController.WaitingImage
-        };
-
-        SetMedia(waitingImage);
-
-        ProjectionTexture = Texture.CreateRenderTarget("projection", ImageFormat.RGBA8888, ProjectionResolution);
-
-        SetupProjectionLight();
+        UpdateScreenPositionAndDistance();
     }
 
-    private void PlayMediaOnWebSurface(PlayingMedia media)
+    [GameEvent.Tick.Client]
+    protected virtual void OnClientTick()
     {
-        CreateWebSurfaceIfNotExists();
+        if (ProjectionLight == null)
+            return;
 
-        WebSurfaceMedia = media;
-        WebSurface.Url = WebSurfaceMedia.Url;
+        UpdateProjectorAngles();
+
+        // If the projection texture changed, remake the projector and bounce lights.
+        if (ProjectionTexture != LastProjectionTexture)
+        {
+            InitProjection();
+        }
+        LastProjectionTexture = ProjectionTexture;
     }
 
-    private void CreateWebSurfaceIfNotExists()
+    protected void UpdateScreenPositionAndDistance()
     {
-        if (WebSurface != null) return;
-        WebSurface = Game.CreateWebSurface();
-        WebSurface.Size = ProjectionResolution;
-        WebSurface.InBackgroundMode = false;
-        WebSurface.OnTexture = UpdateWebTexture;
+        const float maxDistance = 5000f;
+
+        // Trace forward from the projector light to find the surface it projects on to.
+        var traceStart = Position;
+        var traceEnd = Position + Rotation.Forward * maxDistance;
+        var tr = Trace.Ray(traceStart, traceEnd)
+            .WorldOnly()
+            .Run();
+
+        // If nothing hit, we act as if the screen is somewhere far in front of the projector.
+        ScreenPosition = tr.Hit
+            ? tr.HitPosition
+            : traceEnd;
+
+        ScreenDistance = tr.Hit
+            ? tr.Distance
+            : maxDistance;
     }
 
-    private void PlayContentOnProjector()
+    protected void UpdateProjectorAngles()
+    {
+        var largestSideSize = MathF.Max(ProjectionSize.x, ProjectionSize.y);
+        var smallestSideSize = MathF.Min(ProjectionSize.x, ProjectionSize.y);
+        var aspectRatio = largestSideSize / smallestSideSize;
+        // Scale up the spotlight to try to fit the all corners of the screen,
+        // then half it for math reasons.
+        var spotLightRadius = largestSideSize * aspectRatio / 2f;
+        // Pretty much gets the visual angle/angular diameter of the screen as seen by the projector,
+        // assuming you look at it head-on. Good enough approximation for now.
+        var angle = MathF.Atan(spotLightRadius / ScreenDistance);
+        var outerConeAngle = MathX.RadianToDegree(angle);
+
+        ProjectionLight.OuterConeAngle = outerConeAngle;
+        // Just make the inner cone angle smaller.
+        ProjectionLight.InnerConeAngle = ProjectionLight.OuterConeAngle * 0.5f;
+    }
+
+    private void PlayCurrentMedia()
     {
         if (!Game.LocalPawn.IsValid()) return;
 
         if (!CanSeeProjector(Game.LocalPawn.Position))
         {
-            WebSurface?.Dispose();
-            WebSurface = null;
-            WebSurfaceMedia = null;
+            CleanupProjection();
             return;
         }
 
-        if (WebSurfaceMedia == CurrentMedia)
-            return;
-
-        PlayMediaOnWebSurface(CurrentMedia);
+        // TODO: Play CurrentMedia
     }
 
-    private bool _WebSurfaceMouseClickedDown = false;
-
-    [GameEvent.Tick.Client]
-    protected void TickClient()
+    protected void CleanupProjection()
     {
-        _WebSurfaceMouseClickedDown = !_WebSurfaceMouseClickedDown;
-        WebSurface?.TellMouseButton(MouseButtons.Left, _WebSurfaceMouseClickedDown);
-        PlayContentOnProjector();
-    }
-
-    private void SetupProjectionLight()
-    {
-        ProjectionLight?.Delete();
-
-        ProjectionLight = new OrthoLightEntity
-        {
-            Parent = this,
-            Position = Position,
-            Rotation = Rotation,
-            LightCookie = ProjectionTexture,
-            Brightness = 1.0f,
-            Range = 1024.0f,
-            OrthoLightWidth = ProjectionSize.x,
-            OrthoLightHeight = ProjectionSize.y,
-            DynamicShadows = true,
-        };
-
-        ProjectionLight.UseFog();
-        ProjectionLight.Components.Create<FakeBounceLight>();
-    }
-
-    private void UpdateWebTexture(ReadOnlySpan<byte> span, Vector2 size)
-    {
-        if (WebSurfaceTexture == null || WebSurfaceTexture.Size != size)
-        {
-            WebSurfaceTexture?.Dispose();
-            WebSurfaceTexture = Texture.Create((int)size.x, (int)size.y, ImageFormat.BGRA8888)
-                                        .WithName("web-surface-texture")
-                                        .WithDynamicUsage()
-                                        .Finish();
-            RenderWorldPanel.Style.SetBackgroundImage(WebSurfaceTexture);
-        }
-
-        WebSurfaceTexture.Update(span, 0, 0, (int)size.x, (int)size.y);
-    }
-
-    [GameEvent.PreRender]
-    protected void OnPreRender()
-    {
-        Graphics.RenderToTexture(RenderCamera, ProjectionTexture);
+        ProjectionTexture?.Dispose();
     }
 }

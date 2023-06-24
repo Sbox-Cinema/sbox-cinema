@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Sandbox;
 using Sandbox.UI;
-using System.Collections;
 
 namespace Cinema.UI;
 
@@ -37,17 +36,22 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public bool Open()
     {
-        var localPawn = Game.LocalPawn;
-        var closestProjector = Entity
-            .All
-            .OfType<ProjectorEntity>()
-            .OrderBy(x => x.Position.Distance(localPawn.Position))
-            .FirstOrDefault();
-
-        if (closestProjector == null)
+        if (Game.LocalPawn is not Player ply)
             return false;
 
-        Controller = closestProjector.Controller;
+        // Make sure you're in a cinema zone that has a projector and a media controller.
+        var closestCinemaZone = ply
+            .GetZones()
+            .FirstOrDefault(z => z.ProjectorEntity != null && z.MediaController != null);
+
+        if (closestCinemaZone == null)
+        {
+            Log.Info("Can't find matching zone. Dumping zones:");
+            ply.DumpZones();
+            return false;
+        }
+
+        Controller = closestCinemaZone.MediaController;
         IsOpen = true;
         return true;
     }
