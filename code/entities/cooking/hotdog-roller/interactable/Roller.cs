@@ -10,7 +10,7 @@ namespace Cinema.HotdogRoller;
 
 public class Roller : BaseInteractable
 {
-    private struct Slot
+    private class Slot
     {
         public HotdogCookable Entity { get; set; }
         public string Attachment { get; set; }
@@ -27,6 +27,8 @@ public class Roller : BaseInteractable
     public Switch Switch { get; set; }
     private Slot[] Slots = new Slot[10];
     private HotdogRoller RollerParent => Parent as HotdogRoller;
+    private int MaxDistanceTarget = 5; // This is the max distance to target the specific hotdog
+    private string HotdogItemUniqueId = "hotdog_cooked"; // The unique id for the hotdog item
 
     public Roller() // For the compiler...
     {
@@ -53,9 +55,9 @@ public class Roller : BaseInteractable
         return new Transform();
     }
 
-    private HotdogCookable AddHotdog(Roller parent, Slot slot)
+    private HotdogCookable AddHotdog(Slot slot)
     {
-        var hotdog = new HotdogCookable(parent);
+        var hotdog = new HotdogCookable(this);
         var reverse = Game.Random.Int(1) == 1;
 
         hotdog.Transform = GetParentTransform(slot.Attachment);
@@ -64,7 +66,6 @@ public class Roller : BaseInteractable
         hotdog.Parent = Parent;
 
         slot.Entity = hotdog;
-        Slots[slot.Index] = slot;
 
         return hotdog;
     }
@@ -91,22 +92,20 @@ public class Roller : BaseInteractable
             slotsByDistance.Add(slot, dist);
         }
 
-        foreach (var slotDistance in slotsByDistance.OrderBy(x => x.Value))
+        foreach (var (slot, distance) in slotsByDistance.OrderBy(x => x.Value))
         {
-            var slot = slotDistance.Key;
-            var distance = slotDistance.Value;
-
-            if (slot.Entity is null || !slot.Entity.IsValid)
+            if (!slot.Entity.IsValid())
             {
-                AddHotdog(this, slot);
+                AddHotdog(slot);
 
                 break;
             }
-            else if (slot.Entity.GetMaterialGroup() > 1 && distance < 5)
+
+            if (slot.Entity.GetMaterialGroup() > 1 && distance < MaxDistanceTarget)
             {
                 slot.Entity.Delete();
 
-                var hotdogCarriable = InventorySystem.CreateItem("hotdog_cooked");
+                var hotdogCarriable = InventorySystem.CreateItem(HotdogItemUniqueId);
 
                 ply.PickupItem(hotdogCarriable);
 

@@ -11,11 +11,18 @@ public partial class HotdogCookable : ModelEntity
         Burnt = 150
     }
 
+    private enum MaterialGroup
+    {
+        Raw = 1,
+        Cooked = 2,
+        Burnt = 3
+    }
+    private int RotationSpeed = 2;
+    private int StartSteam = 30;
     public bool Reversed { get; set; }
     private Roller RollerParent {get; set;}
     private Particles Steam { get; set; }
     private float CurrentCook = 0;
-    private int RotationSpeed = 2;
 
     public HotdogCookable()
     {
@@ -42,7 +49,7 @@ public partial class HotdogCookable : ModelEntity
     [GameEvent.Tick.Server]
     public void Tick()
     {
-        if (RollerParent.Switch.TogglePower != Steam.EnableDrawing && CurrentCook > 30)
+        if (RollerParent.Switch.TogglePower != Steam.EnableDrawing && CurrentCook > StartSteam)
             Steam.EnableDrawing = RollerParent.Switch.TogglePower;
 
         if (!RollerParent.Switch.TogglePower)
@@ -50,24 +57,21 @@ public partial class HotdogCookable : ModelEntity
 
         CurrentCook += Time.Delta * RollerParent.Knob.KnobRotation;
 
-        var newMaterialGroup = 0;
+        MaterialGroup newMaterialGroup = MaterialGroup.Raw;
 
         switch (CurrentCook)
         {
-            case <= (int)CookingTime.Raw:
-                newMaterialGroup = 1;
-            break;
-            case <= (int)CookingTime.Cooked:
-                newMaterialGroup = 2;
+            case < (int)CookingTime.Raw: break;
+            case < (int)CookingTime.Cooked:
+                newMaterialGroup = MaterialGroup.Cooked;
             break;
             case > (int)CookingTime.Burnt:
-                newMaterialGroup = 3;
+                newMaterialGroup = MaterialGroup.Burnt;
             break;
         }
 
-        if (newMaterialGroup != GetMaterialGroup())
-            SetMaterialGroup(newMaterialGroup);
-
+        if ((int)newMaterialGroup != GetMaterialGroup() && newMaterialGroup > MaterialGroup.Raw)
+            SetMaterialGroup((int)newMaterialGroup);
 
         LocalRotation = LocalRotation.RotateAroundAxis(Vector3.Forward, Reversed ? RotationSpeed : -RotationSpeed);
     }
