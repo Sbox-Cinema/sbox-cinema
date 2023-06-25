@@ -41,13 +41,8 @@ public partial class PlayerBodyController
 			GetMechanic<CrouchMechanic>()?.IsActive == true ? 1 : 0,
 			Time.Delta * 10.0f
 		);
-		animHelper.VoiceLevel =
-			(Game.IsClient && Entity.Client.IsValid())
-				? Entity.Client.Voice.LastHeard < 0.5f
-					? Entity.Client.Voice.CurrentLevel
-					: 0.0f
-				: 0.0f;
-		animHelper.IsGrounded = GroundEntity != null;
+		animHelper.VoiceLevel = Entity.Client.Voice.LastHeard < 0.5f ? Entity.Client.Voice.CurrentLevel : 0.0f;
+        animHelper.IsGrounded = GroundEntity != null;
 		animHelper.IsSwimming = Entity.GetWaterLevel() >= 0.5f;
 		animHelper.IsWeaponLowered = false;
 
