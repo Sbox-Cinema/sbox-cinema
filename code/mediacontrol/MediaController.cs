@@ -5,6 +5,12 @@ using Sandbox;
 
 namespace Cinema;
 
+/// <summary>
+/// Manages the media request queue. <br/>
+/// Stores the "waiting image". <br/>
+/// Awards money to players whose media is liked when played. <br/>
+/// Tells the projector to play the next media.
+/// </summary>
 public partial class MediaController : EntityComponent<CinemaZone>, ISingletonComponent
 {
     public CinemaZone Zone => Entity;
@@ -237,11 +243,10 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         var controller = projector?.Components.Get<MediaController>();
         if (controller is null) return;
 
-        controller.RequestMedia(new MediaRequest()
-        {
-            RequestData = youtubeId,
-            Requestor = ConsoleSystem.Caller
-        });
+        var request = new MediaRequest() { Requestor = ConsoleSystem.Caller };
+        request[YouTube.RequestData.YouTubeId] = youtubeId;
+
+        controller.RequestMedia(request);
     }
 
     [ConCmd.Server]

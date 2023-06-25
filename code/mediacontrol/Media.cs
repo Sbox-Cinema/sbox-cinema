@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Sandbox;
 
 namespace Cinema;
 
+/// <summary>
+/// Contains information required by the projector to play specific media. <br/>
+/// Contains user-facing information describing specific media.<br/>
+/// Stores player votes and sentiments about the media. <br/>
+/// Uses the cinema-api endpoint to fetch YouTube-specific information about the media. <br/>
+/// </summary>
 public partial class Media : BaseNetworkable
 {
     [Net]
@@ -120,9 +125,11 @@ public partial class Media : BaseNetworkable
     {
         ParseApiResponse response;
 
+        var youTubeId = request[YouTube.RequestData.YouTubeId];
+
         try
         {
-            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={request.RequestData}", "GET");
+            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={youTubeId}", "GET");
         }
         catch (Exception e)
         {
@@ -140,7 +147,7 @@ public partial class Media : BaseNetworkable
             CanEmbed = response.CanEmbed,
             Thumbnail = response.Thumbnail,
             Verified = true,
-            YouTubeId = request.RequestData,
+            YouTubeId = youTubeId,
             Requestor = request.Requestor,
             VotesFor = new List<IClient>() { request.Requestor },
         };
