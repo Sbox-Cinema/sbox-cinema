@@ -17,6 +17,11 @@ public partial class Player
     /// </summary>
     [ClientInput]
     public string ActiveMenuName { get; protected set; }
+    
+    /// <summary>
+    /// Is the user currently typing in chat?
+    /// </summary>
+    [ClientInput] public string CurrentlyTyping { get; set; }
 
     // Players' world panels
     public NameTag HeadTag { get; set; }
