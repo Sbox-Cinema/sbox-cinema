@@ -3,6 +3,9 @@ using System;
 
 namespace Cinema;
 
+/// <summary>
+/// Contains information about media that is applicable to all providers.
+/// </summary>
 public partial class MediaInfo : BaseNetworkable
 {
     /// <summary>

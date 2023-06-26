@@ -1,6 +1,6 @@
 ﻿using Sandbox.UI;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 public abstract class MediaProviderHeaderPanel : Panel
 {

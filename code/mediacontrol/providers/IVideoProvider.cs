@@ -1,5 +1,6 @@
 ﻿using System;
-namespace Cinema;
+
+namespace CinemaTeam.Plugins.Video;
 
 public interface IVideoProvider
 {

@@ -34,12 +34,6 @@ public partial class Media : BaseNetworkable
     public string Thumbnail { get; set; }
 
     [Net]
-    public bool CanEmbed { get; set; } = false;
-
-    [Net]
-    public bool Verified { get; set; } = false;
-
-    [Net]
     public int ListScore { get; set; }
 
     [Net]
@@ -114,7 +108,7 @@ public partial class Media : BaseNetworkable
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(HashCode.Combine(YouTubeId, Requestor.Name, Title, Duration), HashCode.Combine(Thumbnail, CanEmbed, Verified, VotesFor.Count, VotesAgainst.Count, ListScore, Likes.Count, Dislikes.Count));
+        return HashCode.Combine(HashCode.Combine(YouTubeId, Requestor.Name, Title, Duration), HashCode.Combine(Thumbnail, VotesFor.Count, VotesAgainst.Count, ListScore, Likes.Count, Dislikes.Count));
     }
 
 
@@ -144,9 +138,7 @@ public partial class Media : BaseNetworkable
             Nonce = NonceCounter,
             Duration = response.DurationInSeconds,
             Title = response.Title,
-            CanEmbed = response.CanEmbed,
             Thumbnail = response.Thumbnail,
-            Verified = true,
             YouTubeId = youTubeId,
             Requestor = request.Requestor,
             VotesFor = new List<IClient>() { request.Requestor },

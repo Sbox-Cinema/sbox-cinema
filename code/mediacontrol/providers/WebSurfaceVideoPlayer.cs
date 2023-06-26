@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 public partial class WebSurfaceVideoPlayer : IVideoPlayer
 {
     [ConVar.Client("projector.websurface.size")]

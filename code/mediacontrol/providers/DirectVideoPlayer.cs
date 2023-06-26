@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 public class DirectVideoPlayer : IVideoPlayer
 {
     internal DirectVideoPlayer(string requestData)

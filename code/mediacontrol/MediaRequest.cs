@@ -4,21 +4,32 @@ using System.Collections.Generic;
 namespace Cinema;
 
 /// <summary>
-/// Stores data related to a media request that may be queued.
+/// Stores data related to a media request that may be queued. Supports via an indexer 
+/// the getting and setting of arbitrary string data that may be used by video providers 
+/// to store information required for their implementation.
 /// </summary>
 public partial class MediaRequest : BaseNetworkable
 {
     /// <summary>
-    /// Contains information about this media that shall be displayed to the user.
+    /// Contains information about this media that is applicable to all video providers.
+    /// This information is also displayed in the UI.
     /// </summary>
     [Net]
-    public MediaInfo Information { get; set; }
+    public MediaInfo GenericInfo { get; set; }
     /// <summary>
     /// The client that requested this media. If null, this media was
     /// requested by the server.
     /// </summary>
     [Net]
     public IClient Requestor { get; set; }
+    /// <summary>
+    /// The ID of the video player that shall be used to play this media.
+    /// </summary>
+    // We can't use the IVideoProvider interface here because it's not a networkable,
+    // so we are going to have the server manage associations between IDs and providers
+    // and refer to the provider by ID here.
+    [Net] 
+    public int VideoPlayerId { get; set; }
 
     [Net]
     private IDictionary<string, string> RequestData { get; set; }

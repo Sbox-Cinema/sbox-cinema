@@ -1,8 +1,7 @@
-﻿inherits Panel
+﻿@inherits Panel
 @using Sandbox;
 @using Sandbox.UI;
-
-@namespace Cinema.UI
+@using Cinema;
 
 @attribute [StyleSheet]
 <root>
@@ -12,6 +11,6 @@
 @code {
     public void RefreshVideoProviders()
     {
-        var providers = TypeLibrary.GetTypes<IVideoProvider>();
+        var providers = VideoProviderManager.Instance.GetAll();
     }
 }
