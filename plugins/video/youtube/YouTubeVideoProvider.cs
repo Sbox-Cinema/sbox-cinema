@@ -2,16 +2,16 @@
 
 namespace CinemaTeam.Plugins.Video;
 
-public class YouTubeWebSurface : IVideoProvider
+public partial class YouTubeVideoProvider : IVideoProvider
 {
-    public string ProviderName => "YouTube (WebSurface)";
+    public string ProviderName => "YouTube (VideoPlayer)";
 
     public MediaProviderHeaderPanel HeaderPanel => throw new NotImplementedException();
 
     public event EventHandler<IVideoProvider.OnRequestMediaEventArgs> OnRequestMedia;
 
-    public IVideoPlayer Play(string requestData)
+    public IVideoControls Play(string requestData)
     {
-        throw new NotImplementedException();
+        return new YouTubeVideoPlayer(requestData);
     }
 }

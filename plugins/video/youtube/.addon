@@ -1,0 +1,30 @@
+{
+  "Title": "YouTube Video Player",
+  "Type": "library",
+  "Org": "cinemateam",
+  "Ident": "youtube_video_player",
+  "Tags": "ctvpi video player plugin",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "Resources": null,
+  "MenuResources": null,
+  "HasCode": true,
+  "CodePath": ".",
+  "PackageReferences": [
+    "cinemateam.interface_video",
+    "carsonk.mediahelpers"
+  ],
+  "EditorReferences": null,
+  "Metadata": {
+    "ProjectTemplate": null,
+    "CsProjName": "",
+    "Compiler": {
+      "RootNamespace": "CinemaTeam.Plugins.Video",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "References": [],
+      "DistinctReferences": []
+    }
+  }
+}

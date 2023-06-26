@@ -1,6 +1,9 @@
 ﻿namespace CinemaTeam.Plugins.Video;
 
-public interface IVideoPlayer : IVideoPresenter
+/// <summary>
+/// 
+/// </summary>
+public interface IVideoControls
 {
     void Resume();
     void SetPaused(bool paused);

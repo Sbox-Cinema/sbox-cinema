@@ -1,9 +1,9 @@
 ﻿using Sandbox;
 
 namespace CinemaTeam.Plugins.Video;
-public class DirectVideoPlayer : IVideoPlayer
+public class DirectVideoPlayer : IVideoControls, IVideoPresenter
 {
-    internal DirectVideoPlayer(string requestData)
+    public DirectVideoPlayer(string requestData)
     {
         InitializePlayer(requestData);
     }

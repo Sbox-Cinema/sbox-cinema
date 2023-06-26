@@ -6,7 +6,7 @@ public interface IVideoProvider
 {
     public class OnRequestMediaEventArgs : EventArgs
     {
-        public IVideoPlayer Player { get; init; }
+        public IVideoControls Player { get; init; }
         public string RequestData { get; init; }
     }
     string ProviderName { get; }
@@ -17,7 +17,7 @@ public interface IVideoProvider
     /// The panel to display when this provider is selected in the media queue menu.
     /// </summary>
     MediaProviderHeaderPanel HeaderPanel { get; }
-    IVideoPlayer Play(string requestData);
+    IVideoControls Play(string requestData);
 
     event EventHandler<OnRequestMediaEventArgs> OnRequestMedia;
 }

@@ -2,7 +2,7 @@
 using System;
 
 namespace CinemaTeam.Plugins.Video;
-public partial class WebSurfaceVideoPlayer : IVideoPlayer
+public partial class WebSurfaceVideoPlayer : IVideoControls, IVideoPresenter
 {
     [ConVar.Client("projector.websurface.size")]
     public static Vector2 WebSurfaceSize { get; set; } = new Vector2(1280, 720);
