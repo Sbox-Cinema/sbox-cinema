@@ -9,7 +9,7 @@ namespace Cinema.UI;
 
 public partial class Chat : Panel
 {
-	[ConCmd.Client( "sandbox_chat_add", CanBeCalledFromServer = true )]
+	[ClientRpc]
 	public static void AddChatEntryConsole( string name, string message, string playerId = "0", bool isInfo = false )
 	{
         Current?.AddEntry( name, message, long.Parse( playerId ), isInfo );
