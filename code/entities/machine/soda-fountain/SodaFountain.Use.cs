@@ -1,10 +1,11 @@
 ﻿using Sandbox;
+using Sandbox.util;
 
 namespace Cinema;
 
 public partial class SodaFountain 
-{   
-    public string UseText { get; set; }
+{
+    public string UseText { get; set; } = "Use Soda Fountain";
 
     /// <summary>
     /// Whether this Soda Fountain is usable or not
