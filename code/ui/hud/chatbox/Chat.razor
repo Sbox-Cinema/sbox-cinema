@@ -5,6 +5,8 @@
 
 @using Player = Cinema.Player
 
+@inherits Panel
+
 @namespace Cinema.UI
 
 <style>
@@ -250,7 +252,7 @@
 		Rows.Enqueue( e );
 
 		// Kill an item if we need to
-		/*if ( Rows.Count > MaxItems )
-			Rows.Dequeue().Delete();*/
+		if ( Rows.Count > MaxItems )
+			Rows.Dequeue().Delete();
 	}
 }
