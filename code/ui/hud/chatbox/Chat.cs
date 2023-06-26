@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cinema;
+using Sandbox.UI;
 
 namespace Cinema.UI;
 
-public partial class Chat
+public partial class Chat : Panel
 {
 	[ConCmd.Client( "sandbox_chat_add", CanBeCalledFromServer = true )]
 	public static void AddChatEntryConsole( string name, string message, string playerId = "0", bool isInfo = false )
