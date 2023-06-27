@@ -1,5 +1,6 @@
 ﻿using Editor;
 using Sandbox;
+using Sandbox.ModelEditor;
 using Sandbox.util;
 using System.Collections.Generic;
 
@@ -32,62 +33,36 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         Tags.Add("interactable");
     }
 
-    public void HandleUse(Entity player)
+    public void HandleUse(Entity ply)
     {
-
-        foreach (var interactableData in Interactables)
+        foreach (var (_, interactable) in Interactables)
         {
-            var interactable = interactableData.Value;
+            var rayResult = interactable.CanRayTrigger(ply.AimRay);
 
-            interactable.Trigger(player as Player);
-        }
-
-        /*
-        BaseInteractable found = null;
-        float nearest = 999999;
-
-        foreach (var interactableData in Interactables)
-        {
-
-            var interactable = interactableData.Value;
-            var result = interactable.CanRayTrigger(player.AimRay);
-
-            if (result.Hit && result.Distance < interactable.MaxDistance && result.Distance < nearest)
+            if (rayResult.Hit)
             {
-                nearest = result.Distance;
-                found = interactable;
+                interactable.Trigger(ply as Player);
+                break;
             }
         }
-
-        if (found != null)
-            found.Trigger(player as Player);
-        */
-
     }
 
     public void AddInteractables()
     {
         Interactables.Add("Dispenser1", new Dispenser("", "D1")
-        {
-            Parent = this,
-            Mins = new Vector3(242, 465.0f, 36.0f),
-            Maxs = new Vector3(266, 471.0f, 38.0f)
-        });
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_1")
+        );
 
         Interactables.Add("Dispenser2", new Dispenser("", "D2")
-        {
-            Parent = this,
-            Mins = new Vector3(242, 465.0f, 36.0f),
-            Maxs = new Vector3(266, 471.0f, 38.0f)
-        });
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_2")
+        );
 
         Interactables.Add("Dispenser3", new Dispenser("", "D3")
-
-        {
-            Parent = this,
-            Mins = new Vector3(242, 465.0f, 36.0f),
-            Maxs = new Vector3(266, 471.0f, 38.0f)
-        });
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_3")
+        );
 
         Interactables.Add("Platform", new Platform()
         {

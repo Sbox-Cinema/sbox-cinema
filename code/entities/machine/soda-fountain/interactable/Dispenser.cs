@@ -25,6 +25,7 @@ public class Dispenser : BaseInteractable
 
     public override void Trigger(Player player)
     {
-        
+        Log.Info("TRIGGERED");
+        Log.Info(Attachment);
     }
 }

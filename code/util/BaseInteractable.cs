@@ -1,4 +1,7 @@
-﻿namespace Sandbox.util;
+﻿using Cinema;
+using System;
+
+namespace Sandbox.util;
 
 public class CanTriggerResults
 {
@@ -30,6 +33,50 @@ public partial class BaseInteractable : BaseNetworkable
 
     public virtual void Trigger(Cinema.Player ply = null)
     {
+    }
+
+    /// <summary>
+    /// Sets the bounds based on the GameData "interact_box", pass the name defined in ModelDoc.
+    /// If it doesnt find anything it wont set anything.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public BaseInteractable SetBoundsFromInteractionBox(string name)
+    {
+        var interactionBoxes = (Parent as ModelEntity).Model.GetData<ModelInteractionBox[]>();
+
+        foreach (var box in interactionBoxes)
+        {
+            if (box.Name != name)
+                continue;
+
+            var offset = box.OriginOffset;
+            var halfDimensions = box.Dimensions;
+            halfDimensions.x = halfDimensions.x * .5f;
+            halfDimensions.y = halfDimensions.y * .5f;
+            halfDimensions.z = halfDimensions.z * .5f;
+
+            var bbox = new BBox(offset - halfDimensions, offset + halfDimensions);
+
+            Mins = bbox.Mins;
+            Maxs = bbox.Maxs;
+
+            break;
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the parent of the interactable, has to be an entity.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <returns></returns>
+    public BaseInteractable SetParent(Entity parent)
+    {
+        Parent = parent;
+
+        return this;
     }
 
     /// <summary>

@@ -8,7 +8,7 @@ namespace Cinema;
 [GameData("interact_box", AllowMultiple = true)]
 [Box("dimensions", Origin ="offset_origin", Attachment = "attachment_point")]
 [Axis(Origin = "offset_origin", Attachment = "attachment_point")]
-public class ModelInteractionBox
+public struct ModelInteractionBox
 {
     [DisplayName("Interaction")]
     public string Name { get; set; }
