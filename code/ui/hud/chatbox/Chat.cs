@@ -7,19 +7,33 @@ using Sandbox.UI;
 
 namespace Cinema.UI;
 
-public partial class Chat : Panel
+public partial class Chat : Panel, IMenuScreen
 {
-    private static Chat Current;
+    public static Chat Instance { get; set; }
+    
+    public bool IsOpen { get; protected set; }
+    public string VisibleClass => IsOpen ? "visible" : "";
 
+    public string Name => "Chat";
+    
     public Chat()
     {
-        Current = this;
+        Instance = this;
     }
     
-	[ClientRpc]
+    public Panel Canvas { get; protected set; }
+    public TextEntry Input { get; protected set; }
+
+    Queue<ChatRow> Rows = new();
+
+    protected int MaxItems => 100;
+    protected float MessageLifetime => 10f;
+    
+
+        [ClientRpc]
 	public static void AddChatEntryConsole( string name, string message, string playerId = "0", bool isInfo = false )
 	{
-        Current?.AddEntry( name, message, long.Parse( playerId ), isInfo );
+        Instance?.AddEntry( name, message, long.Parse( playerId ), isInfo );
 
 		// Only log clientside if we're not the listen server host
 		if ( !Game.IsListenServer )
@@ -33,14 +47,14 @@ public partial class Chat : Panel
 		AddChatEntryConsole( target, name, message, playerId.ToString(), isInfo );
 	}
 
-	[ConCmd.Client( "sandbox_addinfo", CanBeCalledFromServer = true )]
+	[ConCmd.Client( "chat.addinfo", CanBeCalledFromServer = true )]
 	public static void AddInformation( string message )
 	{
-        Current?.AddEntry( null, message );
+        Instance?.AddEntry( null, message );
 	}
     
 
-	[ConCmd.Server( "chat_say" )]
+	[ConCmd.Server( "chat.say" )]
 	public static void Say( string message )
 	{
         if ( message.Contains( '\n' ) || message.Contains( '\r' ) )
@@ -51,30 +65,7 @@ public partial class Chat : Panel
         AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, ConsoleSystem.Caller.SteamId, false );
 	}
 
-    public Panel Canvas { get; protected set; }
-	public TextEntry Input { get; protected set; }
-
-	Queue<ChatRow> Rows = new();
-
-	protected int MaxItems => 100;
-	protected float MessageLifetime => 10f;
-
-	public bool IsOpen
-	{
-		get => HasClass( "open" );
-		set
-		{
-			SetClass( "open", value );
-			if ( value )
-			{
-				Input.Focus();
-				Input.Text = string.Empty;
-				Input.Label.SetCaretPosition( 0 );
-			}
-		}
-	}
-
-	protected override void OnAfterTreeRender( bool firstTime )
+    protected override void OnAfterTreeRender( bool firstTime )
 	{
 		base.OnAfterTreeRender( firstTime );
 
@@ -85,41 +76,44 @@ public partial class Chat : Panel
 
 	public override void Tick()
 	{
-		if ( Sandbox.Input.Pressed( "Chat" ) )
-			Open();
-
-		Input.Placeholder = string.IsNullOrEmpty( Input.Text ) ? "Enter your message..." : string.Empty;
+        Input.Placeholder = string.IsNullOrEmpty( Input.Text ) ? "Enter your message..." : string.Empty;
 		
 		if (Game.LocalPawn is Player ply)
-		{
-			ply.CurrentlyTyping = HasClass("open") ? Input.Text : "";
-		} 
+        {
+            ply.CurrentlyTyping = HasClass("open") ? Input.Text : "";
+        } 
 	}
 
-	void Open()
-	{
-		AddClass( "open" );
+	public bool Open()
+    {
+        AddClass( "open" );
 		Input.Focus();
 		Canvas.TryScrollToBottom();
-	}
+        
+        IsOpen = true;
 
-	void Close()
+        return true;
+    }
+
+	public void Close()
 	{
-		RemoveClass("open");
+        RemoveClass("open");
 		Input.Blur();
-	}
 
-	void Submit()
-	{
-		Close();
+        IsOpen = false;
+    }
 
-		var msg = Input.Text.Trim();
+	private void Submit()
+    {
+        var msg = Input.Text.Trim();
 		Input.Text = "";
 
 		if ( string.IsNullOrWhiteSpace( msg ) )
 			return;
 
 		Say( msg );
+        
+        IsOpen = false;
 	}
 
 	public void AddEntry( string name, string message, long playerId = 0, bool isInfo = false, bool isLastWords = false )

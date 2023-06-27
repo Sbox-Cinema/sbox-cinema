@@ -19,9 +19,10 @@ public partial class Player
     public string ActiveMenuName { get; protected set; }
     
     /// <summary>
-    /// Is the user currently typing in chat?
+    /// Contains what the user has typed in the chatbox, but has not sent it just yet.
     /// </summary>
-    [ClientInput] public string CurrentlyTyping { get; set; }
+    [ClientInput] 
+    public string CurrentlyTyping { get; set; }
 
     // Players' world panels
     public NameTag HeadTag { get; set; }
@@ -102,13 +103,20 @@ public partial class Player
         {
             ToggleMenu(MovieQueue.Instance);
         }
+        
         if (Input.Pressed("jobmenu") && ActiveMenu is null or JobMenu)
         {
             ToggleMenu(JobMenu.Instance);
         }
+
         if (Input.Pressed("Score") && ActiveMenu is null or Scoreboard)
         {
             ToggleMenu(Scoreboard.Instance);
+        }
+
+        if (Input.Pressed("Chat") && ActiveMenu is null or Chat)
+        {
+            ToggleMenu(Chat.Instance);
         }
     }
 
