@@ -50,4 +50,18 @@ public partial class Player
         }
     }
 
+    public void SetDrawTaggedClothing(string tag, bool enableDrawing)
+    {
+        var clothing = Children.Where(e => e.Tags.Has("clothes") && e.Tags.Has(tag)).ToList();
+        for (int i = 0; i < clothing.Count; i++)
+        {
+            clothing[i].EnableDrawing = enableDrawing;
+        }
+    }
+
+    public void DrawHead(bool enableDrawing)
+    {
+        SetBodyGroup(0, enableDrawing ? 0 : 1);
+    }
+
 }

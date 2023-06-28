@@ -179,6 +179,8 @@ public class ClothingContainer
             anim.EnableHideInFirstPerson = hideInFirstPerson;
             anim.EnableShadowInFirstPerson = castShadowsInFirstPerson;
             anim.EnableTraceAndQueries = false;
+            Log.Info(c.HideBody.ToString());
+            anim.Tags.Add(c.HideBody.ToString());
 
             if (!string.IsNullOrEmpty(c.MaterialGroup))
                 anim.SetMaterialGroup(c.MaterialGroup);

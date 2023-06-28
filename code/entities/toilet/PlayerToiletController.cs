@@ -12,7 +12,23 @@ public partial class PlayerToiletController : PlayerController
     {
         base.OnActivate();
 
+        Log.Info("PlayerToiletController activated");
+
+        Entity.LookInput = Toilet.Rotation.Angles();
+        Entity.DrawHead(false);
+        Entity.SetDrawTaggedClothing("Head", false);
+
         SinceActivated = 0f;
+    }
+
+    protected override void OnDeactivate()
+    {
+        base.OnDeactivate();
+
+        Log.Info("PlayerToiletController deactivated");
+
+        Entity.DrawHead(true);
+        Entity.SetDrawTaggedClothing("Head", true);
     }
 
     protected TimeSince SinceActivated { get; set; }
@@ -50,16 +66,32 @@ public partial class PlayerToiletController : PlayerController
     [ClientInput]
     public Vector3 LookPosition { get; set; }
 
+    private Vector3 EyeOffset => new(0, 0, 50);
+
     public override void FrameSimulate(IClient cl)
     {
         base.FrameSimulate(cl);
 
-        Entity.SimulateCamera(cl);
+        //Entity.SimulateCamera(cl);
+        SimulateCamera(cl);
 
         LookInput = (LookInput + Input.AnalogLook).Normal;
         LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
 
-        var eyeOffset = new Vector3(-6, 0, 40);
-        LookPosition = Entity.Transform.PointToWorld(eyeOffset);
+        LookPosition = Entity.Transform.PointToWorld(EyeOffset);
+    }
+
+    protected void SimulateCamera(IClient cl)
+    {
+        Camera.Rotation = Entity.EyeRotation;
+
+        // Set field of view to whatever the user chose in options
+        Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+
+        Camera.Position = Entity.EyePosition;
+        Camera.ZNear = 0.5f;
+
+        // Set the first person viewer to this, so it won't render our model
+        Camera.FirstPersonViewer = null;
     }
 }

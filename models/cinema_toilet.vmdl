@@ -3,22 +3,6 @@
 	rootNode = 
 	{
 		_class = "RootNode"
-		children = 
-		[
-			{
-				_class = "Skeleton"
-				children = 
-				[
-					{
-						_class = "Bone"
-						name = "butt"
-						origin = [ 5.0, 0.0, 20.0 ]
-						angles = [ 0.0, 0.0, 0.0 ]
-						do_not_discard = true
-					},
-				]
-			},
-		]
 		model_archetype = ""
 		primary_associated_entity = ""
 		anim_graph_name = ""
