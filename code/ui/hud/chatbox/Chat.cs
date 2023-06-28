@@ -28,6 +28,12 @@ public partial class Chat : Panel
     
     public string Name => "Chat";
     
+    /// <summary>
+    /// Contains what the user has typed in the chatbox, but has not sent it just yet.
+    /// </summary>
+    [ClientInput] 
+    public string CurrentlyTyping { get; set; }
+    
     public Chat()
     {
         Instance = this;
@@ -92,7 +98,7 @@ public partial class Chat : Panel
 		
         if (Game.LocalPawn is Player ply)
         {
-            ply.CurrentlyTyping = HasClass("open") ? Input.Text : "";
+            CurrentlyTyping = HasClass("open") ? Input.Text : "";
         } 
 	}
 

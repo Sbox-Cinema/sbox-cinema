@@ -17,12 +17,6 @@ public partial class Player
     /// </summary>
     [ClientInput]
     public string ActiveMenuName { get; protected set; }
-    
-    /// <summary>
-    /// Contains what the user has typed in the chatbox, but has not sent it just yet.
-    /// </summary>
-    [ClientInput] 
-    public string CurrentlyTyping { get; set; }
 
     // Players' world panels
     public NameTag HeadTag { get; set; }
