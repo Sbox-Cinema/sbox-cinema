@@ -1,0 +1,150 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using System.Collections.Generic;
+@using System.Linq;
+
+@using Player = Cinema.Player
+
+@inherits Panel
+
+@namespace Cinema.UI
+
+<style>
+	iconpanel {
+		font-family: "Material Icons";
+	}
+
+	$rounding: 0px;
+
+	Chat {
+		position: absolute;
+		bottom: 256px;
+		left: 32px;
+		z-index: 1001;
+		flex-direction: column;
+		width: 505px;
+		max-height: 435px;
+		font-family: SourceSansPro-SemiBold;
+		text-stroke: 4px rgba(32,32,32,0.7);
+		font-size: 16px;
+		pointer-events: none;
+		transition: all 0.1s ease, border 0s ease;
+		overflow: hidden;
+		color: white;
+
+		textentry {
+			transition: opacity 0.1s ease;
+			flex-shrink: 0;
+			min-height: 44px;
+			opacity: 0;
+			background-color: rgba(32,32,32,0.7);
+			align-items: center;
+			padding: 8px;
+		}
+
+		.placeholder {
+			color: #c0cee7;
+		}
+
+		.content-label {
+			margin-left: 1px;
+		}
+
+		.placeholder, .content-label {
+			font-size: 18px;
+			font-family: SourceSansPro-SemiBold;
+			text-stroke: 4px rgba(32,32,32,0.7);
+			font-weight: 400;
+		}
+
+		.canvas {
+			flex-direction: column;
+			align-items: flex-start;
+			overflow: scroll;
+
+			ChatRow {
+				align-items: center;
+				max-width: 100%;
+				color: white;
+				opacity: 1;
+				flex-shrink: 0;
+				padding: 8px 10px;
+				transition: opacity 0.15s ease;
+
+				.header {
+					flex-shrink: 0;
+					flex-grow: 0;
+					padding-left: 4px;
+					font-weight: 800;
+					font-size: 25px;
+					padding-right: 8px;
+				}
+
+				.msg {
+					color: white;
+					font-size: 25px;
+				}
+
+				&.info {
+					.header, .msg {
+						color: darken( #c0cee7, 20% );
+					}
+				}
+
+				img {
+					flex-shrink: 0;
+					height: 32px;
+					width: 32px;
+					border-radius: 100px;
+				}
+
+				.name {
+					align-items: center;
+					justify-content: center;
+					border-radius: 8px;
+					padding: 1px;
+					padding-right: 10px;
+					color: #f3ff82;
+				}
+
+				&.noname {
+					.name {
+						display: none;
+					}
+				}
+
+				&.stale {
+					transition: opacity 1s ease;
+					opacity: 0;
+				}
+			}
+		}
+
+		&.open {
+			pointer-events: all;
+			backdrop-filter-blur: 10px;
+			background-color: rgba(16,16,16,0.4);
+			left: 32px;
+			border-radius: $rounding;
+
+			textentry {
+				opacity: 1;
+				width: 100%;
+				cursor: text;
+			}
+
+			.canvas {
+				ChatRow {
+					transition: opacity 0.1s ease;
+					opacity: 1;
+				}
+			}
+		}
+	}
+</style>
+
+<root>
+	<div class="canvas" @ref=Canvas />
+	<TextEntry @ref=Input onsubmit=@Submit onblur=@Close />
+</root>
+

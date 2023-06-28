@@ -97,13 +97,21 @@ public partial class Player
         {
             ToggleMenu(MovieQueue.Instance);
         }
+        
         if (Input.Pressed("jobmenu") && ActiveMenu is null or JobMenu)
         {
             ToggleMenu(JobMenu.Instance);
         }
+
         if (Input.Pressed("Score") && ActiveMenu is null or Scoreboard)
         {
             ToggleMenu(Scoreboard.Instance);
+        }
+
+        if (Input.Pressed("Chat"))
+        {
+            // This keeps it a seperate living panel that you could trigger no matter if you are in a menu, which is a smarter choice
+            Chat.Instance.Open();
         }
     }
 
