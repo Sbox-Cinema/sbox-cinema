@@ -140,9 +140,9 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         return false;
     }
 
-    public void OnStopUse(Entity user)
+    public bool OnStopUse(Entity user)
     {
-        // NOP, required by the interface.
+        return true;
     }
 
     public void EjectUser()
