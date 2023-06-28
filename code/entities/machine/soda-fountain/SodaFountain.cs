@@ -1,6 +1,5 @@
 ﻿using Editor;
 using Sandbox;
-using Sandbox.ModelEditor;
 using Sandbox.util;
 using System.Collections.Generic;
 
@@ -33,15 +32,15 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         Tags.Add("interactable");
     }
 
-    public void HandleUse(Entity ply)
+    public void HandleUse(Entity player)
     {
         foreach (var (_, interactable) in Interactables)
         {
-            var rayResult = interactable.CanRayTrigger(ply.AimRay);
+            var rayResult = interactable.CanRayTrigger(player.AimRay);
 
             if (rayResult.Hit)
             {
-                interactable.Trigger(ply as Player);
+                interactable.Trigger(player as Player);
                 break;
             }
         }
@@ -49,28 +48,33 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
 
     public void AddInteractables()
     {
-        Interactables.Add("Dispenser1", new Dispenser("", "D1")
+        Interactables.Add("Dispenser1", new Dispenser("Lever1State")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_1")
         );
 
-        Interactables.Add("Dispenser2", new Dispenser("", "D2")
+        Interactables.Add("Dispenser2", new Dispenser("Lever2State")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_2")
         );
 
-        Interactables.Add("Dispenser3", new Dispenser("", "D3")
+        Interactables.Add("Dispenser3", new Dispenser("Lever3State")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_3")
         );
 
         Interactables.Add("Platform", new Platform()
-        {
-            Parent = this,
-            Mins = new Vector3(242, 465.0f, 36.0f),
-            Maxs = new Vector3(266, 471.0f, 38.0f)
-        });
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("platform")
+        );
     }
 
-    
+    [GameEvent.Tick.Server]
+    public void OnServerTick()
+    {
+        foreach (var (_, interactable) in Interactables)
+        {
+            interactable.Simulate();
+        }
+    }
 }

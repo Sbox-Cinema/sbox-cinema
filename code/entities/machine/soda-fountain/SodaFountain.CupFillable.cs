@@ -1,38 +1,26 @@
 ﻿using Sandbox;
+using System;
 
 namespace Cinema;
 
+
 public partial class CupFillable : ModelEntity
 {
-    private Dispenser DispenserParent { get; set; }
-    private Particles Soda { get; set; }
-
-    public CupFillable()
+    public CupFillable() //For the compiler...
     {
-
+       
     }
-
-    public CupFillable(Dispenser dispenserParent)
-    {
-        DispenserParent = dispenserParent;
-    }
-
     public override void Spawn()
     {
         base.Spawn();
 
         Transmit = TransmitType.Always;
 
-        SetModel("models/papercup/sodafountain_cup.vmdl");
+        SetModel("models/papercup/sodafountain_cup_01/sodafountain_cup_02.vmdl_c");
+        SetupPhysicsFromModel(PhysicsMotionType.Static);
 
-        EnableDrawing = true;
-    }
-
-    [GameEvent.Tick.Server]
-    public void Tick()
-    {
-        //if(DisperParent.IsDispensing()) {
-        //
-        //}
+        // Make cup a random color on spawn
+        Random random = new Random();
+        SetMaterialGroup(random.Next(0, 5));
     }
 }

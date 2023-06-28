@@ -13,7 +13,6 @@ public class Platform : BaseInteractable
         public CupFillable Entity { get; set; }
         public string Attachment { get; set; }
         public int Index { get; set; }
-
         public Slot(int index, string attachment)
         {
             Index = index;
@@ -34,42 +33,24 @@ public class Platform : BaseInteractable
     {
         for (int i = 0; i < NumSlots; i++)
         {
-            Slots[i] = new Slot(i, $"S{i + 1}");
+            Slots[i] = new Slot(i, $"lever{i + 1}_cup");
         }
     }
 
     private CupFillable AddCup(Slot slot)
     {
-        var sodaFountain = Parent as SodaFountain;
-
-        var cup = new CupFillable(sodaFountain.Interactables[$"Dispenser{slot.Index+1}"] as Dispenser);
-
+        var cup = new CupFillable();
         cup.Transform = GetParentTransform(slot.Attachment);
-        
-        //Adjust cup to fit underneath dispenser
-        cup.LocalScale = 0.45f;
-        cup.Position -= Vector3.Up * 1.35f;
-        
         cup.Parent = Parent;
+
+        // Manually setting position until we have a proper paper cup model
+        cup.Position += Vector3.Up * (cup.CollisionBounds.Size / 2);
 
         slot.Entity = cup;
 
-        switch(slot.Index + 1)
-        {
-            case 1:
-                Particles soda1 = Particles.Create("particles/soda_fountain/walker/sodafill2_f_conk.vpcf", Parent);
-                soda1.SetEntityAttachment(0, Parent, $"D{slot.Index + 1}");
-                break; 
-            case 2:
-                Particles soda2 = Particles.Create("particles/soda_fountain/walker/sodafill2_f_mionpisz.vpcf", Parent);
-                soda2.SetEntityAttachment(0, Parent, $"D{slot.Index + 1}");
-                break;
-            case 3:
-                Particles soda3 = Particles.Create("particles/soda_fountain/walker/sodafill2_f_spooge.vpcf", Parent);
-                soda3.SetEntityAttachment(0, Parent, $"D{slot.Index + 1}");
-                break;
-        }
-        
+        // Let the dispenser that a cup has been added to this slot
+        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+        dispenser.CupPlaced = true;
 
         return cup;
     }
@@ -106,12 +87,15 @@ public class Platform : BaseInteractable
             }
 
             if (distance < MaxDistanceTarget)
-            {
+            { 
                 slot.Entity.Delete();
              
                 var cupCarriable = InventorySystem.CreateItem(CupItemUniqueId);
-
                 player.PickupItem(cupCarriable);
+
+                // Let the dispenser know that a cup has been taken from this slot
+                var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+                dispenser.CupPlaced = false;
 
                 break;
             }
