@@ -7,13 +7,25 @@ using Sandbox.UI;
 
 namespace Cinema.UI;
 
-public partial class Chat : Panel, IMenuScreen
+public partial class Chat : Panel
 {
     public static Chat Instance { get; set; }
     
-    public bool IsOpen { get; protected set; }
-    public string VisibleClass => IsOpen ? "visible" : "";
-
+    public bool IsOpen
+    {
+        get => HasClass( "open" );
+        set
+        {
+            SetClass( "open", value );
+            if ( value )
+            {
+                Input.Focus();
+                Input.Text = string.Empty;
+                Input.Label.SetCaretPosition( 0 );
+            }
+        }
+    }
+    
     public string Name => "Chat";
     
     public Chat()
@@ -30,7 +42,7 @@ public partial class Chat : Panel, IMenuScreen
     protected float MessageLifetime => 10f;
     
 
-        [ClientRpc]
+    [ClientRpc]
 	public static void AddChatEntryConsole( string name, string message, string playerId = "0", bool isInfo = false )
 	{
         Instance?.AddEntry( name, message, long.Parse( playerId ), isInfo );
@@ -71,28 +83,26 @@ public partial class Chat : Panel, IMenuScreen
 
 		Canvas.PreferScrollToBottom = true;
 		Input.AcceptsFocus = true;
-		Input.AllowEmojiReplace = true;
+        Input.AllowEmojiReplace = true;
     }
 
 	public override void Tick()
 	{
         Input.Placeholder = string.IsNullOrEmpty( Input.Text ) ? "Enter your message..." : string.Empty;
 		
-		if (Game.LocalPawn is Player ply)
+        if (Game.LocalPawn is Player ply)
         {
             ply.CurrentlyTyping = HasClass("open") ? Input.Text : "";
         } 
 	}
 
-	public bool Open()
+	public void Open()
     {
         AddClass( "open" );
-		Input.Focus();
-		Canvas.TryScrollToBottom();
+        Canvas.TryScrollToBottom();
+        Input.Focus();
         
         IsOpen = true;
-
-        return true;
     }
 
 	public void Close()
@@ -108,10 +118,10 @@ public partial class Chat : Panel, IMenuScreen
         var msg = Input.Text.Trim();
 		Input.Text = "";
 
-		if ( string.IsNullOrWhiteSpace( msg ) )
-			return;
-
-		Say( msg );
+        if (string.IsNullOrWhiteSpace(msg))
+            return;
+        
+        Say( msg );
         
         IsOpen = false;
 	}

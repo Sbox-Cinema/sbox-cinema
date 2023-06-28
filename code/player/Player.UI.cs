@@ -114,9 +114,10 @@ public partial class Player
             ToggleMenu(Scoreboard.Instance);
         }
 
-        if (Input.Pressed("Chat") && ActiveMenu is null or Chat)
+        if (Input.Pressed("Chat"))
         {
-            ToggleMenu(Chat.Instance);
+            // This keeps it a seperate living panel that you could trigger no matter if you are in a menu, which is a smarter choice
+            Chat.Instance.Open();
         }
     }
 
