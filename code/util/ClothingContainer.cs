@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -179,8 +180,9 @@ public class ClothingContainer
             anim.EnableHideInFirstPerson = hideInFirstPerson;
             anim.EnableShadowInFirstPerson = castShadowsInFirstPerson;
             anim.EnableTraceAndQueries = false;
-            Log.Info(c.HideBody.ToString());
-            anim.Tags.Add(c.HideBody.ToString());
+
+            var category = Enum.GetName(typeof(Clothing.ClothingCategory), c.Category);
+            anim.Tags.Add(category);
 
             if (!string.IsNullOrEmpty(c.MaterialGroup))
                 anim.SetMaterialGroup(c.MaterialGroup);

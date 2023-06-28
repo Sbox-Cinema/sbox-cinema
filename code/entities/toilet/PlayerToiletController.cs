@@ -4,7 +4,6 @@ namespace Cinema;
 
 public partial class PlayerToiletController : PlayerController
 {
-
     [Net]
     public Toilet Toilet { get; set; }
 
@@ -12,11 +11,15 @@ public partial class PlayerToiletController : PlayerController
     {
         base.OnActivate();
 
+        if (Toilet is null)
+            return;
+
         Log.Info("PlayerToiletController activated");
 
         Entity.LookInput = Toilet.Rotation.Angles();
         Entity.DrawHead(false);
-        Entity.SetDrawTaggedClothing("Head", false);
+        Entity.SetDrawTaggedClothing("Hat", false);
+        Entity.SetDrawTaggedClothing("Hair", false);
 
         SinceActivated = 0f;
     }
@@ -28,7 +31,8 @@ public partial class PlayerToiletController : PlayerController
         Log.Info("PlayerToiletController deactivated");
 
         Entity.DrawHead(true);
-        Entity.SetDrawTaggedClothing("Head", true);
+        Entity.SetDrawTaggedClothing("Hat", true);
+        Entity.SetDrawTaggedClothing("Hair", true);
     }
 
     protected TimeSince SinceActivated { get; set; }
@@ -61,24 +65,33 @@ public partial class PlayerToiletController : PlayerController
     }
 
     [ClientInput]
-    public Angles LookInput { get; set; }
-
-    [ClientInput]
     public Vector3 LookPosition { get; set; }
 
-    private Vector3 EyeOffset => new(0, 0, 50);
+    private Vector3 EyeOffset => new(9, 0, 2);
+
+    private static float PitchLock => 70f;
+    private static float YawLock => 40;
 
     public override void FrameSimulate(IClient cl)
     {
         base.FrameSimulate(cl);
 
-        //Entity.SimulateCamera(cl);
+        Entity.LookInput = Entity.LookInput.WithPitch(
+            Entity.LookInput.pitch.Clamp(-PitchLock, PitchLock)
+        );
+
+        var lookYaw = Angles.NormalizeAngle(Entity.LookInput.yaw - Toilet.Rotation.Yaw());
+        lookYaw = lookYaw.Clamp(-YawLock, YawLock);
+        Entity.LookInput = Entity.LookInput.WithYaw(Toilet.Rotation.Yaw() + lookYaw);
+
+        LookPosition = Entity.Transform.PointToWorld(
+            Entity.GetBoneTransform("head", false).Position + EyeOffset
+        );
+
+        Entity.EyeRotation = Entity.LookInput.ToRotation();
+        Entity.EyeLocalPosition = Entity.Transform.PointToLocal(LookPosition);
+
         SimulateCamera(cl);
-
-        LookInput = (LookInput + Input.AnalogLook).Normal;
-        LookInput = LookInput.WithPitch(LookInput.pitch.Clamp(-90f, 90f));
-
-        LookPosition = Entity.Transform.PointToWorld(EyeOffset);
     }
 
     protected void SimulateCamera(IClient cl)

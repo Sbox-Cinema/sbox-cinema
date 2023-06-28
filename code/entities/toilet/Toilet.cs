@@ -1,5 +1,3 @@
-using System;
-using Cinema.Jobs;
 using Editor;
 using Sandbox;
 
@@ -26,6 +24,19 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     [Net]
     public TimeUntil TimeUntilFinishedUsing { get; private set; }
 
+    [Net]
+    public TimeSince TimeSinceStartedUsing { get; private set; }
+
+    public enum ToiletState
+    {
+        Idle,
+        SittingDown,
+        Pooping
+    }
+
+    [Net]
+    public ToiletState State { get; private set; } = ToiletState.Idle;
+
     public bool IsBeingUsed => BeingUsedBy is not null;
 
     private static Player LocalPlayer => Game.LocalPawn as Player;
@@ -34,16 +45,25 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
 
     private static Vector3 SeatOffset => new(8, 0, 8);
 
+    private Sound PoopingSound { get; set; }
+
+    public bool FinishedUsing => TimeUntilFinishedUsing.Relative < 0 && !PoopingSound.IsPlaying;
+
     public enum UsageLevel
     {
         Normal,
         Big
     }
 
-    private readonly WeightedSoundEffect[] UsageSounds = new WeightedSoundEffect[]{
-        WeightedSoundEffect.Create().Add("sound/bodilyfunctions/normal_shit.sound", 100),
-        WeightedSoundEffect.Create().Add("sound/bodilyfunctions/big_shit.sound", 900).Add("sound/bodilyfunctions/mega_shit.sound", 100)
-    };
+    private static WeightedSoundEffect[] UsageSounds =>
+        new WeightedSoundEffect[]
+        {
+            WeightedSoundEffect.Create().Add("sound/bodilyfunctions/normal_shit.sound", 100),
+            WeightedSoundEffect
+                .Create()
+                .Add("sound/bodilyfunctions/big_shit.sound", 900)
+                .Add("sound/bodilyfunctions/mega_shit.sound", 100)
+        };
 
     public override void Spawn()
     {
@@ -58,10 +78,12 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
         player.SetParent(this);
         player.LocalPosition = SeatOffset;
         player.SetAnimParameter("sit", 1);
-        var toiletController = player.Components.GetOrCreate<PlayerToiletController>();
+        var toiletController = player.Components.GetOrCreate<PlayerToiletController>(false);
         toiletController.Toilet = this;
-        toiletController.Active = true;
         toiletController.Enabled = true;
+        toiletController.Active = true;
+        State = ToiletState.SittingDown;
+        TimeSinceStartedUsing = 0;
     }
 
     private void RemovePlayerFromToilet(Player player)
@@ -70,26 +92,31 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
         player.BodyController.Active = true;
         player.SetParent(null);
 
-        var toiletController = player.Components.GetOrCreate<PlayerToiletController>();
+        var toiletController = player.Components.GetOrCreate<PlayerToiletController>(false);
         toiletController.Toilet = null;
         toiletController.Enabled = false;
         player.Position = EntryPosition;
+        State = ToiletState.Idle;
     }
 
     public bool IsUsable(Entity user)
     {
-        if (user is not Player player) return false;
+        if (user is not Player player)
+            return false;
 
         return !IsBeingUsed;
     }
 
     public bool OnStopUse(Entity user)
     {
-        if (user is not Player player) return true;
-        if (BeingUsedBy != player) return true;
+        if (user is not Player player)
+            return true;
+        if (BeingUsedBy != player)
+            return true;
 
         // Prevents the user from stopping use early
-        if (TimeUntilFinishedUsing > 0) return false;
+        if (!FinishedUsing)
+            return false;
 
         RemovePlayerFromToilet(player);
         BeingUsedBy = null;
@@ -101,16 +128,26 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     {
         using (Prediction.Off())
         {
-            if (IsBeingUsed && TimeUntilFinishedUsing < 0)
+            if (IsBeingUsed)
             {
-                BeingUsedBy.StopUsing(this);
+                if (State == ToiletState.SittingDown && TimeSinceStartedUsing.Relative > 0.25f)
+                {
+                    State = ToiletState.Pooping;
+                    PoopingSound = PlaySound(UsageSounds[(int)UsageLevel.Normal].GetRandom());
+                }
+
+                if (FinishedUsing)
+                {
+                    BeingUsedBy.StopUsing(this);
+                }
             }
         }
     }
 
     public bool OnUse(Entity user)
     {
-        if (user is not Player player) return false;
+        if (user is not Player player)
+            return false;
 
         if (!IsBeingUsed)
         {
@@ -124,7 +161,6 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     {
         BeingUsedBy = player;
         PutPlayerOnToilet(player);
-        TimeUntilFinishedUsing = 3;
-        player.PlaySound(UsageSounds[(int)UsageLevel.Normal].GetRandom());
+        TimeUntilFinishedUsing = 4f;
     }
 }
