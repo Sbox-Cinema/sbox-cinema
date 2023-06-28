@@ -20,6 +20,8 @@ public class CanTriggerResults
 public partial class BaseInteractable : BaseNetworkable
 {
     [Net]
+    public string Name { get; set; }
+    [Net]
     public Entity Parent { get; set; }
     [Net]
     public Vector3 Mins { get; set; }
@@ -27,12 +29,19 @@ public partial class BaseInteractable : BaseNetworkable
     public Vector3 Maxs { get; set; }
     public float MaxDistance { get; set; } = 60f;
 
+    public string Attachment { get; set; }
+
     public BaseInteractable()
     {
     }
 
     public virtual void Trigger(Cinema.Player ply = null)
     {
+    }
+
+    public virtual void Simulate()
+    {
+
     }
 
     /// <summary>
@@ -50,13 +59,21 @@ public partial class BaseInteractable : BaseNetworkable
             if (box.Name != name)
                 continue;
 
+            Name = box.Name;
+            Attachment = box.Attachment;
+            
             var offset = box.OriginOffset;
             var halfDimensions = box.Dimensions;
+
             halfDimensions.x = halfDimensions.x * .5f;
             halfDimensions.y = halfDimensions.y * .5f;
             halfDimensions.z = halfDimensions.z * .5f;
 
-            var bbox = new BBox(offset - halfDimensions, offset + halfDimensions);
+            var parent = Parent as ModelEntity;
+
+            var attachmentPos = parent.GetAttachment(Attachment, false).Value.Position;
+
+            var bbox = new BBox( (offset + attachmentPos) - halfDimensions , (offset + attachmentPos) + halfDimensions );
 
             Mins = bbox.Mins;
             Maxs = bbox.Maxs;
@@ -110,10 +127,5 @@ public partial class BaseInteractable : BaseNetworkable
         }
 
         return canTrigger.Hit;
-    }
-
-    public virtual void Tick()
-    {
-
     }
 }
