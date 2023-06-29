@@ -41,7 +41,7 @@ public class Dispenser : BaseInteractable
         }
         else
         {
-            Soda?.Destroy();
+            Soda?.Destroy(true);
             Soda?.Dispose();
         }
     }
