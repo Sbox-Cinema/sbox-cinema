@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 /// <summary>
 /// Stores data related to a media request that may be queued. Supports via an indexer 

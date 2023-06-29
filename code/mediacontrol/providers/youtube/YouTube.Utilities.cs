@@ -1,8 +1,10 @@
-﻿using Sandbox;
+﻿using Cinema;
+using Sandbox;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 public partial class YouTube
 {
@@ -12,6 +14,40 @@ public partial class YouTube
     /// </summary>
     [ConVar.Replicated("youtube.enableidvalidation")]
     public static bool ValidateYoutubeIds { get; set; } = true;
+
+    private static int NonceCounter = 0;
+
+    public static async Task<Media> CreateFromRequest(MediaRequest request)
+    {
+        ParseApiResponse response;
+
+        var youTubeId = request[YouTube.RequestData.YouTubeId];
+
+        try
+        {
+            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={youTubeId}", "GET");
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.Message);
+            return null;
+        }
+
+        NonceCounter += 1;
+
+        var media = new Media()
+        {
+            Nonce = NonceCounter,
+            Duration = response.DurationInSeconds,
+            Title = response.Title,
+            Thumbnail = response.Thumbnail,
+            YouTubeId = youTubeId,
+            Requestor = request.Requestor,
+            VotesFor = new List<IClient>() { request.Requestor },
+        };
+
+        return media;
+    }
 
     public static string ParseVideoIdIfUrl(string userInput)
     {

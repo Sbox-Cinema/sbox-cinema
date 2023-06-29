@@ -81,6 +81,17 @@ public partial class FakeBounceLight
             return;
         }
 
+        //if (Game.LocalPawn is not Player ply)
+        //    return;
+
+        //if (ply.GetCurrentTheaterZone() is not CinemaZone zone)
+        //    return;
+
+        //var isClosest = zone.ProjectorEntity.ProjectionTexture == SourceTexture;
+
+        //if (!isClosest)
+        //    return;
+
         UpdateBounceLightCookie();
         if (BounceDebug >= 1)
         {

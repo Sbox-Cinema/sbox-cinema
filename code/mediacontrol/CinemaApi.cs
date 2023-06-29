@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 public class CinemaApi
 {

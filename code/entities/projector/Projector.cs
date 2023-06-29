@@ -18,7 +18,7 @@ public partial class ProjectorEntity : Entity
     public Vector2 ProjectionSize { get; set; }
 
     [Net]
-    public IList<CinemaZone> Areas { get; set; }
+    public CinemaZone Area { get; set; }
 
     public override void Spawn()
     {
@@ -30,14 +30,16 @@ public partial class ProjectorEntity : Entity
         {
             ProjectionSize = new Vector2(256, 208);
         }
-
-        Components.Create<MediaController>();
     }
 
     [GameEvent.Entity.PostSpawn]
     protected void PostSpawn()
     {
-        Areas = All.OfType<CinemaZone>().Where(area => area.ProjectorEntity == this).ToList();
+        Area = All.OfType<CinemaZone>().FirstOrDefault(area => area.ProjectorEntity == this);
+        if (Area == null)
+        {
+            Log.Info($"Map error: projector {Name} does not belong to a CinemaZone.");
+        }
     }
 
     public override void ClientSpawn()

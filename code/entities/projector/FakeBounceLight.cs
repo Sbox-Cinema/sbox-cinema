@@ -103,7 +103,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         var traceStart = Entity.Position;
         var traceEnd = Entity.Position + Entity.Rotation.Forward * 5000f;
         var tr = Trace.Ray(traceStart, traceEnd)
-            .WorldOnly()
+            .StaticOnly()
             .Run();
         if (!tr.Hit)
         {

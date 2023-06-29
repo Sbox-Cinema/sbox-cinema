@@ -1,4 +1,5 @@
 ﻿using System;
+using CinemaTeam.Plugins.Video;
 using Sandbox;
 using Sandbox.UI;
 
@@ -9,7 +10,7 @@ public partial class ProjectorEntity
     /// <summary>
     /// The media we want to be playing (but might not be)
     /// </summary>
-    public PlayingMedia CurrentMedia { get; protected set; }
+    public IVideoPresenter CurrentMedia { get; protected set; }
     private SpotLightEntity ProjectionLight { get; set; }
     public Texture ProjectionTexture { get; set; }
     protected Texture LastProjectionTexture { get; set; }
@@ -19,7 +20,7 @@ public partial class ProjectorEntity
     public float ScreenDistance { get; set; }
     protected bool ShouldRemakeLight { get; set; }
 
-    public void SetMedia(PlayingMedia media)
+    public void SetMedia(IVideoPresenter media)
     {
         CurrentMedia = media;
         PlayCurrentMedia();
@@ -27,14 +28,8 @@ public partial class ProjectorEntity
 
     private void InitProjection()
     {
-        var waitingImage = new PlayingMedia()
-        {
-            Url = MediaController.WaitingImage
-        };
-
-        SetMedia(waitingImage);
-
         SetupProjectionLight();
+        Area?.MediaController?.SetWaitingImage();
     }
 
     private void SetupProjectionLight()
@@ -69,13 +64,12 @@ public partial class ProjectorEntity
 
     public bool CanSeeProjector(Vector3 pos)
     {
-        foreach (var area in Areas)
-        {
-            var inside = area.WorldSpaceBounds.Contains(pos);
-            if (inside) return true;
-        }
+        // Orphaned projectors can't play media, so return null.
+        if (Area == null)
+            return false;
 
-        return false;
+        var inside = Area.WorldSpaceBounds.Contains(pos);
+        return inside;
     }
 
     [GameEvent.Tick.Server]
@@ -108,7 +102,7 @@ public partial class ProjectorEntity
         var traceStart = Position;
         var traceEnd = Position + Rotation.Forward * maxDistance;
         var tr = Trace.Ray(traceStart, traceEnd)
-            .WorldOnly()
+            .StaticOnly()
             .Run();
 
         // If nothing hit, we act as if the screen is somewhere far in front of the projector.
@@ -149,7 +143,10 @@ public partial class ProjectorEntity
             return;
         }
 
-        // TODO: Play CurrentMedia
+        // Log the current media.
+        Log.Info($"Media on projector \"{Name}\" is not null: {CurrentMedia != null}");
+
+        ProjectionTexture = CurrentMedia.Texture;
     }
 
     protected void CleanupProjection()

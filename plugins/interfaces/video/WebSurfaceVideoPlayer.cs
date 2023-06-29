@@ -2,7 +2,7 @@
 using System;
 
 namespace CinemaTeam.Plugins.Video;
-public partial class WebSurfaceVideoPlayer : IVideoControls, IVideoPresenter
+public partial class WebSurfaceVideoPlayer : IVideoPlayer
 {
     [ConVar.Client("projector.websurface.size")]
     public static Vector2 WebSurfaceSize { get; set; } = new Vector2(1280, 720);
@@ -10,8 +10,8 @@ public partial class WebSurfaceVideoPlayer : IVideoControls, IVideoPresenter
     public virtual Texture Texture { get; protected set; }
     protected virtual WebSurface WebSurface { get; set; }
     protected virtual bool WebSurfaceMouseClickedDown { get; set; }
-    protected string RequestData { get; set; }
-    public WebSurfaceVideoPlayer(string requestData)
+    protected MediaRequest RequestData { get; set; }
+    public WebSurfaceVideoPlayer(MediaRequest requestData)
     {
         RequestData = requestData;
         InitializePlayer();
@@ -23,7 +23,7 @@ public partial class WebSurfaceVideoPlayer : IVideoControls, IVideoPresenter
         WebSurface.Size = WebSurfaceSize;
         WebSurface.OnTexture += UpdateTexture;
         WebSurface.InBackgroundMode = false;
-        WebSurface.Url = RequestData;
+        WebSurface.Url = RequestData["Url"];
     }
 
     protected virtual void UpdateTexture(ReadOnlySpan<byte> span, Vector2 size)

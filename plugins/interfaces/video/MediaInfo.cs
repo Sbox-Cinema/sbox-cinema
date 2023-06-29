@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 /// <summary>
 /// Contains information about media that is applicable to all providers.

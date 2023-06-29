@@ -17,10 +17,20 @@ public partial class CinemaZone : BaseTrigger
     [Net]
     public ProjectorEntity ProjectorEntity { get; set; }
 
+    /// <summary>
+    /// Returns true if this zone has a projector and media controller.
+    /// </summary>
+    public bool IsTheaterZone => MediaController != null && ProjectorEntity != null;
+
     public override void Spawn()
     {
         base.Spawn();
         Transmit = TransmitType.Always;
+    }
+
+    [GameEvent.Entity.PostSpawn]
+    public void OnPostSpawn()
+    {
         ProjectorEntity = Projector.GetTarget<ProjectorEntity>();
         Components.Create<MediaController>();
     }

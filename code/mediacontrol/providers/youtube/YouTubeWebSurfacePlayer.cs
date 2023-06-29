@@ -2,5 +2,5 @@
 
 public class YouTubeWebSurfacePlayer : WebSurfaceVideoPlayer
 {
-    public YouTubeWebSurfacePlayer(string requestData) : base(requestData) { }
+    public YouTubeWebSurfacePlayer(MediaRequest requestData) : base(requestData) { }
 }

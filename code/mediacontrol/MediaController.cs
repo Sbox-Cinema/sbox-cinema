@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CinemaTeam.Plugins.Video;
 using Sandbox;
 
 namespace Cinema;
@@ -25,9 +26,10 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     public static int MoneyPerLikePerMinute => 30;
 
     public Media NextMedia => Queue.OrderBy(m => m.ListScore).FirstOrDefault();
+    [Net, Change]
+    public MediaRequest CurrentMedia { get; set; }
 
-    [Net]
-    public Media PlayingMedia { get; set; }
+    public IVideoPlayer CurrentVideoPlayer { get; set; }
 
     [Net]
     public TimeSince TimeSinceStartedPlaying { get; set; }
@@ -41,6 +43,12 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             RequestQueue.RemoveAt(0);
             request.ListScore = Queue.Count;
             Queue.Add(request);
+        }
+
+        if (CurrentMedia == null)
+        {
+            var media = new MediaRequest();
+            media["Url"] = WaitingImage;
         }
 
         PlayNextMediaIfReady();
@@ -60,8 +68,14 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             return;
         }
 
-        var media = await Media.CreateFromRequest(movie);
+        var media = await YouTube.CreateFromRequest(movie);
         RequestQueue.Add(media);
+    }
+
+    public void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
+    {
+        // Log the media change, including URLs.
+        Log.Info($"{Name} - Media changed from {oldValue["Url"]} to {newValue["Url"]}.");
     }
 
     public void RequestMedia(string youTubeId)
@@ -92,7 +106,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         var next = NextMedia;
         if (Queue.Count > 0)
             Queue.RemoveAt(0);
-        StartPlayingMedia(next);
+        // StartPlayingMedia(next);
     }
 
     public void RemoveMediaAtIndex(int index, IClient remover)
@@ -107,13 +121,13 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
     protected void PlayCurrentMediaOnProjector(bool forceUpdate = false)
     {
-        if (PlayingMedia?.YouTubeId == null)
+        if (CurrentMedia != null && CurrentVideoPlayer == null)
         {
             SetWaitingImage();
             return;
         }
 
-        PlayYouTubeVideo(PlayingMedia.YouTubeId, PlayingMedia.Nonce, TimeSinceStartedPlaying, forceUpdate);
+        // PlayYouTubeVideo(CurrentMedia.YouTubeId, CurrentMedia.Nonce, TimeSinceStartedPlaying, forceUpdate);
     }
 
     private void OnFinishedPlayingMedia(Media media)
@@ -130,15 +144,15 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         player.AddMoney(moneyEarned);
     }
 
-    private void StartPlayingMedia(Media media)
+    private void StartPlayingMedia(IVideoPlayer media)
     {
-        if (PlayingMedia?.YouTubeId != null)
+        if (CurrentVideoPlayer != null)
         {
-            OnFinishedPlayingMedia(PlayingMedia);
+            // OnFinishedPlayingMedia(CurrentMedia);
         }
 
         // new media is playing
-        PlayingMedia = media;
+        CurrentVideoPlayer = media;
         TimeSinceStartedPlaying = 0;
         PlayCurrentMediaOnProjector(true);
         return;
@@ -146,7 +160,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
     private void PlayNextMediaIfReady()
     {
-        if (PlayingMedia == null)
+        if (CurrentVideoPlayer == null)
         {
             if (NextMedia != null)
             {
@@ -156,14 +170,17 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             return;
         }
 
-        if (TimeSinceStartedPlaying > PlayingMedia.Duration + 1)
-        {
-            StartNext();
-        }
+        //if (TimeSinceStartedPlaying > CurrentMedia.Duration + 1)
+        //{
+        //    StartNext();
+        //}
 
     }
 
-    private void SetWaitingImage()
+    [ClientRpc]
+    private void ClientSetWaitingImage() => SetWaitingImage();
+
+    public void SetWaitingImage()
     {
         if (Game.IsServer)
         {
@@ -171,12 +188,14 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             return;
         }
 
-        var media = new PlayingMedia()
-        {
-            Url = WaitingImage
-        };
+        if (CurrentMedia == null)
+            return;
 
-        Projector.SetMedia(media);
+        Log.Info("Creating new web surface player");
+
+        CurrentVideoPlayer = new WebSurfaceVideoPlayer(CurrentMedia);
+
+        Projector.SetMedia(CurrentVideoPlayer);
     }
 
     private void PlayYouTubeVideo(string youtubeId, int nonce, float timeSinceStarted, bool forceUpdate = true)
@@ -194,7 +213,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             Nonce = nonce
         };
 
-        Projector.SetMedia(media);
+        // Projector.SetMedia(media);
     }
 
     [ClientRpc]
@@ -203,11 +222,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         PlayYouTubeVideo(url, nonce, timeSinceStarted, forceUpdate);
     }
 
-    [ClientRpc]
-    private void ClientSetWaitingImage()
-    {
-        SetWaitingImage();
-    }
+
 
     private void DebugQueueToLog()
     {
@@ -291,9 +306,9 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
         if (controller is null) return;
 
-        var media = controller.PlayingMedia;
-        if (media?.Nonce != nonce) return;
+        var media = controller.CurrentVideoPlayer;
+        // if (media?.Nonce != nonce) return;
 
-        media.GiveLike(ConsoleSystem.Caller, like);
+        // media.GiveLike(ConsoleSystem.Caller, like);
     }
 }

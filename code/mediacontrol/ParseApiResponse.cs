@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Cinema;
+namespace CinemaTeam.Plugins.Video;
 
 public class ParseApiResponse
 {

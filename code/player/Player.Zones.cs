@@ -15,6 +15,17 @@ public partial class Player
     public List<CinemaZone> GetZones() => Zones.ToList();
     public void IsInZone(CinemaZone zone) => Zones.Contains(zone);
 
+    public CinemaZone GetCurrentZone()
+        => Zones
+            .OrderBy(x => x.Position.Distance(Position))
+            .FirstOrDefault();
+
+    public CinemaZone GetCurrentTheaterZone()
+        => Zones
+            .Where(z => z.IsTheaterZone)
+            .OrderBy(x => x.Position.Distance(Position))
+            .FirstOrDefault();
+
     public void EnterZone(CinemaZone zone)
     {
         if (Zones.Contains(zone))

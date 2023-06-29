@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Sandbox;
 using Sandbox.UI;
+using CinemaTeam.Plugins.Video;
 
 namespace Cinema.UI;
 
@@ -26,7 +27,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public IList<Media> Queue => Controller?.Queue.OrderBy(m => m.ListScore).ToList() ?? new List<Media>();
 
-    public Media NowPlaying => Controller?.PlayingMedia ?? null;
+    public Media NowPlaying => /* Controller?.CurrentMedia ?? */ null;
 
     public TimeSince TimeSinceStartedPlaying => Controller?.TimeSinceStartedPlaying ?? 0;
 
@@ -39,19 +40,13 @@ public partial class MovieQueue : Panel, IMenuScreen
         if (Game.LocalPawn is not Player ply)
             return false;
 
-        // Make sure you're in a cinema zone that has a projector and a media controller.
-        var closestCinemaZone = ply
-            .GetZones()
-            .FirstOrDefault(z => z.ProjectorEntity != null && z.MediaController != null);
+        var currentTheaterZone = ply.GetCurrentTheaterZone();
 
-        if (closestCinemaZone == null)
-        {
-            Log.Info("Can't find matching zone. Dumping zones:");
-            ply.DumpZones();
+        // If we're not in a theater zone, don't open the queue.
+        if (currentTheaterZone == null)
             return false;
-        }
 
-        Controller = closestCinemaZone.MediaController;
+        Controller = currentTheaterZone.MediaController;
         IsOpen = true;
         return true;
     }

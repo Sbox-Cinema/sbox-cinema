@@ -110,40 +110,4 @@ public partial class Media : BaseNetworkable
     {
         return HashCode.Combine(HashCode.Combine(YouTubeId, Requestor.Name, Title, Duration), HashCode.Combine(Thumbnail, VotesFor.Count, VotesAgainst.Count, ListScore, Likes.Count, Dislikes.Count));
     }
-
-
-
-    private static int NonceCounter = 0;
-
-    public static async Task<Media> CreateFromRequest(MediaRequest request)
-    {
-        ParseApiResponse response;
-
-        var youTubeId = request[YouTube.RequestData.YouTubeId];
-
-        try
-        {
-            response = await Http.RequestJsonAsync<ParseApiResponse>($"{CinemaApi.Url}/api/parse2?type=yt&id={youTubeId}", "GET");
-        }
-        catch (Exception e)
-        {
-            Log.Error(e.Message);
-            return null;
-        }
-
-        NonceCounter += 1;
-
-        var media = new Media()
-        {
-            Nonce = NonceCounter,
-            Duration = response.DurationInSeconds,
-            Title = response.Title,
-            Thumbnail = response.Thumbnail,
-            YouTubeId = youTubeId,
-            Requestor = request.Requestor,
-            VotesFor = new List<IClient>() { request.Requestor },
-        };
-
-        return media;
-    }
 }
