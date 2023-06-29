@@ -9,14 +9,18 @@ public class Dispenser : BaseInteractable
     private string AnimationName { get; set; }
     private bool IsDispensing { get; set; }
     private Particles Soda { get; set; }
+    private string ParticlePath { get; set; }
     private float LeverPos { get; set; }
+
+    static private float LeverPosIncrement = 0.05f;
     public Dispenser() // For the compiler...
     {
         
     }
-    public Dispenser(string animationName) 
+    public Dispenser(string animationName, string particlePath) 
     {
         AnimationName = animationName;
+        ParticlePath = particlePath;
     }
     public override void Trigger(Player player)
     {
@@ -26,7 +30,7 @@ public class Dispenser : BaseInteractable
         {
             if (CupPlaced)
             {
-                Soda = Particles.Create($"particles/soda_fountain/sodafill2_f.vpcf", Parent);
+                Soda = Particles.Create(ParticlePath, Parent);
                 Soda.SetEntityAttachment(0, Parent, Attachment);
             } 
             else
@@ -50,7 +54,7 @@ public class Dispenser : BaseInteractable
         {
             if(LeverPos < 1.0f)
             {
-                LeverPos += 0.05f;
+                LeverPos += LeverPosIncrement;
             }
             else
             {
@@ -61,12 +65,18 @@ public class Dispenser : BaseInteractable
         {
             if (LeverPos > 0.0f)
             {
-                LeverPos -= 0.05f;
+                LeverPos -= LeverPosIncrement;
             }
             else
             {
                 LeverPos = 0.0f;
             }
+        }
+
+        if(!CupPlaced)
+        {
+            Soda?.Destroy(true);
+            Soda?.Dispose();
         }
 
         (Parent as AnimatedEntity).SetAnimParameter(AnimationName, LeverPos);
