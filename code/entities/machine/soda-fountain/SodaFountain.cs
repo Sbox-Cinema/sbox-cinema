@@ -48,17 +48,17 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
 
     public void AddInteractables()
     {
-        Interactables.Add("Dispenser1", new Dispenser("Lever1State")
+        Interactables.Add("Dispenser1", new Dispenser("Lever1State", "particles/soda_fountain/walker/sodafill2_conk_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_1")
         );
 
-        Interactables.Add("Dispenser2", new Dispenser("Lever2State")
+        Interactables.Add("Dispenser2", new Dispenser("Lever2State", "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_2")
         );
 
-        Interactables.Add("Dispenser3", new Dispenser("Lever3State")
+        Interactables.Add("Dispenser3", new Dispenser("Lever3State", "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_3")
         );
