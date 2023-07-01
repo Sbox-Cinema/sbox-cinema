@@ -12,6 +12,7 @@ public static class TextureExtensions
     private static ComputeShader DownscaleShader { get; set; } = new ComputeShader("downscale_cs");
     private static ComputeShader MultiplyShader { get; set; } = new ComputeShader("multiplytexture_cs");
     private static ComputeShader GaussianBlurShader { get; set; } = new ComputeShader("gaussianblur_cs");
+    private static ComputeShader ColorPadShader { get; set; } = new ComputeShader("colorpad_cs");
 
     public static void DispatchDownscale(this Texture InputTexture, Texture toTex)
     {
@@ -33,5 +34,14 @@ public static class TextureExtensions
         GaussianBlurShader.Attributes.Set("InputTexture", InputTexture);
         GaussianBlurShader.Attributes.Set("OutputTexture", toTex);
         GaussianBlurShader.Dispatch(toTex.Width, toTex.Height, 1);
+    }
+
+    public static void DispatchColorPad(this Texture OutputTexture, Texture fromTex, Color padColor, float padRatio)
+    {
+        ColorPadShader.Attributes.Set("InputTexture", fromTex);
+        ColorPadShader.Attributes.Set("OutputTexture", OutputTexture);
+        ColorPadShader.Attributes.Set("PadColor", padColor);
+        ColorPadShader.Attributes.Set("PadRatio", padRatio);
+        ColorPadShader.Dispatch(OutputTexture.Width, OutputTexture.Height, 1);
     }
 }

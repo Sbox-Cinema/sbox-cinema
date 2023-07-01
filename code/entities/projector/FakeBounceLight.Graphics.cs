@@ -42,27 +42,16 @@ public partial class FakeBounceLight
     /// </summary>
     private void CreateAllShaderTextures()
     {
-        DownscaledTexture = CreateShaderTexture();
-        MultiplicandTexture = CreateShaderTexture();
-        ProductTexture = CreateShaderTexture();
-        BounceLightCookie = CreateShaderTexture();
+        DownscaledTexture = TextureUtilities.CreateShaderTexture(BounceLightCookieSize, BounceLightCookieSize);
+        MultiplicandTexture = TextureUtilities.CreateShaderTexture(BounceLightCookieSize, BounceLightCookieSize);
+        ProductTexture = TextureUtilities.CreateShaderTexture(BounceLightCookieSize, BounceLightCookieSize);
+        BounceLightCookie = TextureUtilities.CreateShaderTexture(BounceLightCookieSize, BounceLightCookieSize);
         // Downscale the mask texture to the size of the bounce light cookie.
         var largeMaskTex = Texture.Load(FileSystem.Mounted, "materials/lightcookies/box_soft.vtex");
         largeMaskTex.DispatchDownscale(MultiplicandTexture);
     }
 
-    /// <summary>
-    /// Creates and returns an RGBA8888 texture with UAV binding and dynamic usage with a size 
-    /// matching <c>BounceLightCookieSize</c>.
-    /// </summary>
-    private Texture CreateShaderTexture()
-    {
-        return Texture.Create(BounceLightCookieSize, BounceLightCookieSize)
-            .WithUAVBinding()
-            .WithFormat(ImageFormat.RGBA8888)
-            .WithDynamicUsage()
-            .Finish();
-    }
+
 
     [GameEvent.Client.Frame]
     public void OnClientFrame()

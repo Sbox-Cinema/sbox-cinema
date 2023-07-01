@@ -7,13 +7,18 @@ namespace Cinema;
 
 public partial class ProjectorEntity
 {
+    [ConVar.Client("projector.cookie.margin")]
+    public static float ProjectorLightCookieMargin { get; set; } = 0.7f;
+
     /// <summary>
     /// The media we want to be playing (but might not be)
     /// </summary>
     public IVideoPresenter CurrentMedia { get; protected set; }
     private SpotLightEntity ProjectionLight { get; set; }
-    public Texture ProjectionTexture { get; set; }
-    protected Texture LastProjectionTexture { get; set; }
+    public Texture InputTexture { get; set; }
+    protected Texture LastInputTexture { get; set; }
+    protected Texture LightCookieTexture { get; set; }
+
     [Net]
     public Vector3 ScreenPosition { get; set; }
     [Net]
@@ -50,12 +55,17 @@ public partial class ProjectorEntity
         }
         ProjectionLight?.Delete();
 
+        var margin = Math.Clamp(ProjectorLightCookieMargin, 0.2f, 1.0f);
+        var lightCookieWidth = (int)((InputTexture?.Width ?? 320) / margin);
+        var lightCookieHeight = (int)((InputTexture?.Height ?? 180) / margin);
+        LightCookieTexture = TextureUtilities.CreateShaderTexture(lightCookieWidth, lightCookieHeight);
+
         ProjectionLight = new SpotLightEntity
         {
             Parent = this,
             Position = Position,
             Rotation = Rotation,
-            LightCookie = ProjectionTexture,
+            LightCookie = LightCookieTexture,
             Brightness = 20.0f,
             Range = 1024.0f,
             OuterConeAngle = outerConeAngle,
@@ -94,12 +104,21 @@ public partial class ProjectorEntity
         UpdateProjectorAngles();
 
         // If the projection texture changed, remake the projector and bounce lights.
-        if (ProjectionTexture != LastProjectionTexture)
+        if (InputTexture != LastInputTexture)
         {
             Log.Info($"{Name} - Projection texture changed.");
             InitProjection();
         }
-        LastProjectionTexture = ProjectionTexture;
+        LastInputTexture = InputTexture;
+    }
+
+    [GameEvent.Client.Frame]
+    protected virtual void OnFrame()
+    {
+        if (InputTexture == null || LightCookieTexture == null)
+            return;
+
+        LightCookieTexture.DispatchColorPad(InputTexture, Color.Black, ProjectorLightCookieMargin);
     }
 
     protected void UpdateScreenPositionAndDistance()
@@ -158,12 +177,16 @@ public partial class ProjectorEntity
             return;
         }
 
-        ProjectionTexture = CurrentMedia.Texture;
+        InputTexture = CurrentMedia.Texture;
         SetupProjectionLight();
+        // Log the dimensions of the input and light cookie textures.
+        Log.Info($"{Name} - Input texture: {InputTexture.Width}x{InputTexture.Height}");
+        Log.Info($"{Name} - Light cookie texture: {LightCookieTexture.Width}x{LightCookieTexture.Height}");
     }
 
     protected void CleanupProjection()
     {
-        ProjectionTexture?.Dispose();
+        InputTexture?.Dispose();
+        LightCookieTexture?.Dispose();
     }
 }

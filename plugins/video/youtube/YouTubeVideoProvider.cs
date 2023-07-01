@@ -16,7 +16,10 @@ public partial class YouTubeVideoProvider : IVideoProvider, IMediaCurator
         const string nyanCat = "https://www.youtube.com/watch?v=QH2-TGUlwu4";
         const string ICBYDT = "https://www.youtube.com/watch?v=wKbU8B-QVZk";
         const string badApple = "https://www.youtube.com/watch?v=9lNZ_Rnr7Jc";
-        var url = nyanCat;
+        const string brodyQuest = "https://www.youtube.com/watch?v=ygI-2F8ApUM";
+        const string testPattern = "https://www.youtube.com/watch?v=IIqtuupvdWg";
+
+        var url = brodyQuest;
         var videoId = MediaHelper.GetIdFromYoutubeUrl(url);
         var youtubePlayerResponse = await MediaHelper.GetYoutubePlayerResponse(videoId);
         var directVideoUrl = SelectBestStream(youtubePlayerResponse);
