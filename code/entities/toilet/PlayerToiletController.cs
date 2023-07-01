@@ -7,6 +7,19 @@ public partial class PlayerToiletController : PlayerController
     [Net]
     public Toilet Toilet { get; set; }
 
+    [Net]
+    public bool FreezeAim { get; set; }
+
+    public Rotation FrozenAimRotation
+    {
+        get
+        {
+            var angles = Toilet.Rotation.Angles();
+            angles.pitch += 45;
+            return angles.ToRotation();
+        }
+    }
+
     protected override void OnActivate()
     {
         base.OnActivate();
@@ -20,6 +33,7 @@ public partial class PlayerToiletController : PlayerController
         Entity.DrawHead(false);
         Entity.SetDrawTaggedClothing("Hat", false);
         Entity.SetDrawTaggedClothing("Hair", false);
+        Entity.SetDrawTaggedClothing("Bottoms", false);
 
         SinceActivated = 0f;
     }
@@ -33,6 +47,7 @@ public partial class PlayerToiletController : PlayerController
         Entity.DrawHead(true);
         Entity.SetDrawTaggedClothing("Hat", true);
         Entity.SetDrawTaggedClothing("Hair", true);
+        Entity.SetDrawTaggedClothing("Bottoms", true);
     }
 
     protected TimeSince SinceActivated { get; set; }
@@ -42,7 +57,15 @@ public partial class PlayerToiletController : PlayerController
         base.Simulate(cl);
         Entity.Rotation = Toilet.Rotation;
 
-        Entity.EyeRotation = Entity.LookInput.ToRotation();
+        if (FreezeAim)
+        {
+            Entity.EyeRotation = FrozenAimRotation;
+        }
+        else
+        {
+            Entity.EyeRotation = Entity.LookInput.ToRotation();
+        }
+
         Entity.EyeLocalPosition = Entity.Transform.PointToLocal(LookPosition);
 
         SimulateAnimation();
@@ -89,6 +112,12 @@ public partial class PlayerToiletController : PlayerController
         );
 
         Entity.EyeRotation = Entity.LookInput.ToRotation();
+        if (FreezeAim)
+        {
+            Entity.EyeRotation = FrozenAimRotation;
+            Entity.LookInput = FrozenAimRotation.Angles();
+        }
+
         Entity.EyeLocalPosition = Entity.Transform.PointToLocal(LookPosition);
 
         SimulateCamera(cl);

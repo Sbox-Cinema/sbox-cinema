@@ -82,8 +82,17 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
         toiletController.Toilet = this;
         toiletController.Enabled = true;
         toiletController.Active = true;
+        toiletController.FreezeAim = true;
         State = ToiletState.SittingDown;
         TimeSinceStartedUsing = 0;
+        ClientToiletUsed(To.Single(player));
+    }
+
+    [ClientRpc]
+    private void ClientToiletUsed()
+    {
+        var player = Game.LocalPawn as Player;
+        player.OpenMenu(UI.PoopGame.Instance);
     }
 
     private void RemovePlayerFromToilet(Player player)
@@ -97,6 +106,14 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
         toiletController.Enabled = false;
         player.Position = EntryPosition;
         State = ToiletState.Idle;
+        ClientStoppedUsingToilet(To.Single(player));
+    }
+
+    [ClientRpc]
+    private void ClientStoppedUsingToilet()
+    {
+        var player = Game.LocalPawn as Player;
+        player.CloseMenu(UI.PoopGame.Instance);
     }
 
     public bool IsUsable(Entity user)
@@ -138,7 +155,7 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
 
                 if (FinishedUsing)
                 {
-                    BeingUsedBy.StopUsing(this);
+                    //BeingUsedBy.StopUsing(this);
                 }
             }
         }
