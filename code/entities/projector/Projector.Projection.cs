@@ -22,6 +22,13 @@ public partial class ProjectorEntity
 
     public void SetMedia(IVideoPresenter media)
     {
+        if (CurrentMedia != null && CurrentMedia is IVideoControls controls)
+        {
+            // TODO: Hack, move this logic in to the media controller.
+            controls.Stop();
+        }
+        // Stop now in case the next media doesn't clobber the current overhead audio.
+        CurrentOverheadSound?.Stop(true);
         CurrentMedia = media;
         PlayCurrentMedia();
     }
@@ -79,7 +86,7 @@ public partial class ProjectorEntity
     }
 
     [GameEvent.Tick.Client]
-    protected virtual void OnClientTick()
+    protected virtual void UpdateClientProjection()
     {
         if (ProjectionLight == null)
             return;
@@ -89,6 +96,7 @@ public partial class ProjectorEntity
         // If the projection texture changed, remake the projector and bounce lights.
         if (ProjectionTexture != LastProjectionTexture)
         {
+            Log.Info($"{Name} - Projection texture changed.");
             InitProjection();
         }
         LastProjectionTexture = ProjectionTexture;
@@ -139,14 +147,19 @@ public partial class ProjectorEntity
 
         if (!CanSeeProjector(Game.LocalPawn.Position))
         {
+            Log.Info($"{Name} - Cleaning up projection.");
             CleanupProjection();
             return;
         }
 
-        // Log the current media.
-        Log.Info($"Media on projector \"{Name}\" is not null: {CurrentMedia != null}");
+        if (CurrentMedia?.Texture == null)
+        {
+            Log.Info($"{Name} - Media texture is null.");
+            return;
+        }
 
         ProjectionTexture = CurrentMedia.Texture;
+        SetupProjectionLight();
     }
 
     protected void CleanupProjection()

@@ -1,6 +1,8 @@
-﻿namespace CinemaTeam.Plugins.Video;
+﻿using MediaHelpers;
+
+namespace CinemaTeam.Plugins.Video;
 
 public class YouTubeVideoPlayer : DirectVideoPlayer
 {
-    public YouTubeVideoPlayer(string requestData) : base(requestData) { }
+    public YouTubeVideoPlayer(MediaRequest requestData) : base(requestData) { }
 }

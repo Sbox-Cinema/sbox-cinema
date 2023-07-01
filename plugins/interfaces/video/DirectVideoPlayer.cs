@@ -1,18 +1,36 @@
 ﻿using Sandbox;
+using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
-public class DirectVideoPlayer : IVideoControls, IVideoPresenter
+public class DirectVideoPlayer : IVideoPlayer
 {
-    public DirectVideoPlayer(string requestData)
+    public DirectVideoPlayer(MediaRequest requestData)
     {
-        InitializePlayer(requestData);
+        Event.Register(this);
     }
+    
+    protected bool VideoLoaded { get; set; }
+    protected bool AudioLoaded { get; set; }
 
-    protected virtual void InitializePlayer(string requestData)
+    public virtual async Task InitializePlayer(MediaRequest requestData)
     {
         VideoPlayer = new VideoPlayer();
-        var url = requestData;
+        var url = requestData["Url"];
+        VideoPlayer.OnLoaded += () =>
+        {
+            Log.Info("Video loaded.");
+            VideoLoaded = true;
+        };
+        VideoPlayer.OnAudioReady += () =>
+        {
+            Log.Info("Audio loaded.");
+            AudioLoaded = true;
+        };
         PlayUrl(url);
+        while (!(VideoLoaded && AudioLoaded))
+        {
+            await GameTask.DelaySeconds(Time.Delta);
+        }
     }
 
     protected virtual void PlayUrl(string url)
@@ -57,5 +75,11 @@ public class DirectVideoPlayer : IVideoControls, IVideoPresenter
         VideoPlayer.Stop();
         VideoPlayer.Dispose();
         VideoPlayer = null;
+    }
+
+    [GameEvent.Client.Frame]
+    public void OnFrame()
+    {
+        VideoPlayer?.Present();
     }
 }

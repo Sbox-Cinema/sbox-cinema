@@ -1,0 +1,22 @@
+{
+  "Title": "Dummy Video Player",
+  "Type": "library",
+  "Org": "cinemateam",
+  "Ident": "dummy_video_player",
+  "Tags": null,
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "Resources": null,
+  "MenuResources": null,
+  "HasCode": true,
+  "CodePath": ".",
+  "PackageReferences": [
+    "cinemateam.interface_video"
+  ],
+  "EditorReferences": null,
+  "Metadata": {
+    "ProjectTemplate": null,
+    "CsProjName": ""
+  }
+}

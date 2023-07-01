@@ -17,8 +17,14 @@ public partial class ProjectorEntity : Entity
     [Net, Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; }
 
+    [ConVar.Client("projector.audio.volumescale")]
+    public static float VolumeScale { get; set; } = 3.0f;
+    // TODO: Persist VolumeScale clientside.
+
     [Net]
     public CinemaZone Area { get; set; }
+    protected SoundHandle? CurrentOverheadSound { get; set; }
+    protected Vector3 OverheadAudioPosition => Position + Rotation.Forward * (ScreenDistance / 2);
 
     public override void Spawn()
     {
@@ -42,10 +48,42 @@ public partial class ProjectorEntity : Entity
         }
     }
 
+    private float OldVolumeScale = VolumeScale;
+
+    [GameEvent.Tick.Client]
+    public void OnClientTick()
+    {
+        if (CurrentOverheadSound != null)
+        {
+            var hSnd = CurrentOverheadSound.Value;
+            hSnd.Position = OverheadAudioPosition;
+
+            if (VolumeScale != OldVolumeScale)
+            {
+                hSnd.Volume = VolumeScale;
+            }
+        }
+        OldVolumeScale = VolumeScale;
+        UpdateClientProjection();
+    }
+
     public override void ClientSpawn()
     {
         base.ClientSpawn();
         InitProjection();
+    }
+
+    public void PlayOverheadAudio()
+    {
+        if (CurrentMedia == null)
+            return;
+
+        CurrentOverheadSound?.Stop(true);
+        var soundPosition = OverheadAudioPosition;
+        var hSnd = CurrentMedia.PlayAudio(null).Value;
+        hSnd.Position = soundPosition;
+        hSnd.Volume = VolumeScale;
+        CurrentOverheadSound = hSnd;
     }
 
     protected override void OnDestroy()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
 
@@ -8,9 +9,7 @@ public class YouTubeWebSurfaceProvider : IVideoProvider
 
     public MediaProviderHeaderPanel HeaderPanel => throw new NotImplementedException();
 
-    public event EventHandler<IVideoProvider.OnRequestMediaEventArgs> OnRequestMedia;
-
-    public IVideoControls Play(string requestData)
+    public Task<IVideoPlayer> Play(MediaRequest requestData)
     {
         throw new NotImplementedException();
     }
