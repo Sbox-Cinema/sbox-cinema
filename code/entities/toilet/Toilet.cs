@@ -31,7 +31,8 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     {
         Idle,
         SittingDown,
-        Pooping
+        Pooping,
+        Finished
     }
 
     [Net]
@@ -46,8 +47,6 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     private static Vector3 SeatOffset => new(8, 0, 8);
 
     private Sound PoopingSound { get; set; }
-
-    public bool FinishedUsing => TimeUntilFinishedUsing.Relative < 0 && !PoopingSound.IsPlaying;
 
     public enum UsageLevel
     {
@@ -92,7 +91,25 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     private void ClientToiletUsed()
     {
         var player = Game.LocalPawn as Player;
-        player.OpenMenu(UI.PoopGame.Instance);
+        var game = UI.PoopGame.Instance;
+        game.UseToiletCallback = (UsageLevel level) =>
+        {
+            ServerUseToilet(NetworkIdent, level);
+        };
+        player.OpenMenu(game);
+    }
+
+    [ConCmd.Server]
+    private static void ServerUseToilet(int networkIdent, UsageLevel level)
+    {
+        var toilet = Entity.FindByIndex<Toilet>(networkIdent);
+        if (toilet is null)
+        {
+            Log.Error($"Unable to find toilet to use with ident {networkIdent}");
+            return;
+        }
+
+        toilet.UseToilet(level);
     }
 
     private void RemovePlayerFromToilet(Player player)
@@ -130,9 +147,7 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
             return true;
         if (BeingUsedBy != player)
             return true;
-
-        // Prevents the user from stopping use early
-        if (!FinishedUsing)
+        if (State != ToiletState.Finished)
             return false;
 
         RemovePlayerFromToilet(player);
@@ -145,18 +160,14 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     {
         using (Prediction.Off())
         {
-            if (IsBeingUsed)
+            if (
+                State == ToiletState.Pooping
+                && TimeUntilFinishedUsing.Relative < 0
+                && !PoopingSound.IsPlaying
+            )
             {
-                if (State == ToiletState.SittingDown && TimeSinceStartedUsing.Relative > 0.25f)
-                {
-                    State = ToiletState.Pooping;
-                    PoopingSound = PlaySound(UsageSounds[(int)UsageLevel.Normal].GetRandom());
-                }
-
-                if (FinishedUsing)
-                {
-                    //BeingUsedBy.StopUsing(this);
-                }
+                State = ToiletState.Finished;
+                OnStopUse(BeingUsedBy);
             }
         }
     }
@@ -172,6 +183,18 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
         }
 
         return true;
+    }
+
+    protected void UseToilet(UsageLevel level)
+    {
+        State = ToiletState.Pooping;
+        var playSound = async () =>
+        {
+            await GameTask.DelayRealtimeSeconds(0.25f);
+            PoopingSound = PlaySound(UsageSounds[(int)level].GetRandom());
+        };
+        playSound();
+        TimeUntilFinishedUsing = 5f;
     }
 
     private void StartUsing(Player player)
