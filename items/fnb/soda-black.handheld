@@ -1,0 +1,10 @@
+{
+  "ClassName": "Soda",
+  "ViewModel": "models/papercup/walker/v_papercup_black.vmdl",
+  "ItemName": "Cup of Soda",
+  "UniqueId": "soda-black",
+  "Description": "A delicious taste of soda",
+  "Icon": "ui/icons/soda.png",
+  "WorldModel": "models/papercup/walker/w_papercup_black.vmdl",
+  "Tags": []
+}

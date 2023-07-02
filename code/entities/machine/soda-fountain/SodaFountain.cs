@@ -1,4 +1,5 @@
-﻿using Editor;
+﻿using Conna.Inventory;
+using Editor;
 using Sandbox;
 using Sandbox.util;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
 
         AddInteractables();
-
+        
         Tags.Add("interactable");
     }
 

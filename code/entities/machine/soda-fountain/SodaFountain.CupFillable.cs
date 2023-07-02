@@ -6,6 +6,15 @@ namespace Cinema;
 
 public partial class CupFillable : ModelEntity
 {
+    public enum CupColor : int
+    {
+        Default = 0,
+        Blue = 1,
+        Green = 2,
+        Red = 3,
+        Black = 4
+    }
+
     public Dispenser DispenserParent { get; set; }
     private bool IsAssembled { get; set; }
     public CupFillable() //For the compiler...
