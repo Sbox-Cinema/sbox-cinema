@@ -39,4 +39,18 @@ public partial class SodaFountain
     {
 
     }
+
+    public void HandleUse(Entity player)
+    {
+        foreach (var (_, interactable) in Interactables)
+        {
+            var rayResult = interactable.CanRayTrigger(player.AimRay);
+
+            if (rayResult.Hit)
+            {
+                interactable.Trigger(player as Player);
+                break;
+            }
+        }
+    }
 }

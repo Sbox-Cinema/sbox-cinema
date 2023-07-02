@@ -32,33 +32,19 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         Tags.Add("interactable");
     }
 
-    public void HandleUse(Entity player)
-    {
-        foreach (var (_, interactable) in Interactables)
-        {
-            var rayResult = interactable.CanRayTrigger(player.AimRay);
-
-            if (rayResult.Hit)
-            {
-                interactable.Trigger(player as Player);
-                break;
-            }
-        }
-    }
-
     public void AddInteractables()
     {
-        Interactables.Add("Dispenser1", new Dispenser("Lever1State", "particles/soda_fountain/walker/sodafill2_conk_f.vpcf")
+        Interactables.Add("Dispenser1", new Dispenser("Lever1State", "particles/soda_fountain/walker/sodafill2_conk_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_1")
         );
 
-        Interactables.Add("Dispenser2", new Dispenser("Lever2State", "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf")
+        Interactables.Add("Dispenser2", new Dispenser("Lever2State", "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_2")
         );
 
-        Interactables.Add("Dispenser3", new Dispenser("Lever3State", "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf")
+        Interactables.Add("Dispenser3", new Dispenser("Lever3State", "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf")
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_3")
         );

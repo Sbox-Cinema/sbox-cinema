@@ -1,58 +1,72 @@
 ﻿using Sandbox;
 using Sandbox.util;
-
+using System;
 namespace Cinema;
 
-public class Dispenser : BaseInteractable
+public partial class Dispenser : BaseInteractable
 {
-    public bool CupPlaced { get; set; }
+    static private float LeverPosIncrement = 0.05f;
+    static private float DispenseTime = 4.0f;
     private string AnimationName { get; set; }
-    private bool IsDispensing { get; set; }
+    private string SodaFillParticlePath { get; set; }
+    private string SodaDispenseParticlePath { get; set; }
+    public CupFillable Cup { get; set; }
+    public bool IsDispensing { get; set; }
     private Particles Soda { get; set; }
-    private string ParticlePath { get; set; }
     private float LeverPos { get; set; }
 
-    static private float LeverPosIncrement = 0.05f;
+    private TimeUntil DispenseTimer = 0.0f;
+    
     public Dispenser() // For the compiler...
     {
         
     }
-    public Dispenser(string animationName, string particlePath) 
+    public Dispenser(string animationName, string sodaFillParticlePath, string sodaDispenseParticlePath) 
     {
         AnimationName = animationName;
-        ParticlePath = particlePath;
+
+        SodaFillParticlePath = sodaFillParticlePath;
+        SodaDispenseParticlePath = sodaDispenseParticlePath;
     }
     public override void Trigger(Player player)
     {
-        IsDispensing = !IsDispensing;
-
-        if (IsDispensing)
+        if (!IsDispensing)
         {
-            if (CupPlaced)
+            if (Cup.IsValid() && Cup.Assembled()) return;
+
+            DispenseTimer = DispenseTime;
+            IsDispensing = true;
+
+            if (Cup.IsValid())
             {
-                Soda = Particles.Create(ParticlePath, Parent);
+                Soda = Particles.Create(SodaFillParticlePath, Parent);
                 Soda.SetEntityAttachment(0, Parent, Attachment);
-            } 
+            }
             else
             {
-                Soda = Particles.Create($"particles/soda_fountain/sodafill1_f.vpcf", Parent);
+                Soda = Particles.Create(SodaDispenseParticlePath, Parent);
                 Soda.SetEntityAttachment(0, Parent, Attachment);
             }
         }
-        else
-        {
-            Soda?.Destroy(true);
-            Soda?.Dispose();
-        }
     }
-
     public override void Simulate()
     {
         base.Simulate();
 
-        if (IsDispensing)
+        if(DispenseTimer && IsDispensing)
         {
-            if(LeverPos < 1.0f)
+            // Remove soda dispenser particles
+            Soda?.Destroy(true);
+            Soda?.Dispose();
+
+            // Assemble cup
+            Cup?.Assemble();
+
+            IsDispensing = false;
+        } 
+        else if(IsDispensing)
+        {
+            if (LeverPos < 1.0f)
             {
                 LeverPos += LeverPosIncrement;
             }
@@ -60,8 +74,8 @@ public class Dispenser : BaseInteractable
             {
                 LeverPos = 1.0f;
             }
-        }
-        else
+        } 
+        else if(!IsDispensing)
         {
             if (LeverPos > 0.0f)
             {
@@ -73,12 +87,6 @@ public class Dispenser : BaseInteractable
             }
         }
 
-        if(!CupPlaced)
-        {
-            Soda?.Destroy(true);
-            Soda?.Dispose();
-        }
-
         (Parent as AnimatedEntity).SetAnimParameter(AnimationName, LeverPos);
-    }
+   }
 }

@@ -39,18 +39,14 @@ public class Platform : BaseInteractable
 
     private CupFillable AddCup(Slot slot)
     {
-        var cup = new CupFillable();
+        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+        
+        var cup = new CupFillable(dispenser);
         cup.Transform = GetParentTransform(slot.Attachment);
         cup.Parent = Parent;
 
-        // Manually setting position until we have a proper paper cup model
-        cup.Position += Vector3.Up * (cup.CollisionBounds.Size / 2);
-
+        // Set slot's entity to cup
         slot.Entity = cup;
-
-        // Let the dispenser that a cup has been added to this slot
-        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
-        dispenser.CupPlaced = true;
 
         return cup;
     }
@@ -81,6 +77,7 @@ public class Platform : BaseInteractable
         {
             if (!slot.Entity.IsValid())
             {
+                // Add cup to this slot
                 AddCup(slot);
 
                 break;
@@ -88,14 +85,22 @@ public class Platform : BaseInteractable
 
             if (distance < MaxDistanceTarget)
             { 
-                slot.Entity.Delete();
-             
-                var cupCarriable = InventorySystem.CreateItem(CupItemUniqueId);
-                player.PickupItem(cupCarriable);
+                if(slot.Entity is CupFillable cup) {
 
-                // Let the dispenser know that a cup has been taken from this slot
-                var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
-                dispenser.CupPlaced = false;
+                    if (cup.CanPickup())
+                    {
+                        // Remove entity from this slot
+                        slot.Entity.Delete();
+
+                        // Pickup cup
+                        var cupCarriable = InventorySystem.CreateItem(CupItemUniqueId);
+                        player.PickupItem(cupCarriable);
+
+                        // Remove cup from dispenser parent
+                        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+                        dispenser.Cup?.Delete();
+                    }
+                }
 
                 break;
             }
