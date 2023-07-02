@@ -51,17 +51,16 @@ public partial class Toilet : AnimatedEntity, ICinemaUse
     public enum UsageLevel
     {
         Normal,
-        Big
+        Big,
+        Excellent
     }
 
     private static WeightedSoundEffect[] UsageSounds =>
         new WeightedSoundEffect[]
         {
             WeightedSoundEffect.Create().Add("sound/bodilyfunctions/normal_shit.sound", 100),
-            WeightedSoundEffect
-                .Create()
-                .Add("sound/bodilyfunctions/big_shit.sound", 900)
-                .Add("sound/bodilyfunctions/mega_shit.sound", 100)
+            WeightedSoundEffect.Create().Add("sound/bodilyfunctions/big_shit.sound", 100),
+            WeightedSoundEffect.Create().Add("sound/bodilyfunctions/mega_shit.sound", 100)
         };
 
     public override void Spawn()

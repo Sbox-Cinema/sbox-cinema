@@ -31,7 +31,7 @@ public partial class PoopGame : Panel, IMenuScreen
 
     public int TriesRemaining { get; protected set; } = 3;
 
-    protected int[] TryArray => new int[TriesRemaining];
+    protected int[] TryArray => new int[Math.Max(TriesRemaining, 0)];
 
     public Action<Toilet.UsageLevel> UseToiletCallback { get; set; }
 
@@ -80,8 +80,10 @@ public partial class PoopGame : Panel, IMenuScreen
 
         GameState = State.Pooping;
         var level = Toilet.UsageLevel.Normal;
-        if (TriesRemaining == 3)
+        if (TriesRemaining > 1)
             level = Toilet.UsageLevel.Big;
+        if (TriesRemaining == 3)
+            level = Toilet.UsageLevel.Excellent;
 
         UseToiletCallback?.Invoke(level);
     }

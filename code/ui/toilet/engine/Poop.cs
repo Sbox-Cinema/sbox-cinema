@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
 
@@ -8,6 +9,9 @@ public partial class Poop : SpriteEntity
 {
     public Action OnLose { get; set; }
     public Action OnWin { get; set; }
+
+    public List<Vector2> LastPositions = new();
+    public int TicksSinceCreated { get; set; } = 0;
 
     public Poop() : base()
     {
@@ -40,6 +44,9 @@ public partial class Poop : SpriteEntity
 
     public override void Update()
     {
+        LastPositions.Add(Position);
+        ++TicksSinceCreated;
+
         if (Input.Down("jump"))
         {
             if (Velocity.y < 0)
@@ -89,5 +96,21 @@ public partial class Poop : SpriteEntity
         {
             OnWin?.Invoke();
         }
+    }
+
+    public override void Draw()
+    {
+        for (var i = 60; i >= 0; --i)
+        {
+            if (i % 8 != 0)
+                continue;
+            var indexToDraw = LastPositions.Count - i - 1;
+            if (indexToDraw < 0)
+                continue;
+            var lastPosition = LastPositions[indexToDraw];
+            Engine.DrawRectangle(lastPosition, Size, Color, Texture);
+        }
+
+        Engine.DrawRectangle(Position, Size, Color, Texture);
     }
 }

@@ -31,7 +31,7 @@ public partial class PoopGameScreen : Panel
         var poop = Engine.CreateEntity<Poop>();
         poop.SetTexture(Texture.Load(FileSystem.Mounted, "textures/poopemoji.png"))
             .SetSize(new Vector2(40, 40))
-            .SetPosition(new Vector2(0, Engine.PlayArea.y - 80));
+            .SetPosition(new Vector2(0, Engine.PlayArea.y - 120));
         poop.OnWin = OnWin;
         poop.OnLose = OnLose;
         poop.Velocity = new Vector2(200, 0);
