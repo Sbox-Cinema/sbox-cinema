@@ -1,15 +1,27 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 
 namespace CinemaTeam.Plugins.Video;
 
 /// <summary>
 /// Stores data related to a media request that may be queued. Supports via an indexer 
-/// the getting and setting of arbitrary string data that may be used by video providers 
+/// the getting and setting of arbitrary string data that may be used by media providers 
 /// to store information required for their implementation.
 /// </summary>
 public partial class MediaRequest : BaseNetworkable
 {
+    public MediaRequest(MediaInfo mediaInfo = null) 
+    {
+        GenericInfo = mediaInfo;
+    }
+
+    public MediaRequest(Type videoProviderType, MediaInfo mediaInfo = null)
+    {
+        SetVideoProvider(videoProviderType);
+        GenericInfo = mediaInfo;
+    }
+
     /// <summary>
     /// Contains information about this media that is applicable to all video providers.
     /// This information is also displayed in the UI.
@@ -22,14 +34,24 @@ public partial class MediaRequest : BaseNetworkable
     /// </summary>
     [Net]
     public IClient Requestor { get; set; }
+
+    public void SetVideoProvider(Type videoProviderType)
+    {
+        Log.Trace($"{TypeLibrary.GetTypeIdent(videoProviderType)}: {videoProviderType.Name}");
+        VideoProviderId = TypeLibrary.GetTypeIdent(videoProviderType);
+    }
+
+    public void SetVideoProvider<T>() where T : IMediaProvider
+            => SetVideoProvider(typeof(T));
+
     /// <summary>
-    /// The ID of the video player that shall be used to play this media.
+    /// The ID of the video provider that shall be used to play this media.
     /// </summary>
     // We can't use the IVideoProvider interface here because it's not a networkable,
     // so we are going to have the server manage associations between IDs and providers
     // and refer to the provider by ID here.
     [Net] 
-    public int VideoPlayerId { get; set; }
+    public int VideoProviderId { get; protected set; }
 
     [Net]
     private IDictionary<string, string> RequestData { get; set; }

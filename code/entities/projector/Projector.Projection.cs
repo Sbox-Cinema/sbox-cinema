@@ -25,26 +25,9 @@ public partial class ProjectorEntity
     public float ScreenDistance { get; set; }
     protected bool ShouldRemakeLight { get; set; }
 
-    public void SetMedia(IVideoPresenter media)
-    {
-        if (CurrentMedia != null && CurrentMedia is IVideoControls controls)
-        {
-            // TODO: Hack, move this logic in to the media controller.
-            controls.Stop();
-        }
-        // Stop now in case the next media doesn't clobber the current overhead audio.
-        CurrentOverheadSound?.Stop(true);
-        CurrentMedia = media;
-        PlayCurrentMedia();
-    }
 
-    private void InitProjection()
-    {
-        SetupProjectionLight();
-        Area?.MediaController?.SetWaitingImage();
-    }
 
-    private void SetupProjectionLight()
+    private void InitializeProjection()
     {
         var outerConeAngle = 60f;
         var innerConeAngle = 45f;
@@ -74,6 +57,11 @@ public partial class ProjectorEntity
             FogStrength = 1.0f,
             Transmit = TransmitType.Always,
         };
+
+        if (InputTexture != null)
+            Log.Trace($"{Name} - Input texture: {InputTexture.Width}x{InputTexture.Height}");
+
+        Log.Trace($"{Name} - Light cookie texture: {LightCookieTexture.Width}x{LightCookieTexture.Height}");
 
         ProjectionLight.UseFog();
         ProjectionLight.Components.Create<FakeBounceLight>();
@@ -107,7 +95,7 @@ public partial class ProjectorEntity
         if (InputTexture != LastInputTexture)
         {
             Log.Info($"{Name} - Projection texture changed.");
-            InitProjection();
+            InitializeProjection();
         }
         LastInputTexture = InputTexture;
     }
@@ -160,16 +148,10 @@ public partial class ProjectorEntity
         ProjectionLight.InnerConeAngle = ProjectionLight.OuterConeAngle * 0.5f;
     }
 
-    private void PlayCurrentMedia()
+    private void ProjectCurrentMedia()
     {
+        if (CurrentMedia == null) return;
         if (!Game.LocalPawn.IsValid()) return;
-
-        if (!CanSeeProjector(Game.LocalPawn.Position))
-        {
-            Log.Info($"{Name} - Cleaning up projection.");
-            CleanupProjection();
-            return;
-        }
 
         if (CurrentMedia?.Texture == null)
         {
@@ -178,15 +160,11 @@ public partial class ProjectorEntity
         }
 
         InputTexture = CurrentMedia.Texture;
-        SetupProjectionLight();
-        // Log the dimensions of the input and light cookie textures.
-        Log.Info($"{Name} - Input texture: {InputTexture.Width}x{InputTexture.Height}");
-        Log.Info($"{Name} - Light cookie texture: {LightCookieTexture.Width}x{LightCookieTexture.Height}");
+        InitializeProjection();
     }
 
     protected void CleanupProjection()
     {
-        InputTexture?.Dispose();
         LightCookieTexture?.Dispose();
     }
 }

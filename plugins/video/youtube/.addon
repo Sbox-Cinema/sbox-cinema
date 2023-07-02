@@ -7,13 +7,14 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "Resources": null,
+  "Resources": "",
   "MenuResources": null,
   "HasCode": true,
   "CodePath": ".",
   "PackageReferences": [
     "cinemateam.interface_video",
-    "carsonk.mediahelpers"
+    "carsonk.mediahelpers",
+    "local.base"
   ],
   "EditorReferences": null,
   "Metadata": {

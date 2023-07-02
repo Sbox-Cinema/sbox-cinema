@@ -4,5 +4,5 @@ namespace CinemaTeam.Plugins.Video;
 
 public interface IMediaCurator
 {
-    Task<MediaRequest> GetRequest();
+    Task<MediaRequest> SuggestMedia();
 }

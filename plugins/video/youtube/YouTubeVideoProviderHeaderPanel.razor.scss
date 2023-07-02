@@ -1,0 +1,30 @@
+﻿YouTubeVideoProviderHeaderPanel {
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(1,1,1,0.2);
+    border-radius: 10px;
+
+    > .header {
+        justify-content: center;
+        margin: 10px;
+
+        > h2 {
+            font-size: 24px;
+        }
+    }
+
+    > .body {
+        margin: 10px;
+        justify-content: space-around;
+
+        > TextEntry {
+            width: 80%;
+            border-width: 2px;
+            border-color: lightslategray;
+            border-radius: 15px;
+            background-color: rgba(0,0,0,0.2);
+            backdrop-filter: blur(30px);
+            text-align: center;
+        }
+    }
+}

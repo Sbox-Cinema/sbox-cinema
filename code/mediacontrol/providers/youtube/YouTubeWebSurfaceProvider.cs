@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
 
-public class YouTubeWebSurfaceProvider : IVideoProvider
+public class YouTubeWebSurfaceProvider
 {
     public string ProviderName => "YouTube (WebSurface)";
-
-    public MediaProviderHeaderPanel HeaderPanel => throw new NotImplementedException();
+    public string ThumbnailPath => "assets/youtube_icon.png";
 
     public Task<IVideoPlayer> Play(MediaRequest requestData)
     {

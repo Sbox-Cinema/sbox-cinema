@@ -1,10 +1,11 @@
-@inherits Panel
 @using Sandbox;
 @using Sandbox.UI;
+@using CinemaTeam.Plugins.Video;
 
 @namespace Cinema.UI
-
+@inherits Panel
 @attribute [StyleSheet("/ui/movie-queue/MovieQueue.scss")]
+
 <root class="@VisibleClass">
     <div class="placement container">
         <div class="header">
@@ -16,17 +17,8 @@
             </div>
         </div>
         <div class="contents">
-            <div class="section outline">
-                <div class="add-queue-container">
-                    <div class="title">
-                        Add To Queue (Youtube ID):
-                    </div>
-                    <TextEntry @ref=MovieIDEntry CaretColor="#555" />
-                    <div class="button" @onclick=@OnQueue >
-                        Add
-                    </div>
-                </div>
-            </div>
+            <VideoProviderList OnProviderSelected=@SetVideoProvider/>
+            <div @ref=MediaProviderHeaderContainer id="mediaHeader"/>
             <div class="section clear grow scroll">
                 <div class="rows scrollable">
                     @foreach (var (movie, index) in Queue.WithIndex())

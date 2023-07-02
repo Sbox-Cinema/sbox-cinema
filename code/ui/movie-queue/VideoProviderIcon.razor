@@ -1,0 +1,15 @@
+﻿@using Sandbox.UI;
+@using CinemaTeam.Plugins.Video;
+
+@namespace Cinema.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+    <div class="big-icon" style="background-image: url(@Provider.ThumbnailPath)" />
+    <p>@Provider.ProviderName</p>
+</root>
+
+@code {
+    public IMediaProvider Provider { get; set; }
+}

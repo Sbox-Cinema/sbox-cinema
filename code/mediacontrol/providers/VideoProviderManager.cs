@@ -7,7 +7,7 @@ namespace Cinema;
 
 public class VideoProviderManager
 {
-    private IDictionary<int, IVideoProvider> Providers { get; set; }
+    private IDictionary<int, TypeDescription> Providers { get; set; }
 
     public static VideoProviderManager Instance 
     { 
@@ -24,35 +24,40 @@ public class VideoProviderManager
 
     public void Initialize()
     {
+        Providers = new Dictionary<int, TypeDescription>();
         // Get all video providers from this game and the initially loaded addons.
-        Providers = GetLoadedProviders()
-            .ToDictionary(t => TypeLibrary.GetTypeIdent(t.GetType()));
+        foreach (var provider in GetLoadedProviders())
+        {
+            var ident = TypeLibrary.GetTypeIdent(provider.TargetType);
+            // Log the provider type ident and name.
+            Log.Trace($"{ident}: {provider.Name}");
+            Providers.Add(ident, provider);
+        }
     }
 
     /// <summary>
-    /// Returns all video providers that are currently loaded by this game and
-    /// whatever addons and libraries may be loaded.
+    /// Returns a <c>TypeDescription</c> for each <c>IVideoProvider</c> currently loaded by 
+    /// this game and whatever addons and libraries may be loaded.
     /// </summary>
-    /// <returns>A collection of all currently loaded video providers.</returns>
-    private static IEnumerable<IVideoProvider> GetLoadedProviders()
-        => TypeLibrary.GetTypes<IVideoProvider>()
-            .Where(t => !t.IsAbstract && !t.IsInterface) // Concrete types only.
-            .Select(t => TypeLibrary.Create<IVideoProvider>(t.Name));
+    private static IEnumerable<TypeDescription> GetLoadedProviders()
+        => TypeLibrary.GetTypes<IMediaProvider>()
+            .Where(t => !t.IsAbstract && !t.IsInterface); // Concrete types only.
 
-    public IVideoProvider this[int key]
+    public IMediaProvider this[int key]
     {
         get
         {
+            Log.Info(key);
             if (!Providers.ContainsKey(key))
             {
                 return null;
             }
 
-            return Providers[key];
+            return Providers[key].Create<IMediaProvider>();
         }
     }
 
-    [ConCmd.Server("plugins.video.dumpall")]
+    [ConCmd.Client("plugins.video.dumpall")]
     public static void DumpVideoProviders()
     {
         if (!Instance.Providers.Any())
@@ -65,9 +70,9 @@ public class VideoProviderManager
             Log.Info($"Loaded {Instance.Providers.Count} video providers:");
         }
 
-        foreach(var provider in Instance.Providers.Values)
+        foreach(var kvp in Instance.Providers)
         {
-            Log.Info($"\t{provider.ProviderName}");
+            Log.Info($"\t{kvp.Key} - {kvp.Value.ClassName}");
         }
     }
 
@@ -77,9 +82,9 @@ public class VideoProviderManager
     /// </summary>
     /// <param name="provider"></param>
     /// <returns></returns>
-    public int GetKey(IVideoProvider provider)
-        => Providers.FirstOrDefault(p => p.Value == provider).Key;
+    public int GetKey(IMediaProvider provider)
+        => Providers.FirstOrDefault(p => p.Value.GetType() == provider.GetType()).Key;
 
-    public IEnumerable<IVideoProvider> GetAll()
-        => Providers.Values;
+    public IEnumerable<IMediaProvider> GetAll()
+        => Providers.Values.Select(t => t.Create<IMediaProvider>());
 }

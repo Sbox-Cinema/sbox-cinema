@@ -1,16 +1,17 @@
-﻿@inherits Panel
+﻿@using System;
+@using System.Collections.Generic;
+@using CinemaTeam.Plugins.Video;
 @using Sandbox;
 @using Sandbox.UI;
 @using Cinema;
 
+@namespace Cinema.UI
+@inherits Panel
 @attribute [StyleSheet]
+
 <root>
-
-</root>
-
-@code {
-    public void RefreshVideoProviders()
+    @foreach (var provider in Providers)
     {
-        var providers = VideoProviderManager.Instance.GetAll();
+        <VideoProviderIcon Provider=@provider @onclick=@(() => SelectedProvider = provider)/>
     }
-}
+</root>

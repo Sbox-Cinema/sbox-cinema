@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
 
+/// <summary>
+/// Provides a panel that can be used to generate queries for a media provider.
+/// </summary>
 public interface IMediaSelector
 {
-    public class OnRequestMediaEventArgs : EventArgs
+    public class MediaRequestEventArgs : EventArgs
     {
-        public IVideoControls Player { get; init; }
-        public string RequestData { get; init; }
+        public int ProviderId { get; init; }
+        public string Query { get; init; }
     }
-
 
     /// <summary>
     /// The panel to display when this provider is selected in the media queue menu.
     /// </summary>
     MediaProviderHeaderPanel HeaderPanel { get; }
-    event EventHandler<OnRequestMediaEventArgs> OnRequestMedia;
 }

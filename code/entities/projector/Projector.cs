@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CinemaTeam.Plugins.Video;
 using Editor;
 using Sandbox;
 
@@ -70,7 +71,15 @@ public partial class ProjectorEntity : Entity
     public override void ClientSpawn()
     {
         base.ClientSpawn();
-        InitProjection();
+        InitializeProjection();
+    }
+
+    public void SetMedia(IVideoPresenter media)
+    {
+        // Stop now in case the next media doesn't clobber the current overhead audio.
+        CurrentOverheadSound?.Stop(true);
+        CurrentMedia = media;
+        ProjectCurrentMedia();
     }
 
     public void PlayOverheadAudio()
@@ -78,12 +87,17 @@ public partial class ProjectorEntity : Entity
         if (CurrentMedia == null)
             return;
 
-        CurrentOverheadSound?.Stop(true);
+        StopOverheadAudio();
         var soundPosition = OverheadAudioPosition;
         var hSnd = CurrentMedia.PlayAudio(null).Value;
         hSnd.Position = soundPosition;
         hSnd.Volume = VolumeScale;
         CurrentOverheadSound = hSnd;
+    }
+
+    public void StopOverheadAudio()
+    {
+        CurrentOverheadSound?.Stop(true);
     }
 
     protected override void OnDestroy()

@@ -1,9 +1,9 @@
 ﻿namespace CinemaTeam.Plugins.Video;
 
 /// <summary>
-/// 
+/// Allows for the playback of a video to be controlled.
 /// </summary>
-public interface IVideoControls
+public interface IMediaControls
 {
     void Resume();
     void SetPaused(bool paused);
