@@ -37,9 +37,12 @@ public class Platform : BaseInteractable
         }
     }
 
-    private CupFillable AddCup(Slot slot)
+    private void AddCup(Slot slot)
     {
         var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+
+        // Don't add cup if the dispenser is already dispensing
+        if (dispenser.IsDispensing) return;
         
         var cup = new CupFillable(dispenser);
         cup.Transform = GetParentTransform(slot.Attachment);
@@ -47,8 +50,6 @@ public class Platform : BaseInteractable
 
         // Set slot's entity to cup
         slot.Entity = cup;
-
-        return cup;
     }
 
     /// <summary>
