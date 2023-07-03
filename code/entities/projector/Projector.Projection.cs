@@ -162,6 +162,10 @@ public partial class ProjectorEntity
             Log.Info($"{Name} - Media texture is null.");
             return;
         }
+        if (CurrentMedia.Texture.Width == 1 && CurrentMedia.Texture.Height == 1)
+        {
+            Log.Info($"{Name} - Video is blank due to some kind of issue.");
+        }
 
         InputTexture = CurrentMedia.Texture;
         InitializeProjection();

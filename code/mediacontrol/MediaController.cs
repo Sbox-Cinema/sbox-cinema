@@ -19,20 +19,20 @@ public partial class MediaController : EntityComponent<CinemaZone>
     public MediaRequest CurrentMedia { get; set; }
     private IVideoPlayer CurrentVideoPlayer { get; set; }
     [Net]
-    public TimeSince StartedPlaying { get; protected set; }
+    public TimeSince StartedPlaying { get; private set; }
 
     public event EventHandler StartPlaying;
     public event EventHandler StopPlaying;
 
     [GameEvent.Entity.PostSpawn]
-    public void OnPostSpawn()
+    private void OnPostSpawn()
     {
         StartPlaying += (_,_) => Zone.SetLightsEnabled(false);
         StopPlaying += (_,_) => Zone.SetLightsEnabled(true);
     }
 
     [ConCmd.Server]
-    public async static void RequestMedia(int zoneId, int clientId, int providerId, string request)
+    public async static void PlayMedia(int zoneId, int clientId, int providerId, string request)
     {
         var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
         var controller = zone.MediaController;
@@ -60,7 +60,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
         controller.StopPlaying?.Invoke(controller, null);
     }
 
-    public async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
+    private async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
     {
         if (newValue != null)
         {
@@ -74,7 +74,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
     }
 
     [ClientRpc]
-    protected async Task PlayCurrentMedia()
+    private async Task PlayCurrentMedia()
     {
         if (!Game.IsClient)
             return;
@@ -93,9 +93,11 @@ public partial class MediaController : EntityComponent<CinemaZone>
         PlayAudio();
     }
 
-    protected void PlayAudio()
+    private void PlayAudio()
     {
-        var centerChannel = CinemaZone.SpeakerChannel.Center;
+        var centerChannel = CinemaZone.AudioChannel.Center;
+        // For now, we only support playing the center channel, but once VideoPlayer supports
+        // multiple audio channels,
         if (Zone.HasSpeaker(centerChannel))
         {
             CurrentVideoPlayer.PlayAudio(Zone.GetSpeaker(centerChannel));
@@ -109,7 +111,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
         }
     }
 
-    protected void StopAudio()
+    private void StopAudio()
     {
         Zone.StopAllSpeakerAudio();
         Projector?.StopOverheadAudio();

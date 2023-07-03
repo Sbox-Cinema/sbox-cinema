@@ -24,26 +24,12 @@ public partial class CinemaZone : BaseTrigger
     public IList<PointLightEntity> Lights { get; set; }
     [Net]
     public IList<Entity> Speakers { get; set; }
+    private List<SoundHandle> ActiveSoundHandles { get; set; } = new();
+
     public float LightDimmingTime { get; set; } = 5.0f;
     private float MaxLightBrightness { get; set; }
     private float DesiredLightBrightness { get; set; }
     private float CurrentLightBrightness { get; set; }
-    private List<SoundHandle> ActiveSoundHandles { get; set; } = new();
-
-    /// <summary>
-    /// Speaker channel conforming to MP3/WAV/FLAC part of ANSI/CEA-863-A.
-    /// </summary>
-    public enum SpeakerChannel : int
-    {
-        FrontLeft = 0,
-        FrontRight,
-        Center,
-        Subwoofer,
-        SideLeft,
-        SideRight,
-        RearLeft,
-        RearRight
-    }
 
     /// <summary>
     /// Returns true if this zone has a projector and media controller.
@@ -121,17 +107,17 @@ public partial class CinemaZone : BaseTrigger
         DesiredLightBrightness = newValue ? MaxLightBrightness : 0.0f;
     }
 
-    public bool HasSpeaker(SpeakerChannel channel)
+    public bool HasSpeaker(AudioChannel channel)
     {
         return Speakers[(int)channel] != null;
     }
 
-    public Entity GetSpeaker(SpeakerChannel channel)
+    public Entity GetSpeaker(AudioChannel channel)
     {
         return Speakers[(int)channel];
     }
 
-    public void PlayAudioOnSpeaker(IVideoPresenter presenter, SpeakerChannel channel)
+    public void PlayAudioOnSpeaker(IVideoPresenter presenter, AudioChannel channel)
     {
         var speaker = GetSpeaker(channel);
         if (speaker == null)
@@ -143,7 +129,7 @@ public partial class CinemaZone : BaseTrigger
     }
 
     public void PlayAudioOnSpeaker(IVideoPresenter presenter, int channel)
-        => PlayAudioOnSpeaker(presenter, (SpeakerChannel)channel);
+        => PlayAudioOnSpeaker(presenter, (AudioChannel)channel);
 
     public void StopAllSpeakerAudio()
     {

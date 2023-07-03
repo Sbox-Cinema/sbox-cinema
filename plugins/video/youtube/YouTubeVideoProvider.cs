@@ -40,10 +40,11 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Never Gonna Give You Up
     };
 
-    // These next two videos have an issue where the texture for the video will be 1x1 pixels.
+    // These next three videos have an issue where the texture for the video will be 1x1 pixels.
     // Audio plays fine, though. Not sure where the fault lies.
     private const string IssuePlokBeach = "https://www.youtube.com/watch?v=9gpu1GHRymY";
-    private const string IssueRoyco = "https://www.youtube.com/watch?v=0ee0syZi9E0"; 
+    private const string IssueRoyco = "https://www.youtube.com/watch?v=0ee0syZi9E0";
+    private const string IssueEridium = "https://www.youtube.com/watch?v=eLbLKKlna00";
 
     public async Task<MediaRequest> SuggestMedia()
     {

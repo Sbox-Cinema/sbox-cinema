@@ -74,7 +74,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     {
         var zoneId = Controller.Zone.NetworkIdent;
         var clientId = Game.LocalClient.NetworkIdent;
-        MediaController.RequestMedia(zoneId, clientId, providerId, query);
+        MediaController.PlayMedia(zoneId, clientId, providerId, query);
     }
 
     protected static bool CanRemoveMedia(Media media)

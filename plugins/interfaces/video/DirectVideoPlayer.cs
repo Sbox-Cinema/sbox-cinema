@@ -16,8 +16,22 @@ public class DirectVideoPlayer : IVideoPlayer
     {
         VideoPlayer = new VideoPlayer();
         var url = requestData["Url"];
-        VideoPlayer.OnLoaded += () =>
+        VideoPlayer.OnLoaded += async () =>
         {
+            Log.Trace("Video loaded.");
+            // It's possible that after the video is loaded, the texture is still 1x1 pixels.
+            if (Texture.Width == 1 && Texture.Height == 1)
+            {
+                const int maxTries = 5;
+                // We just spin for a few frames to see if the texture gets bigger.
+                for (int i = 0; i < maxTries; i++)
+                {
+                    Log.Trace($"Video is {Texture.Width}x{Texture.Height} now.");
+                    await GameTask.DelaySeconds(Time.Delta);
+                    if (Texture.Width > 1 && Texture.Height > 1)
+                        break;
+                }
+            }
             Log.Trace("Video loaded.");
             VideoLoaded = true;
         };
