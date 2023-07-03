@@ -1,13 +1,12 @@
 ﻿InteractBorder {
     position: absolute;
-    border-width: 2px;
-    border-color: white;
+    border: 2px solid white;
     box-shadow: 2px 2px 20px 2px white;
     border-radius: 10px;
     transition: opacity 0.15s ease-in;
 
     &.visible {
-        opacity: 0.5;
+        opacity: 0.03;
     }
 
     &:not(.visible) {
