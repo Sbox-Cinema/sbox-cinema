@@ -31,6 +31,15 @@ public partial class MediaController : EntityComponent<CinemaZone>
         StopPlaying += (_,_) => Zone.SetLightsEnabled(true);
     }
 
+    [GameEvent.Tick.Server]
+    private void OnTick()
+    {
+        if (CurrentMedia != null && StartedPlaying > CurrentMedia.GenericInfo.Duration)
+        {
+            StopMedia(null);
+        }
+    }
+
     [ConCmd.Server]
     public async static void PlayMedia(int zoneId, int clientId, int providerId, string request)
     {
@@ -41,9 +50,15 @@ public partial class MediaController : EntityComponent<CinemaZone>
         {
             client = Sandbox.Entity.FindByIndex(clientId) as IClient;
         }
+        await controller.PlayMedia(client, providerId, request);
+    }
+
+    public async Task PlayMedia(IClient client, int providerId, string request)
+    {
         var provider = VideoProviderManager.Instance[providerId];
-        controller.CurrentMedia = await provider.CreateRequest(client, request);
-        controller.StartPlaying?.Invoke(controller, null);
+        CurrentMedia = await provider.CreateRequest(client, request);
+        StartedPlaying = 0;
+        StartPlaying?.Invoke(this, null);
     }
 
     [ConCmd.Server]
@@ -56,8 +71,13 @@ public partial class MediaController : EntityComponent<CinemaZone>
         {
             client = Sandbox.Entity.FindByIndex(clientId) as IClient;
         }
-        controller.CurrentMedia = null;
-        controller.StopPlaying?.Invoke(controller, null);
+        controller.StopMedia(client);
+    }
+
+    public void StopMedia(IClient client)
+    {
+        CurrentMedia = null;
+        StopPlaying?.Invoke(this, null);
     }
 
     private async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
