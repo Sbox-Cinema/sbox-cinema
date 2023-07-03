@@ -66,8 +66,6 @@ public partial class MovieQueue : Panel, IMenuScreen
             var header = selector.HeaderPanel;
             MediaProviderHeaderContainer.AddChild(header);
             var providerId = VideoProviderManager.Instance.GetKey(provider);
-            // Log the provider id
-            Log.Info($"Provider ID: {providerId}");
             header.RequestMedia += (s, e) => OnQueue(providerId, e.Query);
         }
     }
@@ -140,7 +138,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     protected void OnSkip()
     {
-        //Controller.Skip();
+        MediaController.StopMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
     }
 
     protected void OnClose()

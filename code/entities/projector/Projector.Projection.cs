@@ -86,7 +86,7 @@ public partial class ProjectorEntity
     [GameEvent.Tick.Client]
     protected virtual void UpdateClientProjection()
     {
-        if (ProjectionLight == null)
+        if (!ProjectionLight.IsValid())
             return;
 
         UpdateProjectorAngles();
@@ -150,7 +150,11 @@ public partial class ProjectorEntity
 
     private void ProjectCurrentMedia()
     {
-        if (CurrentMedia == null) return;
+        if (CurrentMedia == null)
+        {
+            ProjectionLight.Delete();
+            return;
+        }
         if (!Game.LocalPawn.IsValid()) return;
 
         if (CurrentMedia?.Texture == null)

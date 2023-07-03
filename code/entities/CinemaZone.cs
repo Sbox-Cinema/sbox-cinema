@@ -1,6 +1,9 @@
+using CinemaTeam.Plugins.Video;
 using Editor;
 using Sandbox;
+using Sandbox.Utility;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cinema;
 
@@ -17,6 +20,30 @@ public partial class CinemaZone : BaseTrigger
     public MediaController MediaController { get; }
     [Net]
     public ProjectorEntity ProjectorEntity { get; set; }
+    [Net]
+    public IList<PointLightEntity> Lights { get; set; }
+    [Net]
+    public IList<Entity> Speakers { get; set; }
+    public float LightDimmingTime { get; set; } = 5.0f;
+    private float MaxLightBrightness { get; set; }
+    private float DesiredLightBrightness { get; set; }
+    private float CurrentLightBrightness { get; set; }
+    private List<SoundHandle> ActiveSoundHandles { get; set; } = new();
+
+    /// <summary>
+    /// Speaker channel conforming to MP3/WAV/FLAC part of ANSI/CEA-863-A.
+    /// </summary>
+    public enum SpeakerChannel : int
+    {
+        FrontLeft = 0,
+        FrontRight,
+        Center,
+        Subwoofer,
+        SideLeft,
+        SideRight,
+        RearLeft,
+        RearRight
+    }
 
     /// <summary>
     /// Returns true if this zone has a projector and media controller.
@@ -34,6 +61,97 @@ public partial class CinemaZone : BaseTrigger
     {
         ProjectorEntity = Projector.GetTarget<ProjectorEntity>();
         Components.Create<MediaController>();
+
+        InitializeLights();
+        InitializeSpeakers();
+    }
+
+    [GameEvent.Tick.Server]
+    public void OnServerTick()
+    {
+        if (CurrentLightBrightness != DesiredLightBrightness)
+        {
+            var delta = Time.Delta / LightDimmingTime * MaxLightBrightness;
+            CurrentLightBrightness = MathX.Approach(CurrentLightBrightness, DesiredLightBrightness, delta);
+            foreach(var light in Lights)
+            {
+                light.Brightness = CurrentLightBrightness;
+                // Turn off lights if the brightness is zero.
+                light.Enabled = CurrentLightBrightness > 0;
+            }
+        }
+    }
+
+    private void InitializeLights()
+    {
+        Lights = Children
+            .OfType<PointLightEntity>()
+            .ToList();
+        // TODO: Also fetch spotlights, perhaps even make an interface for lights and adapter
+        // for each concrete light type so that we can perform common operations on each.
+
+        // Since movies aren't playing at the start, lights should be enabled at first.
+        SetLightsEnabled(true);
+
+        if (Lights.Any())
+        {
+            MaxLightBrightness = Lights.Sum(l => l.Brightness) / Lights.Count();
+            CurrentLightBrightness = MaxLightBrightness;
+            DesiredLightBrightness = CurrentLightBrightness;
+        }
+    }
+
+    private void InitializeSpeakers()
+    {
+        var speakers = Children
+                .Where(c => c.Tags.Has("speaker"));
+
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("front") && s.Tags.Has("left")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("front") && s.Tags.Has("right")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("center")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("subwoofer")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("side") && s.Tags.Has("left")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("side") && s.Tags.Has("right")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("rear") && s.Tags.Has("left")));
+        Speakers.Add(speakers.FirstOrDefault(s => s.Tags.Has("rear") && s.Tags.Has("right")));
+    }
+
+    public void SetLightsEnabled(bool newValue)
+    {
+        DesiredLightBrightness = newValue ? MaxLightBrightness : 0.0f;
+    }
+
+    public bool HasSpeaker(SpeakerChannel channel)
+    {
+        return Speakers[(int)channel] != null;
+    }
+
+    public Entity GetSpeaker(SpeakerChannel channel)
+    {
+        return Speakers[(int)channel];
+    }
+
+    public void PlayAudioOnSpeaker(IVideoPresenter presenter, SpeakerChannel channel)
+    {
+        var speaker = GetSpeaker(channel);
+        if (speaker == null)
+        {
+            Log.Info($"Speaker {channel.ToString()} is null");
+        }
+        var hSnd = presenter.PlayAudio(speaker).Value;
+        ActiveSoundHandles.Add(hSnd);
+    }
+
+    public void PlayAudioOnSpeaker(IVideoPresenter presenter, int channel)
+        => PlayAudioOnSpeaker(presenter, (SpeakerChannel)channel);
+
+    public void StopAllSpeakerAudio()
+    {
+        foreach (var hSnd in ActiveSoundHandles)
+        {
+            hSnd.Stop(true);
+        }
+        ActiveSoundHandles.Clear();
     }
 
     public override void OnTouchStart(Entity toucher)

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Sandbox;
 using CinemaTeam.Plugins.Video;
+using System;
 
 namespace Cinema;
 
@@ -20,6 +21,16 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [Net]
     public TimeSince StartedPlaying { get; protected set; }
 
+    public event EventHandler StartPlaying;
+    public event EventHandler StopPlaying;
+
+    [GameEvent.Entity.PostSpawn]
+    public void OnPostSpawn()
+    {
+        StartPlaying += (_,_) => Zone.SetLightsEnabled(false);
+        StopPlaying += (_,_) => Zone.SetLightsEnabled(true);
+    }
+
     [ConCmd.Server]
     public async static void RequestMedia(int zoneId, int clientId, int providerId, string request)
     {
@@ -32,10 +43,33 @@ public partial class MediaController : EntityComponent<CinemaZone>
         }
         var provider = VideoProviderManager.Instance[providerId];
         controller.CurrentMedia = await provider.CreateRequest(client, request);
+        controller.StartPlaying?.Invoke(controller, null);
+    }
+
+    [ConCmd.Server]
+    public static void StopMedia(int zoneId, int clientId)
+    {
+        var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
+        var controller = zone.MediaController;
+        IClient client = null;
+        if (clientId > 0)
+        {
+            client = Sandbox.Entity.FindByIndex(clientId) as IClient;
+        }
+        controller.CurrentMedia = null;
+        controller.StopPlaying?.Invoke(controller, null);
     }
 
     public async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
     {
+        if (newValue != null)
+        {
+            StartPlaying?.Invoke(this, null);
+        }
+        else
+        {
+            StopPlaying?.Invoke(this, null);
+        }
         await PlayCurrentMedia();
     }
 
@@ -46,17 +80,39 @@ public partial class MediaController : EntityComponent<CinemaZone>
             return;
 
         CurrentVideoPlayer?.Stop();
-        Projector?.StopOverheadAudio();
+        StopAudio();
 
         if (CurrentMedia == null)
+        {
+            Projector?.SetMedia(null);
             return;
+        }
 
         CurrentVideoPlayer = await CurrentMedia.GetPlayer();
         Projector?.SetMedia(CurrentVideoPlayer);
-        // Once we have the ability to play each audio channel at a different position in the world,
-        // we should branch here depending on whether the current CinemaZone has speakers.
-        // For now, the sound just plays somewhere over the audience's heads.
-        Projector?.PlayOverheadAudio();
+        PlayAudio();
+    }
+
+    protected void PlayAudio()
+    {
+        var centerChannel = CinemaZone.SpeakerChannel.Center;
+        if (Zone.HasSpeaker(centerChannel))
+        {
+            CurrentVideoPlayer.PlayAudio(Zone.GetSpeaker(centerChannel));
+        }
+        else
+        {
+            // Once we have the ability to play each audio channel at a different position in the world,
+            // we should branch here depending on whether the current CinemaZone has speakers.
+            // For now, the sound just plays somewhere over the audience's heads.
+            Projector?.PlayOverheadAudio();
+        }
+    }
+
+    protected void StopAudio()
+    {
+        Zone.StopAllSpeakerAudio();
+        Projector?.StopOverheadAudio();
     }
 
 }
