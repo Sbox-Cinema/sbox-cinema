@@ -1,9 +1,9 @@
 {
   "ClassName": "Soda",
   "ViewModel": "models/papercup/walker/v_papercup_blue.vmdl",
-  "ItemName": "Cup of Soda",
-  "UniqueId": "soda-blue",
-  "Description": "A delicious taste of soda",
+  "ItemName": "Cup of Soda (Mion Pisz)",
+  "UniqueId": "soda-mionpisz",
+  "Description": "A delicious taste of Mion Pisz",
   "Icon": "ui/icons/soda.png",
   "WorldModel": "models/papercup/walker/w_papercup_blue.vmdl",
   "Tags": []

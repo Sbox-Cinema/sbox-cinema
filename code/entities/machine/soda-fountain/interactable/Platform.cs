@@ -1,8 +1,8 @@
-﻿using Conna.Inventory;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 using Sandbox.util;
-using System.Collections.Generic;
-using System.Linq;
+using Conna.Inventory;
 
 namespace Cinema;
 
@@ -38,14 +38,19 @@ public class Platform : BaseInteractable
     }
     private void AddCup(Slot slot)
     {
-        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+        var dispenserKey = $"Dispenser{slot.Index + 1}";
+        var dispenser = (Parent as SodaFountain).Interactables[dispenserKey] as Dispenser;
 
         // Don't add cup if the dispenser is already dispensing
         if (dispenser.IsDispensing) return;
-        
-        var cup = new CupFillable(dispenser);
-        cup.Transform = GetParentTransform(slot.Attachment);
-        cup.Parent = Parent;
+
+        var cup = new CupFillable(dispenser)
+        {
+            Transform = GetParentTransform(slot.Attachment),
+            Parent = Parent
+        };
+
+        cup.SetCupColor(dispenser.SodaType);
 
         // Set slot's entity to cup
         slot.Entity = cup;
@@ -77,7 +82,6 @@ public class Platform : BaseInteractable
         {
             if (!slot.Entity.IsValid())
             {
-                // Add cup to this slot
                 AddCup(slot);
 
                 break;
@@ -85,49 +89,44 @@ public class Platform : BaseInteractable
 
             if (distance < MaxDistanceTarget)
             { 
-                if(slot.Entity is CupFillable cup) {
-
-                    if (cup.CanPickup())
-                    {
-                        // Remove entity from this slot
-                        slot.Entity.Delete();
-
-                        // Pickup cup
-                        if ((slot.Entity as CupFillable).GetMaterialGroup() == (int)CupFillable.CupColor.Blue)
-                        {
-                            var cupCarriable = InventorySystem.CreateItem("soda-blue");
-                            player.PickupItem(cupCarriable);
-                        } 
-                        else if((slot.Entity as CupFillable).GetMaterialGroup() == (int)CupFillable.CupColor.Green)
-                        {
-                            var cupCarriable = InventorySystem.CreateItem("soda-green");
-                            player.PickupItem(cupCarriable);
-                        }
-                        else if ((slot.Entity as CupFillable).GetMaterialGroup() == (int)CupFillable.CupColor.Red)
-                        {
-                            var cupCarriable = InventorySystem.CreateItem("soda-red");
-                            player.PickupItem(cupCarriable);
-                        }
-                        else if ((slot.Entity as CupFillable).GetMaterialGroup() == (int)CupFillable.CupColor.Black)
-                        {
-                            var cupCarriable = InventorySystem.CreateItem("soda-black");
-                            player.PickupItem(cupCarriable);
-                        }
-                        else
-                        {
-                            var cupCarriable = InventorySystem.CreateItem(CupItemUniqueId);
-                            player.PickupItem(cupCarriable);
-                        }
-                        
-                        // Remove cup from dispenser parent
-                        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
-                        dispenser.Cup?.Delete();
-                    }
+                if(slot.Entity is CupFillable cup && cup.CanPickup()) 
+                {
+                    PickupCup(slot, player);   
                 }
 
                 break;
             }
         }
+    }
+
+    private void PickupCup(Slot slot, Player player)
+    {
+        var cupColor = (slot.Entity as CupFillable).GetMaterialGroup();
+
+        switch (cupColor)
+        {
+            case (int)CupFillable.MaterialGroup.Red:
+                player.PickupItem(InventorySystem.CreateItem("soda-conk"));
+                break;
+            case (int)CupFillable.MaterialGroup.Blue:
+                player.PickupItem(InventorySystem.CreateItem("soda-mionpisz"));
+                break;
+            case (int)CupFillable.MaterialGroup.Green:
+                player.PickupItem(InventorySystem.CreateItem("soda-spooge"));
+                break;
+            default:
+                player.PickupItem(InventorySystem.CreateItem(CupItemUniqueId));
+                break;
+        }
+
+        // Remove entity from this slot
+        slot.Entity.Delete();
+
+        // Remove cup from dispenser parent
+        var dispenserKey = $"Dispenser{slot.Index + 1}";
+
+        var dispenser = (Parent as SodaFountain).Interactables[dispenserKey] as Dispenser;
+        dispenser.Cup?.Delete();
     }
     private Transform GetParentTransform(string attachment)
     {

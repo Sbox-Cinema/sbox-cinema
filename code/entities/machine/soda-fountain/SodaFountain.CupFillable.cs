@@ -1,12 +1,10 @@
 ﻿using Sandbox;
-using System;
 
 namespace Cinema;
 
-
 public partial class CupFillable : ModelEntity
 {
-    public enum CupColor : int
+    public enum MaterialGroup : int
     {
         Default = 0,
         Blue = 1,
@@ -17,6 +15,7 @@ public partial class CupFillable : ModelEntity
 
     public Dispenser DispenserParent { get; set; }
     private bool IsAssembled { get; set; }
+
     public CupFillable() //For the compiler...
     {
        
@@ -26,6 +25,7 @@ public partial class CupFillable : ModelEntity
         DispenserParent = dispenserParent;
         DispenserParent.Cup = this;
     }
+
     public override void Spawn()
     {
         base.Spawn();
@@ -35,15 +35,24 @@ public partial class CupFillable : ModelEntity
         SetModel("models/papercup/walker/sodafountaincup/papercup.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Static);
+    }
 
-        // Make cup a random color on spawn
-        Random random = new Random();
-        SetMaterialGroup(random.Next(0, 5));
-    }
-    protected override void OnDestroy()
+    public void SetCupColor(SodaFountain.SodaType type)
     {
-        base.OnDestroy();
+        switch(type)
+        {
+            case SodaFountain.SodaType.Conk:
+                SetMaterialGroup((int)MaterialGroup.Red);
+                break;
+            case SodaFountain.SodaType.MionPisz:
+                SetMaterialGroup((int)MaterialGroup.Blue);
+                break;
+            case SodaFountain.SodaType.Spooge:
+                SetMaterialGroup((int)MaterialGroup.Green);
+                break;
+        }
     }
+
     public bool CanPickup()
     {
         return !DispenserParent.IsDispensing && IsAssembled;

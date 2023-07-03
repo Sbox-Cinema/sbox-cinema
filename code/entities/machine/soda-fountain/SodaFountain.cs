@@ -1,8 +1,7 @@
-﻿using Conna.Inventory;
+﻿using System.Collections.Generic;
 using Editor;
 using Sandbox;
 using Sandbox.util;
-using System.Collections.Generic;
 
 namespace Cinema;
 
@@ -11,6 +10,13 @@ namespace Cinema;
 [EditorModel("models/sodafountain/sodafountain_01.vmdl")]
 public partial class SodaFountain : AnimatedEntity, ICinemaUse
 {
+    public enum SodaType : int
+    {
+        Conk = 0,
+        MionPisz = 1,
+        Spooge = 2
+    }
+
     [Net] public IDictionary<string, BaseInteractable> Interactables { get; set; }
 
     /// <summary>
@@ -35,17 +41,17 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
 
     public void AddInteractables()
     {
-        Interactables.Add("Dispenser1", new Dispenser("Lever1State", "particles/soda_fountain/walker/sodafill2_conk_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf")
+        Interactables.Add("Dispenser1", new Dispenser("Lever1State", SodaType.Conk)
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_1")
         );
 
-        Interactables.Add("Dispenser2", new Dispenser("Lever2State", "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf")
+        Interactables.Add("Dispenser2", new Dispenser("Lever2State", SodaType.MionPisz)
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_2")
         );
 
-        Interactables.Add("Dispenser3", new Dispenser("Lever3State", "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf", "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf")
+        Interactables.Add("Dispenser3", new Dispenser("Lever3State", SodaType.Spooge)
         .SetParent(this)
         .SetBoundsFromInteractionBox("tap_3")
         );
