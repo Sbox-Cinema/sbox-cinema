@@ -130,6 +130,8 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
         Occupant.SetParent(this);
         Occupant.CurrentFovOverride = 60f;
+        // We have to "use" empty space to leave the chair, so suppress the boop.
+        Occupant.ShouldPlaySoundOnUseFail = false;
         Occupant.LocalPosition = SeatOffset;
         Occupant.SetAnimParameter("sit", 1);
 
@@ -158,6 +160,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
         Occupant.SetParent(null);
         Occupant.CurrentFovOverride = 0f;
+        Occupant.ShouldPlaySoundOnUseFail = true;
         Occupant.Position = Transform.PointToWorld(EjectOffset);
         Occupant.BodyController.Active = true;
         var chairComponent = Occupant.Components.Get<ChairController>();

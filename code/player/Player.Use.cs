@@ -13,6 +13,7 @@ public partial class Player
     public Vector3 UsePoint { get; protected set; }
     public float InteractRange => 85;
     public bool HideUsePrompt { get; set; } = false;
+    public bool ShouldPlaySoundOnUseFail { get; set; } = true;
     public bool IsUsingSomething => Using != null;
 
     public bool IsUseDisabled()
@@ -167,7 +168,8 @@ public partial class Player
     /// </summary>
     protected virtual void UseFail()
     {
-        PlaySound("player_use_fail");
+        if (ShouldPlaySoundOnUseFail)
+            PlaySound("player_use_fail");
     }
 
     /// <summary>
