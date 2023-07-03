@@ -70,10 +70,10 @@ public partial class ProjectorEntity
     public bool CanSeeProjector(Vector3 pos)
     {
         // Orphaned projectors can't play media, so return null.
-        if (Area == null)
+        if (Zone == null)
             return false;
 
-        var inside = Area.WorldSpaceBounds.Contains(pos);
+        var inside = Zone.WorldSpaceBounds.Contains(pos);
         return inside;
     }
 

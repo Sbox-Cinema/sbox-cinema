@@ -23,7 +23,7 @@ public partial class ProjectorEntity : Entity
     // TODO: Persist VolumeScale clientside.
 
     [Net]
-    public CinemaZone Area { get; set; }
+    public CinemaZone Zone { get; set; }
     protected SoundHandle? CurrentOverheadSound { get; set; }
     protected Vector3 OverheadAudioPosition => Position + Rotation.Forward * (ScreenDistance / 2);
 
@@ -42,8 +42,8 @@ public partial class ProjectorEntity : Entity
     [GameEvent.Entity.PostSpawn]
     protected void PostSpawn()
     {
-        Area = All.OfType<CinemaZone>().FirstOrDefault(area => area.ProjectorEntity == this);
-        if (Area == null)
+        Zone = All.OfType<CinemaZone>().FirstOrDefault(area => area.ProjectorEntity == this);
+        if (Zone == null)
         {
             Log.Info($"Map error: projector {Name} does not belong to a CinemaZone.");
         }
@@ -82,6 +82,11 @@ public partial class ProjectorEntity : Entity
         ProjectCurrentMedia();
     }
 
+    /// <summary>
+    /// Plays the audio from the current media at the midpoint between the projector
+    /// and the screen, which should sound like it's coming from above the audience.
+    /// This is meant as a fallback option for audio in theaters that lack speakers.
+    /// </summary>
     public void PlayOverheadAudio()
     {
         if (CurrentMedia == null)
@@ -95,6 +100,10 @@ public partial class ProjectorEntity : Entity
         CurrentOverheadSound = hSnd;
     }
 
+    /// <summary>
+    /// Stop whatever audio might be playing overhead as the result of a 
+    /// previous call to <c>PlayOverheadAudio</c>.
+    /// </summary>
     public void StopOverheadAudio()
     {
         CurrentOverheadSound?.Stop(true);

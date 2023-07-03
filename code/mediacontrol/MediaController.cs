@@ -4,6 +4,11 @@ using CinemaTeam.Plugins.Video;
 
 namespace Cinema;
 
+/// <summary>
+/// Manages the presentation and playback state of the currently selected media 
+/// in a CinemaZone. It is called by the media queue, and calls the projector and
+/// speakers of a CinemaZone.
+/// </summary>
 public partial class MediaController : EntityComponent<CinemaZone>
 {
     public CinemaZone Zone => Entity;
