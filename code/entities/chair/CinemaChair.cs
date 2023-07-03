@@ -127,6 +127,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         }
 
         Occupant.SetParent(this);
+        Occupant.CurrentFovOverride = 60f;
         Occupant.LocalPosition = SeatOffset;
         Occupant.SetAnimParameter("sit", 1);
 
@@ -154,6 +155,7 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
         }
 
         Occupant.SetParent(null);
+        Occupant.CurrentFovOverride = 0f;
         Occupant.Position = Transform.PointToWorld(EjectOffset);
         Occupant.BodyController.Active = true;
         var chairComponent = Occupant.Components.Get<ChairController>();

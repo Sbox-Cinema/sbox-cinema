@@ -19,6 +19,8 @@ public partial class ChairController : PlayerController
         base.OnActivate();
 
         SinceActivated = 0f;
+        Entity.EyeRotation = Rotation.Identity;
+        Entity.LookInput = Angles.Zero;
     }
 
     protected TimeSince SinceActivated { get; set; }

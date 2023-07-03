@@ -4,12 +4,22 @@ namespace Cinema;
 
 public partial class Player
 {
+    [Net]
+    public float CurrentFovOverride { get; set; } = 0f;
     public void SimulateCamera(IClient cl)
     {
         Camera.Rotation = EyeRotation;
 
-        // Set field of view to whatever the user chose in options
-        Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        if (CurrentFovOverride > 0f)
+        {
+            // Some game mechanic (e.g. sitting in a chair) has overridden the field of view.
+            Camera.FieldOfView = Screen.CreateVerticalFieldOfView(CurrentFovOverride);
+        }
+        else
+        {
+            // Set field of view to whatever the user chose in options.
+            Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        }
 
         if (ThirdPersonCamera)
         {
@@ -47,7 +57,5 @@ public partial class Player
                 carriable.UpdateCamera();
             }
         }
-
-
     }
 }
