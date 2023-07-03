@@ -13,7 +13,6 @@ public interface IMediaSelector
 {
     public class MediaRequestEventArgs : EventArgs
     {
-        public int ProviderId { get; init; }
         public string Query { get; init; }
     }
 

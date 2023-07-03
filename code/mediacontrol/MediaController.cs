@@ -40,8 +40,6 @@ public partial class MediaController : EntityComponent<CinemaZone>
         if (!Game.IsClient)
             return;
 
-        Log.Info("Request is null: " + (CurrentMedia == null));
-
         CurrentVideoPlayer?.Stop();
         Projector?.StopOverheadAudio();
 

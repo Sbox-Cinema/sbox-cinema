@@ -11,6 +11,11 @@ namespace CinemaTeam.Plugins.Video;
 /// </summary>
 public partial class MediaRequest : BaseNetworkable
 {
+    public MediaRequest()
+    {
+        
+    }
+
     public MediaRequest(MediaInfo mediaInfo = null) 
     {
         GenericInfo = mediaInfo;

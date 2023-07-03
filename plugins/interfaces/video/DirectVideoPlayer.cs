@@ -18,12 +18,12 @@ public class DirectVideoPlayer : IVideoPlayer
         var url = requestData["Url"];
         VideoPlayer.OnLoaded += () =>
         {
-            Log.Info("Video loaded.");
+            Log.Trace("Video loaded.");
             VideoLoaded = true;
         };
         VideoPlayer.OnAudioReady += () =>
         {
-            Log.Info("Audio loaded.");
+            Log.Trace("Audio loaded.");
             AudioLoaded = true;
         };
         PlayUrl(url);

@@ -94,7 +94,7 @@ public partial class ProjectorEntity
         // If the projection texture changed, remake the projector and bounce lights.
         if (InputTexture != LastInputTexture)
         {
-            Log.Info($"{Name} - Projection texture changed.");
+            Log.Trace($"{Name} - Projection texture changed.");
             InitializeProjection();
         }
         LastInputTexture = InputTexture;

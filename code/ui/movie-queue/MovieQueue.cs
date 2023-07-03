@@ -65,7 +65,10 @@ public partial class MovieQueue : Panel, IMenuScreen
             MediaProviderHeaderContainer.DeleteChildren(true);
             var header = selector.HeaderPanel;
             MediaProviderHeaderContainer.AddChild(header);
-            header.RequestMedia += (s, e) => OnQueue(e.ProviderId, e.Query);
+            var providerId = VideoProviderManager.Instance.GetKey(provider);
+            // Log the provider id
+            Log.Info($"Provider ID: {providerId}");
+            header.RequestMedia += (s, e) => OnQueue(providerId, e.Query);
         }
     }
 

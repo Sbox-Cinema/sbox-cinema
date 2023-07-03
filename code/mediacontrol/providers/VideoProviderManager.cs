@@ -47,7 +47,6 @@ public class VideoProviderManager
     {
         get
         {
-            Log.Info(key);
             if (!Providers.ContainsKey(key))
             {
                 return null;
@@ -83,7 +82,7 @@ public class VideoProviderManager
     /// <param name="provider"></param>
     /// <returns></returns>
     public int GetKey(IMediaProvider provider)
-        => Providers.FirstOrDefault(p => p.Value.GetType() == provider.GetType()).Key;
+        => Providers.FirstOrDefault(p => p.Value.TargetType == provider.GetType()).Key;
 
     public IEnumerable<IMediaProvider> GetAll()
         => Providers.Values.Select(t => t.Create<IMediaProvider>());
