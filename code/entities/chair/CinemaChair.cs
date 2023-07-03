@@ -102,11 +102,13 @@ public partial class CinemaChair : AnimatedEntity, ICinemaUse
 
     public bool IsUsable(Entity user)
     {
-        // Make sure the user is a Player and there's no one in the seat.
-        if (!(user as Player).IsValid || IsOccupied)
-        {
+        if (user is not Player ply)
             return false;
-        }
+
+        // If this seat is occupied or the player is sitting, don't have the player sit here.
+        if (IsOccupied || ply.ActiveController is ChairController)
+            return false;
+
         var direction = (user.Position - Position).Normal;
         var angle = direction.Dot(Rotation.Forward);
         // Check whether the player is in front of the seat.
