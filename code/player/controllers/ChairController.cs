@@ -19,8 +19,18 @@ public partial class ChairController : PlayerController
         base.OnActivate();
 
         SinceActivated = 0f;
-        Entity.EyeRotation = Rotation.Identity;
-        Entity.LookInput = Angles.Zero;
+
+        var projector = Entity.GetCurrentTheaterZone()?.ProjectorEntity;
+        if (projector != null )
+        {
+            var direction = projector.ScreenPosition - (Chair.Position + Vector3.Up * 72f);
+            Entity.EyeRotation = Rotation.LookAt(direction);
+        }
+        else
+        {
+            Entity.EyeRotation = Rotation.Identity;
+        }
+        Entity.LookInput = Entity.EyeRotation.Angles().WithRoll(0);
     }
 
     protected TimeSince SinceActivated { get; set; }
