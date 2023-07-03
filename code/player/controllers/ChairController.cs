@@ -23,7 +23,7 @@ public partial class ChairController : PlayerController
         var projector = Entity.GetCurrentTheaterZone()?.ProjectorEntity;
         if (projector != null )
         {
-            var direction = projector.ScreenPosition - (Chair.Position + Vector3.Up * 72f);
+            var direction = projector.ScreenPosition - (Entity.Position + Vector3.Up * 72f);
             Entity.EyeRotation = Rotation.LookAt(direction);
         }
         else
