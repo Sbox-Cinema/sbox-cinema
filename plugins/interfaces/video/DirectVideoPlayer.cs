@@ -72,7 +72,7 @@ public class DirectVideoPlayer : IVideoPlayer
     {
         Texture?.Dispose();
         Texture = Texture.Create((int)size.x, (int)size.y, ImageFormat.RGBA8888)
-                                    .WithName("web-surface-texture")
+                                    .WithName("direct-video-player-texture")
                                     .WithDynamicUsage()
                                     .Finish();
     }

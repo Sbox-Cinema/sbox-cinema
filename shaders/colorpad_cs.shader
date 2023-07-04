@@ -55,16 +55,27 @@ CS
         uint2 inputSize;
         g_tInput.GetDimensions(inputSize.x, inputSize.y);
         float aspectRatio = float(inputSize.x) / inputSize.y;
-        float halfPadRatio = g_flPadRatio / 2;
-        if (normalizedCoordinates.x < halfPadRatio / aspectRatio || normalizedCoordinates.x > 1 - halfPadRatio / aspectRatio)
-            return;
-        if (normalizedCoordinates.y < halfPadRatio || normalizedCoordinates.y > 1 - halfPadRatio)
-            return;
+        if (aspectRatio > 1)
+        {
+            float halfPadRatio = g_flPadRatio / 2;
+            if (normalizedCoordinates.x < halfPadRatio / aspectRatio || normalizedCoordinates.x > 1 - halfPadRatio / aspectRatio)
+                return;
+            if (normalizedCoordinates.y < halfPadRatio || normalizedCoordinates.y > 1 - halfPadRatio )
+                return;
+        }
+        else
+        {
+            float halfPadRatio = g_flPadRatio / 2;
+            if (normalizedCoordinates.x < halfPadRatio || normalizedCoordinates.x > 1 - halfPadRatio)
+                return;
+            if (normalizedCoordinates.y < halfPadRatio * aspectRatio || normalizedCoordinates.y > 1 - halfPadRatio * aspectRatio)
+                return;
+        }
 
     
         float2 subCoords;
         subCoords.x = lerp(0 - g_flPadRatio / aspectRatio, 1 + g_flPadRatio / aspectRatio, normalizedCoordinates.x);
-        subCoords.y = lerp(0 - g_flPadRatio, 1 + g_flPadRatio, normalizedCoordinates.y);
+        subCoords.y = lerp(0 - g_flPadRatio * aspectRatio, 1 + g_flPadRatio * aspectRatio, normalizedCoordinates.y);
 
         // Figure out where we would be pulling from on the input texture.
         uint2 inputCoordinates;
