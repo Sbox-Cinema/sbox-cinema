@@ -58,7 +58,7 @@
         "MapName": "ducc/cinema_test_ducc_02.vmap",
         "MaxPlayers": 1,
         "GameSettings": {},
-        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local",
+        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
       }

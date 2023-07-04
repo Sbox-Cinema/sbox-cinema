@@ -53,7 +53,7 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
 
     public async Task<IVideoPlayer> Play(MediaRequest requestData)
     {
-        var player = new YouTubeVideoPlayer(requestData);
+        var player = new YouTubeVideoPlayer();
         await player.InitializePlayer(requestData);
         return player;
     }
@@ -87,7 +87,7 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
                 .FirstOrDefault(s => s.AudioCodec != null) ?? streams.FirstOrDefault();
         }
         var url = bestStream?.Url;
-        Log.Trace($"Playing \"{bestStream?.VideoQualityLabel ?? null}\" quality video : " + url);
+        Log.Trace($"Playing \"{bestStream?.VideoWidth}x{bestStream?.VideoHeight}, {bestStream?.VideoFramerate} FPS, bitrate {bestStream?.Bitrate}, audio codec {bestStream?.AudioCodec}: " + url);
         return url;
     }
 }

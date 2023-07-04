@@ -1,63 +1,96 @@
 ﻿using Sandbox;
+using System;
 using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
+
 public class DirectVideoPlayer : IVideoPlayer
 {
-    public DirectVideoPlayer(MediaRequest requestData)
+    public DirectVideoPlayer()
     {
         Event.Register(this);
     }
-    
+
+    public virtual Texture Texture { get; protected set; }
+
+    protected virtual VideoPlayer VideoPlayer { get; set; }
+    protected string VideoPath { get; set; }
+    protected SoundHandle? CurrentlyPlayingAudio;
+    protected IEntity CurrentSoundSource { get; set; }
+    protected bool IsInitializing { get; set; }
     protected bool VideoLoaded { get; set; }
     protected bool AudioLoaded { get; set; }
+    protected TimeSince VideoLastUpdated { get; set; }
+
 
     public virtual async Task InitializePlayer(MediaRequest requestData)
     {
-        VideoPlayer = new VideoPlayer();
-        var url = requestData["Url"];
-        VideoPlayer.OnLoaded += async () =>
+        VideoPath = requestData["Url"];
+        IsInitializing = true;
+        Stop();
+        Play(VideoPath);
+        await WaitUntilReady();
+    }
+
+    protected virtual async Task WaitUntilReady()
+    {
+        if (!IsInitializing)
+            return;
+
+        while (!(VideoLoaded && AudioLoaded))
         {
-            Log.Trace("Video loaded.");
-            // It's possible that after the video is loaded, the texture is still 1x1 pixels.
-            if (Texture.Width == 1 && Texture.Height == 1)
-            {
-                const int maxTries = 5;
-                // We just spin for a few frames to see if the texture gets bigger.
-                for (int i = 0; i < maxTries; i++)
-                {
-                    Log.Trace($"Video is {Texture.Width}x{Texture.Height} now.");
-                    await GameTask.DelaySeconds(Time.Delta);
-                    if (Texture.Width > 1 && Texture.Height > 1)
-                        break;
-                }
-            }
-            Log.Trace("Video loaded.");
-            VideoLoaded = true;
-        };
+            await GameTask.DelaySeconds(Time.Delta);
+        }
+        IsInitializing = false;
+    }
+
+    protected virtual void Play(string url)
+    {
+        VideoPlayer = new VideoPlayer();
         VideoPlayer.OnAudioReady += () =>
         {
             Log.Trace("Audio loaded.");
             AudioLoaded = true;
         };
-        PlayUrl(url);
-        while (!(VideoLoaded && AudioLoaded))
-        {
-            await GameTask.DelaySeconds(Time.Delta);
-        }
-    }
-
-    protected virtual void PlayUrl(string url)
-    {
+        VideoPlayer.OnTextureData += OnTextureData;
         VideoPlayer.Play(url);
     }
 
-    protected virtual VideoPlayer VideoPlayer { get; set; }
-
-    public virtual Texture Texture => VideoPlayer?.Texture;
-    public virtual SoundHandle? PlayAudio(IEntity entity)
+    protected virtual void OnTextureData(ReadOnlySpan<byte> span, Vector2 size)
     {
-        return VideoPlayer?.PlayAudio(entity);
+        VideoLoaded = true;
+        VideoLastUpdated = 0;
+        if (Texture == null || Texture.Size != size)
+        {
+            InitializeTexture(size);
+        }
+
+        Texture.Update(span, 0, 0, (int)size.x, (int)size.y);
+    }
+
+    protected virtual void InitializeTexture(Vector2 size)
+    {
+        Texture?.Dispose();
+        Texture = Texture.Create((int)size.x, (int)size.y, ImageFormat.RGBA8888)
+                                    .WithName("web-surface-texture")
+                                    .WithDynamicUsage()
+                                    .Finish();
+    }
+
+    public virtual SoundHandle PlayAudio(IEntity entity)
+    {
+        if (VideoPlayer == null)
+            return default;
+
+        CurrentlyPlayingAudio?.Stop(true);
+        CurrentSoundSource = entity;
+        CurrentlyPlayingAudio = VideoPlayer.PlayAudio(CurrentSoundSource);
+        if (CurrentlyPlayingAudio.HasValue)
+        {
+            var hSnd = CurrentlyPlayingAudio.Value;
+            hSnd.Volume = Config.DefaultMediaVolume;
+        }
+        return CurrentlyPlayingAudio ?? default;
     }
 
     public virtual void Resume()
@@ -86,14 +119,37 @@ public class DirectVideoPlayer : IVideoPlayer
         if (VideoPlayer == null)
             return;
 
+        CurrentlyPlayingAudio?.Stop(true);
+        AudioLoaded = false;
         VideoPlayer.Stop();
         VideoPlayer.Dispose();
+        VideoLoaded = false;
         VideoPlayer = null;
+    }
+
+    protected virtual void Refresh()
+    {
+        IsInitializing = true;
+        var currentTime = VideoPlayer.PlaybackTime;
+        Stop();
+        Play(VideoPath);
+        GameTask.RunInThreadAsync(async () =>
+        {
+            await WaitUntilReady();
+            Seek(currentTime);
+            PlayAudio(CurrentSoundSource);
+        });
     }
 
     [GameEvent.Client.Frame]
     public void OnFrame()
     {
         VideoPlayer?.Present();
+        if (VideoLoaded && VideoLastUpdated > 0.25f)
+        {
+            Log.Info("Video hitch detected. Seeking to current time.");
+            VideoLoaded = false;
+            Refresh();
+        }
     }
 }

@@ -94,7 +94,7 @@ public partial class ProjectorEntity : Entity
 
         StopOverheadAudio();
         var soundPosition = OverheadAudioPosition;
-        var hSnd = CurrentMedia.PlayAudio(null).Value;
+        var hSnd = CurrentMedia.PlayAudio(null);
         hSnd.Position = soundPosition;
         hSnd.Volume = VolumeScale;
         CurrentOverheadSound = hSnd;

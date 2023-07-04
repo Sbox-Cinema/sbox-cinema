@@ -124,7 +124,7 @@ public partial class CinemaZone : BaseTrigger
         {
             Log.Info($"Speaker {channel.ToString()} is null");
         }
-        var hSnd = presenter.PlayAudio(speaker).Value;
+        var hSnd = presenter.PlayAudio(speaker);
         ActiveSoundHandles.Add(hSnd);
     }
 

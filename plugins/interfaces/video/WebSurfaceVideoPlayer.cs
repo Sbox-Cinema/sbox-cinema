@@ -46,10 +46,10 @@ public partial class WebSurfaceVideoPlayer : IVideoPlayer
                                     .Finish();
     }
 
-    public virtual SoundHandle? PlayAudio(IEntity entity)
+    public virtual SoundHandle PlayAudio(IEntity entity)
     {
         // WebSurface will never play positional audio.
-        return null;
+        return default;
     }
 
     public virtual void Resume() { }

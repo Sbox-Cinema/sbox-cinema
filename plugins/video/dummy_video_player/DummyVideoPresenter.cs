@@ -24,7 +24,7 @@ public class DummyVideoPresenter : IVideoPresenter
         Event.Register(this);
     }
 
-    public SoundHandle? PlayAudio(IEntity entity)
+    public SoundHandle PlayAudio(IEntity entity)
     {
         return Audio.Play("waltz_of_the_flowers", entity);
     }
