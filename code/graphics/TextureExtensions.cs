@@ -36,12 +36,14 @@ public static class TextureExtensions
         GaussianBlurShader.Dispatch(toTex.Width, toTex.Height, 1);
     }
 
-    public static void DispatchColorPad(this Texture OutputTexture, Texture fromTex, Color padColor, float padRatio)
+    public static void DispatchColorPad(this Texture OutputTexture, Texture fromTex, Color padColor, 
+        float padRatio, float fitAspectRatio)
     {
         ColorPadShader.Attributes.Set("InputTexture", fromTex);
         ColorPadShader.Attributes.Set("OutputTexture", OutputTexture);
         ColorPadShader.Attributes.Set("PadColor", padColor);
         ColorPadShader.Attributes.Set("PadRatio", padRatio);
+        ColorPadShader.Attributes.Set("FitAspectRatio", fitAspectRatio);
         ColorPadShader.Dispatch(OutputTexture.Width, OutputTexture.Height, 1);
     }
 }

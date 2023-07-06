@@ -31,6 +31,7 @@ CS
 {
     // Padding ratio
     float g_flPadRatio < Attribute("PadRatio"); > ;
+    float g_flFitAspectRatio < Attribute("FitAspectRatio"); > ;
     // Padding color
     float4 g_flColor < Attribute("PadColor"); > ;
     // Input texture
@@ -65,9 +66,11 @@ CS
             paddedCoordinates.x = normalizedCoordinates.x / g_flPadRatio;
             // Instead of making x wider, make y shorter so there's a margin at the bottom.
             paddedCoordinates.y = normalizedCoordinates.y / (1 / aspectRatio) / g_flPadRatio;
-            //paddedCoordinates /= g_flPadRatio;
-            paddedCoordinates.x -= 0.5 / aspectRatio;
-            paddedCoordinates.y -= 0.5 * aspectRatio;
+            float aspectFitness = aspectRatio / g_flFitAspectRatio;
+            paddedCoordinates.x /= g_flPadRatio * aspectFitness;
+            paddedCoordinates.y /= g_flPadRatio * aspectFitness;
+            paddedCoordinates.x -= (1 - g_flPadRatio + (1 - aspectFitness));
+            paddedCoordinates.y -= (1 - (1 / aspectRatio * aspectFitness) + (1 - g_flPadRatio));
         }
         else // Vertical aspect ratio
         {
@@ -75,9 +78,9 @@ CS
             paddedCoordinates.y = normalizedCoordinates.y / g_flPadRatio;
             // In the next three lines of code, I multiply stuff by magic constants I pulled out of my butt.
             // Looks "good enough" for the YouTube short format.
-            paddedCoordinates *= 2.5;
-            paddedCoordinates.x -= 0.5 / aspectRatio * 3;
-            paddedCoordinates.y -= 0.5 * aspectRatio * 4.5;
+            paddedCoordinates *= 2;
+            paddedCoordinates.x -= 0.5 / aspectRatio * 1.6;
+            paddedCoordinates.y -= 0.5 * aspectRatio * 1.9;
         }
 
         if (paddedCoordinates.x < 0 || paddedCoordinates.x > 1)

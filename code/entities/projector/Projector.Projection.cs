@@ -9,7 +9,7 @@ namespace Cinema;
 public partial class ProjectorEntity
 {
     [ConVar.Client("projector.cookie.margin")]
-    public static float ProjectorLightCookieMargin { get; set; } = 0.7f;
+    public static float ProjectorLightCookieMargin { get; set; } = 0.93f;
     [ConVar.Client("projector.cookie.debug")]
     public static int ProjectorLightCookieDebug { get; set; } = 0;
 
@@ -41,10 +41,10 @@ public partial class ProjectorEntity
         }
         ProjectionLight?.Delete();
 
+        float largestDimension = Math.Max(InputTexture?.Width ?? 320, InputTexture?.Height ?? 320);
         var margin = Math.Clamp(ProjectorLightCookieMargin, 0.2f, 1.0f);
-        var lightCookieWidth = (int)((InputTexture?.Width ?? 320) / margin);
-        var lightCookieHeight = (int)((InputTexture?.Height ?? 180) / margin);
-        LightCookieTexture = TextureUtilities.CreateShaderTexture(lightCookieWidth, lightCookieHeight);
+        largestDimension /= margin;
+        LightCookieTexture = TextureUtilities.CreateShaderTexture((int)largestDimension, (int)largestDimension);
 
         ProjectionLight = new SpotLightEntity
         {
@@ -109,7 +109,12 @@ public partial class ProjectorEntity
         if (InputTexture == null || LightCookieTexture == null)
             return;
 
-        LightCookieTexture.DispatchColorPad(InputTexture, Color.Black, ProjectorLightCookieMargin);
+        LightCookieTexture.DispatchColorPad(
+            fromTex: InputTexture, 
+            padColor: ProjectorLightCookieDebug > 0 ? Color.Magenta : Color.Black, 
+            padRatio: ProjectorLightCookieMargin,
+            fitAspectRatio: ProjectionSize.x / ProjectionSize.y
+            );
 
         if (ProjectorLightCookieDebug > 0)
         {
@@ -119,19 +124,9 @@ public partial class ProjectorEntity
 
         float DebugOverlayTexture(Texture texture, Vector2 position)
         {
-            var isHorizontal = texture.Width > texture.Height;
             Vector2 overlaySize;
-            if (isHorizontal)
-            {
-                var aspectRatio = texture.Width / texture.Height;
-                overlaySize = new Vector2(200 * aspectRatio, 200 / aspectRatio);
-
-            }
-            else
-            {
-                var aspectRatio = texture.Height / texture.Width;
-                overlaySize = new Vector2(200 / aspectRatio, 200 * aspectRatio);
-            }
+            var aspectRatio = (float)texture.Width / (float)texture.Height;
+            overlaySize = new Vector2(200 * aspectRatio, 200);
             DebugOverlay.Texture(texture, new Rect(position, overlaySize));
             return overlaySize.x;
         }
@@ -164,8 +159,8 @@ public partial class ProjectorEntity
         var smallestSideSize = MathF.Min(ProjectionSize.x, ProjectionSize.y);
         var aspectRatio = largestSideSize / smallestSideSize;
         // Scale up the spotlight to try to fit the all corners of the screen,
-        // then half it for math reasons.
-        var spotLightRadius = largestSideSize * aspectRatio / 2f;
+        // then third (!?!?) it for... reasons?!?
+        var spotLightRadius = largestSideSize * aspectRatio / 3f;
         // Pretty much gets the visual angle/angular diameter of the screen as seen by the projector,
         // assuming you look at it head-on. Good enough approximation for now.
         var angle = MathF.Atan(spotLightRadius / ScreenDistance);
