@@ -3,12 +3,26 @@ using System;
 
 namespace Sandbox.util;
 
+public class Slot
+{
+    public Entity Entity { get; set; }
+    public string Attachment { get; set; }
+    public int Index { get; set; }
+
+    public int MaxDistanceTarget = 8; // This is the max distance to target the specific target
+    public Slot(int index, string attachment)
+    {
+        Index = index;
+        Attachment = attachment;
+    }
+}
+
 public class CanTriggerResults
 {
-    public CanTriggerResults(bool hit, float dist, BaseInteractable interactable)
+    public CanTriggerResults(bool hit, float distance, BaseInteractable interactable)
     {
         Hit = hit;
-        Distance = dist;
+        Distance = distance;
         Interactable = interactable;
     }
 
@@ -27,15 +41,14 @@ public partial class BaseInteractable : BaseNetworkable
     public Vector3 Mins { get; set; }
     [Net]
     public Vector3 Maxs { get; set; }
-    public float MaxDistance { get; set; } = 60f;
-
     public string Attachment { get; set; }
+    public float MaxDistance { get; set; } = 60f;
 
     public BaseInteractable()
     {
     }
 
-    public virtual void Trigger(Cinema.Player ply = null)
+    public virtual void Trigger(Cinema.Player player = null)
     {
     }
 
@@ -106,8 +119,8 @@ public partial class BaseInteractable : BaseNetworkable
         var mins = Parent.Transform.PointToWorld(Mins);
         var maxs = Parent.Transform.PointToWorld(Maxs);
         var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
-        var hit = bounds.Trace(ray, MaxDistance, out float dist);
-        var triggerResults = new CanTriggerResults(hit, dist, this);
+        var hit = bounds.Trace(ray, MaxDistance, out float distance);
+        var triggerResults = new CanTriggerResults(hit, distance, this);
 
         return triggerResults;
     }

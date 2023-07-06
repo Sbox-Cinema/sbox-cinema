@@ -1,22 +1,37 @@
 ﻿using Sandbox;
 using Sandbox.util;
-using System;
+
 namespace Cinema;
 
 public partial class Dispenser : BaseInteractable
 {
     static private float LeverPosIncrement = 0.05f;
-    static private float DispenseTime = 4.0f;
+    static private float DispenseTime = 3.5f;
     private string AnimationName { get; set; }
-    public SodaFountain.SodaType SodaType { get; set; }
-    private string SodaFillParticlePath { get; set; }
-    private string SodaDispenseParticlePath { get; set; }
-    private Particles Soda { get; set; }
-    public CupFillable Cup { get; set; }
-    public bool IsDispensing { get; set; }
-    private float LeverPos { get; set; }
-
     private TimeUntil DispenseTimer = 0.0f;
+    private float LeverPos { get; set; }
+    public bool IsDispensing { get; set; }
+  
+    public SodaFountain.SodaType SodaType { get; set; }
+    private string SodaFillParticlePath => SodaType switch
+    {
+        SodaFountain.SodaType.Conk => "particles/soda_fountain/walker/sodafill2_conk_f.vpcf",
+        SodaFountain.SodaType.MionPisz => "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf",
+        SodaFountain.SodaType.Spooge => "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf",
+
+        _ => "particles/soda_fountain/walker/sodafill2_conk_f.vpcf"
+    };
+    private string SodaDispenseParticlePath => SodaType switch
+    {
+        SodaFountain.SodaType.Conk => "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf",
+        SodaFountain.SodaType.MionPisz => "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf",
+        SodaFountain.SodaType.Spooge => "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf",
+
+        _ => "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf"
+    };
+
+    private Particles SodaParticles { get; set; }
+    public CupFillable Cup { get; set; }
 
     public Dispenser() // For the compiler...
     {
@@ -27,24 +42,6 @@ public partial class Dispenser : BaseInteractable
     {
         AnimationName = animationName;
         SodaType = type;
-
-        switch(SodaType)
-        {
-            case SodaFountain.SodaType.Conk:
-                SodaFillParticlePath = "particles/soda_fountain/walker/sodafill2_conk_f.vpcf";
-                SodaDispenseParticlePath = "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf";
-                break;
-
-            case SodaFountain.SodaType.MionPisz:
-                SodaFillParticlePath = "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf";
-                SodaDispenseParticlePath = "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf";
-                break;
-
-            case SodaFountain.SodaType.Spooge:
-                SodaFillParticlePath = "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf";
-                SodaDispenseParticlePath = "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf";
-                break;
-        }
     }
 
     public override void Trigger(Player player)
@@ -60,14 +57,17 @@ public partial class Dispenser : BaseInteractable
 
             if (Cup.IsValid()) // If empty cup is underneath this dispenser, create soda fill particles
             {
-                Soda = Particles.Create(SodaFillParticlePath, Parent);
-                Soda.SetEntityAttachment(0, Parent, Attachment);
+                SodaParticles = Particles.Create(SodaFillParticlePath, Parent);
+                SodaParticles.SetEntityAttachment(0, Parent, Attachment);
             }
             else // If no cup is underneath this dispenser, create soda dispense particles
             {
-                Soda = Particles.Create(SodaDispenseParticlePath, Parent);
-                Soda.SetEntityAttachment(0, Parent, Attachment);
+                SodaParticles = Particles.Create(SodaDispenseParticlePath, Parent);
+                SodaParticles.SetEntityAttachment(0, Parent, Attachment);
             }
+
+            // Play sound for dispenser lever being pushed
+            Sound.FromEntity("machine_lever_pull_01", Parent);
         }
     }
     public override void Simulate()
@@ -77,8 +77,8 @@ public partial class Dispenser : BaseInteractable
         if(DispenseTimer && IsDispensing)
         {
             // Remove soda dispenser particles
-            Soda?.Destroy(true);
-            Soda?.Dispose();
+            SodaParticles?.Destroy(true);
+            SodaParticles?.Dispose();
 
             // Assemble cup
             Cup?.Assemble();
@@ -112,6 +112,4 @@ public partial class Dispenser : BaseInteractable
 
         (Parent as AnimatedEntity).SetAnimParameter(AnimationName, LeverPos);
    }
-
-
 }

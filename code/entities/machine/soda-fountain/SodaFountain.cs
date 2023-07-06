@@ -16,7 +16,6 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         MionPisz = 1,
         Spooge = 2
     }
-
     [Net] public IDictionary<string, BaseInteractable> Interactables { get; set; }
 
     /// <summary>
@@ -37,6 +36,14 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         AddInteractables();
         
         Tags.Add("interactable");
+    }
+
+    public override void ClientSpawn()
+    {
+        base.ClientSpawn();
+
+        // Play sound for the soda fountain "on" noise
+        Sound.FromEntity("machine_hum_02", this).SetVolume(10.0f);
     }
 
     public void AddInteractables()

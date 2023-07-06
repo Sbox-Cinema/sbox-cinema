@@ -13,6 +13,11 @@ public partial class CupFillable : ModelEntity
         Black = 4
     }
 
+    static public string CupItemUniqueId = "soda"; 
+    static public string CupItemUniqueIdConk = "soda-conk"; 
+    static public string CupItemUniqueIdMionPisz = "soda-mionpisz"; 
+    static public string CupItemUniqueIdSpooge = "soda-spooge"; 
+
     public Dispenser DispenserParent { get; set; }
     private bool IsAssembled { get; set; }
 
@@ -25,7 +30,6 @@ public partial class CupFillable : ModelEntity
         DispenserParent = dispenserParent;
         DispenserParent.Cup = this;
     }
-
     public override void Spawn()
     {
         base.Spawn();
@@ -36,7 +40,6 @@ public partial class CupFillable : ModelEntity
 
         SetupPhysicsFromModel(PhysicsMotionType.Static);
     }
-
     public void SetCupColor(SodaFountain.SodaType type)
     {
         switch(type)
@@ -52,7 +55,6 @@ public partial class CupFillable : ModelEntity
                 break;
         }
     }
-
     public bool CanPickup()
     {
         return !DispenserParent.IsDispensing && IsAssembled;
@@ -65,6 +67,9 @@ public partial class CupFillable : ModelEntity
     {
         //Set to "assembled" body group
         SetBodyGroup(1, 1);
+
+        // Play sounds for placing the lid on the cup
+        Sound.FromEntity("cup_lid_place", Parent);
 
         IsAssembled = true;
     }
