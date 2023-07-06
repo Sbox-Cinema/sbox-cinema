@@ -1,4 +1,5 @@
 ﻿using Conna.Inventory;
+using Cinema.UI;
 using Sandbox;
 
 //
@@ -44,5 +45,14 @@ public partial class CinemaGame : GameManager
         pawn.MakePawnOf(client);
         pawn.Money = 500; // @TEMP: Give players money when they join
         pawn.Respawn();
+        
+        Chat.AddChatEntry( To.Everyone, "Server", $"{client.Name} has joined the game", isInfo: true );
+    }
+
+    public override void ClientDisconnect(IClient client, NetworkDisconnectionReason reason)
+    {
+        base.ClientDisconnect(client, reason);
+        
+        Chat.AddChatEntry( To.Everyone, "Server", $"{client.Name} has left the game", isInfo: true );
     }
 }

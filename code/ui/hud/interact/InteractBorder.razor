@@ -1,0 +1,62 @@
+﻿@using System;
+@using Sandbox;
+@using Sandbox.UI;
+@using Cinema;
+
+@attribute [StyleSheet]
+@inherits Panel;
+
+<root style="transition: opacity, @(GetFadeOutTime())s, ease-in;" class=@GetClass()>
+
+</root>
+
+@code {
+    public string GetClass() => HoveredInteractable != null ? "visible" : "";
+    public string GetFadeOutTime() => FadeOutTime.ToString();
+    public Entity HoveredInteractable
+    {
+        get => _HoveredInteractable;
+        set
+        {
+            if (_HoveredInteractable != null && value == null)
+            {
+                TimeSinceHoverEnd = 0;
+            }
+            _HoveredInteractable = value;
+            if (value != null)
+            {
+                HoveredBounds = value.WorldSpaceBounds;
+            }
+        }
+    }
+    private Entity _HoveredInteractable;
+
+    private BBox HoveredBounds;
+    private float FadeOutTime = 0.5f;
+    private TimeSince TimeSinceHoverEnd;
+    private Rect ScreenBounds { get; set; }
+
+    public override void Tick()
+    {
+        HoveredInteractable = (Game.LocalPawn is Cinema.Player ply)
+            ? ply.FindUsable(true) 
+            : null;
+
+        // We don't stop tracking the interactable until the fade out is finished.
+        // This prevents the border from jumping around when the interactable is removed.
+        if (HoveredInteractable == null && TimeSinceHoverEnd >= FadeOutTime)
+            return;
+
+        // Use fraction of screen size so that it works better with different resolution.
+        ScreenBounds = HoveredBounds.ToFractionalScreenBounds();
+        Style.Top = Length.Fraction(ScreenBounds.Top);
+        Style.Left = Length.Fraction(ScreenBounds.Left);
+        Style.Width = Length.Fraction(ScreenBounds.Width);
+        Style.Height = Length.Fraction(ScreenBounds.Height);
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(ScreenBounds.Width, ScreenBounds.Height, ScreenBounds.TopLeft, ScreenBounds.BottomRight, HoveredInteractable);
+    }
+}
