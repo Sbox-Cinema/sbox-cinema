@@ -61,27 +61,16 @@ CS
 
         float aspectRatio = float(inputSize.x) / inputSize.y;
         float halfPadRatio = g_flPadRatio / 2;
-        if (aspectRatio > 1) // Horizontal aspect ratio
-        {
-            paddedCoordinates.x = normalizedCoordinates.x / g_flPadRatio;
-            // Instead of making x wider, make y shorter so there's a margin at the bottom.
-            paddedCoordinates.y = normalizedCoordinates.y / (1 / aspectRatio) / g_flPadRatio;
-            float aspectFitness = aspectRatio / g_flFitAspectRatio;
-            paddedCoordinates.x /= g_flPadRatio * aspectFitness;
-            paddedCoordinates.y /= g_flPadRatio * aspectFitness;
-            paddedCoordinates.x -= (1 - g_flPadRatio + (1 - aspectFitness));
-            paddedCoordinates.y -= (1 - (1 / aspectRatio * aspectFitness) + (1 - g_flPadRatio));
-        }
-        else // Vertical aspect ratio
-        {
-            paddedCoordinates.x = normalizedCoordinates.x / aspectRatio / g_flPadRatio;
-            paddedCoordinates.y = normalizedCoordinates.y / g_flPadRatio;
-            // In the next three lines of code, I multiply stuff by magic constants I pulled out of my butt.
-            // Looks "good enough" for the YouTube short format.
-            paddedCoordinates *= 2;
-            paddedCoordinates.x -= 0.5 / aspectRatio * 1.6;
-            paddedCoordinates.y -= 0.5 * aspectRatio * 1.9;
-        }
+
+        paddedCoordinates.x = normalizedCoordinates.x / g_flPadRatio;
+        // Instead of making x wider, make y shorter so there's a margin at the bottom.
+        paddedCoordinates.y = normalizedCoordinates.y / (1 / aspectRatio) / g_flPadRatio;
+        
+        float aspectFitness = aspectRatio / g_flFitAspectRatio; 
+        paddedCoordinates/= g_flPadRatio * aspectFitness;
+        paddedCoordinates.x -= (1 - g_flPadRatio) + 0.5 * (1 / aspectFitness) - 0.5;
+        paddedCoordinates.y -= (1 - (1 / aspectRatio * aspectFitness) + (1 - g_flPadRatio));
+        
 
         if (paddedCoordinates.x < 0 || paddedCoordinates.x > 1)
             return;
