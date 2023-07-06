@@ -74,6 +74,7 @@ public class DirectVideoPlayer : IVideoPlayer
         Texture = Texture.Create((int)size.x, (int)size.y, ImageFormat.RGBA8888)
                                     .WithName("direct-video-player-texture")
                                     .WithDynamicUsage()
+                                    .WithUAVBinding()
                                     .Finish();
     }
 

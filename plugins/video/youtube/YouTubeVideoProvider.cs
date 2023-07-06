@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CinemaTeam.Plugins.Video;
 
@@ -15,13 +16,13 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
 
     public async Task<MediaRequest> CreateRequest(IClient client, string requestString)
     {
-        var videoId = MediaHelper.GetIdFromYoutubeUrl(requestString);
-        var youtubePlayerResponse = await MediaHelper.GetYoutubePlayerResponse(videoId);
+        var videoId = GetIdFromYoutubeUrl(requestString);
+        var youtubePlayerResponse = await MediaHelper.GetYoutubePlayerResponseFromId(videoId);
         var mediaInfo = new MediaInfo()
         {
             Title = youtubePlayerResponse.Title,
             Author = youtubePlayerResponse.Author,
-            Duration = (int)youtubePlayerResponse.Duration.Value.TotalSeconds,
+            Duration = (int)youtubePlayerResponse.DurationSeconds,
             Thumbnail = youtubePlayerResponse.Thumbnails.FirstOrDefault().Url
         };
         var request = new MediaRequest(mediaInfo);
@@ -40,10 +41,10 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Never Gonna Give You Up
         "https://www.youtube.com/watch?v=irU_2h60T50", // Earthbound, Mr. Carpainter fight
         "https://www.youtube.com/watch?v=0ee0syZi9E0", // Royco Cup-a-Soup
+        "https://www.youtube.com/watch?v=aaLrCdIsTPs", // Earthbound, Titanic Ant fight (in 4:3 resolution)
+        "https://www.youtube.com/watch?v=eLbLKKlna00", // Eridium short (in vertical resolution)
+        "https://www.youtube.com/watch?v=IIqtuupvdWg", // Test video (useful for testing borders)
     };
-
-    // The next video doesn't display correctly, probably because it's vertical.
-    private const string IssueEridium = "https://www.youtube.com/watch?v=eLbLKKlna00";
 
     public async Task<MediaRequest> SuggestMedia()
     {
@@ -57,6 +58,12 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
         await player.InitializePlayer(requestData);
         return player;
     }
+    private static string GetIdFromYoutubeUrl(string url)
+    {
+        url = url.Replace("shorts/", "watch?v=");
+        return HttpUtility.ParseQueryString(new Uri(url).Query).Get("v");
+    }
+
 
     private static string SelectBestStream(YoutubePlayerResponse response)
     {

@@ -44,6 +44,9 @@ CS
         // Set the padding color. It will be overwritten if we needed to put something here.
         g_tOutput[vThreadId.xy] = g_flColor;
 
+        uint2 inputSize;
+        g_tInput.GetDimensions(inputSize.x, inputSize.y);
+
         uint2 outputSize;
         g_tOutput.GetDimensions(outputSize.x, outputSize.y);
 
@@ -52,35 +55,40 @@ CS
         normalizedCoordinates.x = float(vThreadId.x) / outputSize.x;
         normalizedCoordinates.y = float(vThreadId.y) / outputSize.y;
 
-        uint2 inputSize;
-        g_tInput.GetDimensions(inputSize.x, inputSize.y);
+        float2 paddedCoordinates;
+
+
         float aspectRatio = float(inputSize.x) / inputSize.y;
-        if (aspectRatio > 1)
+        float halfPadRatio = g_flPadRatio / 2;
+        if (aspectRatio > 1) // Horizontal aspect ratio
         {
-            float halfPadRatio = g_flPadRatio / 2;
-            if (normalizedCoordinates.x < halfPadRatio / aspectRatio || normalizedCoordinates.x > 1 - halfPadRatio / aspectRatio)
-                return;
-            if (normalizedCoordinates.y < halfPadRatio || normalizedCoordinates.y > 1 - halfPadRatio )
-                return;
+            paddedCoordinates.x = normalizedCoordinates.x / g_flPadRatio;
+            // Instead of making x wider, make y shorter so there's a margin at the bottom.
+            paddedCoordinates.y = normalizedCoordinates.y / (1 / aspectRatio) / g_flPadRatio;
+            //paddedCoordinates /= g_flPadRatio;
+            paddedCoordinates.x -= 0.5 / aspectRatio;
+            paddedCoordinates.y -= 0.5 * aspectRatio;
         }
-        else
+        else // Vertical aspect ratio
         {
-            float halfPadRatio = g_flPadRatio / 2;
-            if (normalizedCoordinates.x < halfPadRatio || normalizedCoordinates.x > 1 - halfPadRatio)
-                return;
-            if (normalizedCoordinates.y < halfPadRatio * aspectRatio || normalizedCoordinates.y > 1 - halfPadRatio * aspectRatio)
-                return;
+            paddedCoordinates.x = normalizedCoordinates.x / aspectRatio / g_flPadRatio;
+            paddedCoordinates.y = normalizedCoordinates.y / g_flPadRatio;
+            // In the next three lines of code, I multiply stuff by magic constants I pulled out of my butt.
+            // Looks "good enough" for the YouTube short format.
+            paddedCoordinates *= 2.5;
+            paddedCoordinates.x -= 0.5 / aspectRatio * 3;
+            paddedCoordinates.y -= 0.5 * aspectRatio * 4.5;
         }
 
-    
-        float2 subCoords;
-        subCoords.x = lerp(0 - g_flPadRatio / aspectRatio, 1 + g_flPadRatio / aspectRatio, normalizedCoordinates.x);
-        subCoords.y = lerp(0 - g_flPadRatio * aspectRatio, 1 + g_flPadRatio * aspectRatio, normalizedCoordinates.y);
+        if (paddedCoordinates.x < 0 || paddedCoordinates.x > 1)
+            return;
+        if (paddedCoordinates.y < 0 || paddedCoordinates.y > 1)
+            return;
 
         // Figure out where we would be pulling from on the input texture.
         uint2 inputCoordinates;
-        inputCoordinates.x = subCoords.x * inputSize.x;
-        inputCoordinates.y = subCoords.y * inputSize.y;
+        inputCoordinates.x = lerp(0, 1, paddedCoordinates.x) * inputSize.x;
+        inputCoordinates.y = lerp(0, 1, paddedCoordinates.y) * inputSize.y;
 
         // Read the pixel from the input texture
         float4 inputPixel = g_tInput.Load(int3(inputCoordinates, 0));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using CinemaTeam.Plugins.Video;
 using Sandbox;
 using Sandbox.UI;
@@ -9,6 +10,8 @@ public partial class ProjectorEntity
 {
     [ConVar.Client("projector.cookie.margin")]
     public static float ProjectorLightCookieMargin { get; set; } = 0.7f;
+    [ConVar.Client("projector.cookie.debug")]
+    public static int ProjectorLightCookieDebug { get; set; } = 0;
 
     /// <summary>
     /// The media we want to be playing (but might not be)
@@ -107,6 +110,31 @@ public partial class ProjectorEntity
             return;
 
         LightCookieTexture.DispatchColorPad(InputTexture, Color.Black, ProjectorLightCookieMargin);
+
+        if (ProjectorLightCookieDebug > 0)
+        {
+            var inputSize = DebugOverlayTexture(InputTexture, Vector2.Zero);
+            DebugOverlayTexture(LightCookieTexture, new Vector2(inputSize, 0));
+        }
+
+        float DebugOverlayTexture(Texture texture, Vector2 position)
+        {
+            var isHorizontal = texture.Width > texture.Height;
+            Vector2 overlaySize;
+            if (isHorizontal)
+            {
+                var aspectRatio = texture.Width / texture.Height;
+                overlaySize = new Vector2(200 * aspectRatio, 200 / aspectRatio);
+
+            }
+            else
+            {
+                var aspectRatio = texture.Height / texture.Width;
+                overlaySize = new Vector2(200 / aspectRatio, 200 * aspectRatio);
+            }
+            DebugOverlay.Texture(texture, new Rect(position, overlaySize));
+            return overlaySize.x;
+        }
     }
 
     protected void UpdateScreenPositionAndDistance()
