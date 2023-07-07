@@ -196,13 +196,6 @@ public partial class WeaponBase : Carriable
         ViewModelEntity.Owner = Owner;
         ViewModelEntity.EnableViewmodelRendering = true;
         ViewModelEntity.SetModel(ViewModelPath);
-
-        BaseViewModel arms = new BaseViewModel();
-        arms.Position = Camera.Position;
-        arms.Owner = Owner;
-        arms.EnableViewmodelRendering = true;
-        arms.SetModel("models/first_person_citizen/first_person_citizen.vmdl");
-        arms.SetParent(ViewModelEntity, true);
     }
 
     public void RemoveFromHolder()
