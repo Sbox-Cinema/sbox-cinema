@@ -12,6 +12,7 @@ public class DirectVideoPlayer : IVideoPlayer
     }
 
     public virtual Texture Texture { get; protected set; }
+    public virtual bool IsPaused => VideoPlayer?.IsPaused ?? false;
 
     protected virtual VideoPlayer VideoPlayer { get; set; }
     protected string VideoPath { get; set; }
@@ -143,14 +144,8 @@ public class DirectVideoPlayer : IVideoPlayer
     }
 
     [GameEvent.Client.Frame]
-    public void OnFrame()
+    public virtual void OnFrame()
     {
         VideoPlayer?.Present();
-        if (VideoLoaded && VideoLastUpdated > 0.25f)
-        {
-            Log.Info("Video hitch detected. Seeking to current time.");
-            VideoLoaded = false;
-            Refresh();
-        }
     }
 }

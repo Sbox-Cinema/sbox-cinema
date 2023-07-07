@@ -1,14 +1,18 @@
 using Sandbox;
 using Sandbox.Internal;
+using System;
 
 namespace CinemaTeam.Plugins.Video;
 
-public class DummyVideoPresenter : IVideoPresenter
+public class DummyVideoPresenter : IVideoPlayer
 {
     [ConVar.Client("plugins.video.test.drawtex")]
     public static bool EnableShaderDebug { get; set; }
     public Texture MultiplicandTexture { get; set; }
     public Texture Texture { get; private set; }
+    public bool IsPaused { get; private set; }
+    private SoundHandle CurrentlyPlayingSound { get; set; }
+    private IEntity LastEntity { get; set; } = null;
 
     private ComputeShader ColorfulShader { get; set; }
 
@@ -26,12 +30,20 @@ public class DummyVideoPresenter : IVideoPresenter
 
     public SoundHandle PlayAudio(IEntity entity)
     {
-        return Audio.Play("waltz_of_the_flowers", entity);
+        CurrentlyPlayingSound.Stop(true);
+        LastEntity = entity;
+        var hSnd = Audio.Play("waltz_of_the_flowers", entity);
+        hSnd.Volume = 5 * Config.DefaultMediaVolume;
+        CurrentlyPlayingSound = hSnd;
+        return hSnd;
     }
 
     [GameEvent.Client.Frame]
     public void OnFrame()
     {
+        if (IsPaused)
+            return;
+
         ColorfulShader.Attributes.Set("GameTime", Time.Now);
         ColorfulShader.Attributes.Set("MultiplicandTexture", MultiplicandTexture);
         ColorfulShader.Attributes.Set("OutputTexture", Texture);
@@ -41,4 +53,32 @@ public class DummyVideoPresenter : IVideoPresenter
             DebugOverlay.Texture(Texture, Vector2.Zero);
         }
     }
+
+    public void Resume() 
+    {
+        PlayAudio(LastEntity);    
+    }
+
+    public void SetPaused(bool newPauseValue) 
+    {
+        var oldPauseValue = IsPaused;
+        IsPaused = newPauseValue;
+
+        //if (oldPauseValue == newPauseValue)
+        //    return;
+
+        if (newPauseValue)
+        {
+            CurrentlyPlayingSound.Stop(true);
+        }
+        else
+        {
+            Resume();
+        }
+    }
+    public void Stop() 
+    {
+        CurrentlyPlayingSound.Stop(true);
+    }
+    public void Seek(float time) { }
 }

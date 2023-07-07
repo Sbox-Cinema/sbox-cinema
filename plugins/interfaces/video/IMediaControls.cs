@@ -5,6 +5,7 @@
 /// </summary>
 public interface IMediaControls
 {
+    bool IsPaused { get; }
     void Resume();
     void SetPaused(bool paused);
     void Stop();

@@ -2,12 +2,14 @@
 using System;
 
 namespace CinemaTeam.Plugins.Video;
-public partial class WebSurfaceVideoPlayer : IVideoPlayer
+public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
 {
     [ConVar.Client("projector.websurface.size")]
     public static Vector2 WebSurfaceSize { get; set; } = new Vector2(1280, 720);
 
     public virtual Texture Texture { get; protected set; }
+
+    public abstract bool IsPaused { get; }
     protected virtual WebSurface WebSurface { get; set; }
     protected virtual bool WebSurfaceMouseClickedDown { get; set; }
     protected MediaRequest RequestData { get; set; }

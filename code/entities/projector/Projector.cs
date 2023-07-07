@@ -35,7 +35,15 @@ public partial class ProjectorEntity : Entity
 
         if (ProjectionSize == default)
         {
-            ProjectionSize = new Vector2(256, 208);
+            ProjectionSize = new Vector2(320, 180);
+        }
+        // Force a 16:9 aspect ratio.
+        if (ProjectionSize.x % 16 != 0 || ProjectionSize.y % 9 != 0)
+        {
+            var newSize = Vector2.Zero;
+            newSize.x = ProjectionSize.x - (ProjectionSize.x % 16);
+            newSize.y = newSize.x * (9.0f / 16.0f);
+            ProjectionSize = newSize;
         }
     }
 

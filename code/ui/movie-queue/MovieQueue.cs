@@ -28,11 +28,11 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public IList<Media> Queue => /* Controller?.Queue.OrderBy(m => m.ListScore).ToList() ?? */ new List<Media>();
 
-    public Media NowPlaying => /* Controller?.CurrentMedia ?? */ null;
+    public MediaRequest NowPlaying => Controller?.CurrentMedia;
 
     public TimeSince TimeSinceStartedPlaying => Controller?.StartedPlaying ?? 0;
 
-    public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.Duration):hh\\:mm\\:ss}";
+    public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.GenericInfo.Duration):hh\\:mm\\:ss}";
 
     public TextEntry MovieIDEntry { get; set; }
 
@@ -77,38 +77,41 @@ public partial class MovieQueue : Panel, IMenuScreen
         MediaController.PlayMedia(zoneId, clientId, providerId, query);
     }
 
-    protected static bool CanRemoveMedia(Media media)
+    protected static bool CanRemoveMedia(MediaRequest media)
     {
-        return media.CanRemove(Game.LocalClient);
+        return false;
+        // return media.CanRemove(Game.LocalClient);
     }
 
-    protected static bool IsPlayer(Media media)
+    protected static bool IsPlayer(MediaRequest media)
     {
-        return media.IsPlayer(Game.LocalClient);
+        return media.Requestor == Game.LocalClient;
     }
 
-    protected static bool CanVoteFor(Media media, bool upvote)
+    protected static bool CanVoteFor(MediaRequest media, bool upvote)
     {
-        return upvote ? media.CanUpVote(Game.LocalClient) : media.CanDownVote(Game.LocalClient);
+        return false;
+        // return upvote ? media.CanUpVote(Game.LocalClient) : media.CanDownVote(Game.LocalClient);
     }
 
-    protected static bool CanGiveLike(Media media, bool like)
+    protected static bool CanGiveLike(MediaRequest media, bool like)
     {
-        return like ? media.CanLike(Game.LocalClient) : media.CanDislike(Game.LocalClient);
+        return false;
+        // return like ? media.CanLike(Game.LocalClient) : media.CanDislike(Game.LocalClient);
     }
 
-    protected void OnRemove(Media media)
+    protected void OnRemove(MediaRequest media)
     {
         //MediaController.RemoveMedia(Controller.NetworkIdent, Controller.Queue.IndexOf(media));
     }
 
-    protected void OnVote(Media media, bool voteFor)
+    protected void OnVote(MediaRequest media, bool voteFor)
     {
         //if (voteFor ? !media.CanUpVote(Game.LocalClient) : !media.CanDownVote(Game.LocalClient)) return;
         //MediaController.VoteForMedia(Controller.NetworkIdent, media.Nonce, voteFor);
     }
 
-    protected void OnLike(Media media, bool like)
+    protected void OnLike(MediaRequest media, bool like)
     {
         //if (like ? !media.CanLike(Game.LocalClient) : !media.CanDislike(Game.LocalClient)) return;
         //MediaController.GiveMediaLike(Controller.NetworkIdent, like);
@@ -133,12 +136,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public override void Tick()
     {
-        Thumbnail?.Style.SetBackgroundImage(NowPlaying.Thumbnail);
-    }
-
-    protected void OnSkip()
-    {
-        MediaController.StopMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
+        Thumbnail?.Style.SetBackgroundImage(NowPlaying.GenericInfo.Thumbnail);
     }
 
     protected void OnClose()

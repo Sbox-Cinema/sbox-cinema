@@ -15,8 +15,6 @@ MovieQueue {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
 
-    backdrop-filter: blur(8px) brightness(50%);
-
     &.visible {
         opacity: 1;
         pointer-events: all;
@@ -36,29 +34,11 @@ MovieQueue {
         justify-content: center;
         font-size: 100px;
         padding-left: 32px;
-        //background: linear-gradient(#860204, #230105);
-        background-image: url("ui/curtain-red.png");
-        background-size: cover;
-        box-shadow: 0px 0px 8px 4px #0e0505;
-        font-family: manbow-lines; //breamcatcher-rg; //Vintage; //Chi-TownNF;
+        // background-image: url("ui/curtain-red.png");
+        // background-size: cover;
         color: #fffD;
-        text-shadow: 1px 1px 2px rgb(148, 125, 58);
-
-        
-
-        >.title {
-            >.deco {
-                align-items: center;
-                flex-direction: row;
-                margin-left: 16px;
-                margin-right: 16px;
-                font-size: 80px;
-                font-family: DecoBordersNF;
-            }
-            >.text {
-                position: relative;
-            }  
-        }
+        background-color: rgba(0,0,0,0.75);
+        backdrop-filter: blur(8px);
     
         .close-btn {
             position: absolute;

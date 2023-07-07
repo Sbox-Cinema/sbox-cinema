@@ -20,6 +20,8 @@ public partial class MediaController : EntityComponent<CinemaZone>
     private IVideoPlayer CurrentVideoPlayer { get; set; }
     [Net]
     public TimeSince StartedPlaying { get; private set; }
+    [Net]
+    public bool IsPaused { get; set; }
 
     public event EventHandler StartPlaying;
     public event EventHandler StopPlaying;
@@ -40,8 +42,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
         }
     }
 
-    [ConCmd.Server]
-    public async static void PlayMedia(int zoneId, int clientId, int providerId, string request)
+    private static (MediaController controller, IClient client) GetControllerAndClient(int zoneId, int clientId)
     {
         var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
         var controller = zone.MediaController;
@@ -50,27 +51,49 @@ public partial class MediaController : EntityComponent<CinemaZone>
         {
             client = Sandbox.Entity.FindByIndex(clientId) as IClient;
         }
-        await controller.PlayMedia(client, providerId, request);
+        return (controller, client);
     }
 
+    [ConCmd.Server]
+    public async static void PlayMedia(int zoneId, int clientId, int providerId, string request)
+    {
+        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        await controller.PlayMedia(client, providerId, request);
+    }
     public async Task PlayMedia(IClient client, int providerId, string request)
     {
         var provider = VideoProviderManager.Instance[providerId];
         CurrentMedia = await provider.CreateRequest(client, request);
         StartedPlaying = 0;
+        IsPaused = false;
         StartPlaying?.Invoke(this, null);
+    }
+
+    [ConCmd.Server]
+    public static void TogglePauseMedia(int zoneId, int clientId)
+    {
+        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        controller.TogglePauseMedia(client);
+    }
+
+    public void TogglePauseMedia(IClient client)
+    {
+
+        // TODO: Return early if the client is not allowed to pause the media.
+        IsPaused = !IsPaused;
+        SetPauseMedia(IsPaused);
+    }
+
+    [ClientRpc]
+    public void SetPauseMedia(bool shouldPause)
+    {
+        CurrentVideoPlayer.SetPaused(shouldPause);
     }
 
     [ConCmd.Server]
     public static void StopMedia(int zoneId, int clientId)
     {
-        var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
-        var controller = zone.MediaController;
-        IClient client = null;
-        if (clientId > 0)
-        {
-            client = Sandbox.Entity.FindByIndex(clientId) as IClient;
-        }
+        var (controller, client) = GetControllerAndClient(zoneId, clientId);
         controller.StopMedia(client);
     }
 

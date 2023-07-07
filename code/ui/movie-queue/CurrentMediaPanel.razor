@@ -1,0 +1,28 @@
+﻿@using Sandbox.UI;
+
+@namespace Cinema.UI
+@inherits Panel;
+@attribute [StyleSheet]
+
+<root>
+    <div class="now-playing-block">
+        <div class="stats">
+            <div class="thumbnail" @ref=Thumbnail> </div>
+            <div class="details">
+                <div class="title">
+                    @NowPlaying?.GenericInfo?.Title
+                </div>
+                <div class="time">
+                    @NowPlayingTimeString
+                </div>
+                <div class="requestor">
+                    @NowPlaying?.Requestor?.Name
+                </div>
+            </div>
+            <div class="controls">
+                <button class="control-button" @onclick=@OnTogglePause>@(Controller.IsPaused ? "play_arrow" : "pause")</button>
+                <button class="control-button" @onclick=@OnSkip>skip_next</button>
+            <div>
+        </div>
+    </div>
+</root>
