@@ -1,28 +1,32 @@
-﻿@using Sandbox.UI;
+﻿@using CinemaTeam.Plugins.Video;
+@using Sandbox.UI;
 
 @namespace Cinema.UI
 @inherits Panel;
 @attribute [StyleSheet]
 
 <root>
-    <div class="now-playing-block">
-        <div class="stats">
-            <div class="thumbnail" @ref=Thumbnail> </div>
-            <div class="details">
-                <div class="title">
-                    @NowPlaying?.GenericInfo?.Title
-                </div>
-                <div class="time">
-                    @NowPlayingTimeString
-                </div>
-                <div class="requestor">
-                    @NowPlaying?.Requestor?.Name
-                </div>
-            </div>
-            <div class="controls">
-                <button class="control-button" @onclick=@OnTogglePause>@(Controller.IsPaused ? "play_arrow" : "pause")</button>
-                <button class="control-button" @onclick=@OnSkip>skip_next</button>
-            <div>
+    <div class="playback">
+        <div class="thumbnail" @ref=Thumbnail />
+        <div class="details">
+            <div class="title">Title: @NowPlaying?.GenericInfo?.Title</div>
+            <div class="artist">Author: @NowPlaying?.GenericInfo?.Author</div>
+            <div class="requestor">Requestor: @NowPlaying?.Requestor?.Name</div>
         </div>
+        <div class="controls">
+            <button class="control-button restart" onclick=@OnRestart>skip_previous</button>
+            <button class="control-button play" @onclick=@OnTogglePause>@(Controller.IsPaused ? "play_arrow" : "pause")</button>
+            <button class="control-button skip" @onclick=@OnSkip>skip_next</button>
+        </div>
+        <div class="volume-area">
+            <button class="volume-icon">volume_up</button>
+            <SliderControl @ref=VolumeSlider OnValueChanged=@OnVolumeChanged Min=@(0.0f) Max=@(2.0f) Step=@(0.01f) class="volume-control"/>
+        </div>
+    </div>
+
+    <div class="progress-area">
+        <div class="progress-time">@NowPlayingTimeString</div>
+        <SliderControl Value=@(Controller.TimeSinceStartedPlaying) Min=@(0.0f) Max=@(NowPlaying?.GenericInfo?.Duration ?? 0.0f)/>
+        <div class="progress-time">@NowPlaying?.GenericInfo?.DurationFormatted</div>
     </div>
 </root>

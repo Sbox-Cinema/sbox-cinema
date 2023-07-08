@@ -12,6 +12,6 @@
 <root>
     @foreach (var provider in Providers)
     {
-        <VideoProviderIcon Provider=@provider @onclick=@(() => SelectedProvider = provider)/>
+        <VideoProviderIcon Provider=@provider @onclick=@(_ => OnClickedProvider(provider))/>
     }
 </root>

@@ -8,11 +8,12 @@ namespace Cinema.UI;
 public partial class CurrentMediaPanel : Panel
 {
     public Panel Thumbnail { get; set; }
+    public Panel VolumeSlider { get; set; }
 
     public MediaController Controller { get; set; } = null;
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
-    public TimeSince TimeSinceStartedPlaying => Controller?.StartedPlaying ?? 0;
-    public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.GenericInfo.Duration):hh\\:mm\\:ss}";
+    public TimeSince TimeSinceStartedPlaying => Controller?.TimeSinceStartedPlaying ?? 0;
+    public string NowPlayingTimeString => NowPlaying == null ? "0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss}";
 
     public CurrentMediaPanel()
     {
@@ -25,6 +26,17 @@ public partial class CurrentMediaPanel : Panel
             return;
 
         Controller = currentTheaterZone.MediaController;
+
+    }
+
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        if (!firstTime)
+            return;
+
+        var volumeSlider = VolumeSlider as SliderControl;
+        MediaConfig.DefaultMediaVolumeChanged += (_, volume) => volumeSlider.Value = volume;
+        volumeSlider.Value = MediaConfig.DefaultMediaVolume;
     }
 
     protected override int BuildHash()
@@ -38,9 +50,20 @@ public partial class CurrentMediaPanel : Panel
         // TODO: Gray out this button if the player shouldn't be able to pause
         MediaController.TogglePauseMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
     }
+
     protected void OnSkip()
     {
         MediaController.StopMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
+    }
+
+    protected void OnRestart()
+    {
+
+    }
+
+    protected void OnVolumeChanged(float volume)
+    {
+        MediaConfig.DefaultMediaVolume = volume;
     }
 
     

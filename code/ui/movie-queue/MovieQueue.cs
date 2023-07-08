@@ -22,6 +22,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     public Panel Thumbnail { get; set; }
 
     public string VisibleClass => IsOpen ? "visible" : "";
+    public Panel MediaProviderList { get; set; }
     public Panel MediaProviderHeaderContainer { get; set; }
 
     public MediaController Controller { get; set; } = null;
@@ -30,7 +31,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
 
-    public TimeSince TimeSinceStartedPlaying => Controller?.StartedPlaying ?? 0;
+    public TimeSince TimeSinceStartedPlaying => Controller?.TimeSinceStartedPlaying ?? 0;
 
     public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.GenericInfo.Duration):hh\\:mm\\:ss}";
 
@@ -55,10 +56,11 @@ public partial class MovieQueue : Panel, IMenuScreen
     public void Close()
     {
         IsOpen = false;
+        (MediaProviderList as VideoProviderList).SelectedProvider = null;
         Controller = null;
     }
 
-    public void SetVideoProvider(IMediaProvider provider)
+    public void CreateMediaProviderHeaderPanel(IMediaProvider provider)
     {
         if (provider is IMediaSelector selector)
         {
@@ -67,6 +69,10 @@ public partial class MovieQueue : Panel, IMenuScreen
             MediaProviderHeaderContainer.AddChild(header);
             var providerId = VideoProviderManager.Instance.GetKey(provider);
             header.RequestMedia += (s, e) => OnQueue(providerId, e.Query);
+        }
+        else
+        {
+            MediaProviderHeaderContainer.DeleteChildren(true);
         }
     }
 

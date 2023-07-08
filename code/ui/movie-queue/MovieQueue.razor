@@ -9,7 +9,7 @@
 <root class="@VisibleClass">
     <div class="placement container">
         <div class="header">
-            <VideoProviderList OnProviderSelected=@SetVideoProvider/>
+            <VideoProviderList @ref=MediaProviderList OnProviderSelected=@CreateMediaProviderHeaderPanel/>
             <div class="close-btn button" @onclick=@OnClose>
                 Close
             </div>

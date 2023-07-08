@@ -19,7 +19,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
     public MediaRequest CurrentMedia { get; set; }
     private IVideoPlayer CurrentVideoPlayer { get; set; }
     [Net]
-    public TimeSince StartedPlaying { get; private set; }
+    public float TimeSinceStartedPlaying { get; private set; }
     [Net]
     public bool IsPaused { get; set; }
 
@@ -36,9 +36,13 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [GameEvent.Tick.Server]
     private void OnTick()
     {
-        if (CurrentMedia != null && StartedPlaying > CurrentMedia.GenericInfo.Duration)
+        if (CurrentMedia != null && TimeSinceStartedPlaying > CurrentMedia.GenericInfo.Duration)
         {
             StopMedia(null);
+        }
+        if (CurrentMedia != null && !IsPaused)
+        {
+            TimeSinceStartedPlaying += Time.Delta;
         }
     }
 
@@ -64,7 +68,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
     {
         var provider = VideoProviderManager.Instance[providerId];
         CurrentMedia = await provider.CreateRequest(client, request);
-        StartedPlaying = 0;
+        TimeSinceStartedPlaying = 0;
         IsPaused = false;
         StartPlaying?.Invoke(this, null);
     }
@@ -132,6 +136,8 @@ public partial class MediaController : EntityComponent<CinemaZone>
         }
 
         CurrentVideoPlayer = await CurrentMedia.GetPlayer();
+        CurrentVideoPlayer.SetVolume(MediaConfig.DefaultMediaVolume);
+        MediaConfig.DefaultMediaVolumeChanged += (_, volume) => CurrentVideoPlayer.SetVolume(volume);
         Projector?.SetMedia(CurrentVideoPlayer);
         PlayAudio();
     }

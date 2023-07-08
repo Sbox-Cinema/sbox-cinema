@@ -90,9 +90,18 @@ public class DirectVideoPlayer : IVideoPlayer
         if (CurrentlyPlayingAudio.HasValue)
         {
             var hSnd = CurrentlyPlayingAudio.Value;
-            hSnd.Volume = Config.DefaultMediaVolume;
+            hSnd.Volume = MediaConfig.DefaultMediaVolume;
         }
         return CurrentlyPlayingAudio ?? default;
+    }
+
+    public void SetVolume(float newVolume)
+    {
+        if (CurrentlyPlayingAudio.HasValue)
+        {
+            var hSnd = CurrentlyPlayingAudio.Value;
+            hSnd.Volume = newVolume;
+        }
     }
 
     public virtual void Resume()

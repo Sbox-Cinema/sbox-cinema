@@ -11,4 +11,5 @@ public interface IVideoPresenter
     Texture Texture { get; }
     // TODO: Move this in to a separate interface.
     SoundHandle PlayAudio(IEntity entity);
+    void SetVolume(float newVolume);
 }

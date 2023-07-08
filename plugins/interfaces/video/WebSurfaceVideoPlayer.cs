@@ -54,6 +54,11 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
         return default;
     }
 
+    public virtual void SetVolume(float newVolume)
+    {
+        // This is dependent on the website.
+    }
+
     public virtual void Resume() { }
     public virtual void Seek(float time) { }
     public virtual void SetPaused(bool paused) { }

@@ -32,10 +32,15 @@ public class DummyVideoPresenter : IVideoPlayer
     {
         CurrentlyPlayingSound.Stop(true);
         LastEntity = entity;
-        var hSnd = Audio.Play("waltz_of_the_flowers", entity);
-        hSnd.Volume = 5 * Config.DefaultMediaVolume;
-        CurrentlyPlayingSound = hSnd;
-        return hSnd;
+        CurrentlyPlayingSound = Audio.Play("waltz_of_the_flowers", entity);
+        SetVolume(MediaConfig.DefaultMediaVolume);
+        return CurrentlyPlayingSound;
+    }
+
+    public void SetVolume(float newVolume)
+    {
+        var hSnd = CurrentlyPlayingSound;
+        hSnd.Volume = 5 * newVolume;
     }
 
     [GameEvent.Client.Frame]

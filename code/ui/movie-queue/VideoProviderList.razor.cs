@@ -27,14 +27,8 @@ public partial class VideoProviderList : Panel
             var providerPanel = Children
                 .OfType<VideoProviderIcon>()
                 .FirstOrDefault(p => p.Provider == value);
-            // Make sure the panel actually exists.
-            if (providerPanel == null)
-            {
-                Log.Info("Unable to find panel for provider.");
-                return;
-            }
             // Select the panel we found.
-            providerPanel.SetClass("selected", true);
+            providerPanel?.SetClass("selected", true);
             DeselectOtherPanels(value);
             OnProviderSelected?.Invoke(value);
         }
@@ -46,6 +40,13 @@ public partial class VideoProviderList : Panel
     public void RefreshVideoProviders()
     {
         Providers = new List<IMediaProvider>(VideoProviderManager.Instance.GetAll());
+    }
+
+    public void OnClickedProvider(IMediaProvider provider)
+    {
+        SelectedProvider = SelectedProvider == provider
+            ? null
+            : provider;
     }
 
     private void DeselectOtherPanels(IMediaProvider keepSelected)
