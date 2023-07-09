@@ -18,6 +18,7 @@ public class DirectVideoPlayer : IVideoPlayer
     protected string VideoPath { get; set; }
     protected SoundHandle? CurrentlyPlayingAudio;
     protected IEntity CurrentSoundSource { get; set; }
+    protected float LastVolume { get; set; }
     protected bool IsInitializing { get; set; }
     protected bool VideoLoaded { get; set; }
     protected bool AudioLoaded { get; set; }
@@ -91,6 +92,7 @@ public class DirectVideoPlayer : IVideoPlayer
         {
             var hSnd = CurrentlyPlayingAudio.Value;
             hSnd.Volume = MediaConfig.DefaultMediaVolume;
+            LastVolume = MediaConfig.DefaultMediaVolume;
         }
         return CurrentlyPlayingAudio ?? default;
     }

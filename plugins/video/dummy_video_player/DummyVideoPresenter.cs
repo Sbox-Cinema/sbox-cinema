@@ -81,6 +81,7 @@ public class DummyVideoPresenter : IVideoPlayer
             Resume();
         }
     }
+
     public void Stop() 
     {
         CurrentlyPlayingSound.Stop(true);

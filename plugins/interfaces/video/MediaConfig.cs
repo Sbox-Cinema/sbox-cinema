@@ -19,7 +19,27 @@ public static class MediaConfig
             // TODO: Persist this value clientside.
         }
     }
+
     private static float _DefaultMediaVolume = 1f;
+
+    public static bool ShouldMute 
+    {
+        get => DefaultMediaVolume == 0f;
+        set
+        {
+            if (value)
+            {
+                _LastVolume = DefaultMediaVolume;
+                DefaultMediaVolume = 0f;
+            }
+            else
+            {
+                DefaultMediaVolume = _LastVolume;
+            }
+        }
+    }
+    private static bool _ShouldMute = false;
+    private static float _LastVolume = _DefaultMediaVolume;
 
     public static event EventHandler<float> DefaultMediaVolumeChanged;
 
@@ -27,5 +47,4 @@ public static class MediaConfig
     {
         DefaultMediaVolumeChanged?.Invoke(null, newValue);
     }
-
 }

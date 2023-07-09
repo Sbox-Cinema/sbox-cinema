@@ -22,7 +22,7 @@ public class DummyVideoProvider : IMediaProvider, IMediaSelector
             GenericInfo = new MediaInfo()
             {
                 Author = "ducc",
-                Title = "Cool Dog Video",
+                Title = "Pretty Good Dog Video But Not Actually A Video It's Just a Texture and I'm playing a sound on the side lol",
                 Duration = 450,
                 Thumbnail = null
             },

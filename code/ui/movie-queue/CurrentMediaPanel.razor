@@ -6,27 +6,24 @@
 @attribute [StyleSheet]
 
 <root>
+    <div class="thumbnail" @ref=Thumbnail style="background-image: url(@ThumbnailPath);" />
     <div class="playback">
-        <div class="thumbnail" @ref=Thumbnail />
-        <div class="details">
-            <div class="title">Title: @NowPlaying?.GenericInfo?.Title</div>
-            <div class="artist">Author: @NowPlaying?.GenericInfo?.Author</div>
-            <div class="requestor">Requestor: @NowPlaying?.Requestor?.Name</div>
+        <div class="title">@NowPlaying?.GenericInfo?.Title</div>
+        <div class="mid-area">
+            <div class="controls">
+                <button class="control-button restart" onclick=@OnRestart>skip_previous</button>
+                <button class="control-button play" @onclick=@OnTogglePause>@(Controller.IsPaused ? "play_arrow" : "pause")</button>
+                <button class="control-button skip" @onclick=@OnSkip>skip_next</button>
+            </div>
+            <div class="volume-area">
+                <button class="volume-icon" @onclick=@OnToggleMute>@(MediaConfig.DefaultMediaVolume == 0f ? "volume_off" : "volume_up")</button>
+                <SliderControl @ref=VolumeSlider OnValueChanged=@OnVolumeChanged Min=@(0.0f) Max=@(2.0f) Step=@(0.01f) class="volume-control"/>
+            </div>
         </div>
-        <div class="controls">
-            <button class="control-button restart" onclick=@OnRestart>skip_previous</button>
-            <button class="control-button play" @onclick=@OnTogglePause>@(Controller.IsPaused ? "play_arrow" : "pause")</button>
-            <button class="control-button skip" @onclick=@OnSkip>skip_next</button>
+        <div class="progress-area">
+            <div class="progress-time">@NowPlayingTimeString</div>
+            <SliderControl @ref=ProgressSlider Min=@(0.0f) Max=@(NowPlaying?.GenericInfo?.Duration ?? 0.0f)/>
+            <div class="progress-time">@NowPlaying?.GenericInfo?.DurationFormatted</div>
         </div>
-        <div class="volume-area">
-            <button class="volume-icon">volume_up</button>
-            <SliderControl @ref=VolumeSlider OnValueChanged=@OnVolumeChanged Min=@(0.0f) Max=@(2.0f) Step=@(0.01f) class="volume-control"/>
-        </div>
-    </div>
-
-    <div class="progress-area">
-        <div class="progress-time">@NowPlayingTimeString</div>
-        <SliderControl Value=@(Controller.TimeSinceStartedPlaying) Min=@(0.0f) Max=@(NowPlaying?.GenericInfo?.Duration ?? 0.0f)/>
-        <div class="progress-time">@NowPlaying?.GenericInfo?.DurationFormatted</div>
     </div>
 </root>

@@ -18,8 +18,8 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [Net, Change]
     public MediaRequest CurrentMedia { get; set; }
     private IVideoPlayer CurrentVideoPlayer { get; set; }
-    [Net]
-    public float TimeSinceStartedPlaying { get; private set; }
+    [Net, Change]
+    public float CurrentPlaybackTime { get; private set; }
     [Net]
     public bool IsPaused { get; set; }
 
@@ -36,13 +36,13 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [GameEvent.Tick.Server]
     private void OnTick()
     {
-        if (CurrentMedia != null && TimeSinceStartedPlaying > CurrentMedia.GenericInfo.Duration)
+        if (CurrentMedia != null && CurrentPlaybackTime > CurrentMedia.GenericInfo.Duration)
         {
             StopMedia(null);
         }
         if (CurrentMedia != null && !IsPaused)
         {
-            TimeSinceStartedPlaying += Time.Delta;
+            CurrentPlaybackTime += Time.Delta;
         }
     }
 
@@ -68,7 +68,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
     {
         var provider = VideoProviderManager.Instance[providerId];
         CurrentMedia = await provider.CreateRequest(client, request);
-        TimeSinceStartedPlaying = 0;
+        CurrentPlaybackTime = 0;
         IsPaused = false;
         StartPlaying?.Invoke(this, null);
     }
@@ -88,6 +88,15 @@ public partial class MediaController : EntityComponent<CinemaZone>
         SetPauseMedia(IsPaused);
     }
 
+    [ConCmd.Server]
+    public static void SeekMedia(int zoneId, int clientId, float time)
+    {
+        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        // TODO: Verify whether client is allowed to seek.
+        // Due to ChangeAttribute, all clients should now seek to the new position.
+        controller.CurrentPlaybackTime = time;
+    }
+
     [ClientRpc]
     public void SetPauseMedia(bool shouldPause)
     {
@@ -105,6 +114,16 @@ public partial class MediaController : EntityComponent<CinemaZone>
     {
         CurrentMedia = null;
         StopPlaying?.Invoke(this, null);
+    }
+
+    private void OnCurrentPlaybackTimeChanged(float oldValue, float newValue)
+    {
+        // If the server's playback position has been changed by at least one second,
+        // all of the clients should seek to the new position.
+        if (Math.Abs(newValue - oldValue) >= 1f)
+        {
+            CurrentVideoPlayer.Seek(CurrentPlaybackTime);
+        }
     }
 
     private async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
