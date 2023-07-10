@@ -138,7 +138,13 @@ partial class Player : AnimatedEntity, IEyes
     {
         if (Input.Pressed("view"))
         {
+            Log.Info($"{ThirdPersonCamera}");
             ThirdPersonCamera = !ThirdPersonCamera;
+        }
+
+        if (Input.Pressed("swap"))
+        {
+            ThirdPersonSwapShoulder();
         }
 
         TickPlayerUse();

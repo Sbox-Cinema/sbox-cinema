@@ -225,6 +225,11 @@
           "Name": "JobMenu",
           "KeyboardCode": "B",
           "GroupName": "Game"
+        },
+        {
+          "Name": "swap",
+          "KeyboardCode": "p",
+          "GroupName": "Camera"
         }
       ]
     },

@@ -4,6 +4,19 @@ namespace Cinema;
 
 public partial class Player
 {
+    // default
+    public bool isLeftShoulderView = true;
+    public bool isRightShoulderView;
+
+    public void ThirdPersonSwapShoulder()
+    {
+        if(ThirdPersonCamera)
+        {
+            isRightShoulderView = !isRightShoulderView;
+            Log.Info($"Switched to {(isRightShoulderView ? "Right Shoulder View" : "Left Shoulder View")}");
+        }
+    }
+
     public void SimulateCamera(IClient cl)
     {
         Camera.Rotation = EyeRotation;
@@ -22,6 +35,7 @@ public partial class Player
 
             float distance = 130.0f * Scale;
             targetPos = pos + rot.Right * ((CollisionBounds.Mins.x + 32) * Scale);
+            targetPos = pos + rot.Right * ((isRightShoulderView ? 1 : 64) * Scale);
             targetPos += rot.Forward * -distance;
 
             var tr = Trace.Ray(pos, targetPos)
