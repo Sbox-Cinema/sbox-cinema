@@ -5,7 +5,6 @@ namespace Cinema;
 public partial class Player
 {
     // default
-    public bool isLeftShoulderView = true;
     public bool isRightShoulderView;
 
     public void ThirdPersonSwapShoulder()
