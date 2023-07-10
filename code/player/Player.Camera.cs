@@ -12,7 +12,7 @@ public partial class Player
         if(ThirdPersonCamera)
         {
             isRightShoulderView = !isRightShoulderView;
-            Log.Info($"Switched to {(isRightShoulderView ? "Right Shoulder View" : "Left Shoulder View")}");
+            //Log.Info($"Switched to {(isRightShoulderView ? "Right Shoulder View" : "Left Shoulder View")}");
         }
     }
 
@@ -28,13 +28,14 @@ public partial class Player
             Camera.FirstPersonViewer = null;
 
             Vector3 targetPos;
-            var center = Position + Vector3.Up * 64;
+            var center = Position + Vector3.Up * 80;
             var pos = center;
-            var rot = Rotation.FromAxis(Vector3.Up, -16) * Camera.Rotation;
+            var rot = Rotation.FromAxis(Vector3.Up, 0) * Camera.Rotation;
 
             float distance = 130.0f * Scale;
             targetPos = pos + rot.Right * ((CollisionBounds.Mins.x + 32) * Scale);
-            targetPos = pos + rot.Right * ((isRightShoulderView ? 1 : 64) * Scale);
+            targetPos = pos + rot.Right * ((isRightShoulderView ? 1 : -1) * 32 * Scale);
+
             targetPos += rot.Forward * -distance;
 
             var tr = Trace.Ray(pos, targetPos)
