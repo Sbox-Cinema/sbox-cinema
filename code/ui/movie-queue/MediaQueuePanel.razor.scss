@@ -1,0 +1,31 @@
+﻿MediaQueuePanel {
+    width: 30%;
+    height: 60%;
+    position: absolute;
+    right: 0%;
+    top: 15%;
+    z-index: 1;
+    background-color: rgba(42, 74, 127, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    flex-direction: column;
+
+    .header {
+        justify-content: center;
+        align-items: center;
+        height: 10%;
+        padding: 10px;
+        font-size: 36px;
+    }
+
+    .body {
+        flex-direction: column;
+        height: 85%;
+        margin-left: 10px;
+        margin-right: 10px;
+        border-radius: 10px;
+        background-color: rgba(69, 95, 114, 0.30);
+        backdrop-filter: blur(40px);
+        overflow-y: scroll;
+    }
+}

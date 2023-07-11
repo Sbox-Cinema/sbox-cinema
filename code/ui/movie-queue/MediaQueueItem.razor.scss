@@ -1,0 +1,14 @@
+﻿MediaQueueItem {
+    height: 150px;
+    align-items: center;
+
+    > .thumbnail {
+        width: 100px;
+        height: 100px;
+    }
+
+    > .icon {
+        font-family: 'Material Icons';
+        border-color: rgba(0,0,0,0);
+    }
+}

@@ -1,0 +1,21 @@
+﻿@using Sandbox.UI;
+
+@namespace Cinema.UI
+@inherits Panel;
+@attribute [StyleSheet]
+
+<root>
+    <div class="header">
+        <div class="title">Media Queue</div>
+    </div>
+    <div class="body">
+        @if (MediaQueue == null)
+        {
+            return;
+        }
+        @foreach(var item in MediaQueue.Items)
+        {
+            <MediaQueueItem ScoredItem=@item Queue=@MediaQueue/>
+        }
+    </div>
+</root>

@@ -8,6 +8,7 @@
 
 <root class="@VisibleClass">
     <div class="placement container">
+        <MediaQueuePanel MediaQueue=@Controller?.Zone?.MediaQueue/>      
         <div class="header">
             <VideoProviderList @ref=MediaProviderList OnProviderSelected=@CreateMediaProviderHeaderPanel/>
             <div class="close-btn button" @onclick=@OnClose>
@@ -17,33 +18,7 @@
         <div class="contents">
 
             <div @ref=MediaProviderHeaderContainer id="mediaHeader"/>
-            <div class="section clear grow scroll">
-                <div class="rows scrollable">
-@*                    @foreach (var (movie, index) in Queue.WithIndex())
-                    {
-                        <div class="row">
-                            <div class="count">@(index + 1)</div>
-                            <div class="title">
-                                <div class="text">@movie.Title</div>
-                                @if (CanRemoveMedia(movie))
-                                {
-                                    <div class="button fit small remove" @onclick=@(() => OnRemove(movie))>Remove</div>
-                                }
-                            </div>
-                            <div class="duration">
-                                @movie.DurationFormatted
-                            </div>
-                            <div class="requestor">
-                                @movie.Requestor.Name
-                            </div>
-                            <div class="voting-buttons">
-                                <div class="button like @(CanVoteFor(movie, true) ? "" : "disabled")" @onclick=@(() => OnVote(movie, true))>@(CanVoteFor(movie, true) ? "👍" : "-")</div>
-                                <div class="button dislike @(CanVoteFor(movie, false) ? "" : "disabled")" @onclick=@(() => OnVote(movie, false))>@(CanVoteFor(movie, false) ? "👎" : "-")</div>
-                            </div>
-                        </div>
-                    }*@
-                </div>
-            </div>                
+    
             @if (NowPlaying != null)
             {
                 <CurrentMediaPanel/>

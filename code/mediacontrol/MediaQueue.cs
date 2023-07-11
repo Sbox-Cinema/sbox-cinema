@@ -1,86 +1,84 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Sandbox;
+using CinemaTeam.Plugins.Video;
 
 namespace Cinema;
 
-public partial class MediaQueue<T> : EntityComponent where T : BaseNetworkable
+public partial class MediaQueue : EntityComponent
 {
-    public class ScoredItem : BaseNetworkable
+    public partial class ScoredItem : BaseNetworkable, IComparable<ScoredItem>
     {
-        public T Item { get; set; }
-        public int Score { get; set; }
-    }
+        [Net]
+        public MediaRequest Item { get; set; }
+        [Net]
+        public int Id { get; set; }
+        [Net]
+        public int PriorityOffset { get; set; }
+        [Net]
+        public IDictionary<IClient, bool> PriorityVotes { get; set; }
 
-    public class Vote : BaseNetworkable
-    {
-        public T Item { get; set; }
-        public IClient Voter { get; set; }
-        public bool Upvote { get; set; }
-    }
-
-    [Net]
-    private IList<ScoredItem> PriorityScores { get; set; }
-    [Net]
-    private IList<ScoredItem> FeedbackScores { get; set; }
-    [Net]
-    private IList<Vote> PriorityVotes { get; set; }
-    [Net]
-    private IList<Vote> FeedbackVotes { get; set; }
-    
-    public void Add(T item, int score)
-    {
-        PriorityScores.Add(new ScoredItem() { Item = item, Score = score });
-    }
-
-    public void ModifyPriorityScore(T item, int delta)
-    {
-        PriorityScores
-            .First(i => i.Item == item)
-            .Score += delta;
-    }
-
-    public void ModifyFeedbackScore(T item, int delta)
-    {
-        FeedbackScores
-            .First(i => i.Item == item)
-            .Score += delta;
-    }
-
-    public void Remove(T item)
-    {
-        var matches = PriorityScores.Where(i => i.Item == item).ToList();
-        foreach(var scoredItem in matches)
+        public void Vote(IClient client, bool isUpvote)
         {
-            PriorityScores.Remove(scoredItem);
+            if (PriorityVotes.TryGetValue(client, out var existingVote))
+            {
+                if (existingVote == isUpvote)
+                {
+                    return;
+                }
+                PriorityVotes[client] = isUpvote;
+                PriorityOffset += isUpvote ? 1 : -1;
+            }
+            else
+            {
+                PriorityVotes.Add(client, isUpvote);
+                PriorityOffset += isUpvote ? 1 : -1;
+            }
+        }
+
+        public int CompareTo(ScoredItem other)
+        {
+            return (PriorityOffset + Id).CompareTo(other.PriorityOffset + other.Id);
         }
     }
 
-    public void AddPriorityVote(T item, IClient voter, bool upvote)
-    {
-        PriorityVotes.Add(new Vote() { Item = item, Voter = voter, Upvote = upvote });
-    }
+    [Net]
+    public IList<ScoredItem> Items { get; set; }
 
-    public void RemovePriorityVote(T item, IClient voter)
+    private static int NextId { get; set; } = 0;
+
+    public IEnumerable<ScoredItem> GetAll() => Items.OrderBy(i => i);
+
+    public MediaRequest Pop()
     {
-        var matches = PriorityVotes.Where(v => v.Item == item && v.Voter == voter).ToList();
-        foreach(var vote in matches)
+        var item = Items.OrderBy(i => i).FirstOrDefault();
+        if (item != null)
         {
-            PriorityVotes.Remove(vote);
+            Items.Remove(item);
         }
+        return item.Item;
     }
 
-    public void AddFeedbackVote(T item, IClient voter, bool upvote)
+    private static MediaQueue FindByZoneId(int zoneId)
     {
-        FeedbackVotes.Add(new Vote() { Item = item, Voter = voter, Upvote = upvote });
+        var zone = Entity.FindByIndex(zoneId) as CinemaZone;
+        return zone?.MediaQueue;
     }
 
-    public void RemoveFeedbackVote(T item, IClient voter)
+    [ConCmd.Server]
+    public async static void Push(int zoneId, int clientId, int providerId, string query)
     {
-        var matches = FeedbackVotes.Where(v => v.Item == item && v.Voter == voter).ToList();
-        foreach(var vote in matches)
-        {
-            FeedbackVotes.Remove(vote);
-        }
+        var queue = FindByZoneId(zoneId);
+        var client = ClientHelper.FindById(clientId);
+        var provider = VideoProviderManager.Instance[providerId];
+        var request = await provider.CreateRequest(client, query);
+        queue.Push(request);
+    }
+
+    public void Push(MediaRequest request)
+    {
+        Items.Add(new ScoredItem { Item = request, Id = NextId++ });
     }
 }

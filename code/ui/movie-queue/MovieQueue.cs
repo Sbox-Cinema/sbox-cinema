@@ -26,8 +26,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     public Panel MediaProviderHeaderContainer { get; set; }
 
     public MediaController Controller { get; set; } = null;
-
-    public IList<Media> Queue => /* Controller?.Queue.OrderBy(m => m.ListScore).ToList() ?? */ new List<Media>();
+    public MediaQueue Queue => Controller?.Zone?.MediaQueue;
 
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
 
@@ -80,13 +79,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     {
         var zoneId = Controller.Zone.NetworkIdent;
         var clientId = Game.LocalClient.NetworkIdent;
-        MediaController.PlayMedia(zoneId, clientId, providerId, query);
-    }
-
-    protected static bool CanRemoveMedia(MediaRequest media)
-    {
-        return false;
-        // return media.CanRemove(Game.LocalClient);
+        MediaQueue.Push(zoneId, clientId, providerId, query);
     }
 
     protected static bool IsPlayer(MediaRequest media)
@@ -125,19 +118,9 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     protected override int BuildHash()
     {
-        var queueHash = 11;
-
-        if (Queue != null)
-        {
-            foreach (var media in Queue)
-            {
-                queueHash = queueHash * 31 + media.GetHashCode();
-            }
-        }
-
         var activeMediaProviderPanel = MediaProviderHeaderContainer.Children.FirstOrDefault();
 
-        return HashCode.Combine(activeMediaProviderPanel, IsOpen, Queue.Count, NowPlaying, queueHash, NowPlayingTimeString);
+        return HashCode.Combine(activeMediaProviderPanel, IsOpen, NowPlaying, NowPlayingTimeString);
     }
 
     public override void Tick()

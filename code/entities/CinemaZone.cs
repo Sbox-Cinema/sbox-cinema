@@ -18,6 +18,8 @@ public partial class CinemaZone : BaseTrigger
     public EntityTarget Projector { get; set; }
     [BindComponent]
     public MediaController MediaController { get; }
+    [BindComponent]
+    public MediaQueue MediaQueue { get; }
     [Net]
     public ProjectorEntity ProjectorEntity { get; set; }
     [Net]
@@ -47,6 +49,10 @@ public partial class CinemaZone : BaseTrigger
     {
         ProjectorEntity = Projector.GetTarget<ProjectorEntity>();
         Components.Create<MediaController>();
+        Components.Create<MediaQueue>();
+
+        MediaController.StartPlaying += (_, _) => SetLightsEnabled(false);
+        MediaController.StopPlaying += (_, _) => SetLightsEnabled(true);
 
         InitializeLights();
         InitializeSpeakers();

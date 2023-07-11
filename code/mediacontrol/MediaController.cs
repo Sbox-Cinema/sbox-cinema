@@ -26,13 +26,6 @@ public partial class MediaController : EntityComponent<CinemaZone>
     public event EventHandler StartPlaying;
     public event EventHandler StopPlaying;
 
-    [GameEvent.Entity.PostSpawn]
-    private void OnPostSpawn()
-    {
-        StartPlaying += (_,_) => Zone.SetLightsEnabled(false);
-        StopPlaying += (_,_) => Zone.SetLightsEnabled(true);
-    }
-
     [GameEvent.Tick.Server]
     private void OnTick()
     {
@@ -46,37 +39,18 @@ public partial class MediaController : EntityComponent<CinemaZone>
         }
     }
 
-    private static (MediaController controller, IClient client) GetControllerAndClient(int zoneId, int clientId)
+    public static MediaController FindByZoneId(int zoneId)
     {
         var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
         var controller = zone.MediaController;
-        IClient client = null;
-        if (clientId > 0)
-        {
-            client = Sandbox.Entity.FindByIndex(clientId) as IClient;
-        }
-        return (controller, client);
-    }
-
-    [ConCmd.Server]
-    public async static void PlayMedia(int zoneId, int clientId, int providerId, string request)
-    {
-        var (controller, client) = GetControllerAndClient(zoneId, clientId);
-        await controller.PlayMedia(client, providerId, request);
-    }
-    public async Task PlayMedia(IClient client, int providerId, string request)
-    {
-        var provider = VideoProviderManager.Instance[providerId];
-        CurrentMedia = await provider.CreateRequest(client, request);
-        CurrentPlaybackTime = 0;
-        IsPaused = false;
-        StartPlaying?.Invoke(this, null);
+        return controller;
     }
 
     [ConCmd.Server]
     public static void TogglePauseMedia(int zoneId, int clientId)
     {
-        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        var controller = FindByZoneId(zoneId);
+        var client = ClientHelper.FindById(clientId);
         controller.TogglePauseMedia(client);
     }
 
@@ -91,7 +65,7 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [ConCmd.Server]
     public static void SeekMedia(int zoneId, int clientId, float time)
     {
-        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        var controller = FindByZoneId(zoneId);
         // TODO: Verify whether client is allowed to seek.
         // Due to ChangeAttribute, all clients should now seek to the new position.
         controller.CurrentPlaybackTime = time;
@@ -106,7 +80,8 @@ public partial class MediaController : EntityComponent<CinemaZone>
     [ConCmd.Server]
     public static void StopMedia(int zoneId, int clientId)
     {
-        var (controller, client) = GetControllerAndClient(zoneId, clientId);
+        var controller = FindByZoneId(zoneId);
+        var client = ClientHelper.FindById(clientId);
         controller.StopMedia(client);
     }
 
@@ -137,6 +112,14 @@ public partial class MediaController : EntityComponent<CinemaZone>
             StopPlaying?.Invoke(this, null);
         }
         await PlayCurrentMedia();
+    }
+
+    public void PlayMedia(MediaRequest media)
+    {
+        CurrentMedia = media;
+        CurrentPlaybackTime = 0;
+        IsPaused = false;
+        StartPlaying?.Invoke(this, null);
     }
 
     [ClientRpc]
