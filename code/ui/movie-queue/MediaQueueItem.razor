@@ -10,8 +10,8 @@
         <div class="title">@MediaInfo.Title</div>
         <div>
             <div class="duration">@MediaInfo.DurationFormatted</div>
-            <button class="icon upvote" @onclick=@(() => OnVote(true))>thumb_up</button>
-            <button class="icon downvote" @onclick=@(() => OnVote(false))>thumb_down</button>
+            <button class="icon upvote" @onclick=@(() => OnVote(true))>arrow_upward</button>
+            <button class="icon downvote" @onclick=@(() => OnVote(false))>arrow_downward</button>
             <button class="icon remove" @onclick=@OnRemove>delete</button>
         </div>
     </div>
