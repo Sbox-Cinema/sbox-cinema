@@ -10,6 +10,7 @@ public partial class Hotdog : WeaponBase
     public override void Spawn()
     {
         base.Spawn();
+        Model = Model.Load("models/hotdog/w_hotdog_boxed.vmdl");
     }
 
     public override void PrimaryFire()

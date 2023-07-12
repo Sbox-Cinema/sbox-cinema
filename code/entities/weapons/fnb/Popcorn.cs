@@ -10,6 +10,8 @@ public partial class Popcorn : WeaponBase
     public override void Spawn()
     {
         base.Spawn();
+        WorldModel = Model.Load("models/popcorn_tub/w_popcorn_tub_01.vmdl");
+        
     }
 
     public override void PrimaryFire()

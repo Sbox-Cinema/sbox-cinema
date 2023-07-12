@@ -114,12 +114,13 @@ public partial class CinemaGame
             .Ignore(owner)
             .Size(2)
             .Run();
-
+        // might spawn as an entity prefab. Weird.
         var ent = TypeLibrary.Create<Entity>(entityType);
 
         ent.Position = tr.EndPosition;
+        ent.Spawn();
         // Make the spawned entity face the player who spawned it.
-        ent.Rotation = Rotation.From(new Angles(0, (-owner.AimRay.Forward).EulerAngles.yaw, 0));
+        //ent.Rotation = Rotation.From(new Angles(15, (-owner.AimRay.Forward).EulerAngles.yaw, 15));
     }
 
     [ConCmd.Server("item.give")]
@@ -152,7 +153,7 @@ public partial class CinemaGame
 
         var tr = Trace.Ray(player.EyePosition, player.EyePosition + player.EyeRotation.Forward * 999)
             .Ignore(player)
-            .WorldOnly()
+            .StaticOnly()
             .Run();
 
         client.Pawn.Position = tr.EndPosition;
