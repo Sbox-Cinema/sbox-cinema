@@ -38,14 +38,19 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         Tags.Add("interactable");
     }
 
+    /// <summary>
+    /// Plays soda fountain sound on client spawn
+    /// </summary>
     public override void ClientSpawn()
     {
         base.ClientSpawn();
 
-        // Play sound for the soda fountain "on" noise
-        Sound.FromEntity("machine_hum_02", this).SetVolume(10.0f);
+        Sound.FromEntity("machine_hum_02", this).SetVolume(8.0f);
     }
 
+    /// <summary>
+    /// Adds the interaction volumes from model doc 
+    /// </summary>
     public void AddInteractables()
     {
         Interactables.Add("Dispenser1", new Dispenser("Lever1State", SodaType.Conk)
@@ -69,6 +74,9 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         );
     }
 
+    /// <summary>
+    /// Simulates the interaction volumes
+    /// </summary>
     [GameEvent.Tick.Server]
     public void OnServerTick()
     {

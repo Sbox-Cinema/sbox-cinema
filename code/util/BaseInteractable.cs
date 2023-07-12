@@ -1,8 +1,6 @@
 ﻿using Cinema;
-using System;
 
 namespace Sandbox.util;
-
 public class Slot
 {
     public Entity Entity { get; set; }
@@ -14,6 +12,21 @@ public class Slot
     {
         Index = index;
         Attachment = attachment;
+    }
+
+    public void Occupy(Entity entity)
+    {
+        Entity = entity;
+    }
+
+    public void Clear()
+    {
+        Entity.Delete();
+    }
+
+    public bool IsEmpty()
+    {
+        return !Entity.IsValid();
     }
 }
 
@@ -33,15 +46,12 @@ public class CanTriggerResults
 
 public partial class BaseInteractable : BaseNetworkable
 {
-    [Net]
-    public string Name { get; set; }
-    [Net]
-    public Entity Parent { get; set; }
-    [Net]
-    public Vector3 Mins { get; set; }
-    [Net]
-    public Vector3 Maxs { get; set; }
-    public string Attachment { get; set; }
+    [Net] public string Name { get; set; }
+
+    [Net] public Entity Parent { get; set; }
+    [Net] public Vector3 Mins { get; set; }
+    [Net] public Vector3 Maxs { get; set; }
+    [Net] public string Attachment { get; set; }
     public float MaxDistance { get; set; } = 60f;
 
     public BaseInteractable()
@@ -54,7 +64,16 @@ public partial class BaseInteractable : BaseNetworkable
 
     public virtual void Simulate()
     {
+    }
 
+    public Transform GetParentTransform(string attachment)
+    {
+        if ((Parent as ModelEntity).GetAttachment(attachment) is Transform transform)
+        {
+            return transform;
+        }
+
+        return new Transform();
     }
 
     /// <summary>

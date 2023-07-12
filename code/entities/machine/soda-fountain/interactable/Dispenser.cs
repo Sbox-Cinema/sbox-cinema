@@ -32,7 +32,7 @@ public partial class Dispenser : BaseInteractable
 
     private Particles SodaParticles { get; set; }
     public CupFillable Cup { get; set; }
-
+    
     public Dispenser() // For the compiler...
     {
         
@@ -53,6 +53,7 @@ public partial class Dispenser : BaseInteractable
             if (Cup.IsValid() && Cup.Assembled()) return;
 
             DispenseTimer = DispenseTime;
+
             IsDispensing = true;
 
             if (Cup.IsValid()) // If empty cup is underneath this dispenser, create soda fill particles
@@ -66,15 +67,15 @@ public partial class Dispenser : BaseInteractable
                 SodaParticles.SetEntityAttachment(0, Parent, Attachment);
             }
 
-            // Play sound for dispenser lever being pushed
-            Sound.FromEntity("machine_lever_pull_01", Parent);
+            // Play sound for soda dispensing
+            Sound.FromEntity("cup_filling_01", Parent);
         }
     }
     public override void Simulate()
     {
         base.Simulate();
 
-        if(DispenseTimer && IsDispensing)
+        if (DispenseTimer && IsDispensing)
         {
             // Remove soda dispenser particles
             SodaParticles?.Destroy(true);
