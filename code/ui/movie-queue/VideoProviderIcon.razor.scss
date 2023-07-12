@@ -26,6 +26,9 @@
 
     > .big-icon {
         background-size: cover;
+        border-radius: 10px;
+        border-width: 2px;
+        border-color: rgba(255,255,255, 0.05);
         width: 80px;
         height: 80px;
     }

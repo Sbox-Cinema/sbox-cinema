@@ -11,7 +11,7 @@ namespace CinemaTeam.Plugins.Video;
 public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMediaCurator
 {
     public string ProviderName => "YouTube (VideoPlayer)";
-    public string ThumbnailPath => "assets/youtube_icon.png";
+    public string ThumbnailPath => "assets/youtube_icon_good.png";
     public MediaProviderHeaderPanel HeaderPanel => new YouTubeVideoProviderHeaderPanel();
 
     public async Task<MediaRequest> CreateRequest(IClient client, string requestString)
