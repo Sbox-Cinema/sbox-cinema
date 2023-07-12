@@ -52,11 +52,9 @@ MovieQueue {
     flex-direction: column;
     overflow: hidden;
     padding: 32px;
-    width: 80%;
+    width: 60%;
     height: 85%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 5%;
 }
 
 .section {
@@ -164,13 +162,6 @@ MovieQueue {
     &.fill {
         width: 100%;
     }
-
-    &.remove {
-        margin-left: 6px;
-        color: #C55;
-        font-size: 18px;
-    }
-
 }
 
 .rows {

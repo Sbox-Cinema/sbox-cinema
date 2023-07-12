@@ -106,6 +106,15 @@ public class DirectVideoPlayer : IVideoPlayer
         }
     }
 
+    public void SetPosition(Vector3 position)
+    {
+        if (CurrentlyPlayingAudio.HasValue)
+        {
+            var hSnd = CurrentlyPlayingAudio.Value;
+            hSnd.Position = position;
+        }
+    }
+
     public virtual void Resume()
     {
         VideoPlayer?.Resume();

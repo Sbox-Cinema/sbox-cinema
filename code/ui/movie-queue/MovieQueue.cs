@@ -13,6 +13,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public string Name => "Movie Queue";
     public bool IsOpen { get; protected set; }
+    public bool ShouldHideHud => true;
 
     public MovieQueue()
     {

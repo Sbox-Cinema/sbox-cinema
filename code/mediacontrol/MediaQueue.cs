@@ -7,7 +7,7 @@ using CinemaTeam.Plugins.Video;
 
 namespace Cinema;
 
-public partial class MediaQueue : EntityComponent
+public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent
 {
     public partial class ScoredItem : BaseNetworkable, IComparable<ScoredItem>
     {
@@ -46,24 +46,42 @@ public partial class MediaQueue : EntityComponent
 
     [Net]
     public IList<ScoredItem> Items { get; set; }
+    public MediaController Controller => Entity.MediaController;
+    public IEnumerable<ScoredItem> GetAll() => Items.OrderBy(i => i);
 
     private static int NextId { get; set; } = 0;
 
-    public IEnumerable<ScoredItem> GetAll() => Items.OrderBy(i => i);
+
+    [GameEvent.Tick.Server]
+    public void OnServerTick()
+    {
+        if (Controller == null)
+            return;
+
+        if (Controller.CurrentMedia == null)
+        {
+            var item = Pop();
+            if (item != null)
+            {
+                Controller.PlayMedia(item);
+            }
+        }
+    }
 
     public MediaRequest Pop()
     {
         var item = Items.OrderBy(i => i).FirstOrDefault();
-        if (item != null)
-        {
-            Items.Remove(item);
-        }
+
+        if (item == null)
+            return null;
+
+        Items.Remove(item);
         return item.Item;
     }
 
     private static MediaQueue FindByZoneId(int zoneId)
     {
-        var zone = Entity.FindByIndex(zoneId) as CinemaZone;
+        var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
         return zone?.MediaQueue;
     }
 

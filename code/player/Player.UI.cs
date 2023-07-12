@@ -52,6 +52,7 @@ public partial class Player
             CloseMenu();
 
         ActiveMenu = menu.Open() ? menu : null;
+        Hud.Instance.ShouldHide = ActiveMenu?.ShouldHideHud ?? false;
     }
 
     /// <summary>
@@ -67,6 +68,7 @@ public partial class Player
 
         ActiveMenu?.Close();
         ActiveMenu = null;
+        Hud.Instance.ShouldHide = false;
     }
 
     /// <summary>

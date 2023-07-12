@@ -59,6 +59,11 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
         // This is dependent on the website.
     }
 
+    public virtual void SetPosition(Vector3 newPosition)
+    {
+        // WebSurface will never play positional audio.
+    }
+
     public virtual void Resume() { }
     public virtual void Seek(float time) { }
     public virtual void SetPaused(bool paused) { }

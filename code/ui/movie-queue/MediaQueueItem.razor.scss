@@ -1,14 +1,32 @@
 ﻿MediaQueueItem {
-    height: 150px;
     align-items: center;
+    padding: 0px 10px;
 
     > .thumbnail {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 45px;
+        background-size: cover;
     }
 
-    > .icon {
+    > .details {
+        flex-direction: column;
+    }
+
+    .icon {
         font-family: 'Material Icons';
+        font-size: 28px;
         border-color: rgba(0,0,0,0);
+    }
+
+    > button {
+        &:hover {
+            background-color: #333;
+            border: 1px solid #6665;
+        }
+
+        &:active {
+            background-color: #444;
+            border: 1px solid #7775;
+        }
     }
 }

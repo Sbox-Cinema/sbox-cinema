@@ -43,6 +43,12 @@ public class DummyVideoPresenter : IVideoPlayer
         hSnd.Volume = 5 * newVolume;
     }
 
+    public void SetPosition(Vector3 position)
+    {
+        var hSnd = CurrentlyPlayingSound;
+        hSnd.Position = position;
+    }
+
     [GameEvent.Client.Frame]
     public void OnFrame()
     {

@@ -10,7 +10,7 @@ namespace Cinema;
 /// in a CinemaZone. It is called by the media queue, and calls the projector and
 /// speakers of a CinemaZone.
 /// </summary>
-public partial class MediaController : EntityComponent<CinemaZone>
+public partial class MediaController : EntityComponent<CinemaZone>, ISingletonComponent
 {
     public CinemaZone Zone => Entity;
     public ProjectorEntity Projector => Zone.ProjectorEntity;
@@ -148,16 +148,14 @@ public partial class MediaController : EntityComponent<CinemaZone>
     {
         var centerChannel = CinemaZone.AudioChannel.Center;
         // For now, we only support playing the center channel, but once VideoPlayer supports
-        // multiple audio channels,
+        // multiple audio channels, we can play each channel at a different position in the world.
         if (Zone.HasSpeaker(centerChannel))
         {
             CurrentVideoPlayer.PlayAudio(Zone.GetSpeaker(centerChannel));
         }
         else
         {
-            // Once we have the ability to play each audio channel at a different position in the world,
-            // we should branch here depending on whether the current CinemaZone has speakers.
-            // For now, the sound just plays somewhere over the audience's heads.
+            // Play a sound somewhere over the audience's heads.
             Projector?.PlayOverheadAudio();
         }
     }

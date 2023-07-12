@@ -15,4 +15,16 @@ Hud {
         right: 40px;
         bottom: 160px;
     }
+
+    > PlayerCard {
+        transition: opacity 0.2s ease-in;
+
+        &.visible {
+            opacity: 1;
+        }
+
+        &:not(.visible) {
+            opacity: 0;
+        }
+    }
 }

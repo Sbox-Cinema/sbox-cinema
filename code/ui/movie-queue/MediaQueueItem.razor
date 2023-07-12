@@ -6,9 +6,13 @@
 
 <root>
     <div class="thumbnail" style="background-image: url(@MediaInfo.Thumbnail );" />
-    <div class="title">@MediaInfo.Title</div>
-    <div class="duration">@MediaInfo.DurationFormatted</div>
-    <button class="icon upvote" @onclick=@(() => OnVote(true))>thumb_up</button>
-    <button class="icon downvote" @onclick=@(() => OnVote(false))>thumb_down</button>
-    <button class="remove" @onclick=@OnRemove>Remove</button>
+    <div class="details">
+        <div class="title">@MediaInfo.Title</div>
+        <div>
+            <div class="duration">@MediaInfo.DurationFormatted</div>
+            <button class="icon upvote" @onclick=@(() => OnVote(true))>thumb_up</button>
+            <button class="icon downvote" @onclick=@(() => OnVote(false))>thumb_down</button>
+            <button class="icon remove" @onclick=@OnRemove>delete</button>
+        </div>
+    </div>
 </root>
