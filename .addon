@@ -23,7 +23,7 @@
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Unrestricted",
     "MapList": [
-      "facepunch.flatgrass"
+      "cinemateam.cinema_test_ducc_02"
     ],
     "RankType": "None",
     "PerMapRanking": false,
