@@ -15,7 +15,7 @@ public partial class CurrentMediaPanel : Panel
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
     public TimeSince TimeSinceStartedPlaying => Controller?.CurrentPlaybackTime ?? 0;
     public string NowPlayingTimeString => NowPlaying == null ? "0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss}";
-    public string ThumbnailPath => NowPlaying?.GenericInfo.Thumbnail ?? "https://i.ytimg.com/vi/EbnH3VHzhu8/default.jpg";
+    public string ThumbnailPath => NowPlaying?.GenericInfo?.Thumbnail ?? "https://i.ytimg.com/vi/EbnH3VHzhu8/default.jpg";
 
     private bool _ProgressSliderClicked = false;
 

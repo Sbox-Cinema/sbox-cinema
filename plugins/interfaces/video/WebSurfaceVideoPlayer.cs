@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System;
+using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
 public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
@@ -13,28 +14,40 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
     protected virtual WebSurface WebSurface { get; set; }
     protected virtual bool WebSurfaceMouseClickedDown { get; set; }
     protected MediaRequest RequestData { get; set; }
+    protected bool VideoLoaded { get; set; }
     public WebSurfaceVideoPlayer(MediaRequest requestData)
     {
         RequestData = requestData;
-        InitializePlayer();
     }
 
-    protected virtual void InitializePlayer()
+    public virtual async Task InitializePlayer()
     {
         WebSurface = Game.CreateWebSurface();
         WebSurface.Size = WebSurfaceSize;
         WebSurface.OnTexture += UpdateTexture;
         WebSurface.InBackgroundMode = false;
         WebSurface.Url = RequestData["Url"];
+        await WaitUntilReady();
+    }
+
+    protected virtual async Task WaitUntilReady()
+    {
+        while(!VideoLoaded)
+        {
+            await GameTask.DelaySeconds(Time.Delta);
+        }
     }
 
     protected virtual void UpdateTexture(ReadOnlySpan<byte> span, Vector2 size)
     {
         if (Texture == null || Texture.Size != size)
         {
+            VideoLoaded = true;
             InitializeTexture(size);
         }
 
+        Log.Info($"Updating texture with size {size} and length {span.Length}");
+        
         Texture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
 

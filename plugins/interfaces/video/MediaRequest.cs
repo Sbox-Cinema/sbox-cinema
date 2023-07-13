@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace CinemaTeam.Plugins.Video;
 
@@ -13,7 +14,7 @@ public partial class MediaRequest : BaseNetworkable
 {
     public MediaRequest()
     {
-        
+
     }
 
     public MediaRequest(MediaInfo mediaInfo = null) 

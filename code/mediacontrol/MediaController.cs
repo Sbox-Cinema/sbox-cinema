@@ -29,7 +29,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     [GameEvent.Tick.Server]
     private void OnTick()
     {
-        if (CurrentMedia != null && CurrentPlaybackTime > CurrentMedia.GenericInfo.Duration)
+        if (CurrentMedia != null && CurrentPlaybackTime > CurrentMedia.GenericInfo?.Duration)
         {
             StopMedia(null);
         }

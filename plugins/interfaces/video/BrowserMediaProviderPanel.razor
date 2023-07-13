@@ -1,0 +1,18 @@
+﻿@using System.Threading.Tasks;
+@using Sandbox.UI;
+
+@namespace CinemaTeam.Plugins.Video
+@inherits MediaProviderHeaderPanel;
+@attribute [StyleSheet]
+
+<root>
+    <div class="url-bar">
+        <div>Media URL:</div>
+        <TextEntry class="url-entry" @ref=UrlTextEntry/>
+        <button class="url-submit" onclick=@(() => OnClickAdd())>Add</button>
+    </div>
+    <WebPanel @ref=BrowserPanel/>
+</root>
+
+@code {
+}

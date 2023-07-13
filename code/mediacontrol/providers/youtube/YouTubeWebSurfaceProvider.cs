@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Video;
@@ -9,16 +10,25 @@ public class YouTubeWebSurfaceProvider : IMediaProvider, IMediaSelector
     public string ProviderName => "YouTube (WebSurface)";
     public string ThumbnailPath => "ui/youtube_icon.png";
 
-    public MediaProviderHeaderPanel HeaderPanel => new YouTubeWebSurfaceHeaderPanel();
+    public MediaProviderHeaderPanel HeaderPanel 
+        => new BrowserMediaProviderPanel() { DefaultUrl = "https://www.youtube.com" };
 
-    public Task<MediaRequest> CreateRequest(IClient client, string queryString)
+    public async Task<MediaRequest> CreateRequest(IClient client, string queryString)
     {
-        throw new NotImplementedException();   
+        // TODO: Use Media Helpers to get the video information.
+        var request = new MediaRequest()
+        {
+            Requestor = client,
+        };
+        request["Url"] = queryString;
+        request.SetVideoProvider<YouTubeWebSurfaceProvider>();
+        return await GameTask.FromResult(request);
     }
 
-    public Task<IVideoPlayer> Play(MediaRequest requestData)
+    public async Task<IVideoPlayer> Play(MediaRequest requestData)
     {
-        IVideoPlayer player = new YouTubeWebSurfacePlayer(requestData);
-        return Task.FromResult(player);
+        var player = new YouTubeWebSurfacePlayer(requestData);
+        await player.InitializePlayer();
+        return player;
     }
 }

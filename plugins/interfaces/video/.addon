@@ -11,7 +11,9 @@
   "MenuResources": null,
   "HasCode": true,
   "CodePath": ".",
-  "PackageReferences": [],
+  "PackageReferences": [
+    "local.base"
+  ],
   "EditorReferences": null,
   "Metadata": {
     "ProjectTemplate": null,

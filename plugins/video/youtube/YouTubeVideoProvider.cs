@@ -12,7 +12,8 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
 {
     public string ProviderName => "YouTube (VideoPlayer)";
     public string ThumbnailPath => "assets/youtube_icon_good.png";
-    public MediaProviderHeaderPanel HeaderPanel => new YouTubeVideoProviderHeaderPanel();
+    public MediaProviderHeaderPanel HeaderPanel 
+        => new BrowserMediaProviderPanel() { DefaultUrl = "https://www.youtube.com" };
 
     public async Task<MediaRequest> CreateRequest(IClient client, string requestString)
     {
@@ -26,9 +27,9 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
             Thumbnail = youtubePlayerResponse.Thumbnails.FirstOrDefault().Url
         };
         var request = new MediaRequest(mediaInfo);
-        request.SetVideoProvider<YouTubeVideoProvider>();
         request.Requestor = client;
         request["Url"] = SelectBestStream(youtubePlayerResponse);
+        request.SetVideoProvider<YouTubeVideoProvider>();
         return request;
     }
 
