@@ -9,11 +9,10 @@ public partial class Player
 
     public void ThirdPersonSwapShoulder()
     {
-        if(ThirdPersonCamera)
-        {
-            isRightShoulderView = !isRightShoulderView;
-            //Log.Info($"Switched to {(isRightShoulderView ? "Right Shoulder View" : "Left Shoulder View")}");
-        }
+    if (!ThirdPersonCamera)
+        return;
+
+        isRightShoulderView = !isRightShoulderView;
     }
 
     public void SimulateCamera(IClient cl)
