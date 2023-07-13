@@ -58,7 +58,7 @@
         "MapName": "cinemateam.cinema_test_ducc_02",
         "MaxPlayers": 15,
         "GameSettings": {},
-        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;",
+        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;duccsoft.ctmi_derpibooru#local;",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
       },
@@ -262,6 +262,7 @@
           "GroupName": "Other"
         }
       ]
-    }
+    },
+    "TickRate": 50
   }
 }

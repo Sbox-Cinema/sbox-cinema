@@ -10,6 +10,15 @@
         align-items: center;
         margin: 0px 40px 10px 40px;
 
+        > .icon {
+            border-color: rgba(0, 0, 0, 0);
+            font-family: "Material Icons";
+
+            &.disabled {
+                color: rgba(255,255,255,0.5);
+            }
+        }
+
         > .url-entry {
             width: 65%;
             border-width: 2px;
