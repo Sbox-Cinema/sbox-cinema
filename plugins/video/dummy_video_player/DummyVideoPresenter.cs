@@ -1,6 +1,4 @@
 using Sandbox;
-using Sandbox.Internal;
-using System;
 
 namespace CinemaTeam.Plugins.Video;
 
@@ -11,8 +9,7 @@ public class DummyVideoPresenter : IVideoPlayer
     public Texture MultiplicandTexture { get; set; }
     public Texture Texture { get; private set; }
     public bool IsPaused { get; private set; }
-    private SoundHandle CurrentlyPlayingSound { get; set; }
-    private IEntity LastEntity { get; set; } = null;
+    private MusicPlayer Music { get; set; }
 
     private ComputeShader ColorfulShader { get; set; }
 
@@ -30,29 +27,33 @@ public class DummyVideoPresenter : IVideoPlayer
 
     public SoundHandle PlayAudio(IEntity entity)
     {
-        CurrentlyPlayingSound.Stop(true);
-        LastEntity = entity;
-        CurrentlyPlayingSound = Audio.Play("waltz_of_the_flowers", entity);
+        Stop();
+        Music = MusicPlayer.Play(FileSystem.Mounted, "music/waltz_of_the_flowers.mp3");
+        Music.Entity = entity;
         SetVolume(MediaConfig.DefaultMediaVolume);
-        return CurrentlyPlayingSound;
+        return default;
     }
 
     public void SetVolume(float newVolume)
     {
-        var hSnd = CurrentlyPlayingSound;
-        hSnd.Volume = 5 * newVolume;
+        if (Music == null)
+            return;
+
+        Music.Volume = 5 * newVolume;
     }
 
     public void SetPosition(Vector3 position)
     {
-        var hSnd = CurrentlyPlayingSound;
-        hSnd.Position = position;
+        if (Music == null)
+            return;
+
+        Music.Position = position;
     }
 
     [GameEvent.Client.Frame]
     public void OnFrame()
     {
-        if (IsPaused)
+        if (Music == null || IsPaused)
             return;
 
         ColorfulShader.Attributes.Set("GameTime", Time.Now);
@@ -67,30 +68,32 @@ public class DummyVideoPresenter : IVideoPlayer
 
     public void Resume() 
     {
-        PlayAudio(LastEntity);    
+        if (Music == null)
+            return;
+
+        Music.Paused = false;
     }
 
     public void SetPaused(bool newPauseValue) 
     {
-        var oldPauseValue = IsPaused;
+        Music.Paused = newPauseValue;
         IsPaused = newPauseValue;
-
-        //if (oldPauseValue == newPauseValue)
-        //    return;
-
-        if (newPauseValue)
-        {
-            CurrentlyPlayingSound.Stop(true);
-        }
-        else
-        {
-            Resume();
-        }
     }
 
-    public void Stop() 
+    public void Stop()
     {
-        CurrentlyPlayingSound.Stop(true);
+        if (Music == null)
+            return;
+
+        Music.Stop();
+        Music.Dispose();
+        Music = null;
     }
-    public void Seek(float time) { }
+    public void Seek(float time)
+    {
+        if (Music == null)
+            return;
+
+        Music.Seek(time);
+    }
 }

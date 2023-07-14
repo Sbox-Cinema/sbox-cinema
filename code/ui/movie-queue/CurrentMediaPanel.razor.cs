@@ -42,14 +42,13 @@ public partial class CurrentMediaPanel : Panel
         MediaConfig.DefaultMediaVolumeChanged += (_, volume) => volumeSlider.Value = volume;
         volumeSlider.Value = MediaConfig.DefaultMediaVolume;
         var progress = ProgressSlider as SliderControl;
-        progress.AddEventListener("onclick", _ => { Log.Info("left mouse down");  _ProgressSliderClicked = true; });
+        progress.AddEventListener("onclick", _ => { _ProgressSliderClicked = true; });
         progress.AddEventListener("onmouseup", 
             e =>
             {
                 var mouseEvent = e as MousePanelEvent;
                 if (mouseEvent.MouseButton == MouseButtons.Left)
                 {
-                    Log.Info("Left mouse up");
                     OnProgressChanged(progress.Value);
                 };
             }
