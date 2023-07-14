@@ -53,10 +53,10 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
         return await CreateRequest(null, randomVid);
     }
 
-    public async Task<IVideoPlayer> Play(MediaRequest requestData)
+    public async Task<IMediaPlayer> Play(MediaRequest requestData)
     {
         var player = new YouTubeVideoPlayer();
-        await player.InitializePlayer(requestData);
+        await player.StartAsync(requestData);
         return player;
     }
     private static string GetIdFromYoutubeUrl(string url)

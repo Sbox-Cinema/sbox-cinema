@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace CinemaTeam.Plugins.Media;
 
-public class YouTubeVideoPlayer : DirectVideoPlayer 
+public class YouTubeVideoPlayer : VideoPlayerMediaAdapter 
 {
     public override void OnFrame()
     {

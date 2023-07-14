@@ -15,5 +15,5 @@ public interface IMediaProvider
 
     Task<MediaRequest> CreateRequest(IClient client, string queryString);
 
-    Task<IVideoPlayer> Play(MediaRequest requestData);
+    Task<IMediaPlayer> Play(MediaRequest requestData);
 }

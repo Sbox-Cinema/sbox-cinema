@@ -1,8 +1,6 @@
 ﻿namespace CinemaTeam.Plugins.Media;
 
-public class YouTubeWebSurfacePlayer : WebSurfaceVideoPlayer
+public class YouTubeWebSurfacePlayer : WebSurfaceMediaPlayer
 {
-    public YouTubeWebSurfacePlayer(MediaRequest requestData) : base(requestData) { }
-
-    public override bool IsPaused => false;
+    public YouTubeWebSurfacePlayer() : base() { }
 }

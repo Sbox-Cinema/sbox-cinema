@@ -25,10 +25,10 @@ public class YouTubeWebSurfaceProvider : IMediaProvider, IMediaSelector
         return await GameTask.FromResult(request);
     }
 
-    public async Task<IVideoPlayer> Play(MediaRequest requestData)
+    public async Task<IMediaPlayer> Play(MediaRequest requestData)
     {
-        var player = new YouTubeWebSurfacePlayer(requestData);
-        await player.InitializePlayer();
+        var player = new YouTubeWebSurfacePlayer();
+        await player.StartAsync(requestData);
         return player;
     }
 }

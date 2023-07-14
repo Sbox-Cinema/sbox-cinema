@@ -4,17 +4,29 @@ using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Media;
 
-public class DirectVideoPlayer : IVideoPlayer
+public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer, IPlaybackControls
 {
-    public DirectVideoPlayer()
+    public VideoPlayerMediaAdapter()
     {
         Event.Register(this);
     }
 
-    public virtual Texture Texture { get; protected set; }
-    public virtual bool IsPaused => VideoPlayer?.IsPaused ?? false;
+    public virtual IVideoPlayer VideoPlayer => this;
+    public virtual IAudioPlayer AudioPlayer => this;
 
-    protected virtual VideoPlayer VideoPlayer { get; set; }
+    public virtual IPlaybackControls Controls => this;
+    public virtual void Pause() => _VideoPlayer.Pause();
+    public virtual void Resume() => _VideoPlayer?.Resume();
+    public virtual bool IsPaused => _VideoPlayer?.IsPaused ?? false;
+    public float PlaybackTime
+    {
+        get => _VideoPlayer?.PlaybackTime ?? 0;
+        set => Seek(value);
+    }
+    public virtual void Seek(float time) => _VideoPlayer?.Seek(time);
+
+    public virtual Texture Texture { get; protected set; }
+    protected virtual VideoPlayer _VideoPlayer { get; set; }
     protected string VideoPath { get; set; }
     protected SoundHandle? CurrentlyPlayingAudio;
     protected IEntity CurrentSoundSource { get; set; }
@@ -24,8 +36,7 @@ public class DirectVideoPlayer : IVideoPlayer
     protected bool AudioLoaded { get; set; }
     protected TimeSince VideoLastUpdated { get; set; }
 
-
-    public virtual async Task InitializePlayer(MediaRequest requestData)
+    public virtual async Task StartAsync(MediaRequest requestData)
     {
         VideoPath = requestData["Url"];
         IsInitializing = true;
@@ -48,14 +59,14 @@ public class DirectVideoPlayer : IVideoPlayer
 
     protected virtual void Play(string url)
     {
-        VideoPlayer = new VideoPlayer();
-        VideoPlayer.OnAudioReady += () =>
+        _VideoPlayer = new VideoPlayer();
+        _VideoPlayer.OnAudioReady += () =>
         {
             Log.Trace("Audio loaded.");
             AudioLoaded = true;
         };
-        VideoPlayer.OnTextureData += OnTextureData;
-        VideoPlayer.Play(url);
+        _VideoPlayer.OnTextureData += OnTextureData;
+        _VideoPlayer.Play(url);
     }
 
     protected virtual void OnTextureData(ReadOnlySpan<byte> span, Vector2 size)
@@ -80,21 +91,21 @@ public class DirectVideoPlayer : IVideoPlayer
                                     .Finish();
     }
 
-    public virtual SoundHandle PlayAudio(IEntity entity)
+    public virtual void PlayAudio(IEntity entity)
     {
-        if (VideoPlayer == null)
-            return default;
+        if (_VideoPlayer == null)
+            return;
 
         CurrentlyPlayingAudio?.Stop(true);
         CurrentSoundSource = entity;
-        CurrentlyPlayingAudio = VideoPlayer.PlayAudio(CurrentSoundSource);
+        CurrentlyPlayingAudio = _VideoPlayer.PlayAudio(CurrentSoundSource);
         if (CurrentlyPlayingAudio.HasValue)
         {
             var hSnd = CurrentlyPlayingAudio.Value;
             hSnd.Volume = MediaConfig.DefaultMediaVolume;
             LastVolume = MediaConfig.DefaultMediaVolume;
         }
-        return CurrentlyPlayingAudio ?? default;
+        return;
     }
 
     public void SetVolume(float newVolume)
@@ -115,44 +126,23 @@ public class DirectVideoPlayer : IVideoPlayer
         }
     }
 
-    public virtual void Resume()
-    {
-        VideoPlayer?.Resume();
-    }
-
-    public virtual void SetPaused(bool paused)
-    {
-        if (VideoPlayer == null)
-            return;
-
-        if (VideoPlayer.IsPaused != paused)
-        {
-            VideoPlayer.TogglePause();
-        }
-    }
-
-    public virtual void Seek(float time)
-    {
-        VideoPlayer?.Seek(time);
-    }
-
     public virtual void Stop()
     {
-        if (VideoPlayer == null)
+        if (_VideoPlayer == null)
             return;
 
         CurrentlyPlayingAudio?.Stop(true);
         AudioLoaded = false;
-        VideoPlayer.Stop();
-        VideoPlayer.Dispose();
+        _VideoPlayer.Stop();
+        _VideoPlayer.Dispose();
         VideoLoaded = false;
-        VideoPlayer = null;
+        _VideoPlayer = null;
     }
 
     protected virtual void Refresh()
     {
         IsInitializing = true;
-        var currentTime = VideoPlayer.PlaybackTime;
+        var currentTime = _VideoPlayer.PlaybackTime;
         Stop();
         Play(VideoPath);
         GameTask.RunInThreadAsync(async () =>
@@ -166,6 +156,6 @@ public class DirectVideoPlayer : IVideoPlayer
     [GameEvent.Client.Frame]
     public virtual void OnFrame()
     {
-        VideoPlayer?.Present();
+        _VideoPlayer?.Present();
     }
 }

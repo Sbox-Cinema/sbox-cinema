@@ -32,9 +32,9 @@ public class DummyVideoProvider : IMediaProvider, IMediaSelector
         return Task.FromResult(request);
     }
 
-    public Task<IVideoPlayer> Play(MediaRequest requestData)
+    public Task<IMediaPlayer> Play(MediaRequest requestData)
     {
-        IVideoPlayer player = new DummyVideoPresenter();
+        IMediaPlayer player = new DummyVideoPresenter();
         return Task.FromResult(player);
     }
        

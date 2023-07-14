@@ -17,7 +17,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
     [Net, Change]
     public MediaRequest CurrentMedia { get; set; }
-    private IVideoPlayer CurrentVideoPlayer { get; set; }
+    private IMediaPlayer CurrentMediaPlayer { get; set; }
     [Net, Change]
     public float CurrentPlaybackTime { get; private set; }
     [Net]
@@ -74,7 +74,14 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     [ClientRpc]
     public void SetPauseMedia(bool shouldPause)
     {
-        CurrentVideoPlayer.SetPaused(shouldPause);
+        if (shouldPause)
+        {
+            CurrentMediaPlayer.Controls?.Pause();
+        }
+        else
+        {
+            CurrentMediaPlayer.Controls?.Resume();
+        }
     }
 
     [ConCmd.Server]
@@ -97,7 +104,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         // all of the clients should seek to the new position.
         if (Math.Abs(newValue - oldValue) >= 1f)
         {
-            CurrentVideoPlayer.Seek(CurrentPlaybackTime);
+            CurrentMediaPlayer.Controls?.Seek(CurrentPlaybackTime);
         }
     }
 
@@ -128,8 +135,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         if (!Game.IsClient)
             return;
 
-        CurrentVideoPlayer?.Stop();
-        StopAudio();
+        CurrentMediaPlayer?.Stop();
 
         if (CurrentMedia == null)
         {
@@ -137,33 +143,32 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             return;
         }
 
-        CurrentVideoPlayer = await CurrentMedia.GetPlayer();
-        CurrentVideoPlayer.SetVolume(MediaConfig.DefaultMediaVolume);
-        MediaConfig.DefaultMediaVolumeChanged += (_, volume) => CurrentVideoPlayer.SetVolume(volume);
-        Projector?.SetMedia(CurrentVideoPlayer);
-        PlayAudio();
+        CurrentMediaPlayer = await CurrentMedia.GetPlayer();
+        Projector?.SetMedia(CurrentMediaPlayer);
+        if (CurrentMediaPlayer.AudioPlayer != null)
+        {
+            CurrentMediaPlayer.AudioPlayer.SetVolume(MediaConfig.DefaultMediaVolume);
+            MediaConfig.DefaultMediaVolumeChanged += (_, volume) => CurrentMediaPlayer.AudioPlayer.SetVolume(volume);
+            PlayAudio();
+        }
     }
 
     private void PlayAudio()
     {
+        if (CurrentMediaPlayer.AudioPlayer == null)
+            return;
+
         var centerChannel = CinemaZone.AudioChannel.Center;
         // For now, we only support playing the center channel, but once VideoPlayer supports
         // multiple audio channels, we can play each channel at a different position in the world.
         if (Zone.HasSpeaker(centerChannel))
         {
-            CurrentVideoPlayer.PlayAudio(Zone.GetSpeaker(centerChannel));
+            CurrentMediaPlayer.AudioPlayer.PlayAudio(Zone.GetSpeaker(centerChannel));
         }
         else
         {
-            // Play a sound somewhere over the audience's heads.
-            Projector?.PlayOverheadAudio();
+            // Play a sound from the projector itself.
+            CurrentMediaPlayer.AudioPlayer.PlayAudio(Projector);
         }
     }
-
-    private void StopAudio()
-    {
-        Zone.StopAllSpeakerAudio();
-        Projector?.StopOverheadAudio();
-    }
-
 }

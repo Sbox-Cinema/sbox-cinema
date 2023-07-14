@@ -5,7 +5,7 @@ namespace CinemaTeam.Plugins.Media;
 
 public static class MediaRequestExtensions
 {
-    public async static Task<IVideoPlayer> GetPlayer(this MediaRequest request)
+    public async static Task<IMediaPlayer> GetPlayer(this MediaRequest request)
     {
         // Log request URL and providre ID
         Log.Info($"Request URL: {request["Url"]}");

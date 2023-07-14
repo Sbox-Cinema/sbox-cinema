@@ -32,10 +32,10 @@ public class DirectVideoProvider : IMediaProvider, IMediaSelector
         return request;
     }
 
-    public async Task<IVideoPlayer> Play(MediaRequest requestData)
+    public async Task<IMediaPlayer> Play(MediaRequest requestData)
     {
-        var player = new DirectVideoPlayer();
-        await player.InitializePlayer(requestData);
+        var player = new VideoPlayerMediaAdapter();
+        await player.StartAsync(requestData);
         return player;
     }
 }

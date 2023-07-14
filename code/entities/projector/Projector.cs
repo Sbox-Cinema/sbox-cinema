@@ -18,13 +18,8 @@ public partial class ProjectorEntity : Entity
     [Net, Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; }
 
-    [ConVar.Client("projector.audio.volumescale")]
-    public static float VolumeScale { get; set; } = 3.0f;
-    // TODO: Persist VolumeScale clientside.
-
     [Net]
     public CinemaZone Zone { get; set; }
-    protected SoundHandle? CurrentOverheadSound { get; set; }
     protected Vector3 OverheadAudioPosition => Position + Rotation.Forward * (ScreenDistance / 2);
 
     public override void Spawn()
@@ -57,22 +52,9 @@ public partial class ProjectorEntity : Entity
         }
     }
 
-    private float OldVolumeScale = VolumeScale;
-
     [GameEvent.Tick.Client]
     public void OnClientTick()
     {
-        if (CurrentOverheadSound != null)
-        {
-            var hSnd = CurrentOverheadSound.Value;
-            hSnd.Position = OverheadAudioPosition;
-
-            if (VolumeScale != OldVolumeScale)
-            {
-                hSnd.Volume = VolumeScale;
-            }
-        }
-        OldVolumeScale = VolumeScale;
         UpdateClientProjection();
     }
 
@@ -82,39 +64,12 @@ public partial class ProjectorEntity : Entity
         InitializeProjection();
     }
 
-    public void SetMedia(IVideoPresenter media)
+    public void SetMedia(IMediaPlayer media)
     {
-        // Stop now in case the next media doesn't clobber the current overhead audio.
-        CurrentOverheadSound?.Stop(true);
+        // Stop whatever media might already be playing.
+        CurrentMedia?.Stop();
         CurrentMedia = media;
         ProjectCurrentMedia();
-    }
-
-    /// <summary>
-    /// Plays the audio from the current media at the midpoint between the projector
-    /// and the screen, which should sound like it's coming from above the audience.
-    /// This is meant as a fallback option for audio in theaters that lack speakers.
-    /// </summary>
-    public void PlayOverheadAudio()
-    {
-        if (CurrentMedia == null)
-            return;
-
-        StopOverheadAudio();
-        var soundPosition = OverheadAudioPosition;
-        var hSnd = CurrentMedia.PlayAudio(null);
-        hSnd.Position = soundPosition;
-        hSnd.Volume = VolumeScale;
-        CurrentOverheadSound = hSnd;
-    }
-
-    /// <summary>
-    /// Stop whatever audio might be playing overhead as the result of a 
-    /// previous call to <c>PlayOverheadAudio</c>.
-    /// </summary>
-    public void StopOverheadAudio()
-    {
-        CurrentOverheadSound?.Stop(true);
     }
 
     protected override void OnDestroy()

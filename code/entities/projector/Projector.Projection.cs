@@ -16,7 +16,7 @@ public partial class ProjectorEntity
     /// <summary>
     /// The media we want to be playing (but might not be)
     /// </summary>
-    public IVideoPresenter CurrentMedia { get; protected set; }
+    public IMediaPlayer CurrentMedia { get; protected set; }
     private SpotLightEntity ProjectionLight { get; set; }
     public Texture InputTexture { get; set; }
     protected Texture LastInputTexture { get; set; }
@@ -180,17 +180,19 @@ public partial class ProjectorEntity
         }
         if (!Game.LocalPawn.IsValid()) return;
 
-        if (CurrentMedia?.Texture == null)
+        var videoPlayer = CurrentMedia.VideoPlayer;
+
+        if (videoPlayer.Texture == null)
         {
             Log.Info($"{Name} - Media texture is null.");
             return;
         }
-        if (CurrentMedia.Texture.Width == 1 && CurrentMedia.Texture.Height == 1)
+        if (videoPlayer.Texture.Width == 1 && videoPlayer.Texture.Height == 1)
         {
             Log.Info($"{Name} - Video is blank due to some kind of issue.");
         }
 
-        InputTexture = CurrentMedia.Texture;
+        InputTexture = videoPlayer.Texture;
         InitializeProjection();
     }
 

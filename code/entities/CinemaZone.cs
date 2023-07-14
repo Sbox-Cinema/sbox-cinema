@@ -26,7 +26,6 @@ public partial class CinemaZone : BaseTrigger
     public IList<PointLightEntity> Lights { get; set; }
     [Net]
     public IList<Entity> Speakers { get; set; }
-    private List<SoundHandle> ActiveSoundHandles { get; set; } = new();
 
     public float LightDimmingTime { get; set; } = 5.0f;
     private float MaxLightBrightness { get; set; }
@@ -123,28 +122,18 @@ public partial class CinemaZone : BaseTrigger
         return Speakers[(int)channel];
     }
 
-    public void PlayAudioOnSpeaker(IVideoPresenter presenter, AudioChannel channel)
+    public void PlayAudioOnSpeaker(IAudioPlayer presenter, AudioChannel channel)
     {
         var speaker = GetSpeaker(channel);
         if (speaker == null)
         {
-            Log.Info($"Speaker {channel.ToString()} is null");
+            Log.Info($"Speaker {channel} is null");
         }
-        var hSnd = presenter.PlayAudio(speaker);
-        ActiveSoundHandles.Add(hSnd);
+        presenter.PlayAudio(speaker);
     }
 
-    public void PlayAudioOnSpeaker(IVideoPresenter presenter, int channel)
+    public void PlayAudioOnSpeaker(IAudioPlayer presenter, int channel)
         => PlayAudioOnSpeaker(presenter, (AudioChannel)channel);
-
-    public void StopAllSpeakerAudio()
-    {
-        foreach (var hSnd in ActiveSoundHandles)
-        {
-            hSnd.Stop(true);
-        }
-        ActiveSoundHandles.Clear();
-    }
 
     public override void OnTouchStart(Entity toucher)
     {

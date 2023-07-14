@@ -1,16 +1,33 @@
 using Sandbox;
+using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Media;
 
-public class DummyVideoPresenter : IVideoPlayer
+public class DummyVideoPresenter : IMediaPlayer, IVideoPlayer, IAudioPlayer, IPlaybackControls
 {
     [ConVar.Client("plugins.video.test.drawtex")]
     public static bool EnableShaderDebug { get; set; }
+
+    public virtual IVideoPlayer VideoPlayer => this;
+    public virtual IAudioPlayer AudioPlayer => this;
+    public virtual IPlaybackControls Controls => this;
+    public float PlaybackTime 
+    {
+        get => Music?.PlaybackTime ?? 0;
+        set => Seek(value);
+    }
+    public bool IsPaused => Music?.Paused ?? false;
+    public void Pause()
+    {
+        if (Music == null)
+            return;
+
+        Music.Paused = true;
+    }
+
     public Texture MultiplicandTexture { get; set; }
     public Texture Texture { get; private set; }
-    public bool IsPaused { get; private set; }
     private MusicPlayer Music { get; set; }
-
     private ComputeShader ColorfulShader { get; set; }
 
     public DummyVideoPresenter()
@@ -25,13 +42,17 @@ public class DummyVideoPresenter : IVideoPlayer
         Event.Register(this);
     }
 
-    public SoundHandle PlayAudio(IEntity entity)
+    public Task StartAsync(MediaRequest request)
+    {
+        return Task.CompletedTask;
+    }
+
+    public void PlayAudio(IEntity entity)
     {
         Stop();
         Music = MusicPlayer.Play(FileSystem.Mounted, "music/waltz_of_the_flowers.mp3");
         Music.Entity = entity;
         SetVolume(MediaConfig.DefaultMediaVolume);
-        return default;
     }
 
     public void SetVolume(float newVolume)
@@ -72,12 +93,6 @@ public class DummyVideoPresenter : IVideoPlayer
             return;
 
         Music.Paused = false;
-    }
-
-    public void SetPaused(bool newPauseValue) 
-    {
-        Music.Paused = newPauseValue;
-        IsPaused = newPauseValue;
     }
 
     public void Stop()

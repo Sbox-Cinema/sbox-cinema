@@ -3,25 +3,32 @@ using System;
 using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Media;
-public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
+public partial class WebSurfaceMediaPlayer : IMediaPlayer, IVideoPlayer
 {
     [ConVar.Client("projector.websurface.size")]
     public static Vector2 WebSurfaceSize { get; set; } = new Vector2(1280, 720);
 
+    public virtual IVideoPlayer VideoPlayer => this;
     public virtual Texture Texture { get; protected set; }
 
-    public abstract bool IsPaused { get; }
-    protected virtual WebSurface WebSurface { get; set; }
-    protected virtual bool WebSurfaceMouseClickedDown { get; set; }
+    // Volume depends on the website, and audio position may never be set.
+    public virtual IAudioPlayer AudioPlayer => null; 
+    // The playback controls would be implemented per-website.
+    public virtual IPlaybackControls Controls => null;
+
+    protected WebSurface WebSurface { get; set; }
+    protected bool WebSurfaceMouseClickedDown { get; set; }
     protected MediaRequest RequestData { get; set; }
     protected bool VideoLoaded { get; set; }
-    public WebSurfaceVideoPlayer(MediaRequest requestData)
+
+    public WebSurfaceMediaPlayer()
     {
-        RequestData = requestData;
+        Event.Register(this);
     }
 
-    public virtual async Task InitializePlayer()
+    public virtual async Task StartAsync(MediaRequest request)
     {
+        RequestData = request;
         WebSurface = Game.CreateWebSurface();
         WebSurface.Size = WebSurfaceSize;
         WebSurface.OnTexture += UpdateTexture;
@@ -59,26 +66,6 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
                                     .WithUAVBinding() // Needed for the texture to work as a light cookie.
                                     .Finish();
     }
-
-    public virtual SoundHandle PlayAudio(IEntity entity)
-    {
-        // WebSurface will never play positional audio.
-        return default;
-    }
-
-    public virtual void SetVolume(float newVolume)
-    {
-        // This is dependent on the website.
-    }
-
-    public virtual void SetPosition(Vector3 newPosition)
-    {
-        // WebSurface will never play positional audio.
-    }
-
-    public virtual void Resume() { }
-    public virtual void Seek(float time) { }
-    public virtual void SetPaused(bool paused) { }
 
     public virtual void Stop()
     {
