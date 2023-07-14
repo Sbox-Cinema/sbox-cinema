@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sandbox;
-using CinemaTeam.Plugins.Video;
+using CinemaTeam.Plugins.Media;
 using System;
 
 namespace Cinema;

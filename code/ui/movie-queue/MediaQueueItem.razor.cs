@@ -1,4 +1,4 @@
-﻿using CinemaTeam.Plugins.Video;
+﻿using CinemaTeam.Plugins.Media;
 using Sandbox.UI;
 using System;
 using System.Collections.Generic;

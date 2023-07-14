@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
 {

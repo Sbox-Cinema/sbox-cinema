@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Sandbox;
 using Sandbox.UI;
-using CinemaTeam.Plugins.Video;
+using CinemaTeam.Plugins.Media;
 
 namespace Cinema.UI;
 

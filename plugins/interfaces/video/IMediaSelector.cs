@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 /// <summary>
 /// Provides a panel that can be used to generate queries for a media provider.

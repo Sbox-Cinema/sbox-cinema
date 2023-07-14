@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Threading.Tasks;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 /// <summary>
 /// Identifies a media provider by name and thumbnail.

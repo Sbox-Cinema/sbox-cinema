@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMediaCurator
 {

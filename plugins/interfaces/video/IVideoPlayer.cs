@@ -1,4 +1,4 @@
-﻿namespace CinemaTeam.Plugins.Video;
+﻿namespace CinemaTeam.Plugins.Media;
 
 /// <summary>
 /// Provides a union of the IVideoPresenter and IMediaControls interfaces. 

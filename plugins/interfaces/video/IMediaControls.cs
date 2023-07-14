@@ -1,4 +1,4 @@
-﻿namespace CinemaTeam.Plugins.Video;
+﻿namespace CinemaTeam.Plugins.Media;
 
 /// <summary>
 /// Allows for the playback of a video to be controlled.

@@ -1,6 +1,6 @@
 using Sandbox;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 public class DummyVideoPresenter : IVideoPlayer
 {

@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 /// <summary>
 /// Provides a texture that can be displayed on a screen.

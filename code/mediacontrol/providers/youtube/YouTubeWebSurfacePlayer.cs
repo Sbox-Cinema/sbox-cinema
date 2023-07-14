@@ -1,4 +1,4 @@
-﻿namespace CinemaTeam.Plugins.Video;
+﻿namespace CinemaTeam.Plugins.Media;
 
 public class YouTubeWebSurfacePlayer : WebSurfaceVideoPlayer
 {

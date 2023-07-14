@@ -1,9 +1,9 @@
 {
-  "Title": "YouTube Video Player",
+  "Title": "YouTube Media Provider",
   "Type": "library",
   "Org": "cinemateam",
-  "Ident": "youtube_video_player",
-  "Tags": "ctvpi video player plugin",
+  "Ident": "youtube_media_provider",
+  "Tags": "ctmi plugin video youtube",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
@@ -12,7 +12,7 @@
   "HasCode": true,
   "CodePath": ".",
   "PackageReferences": [
-    "cinemateam.interface_video",
+    "cinemateam.ctmi",
     "carsonk.mediahelpers",
     "local.base"
   ],
@@ -21,7 +21,7 @@
     "ProjectTemplate": null,
     "CsProjName": "",
     "Compiler": {
-      "RootNamespace": "CinemaTeam.Plugins.Video",
+      "RootNamespace": "CinemaTeam.Plugins.Media",
       "DefineConstants": "SANDBOX;ADDON;DEBUG",
       "NoWarn": "1701;1702;1591;",
       "References": [],

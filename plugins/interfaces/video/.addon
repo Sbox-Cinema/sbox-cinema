@@ -1,8 +1,8 @@
 {
-  "Title": "Video Player Interface",
+  "Title": "Cinema Team Media Interface",
   "Type": "library",
   "Org": "cinemateam",
-  "Ident": "interface_video",
+  "Ident": "ctmi",
   "Tags": "ctvpi interface",
   "Schema": 1,
   "HasAssets": true,
@@ -17,6 +17,13 @@
   "EditorReferences": null,
   "Metadata": {
     "ProjectTemplate": null,
-    "CsProjName": ""
+    "CsProjName": "",
+    "Compiler": {
+      "RootNamespace": "CinemaTeam.Plugins.Media",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "References": [],
+      "DistinctReferences": []
+    }
   }
 }

@@ -3,7 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 public class YouTubeWebSurfaceProvider : IMediaProvider, IMediaSelector
 {

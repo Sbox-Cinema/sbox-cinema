@@ -1,7 +1,7 @@
 ﻿using Cinema;
 using System.Threading.Tasks;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 
 public static class MediaRequestExtensions
 {

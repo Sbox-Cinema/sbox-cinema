@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace CinemaTeam.Plugins.Video;
+namespace CinemaTeam.Plugins.Media;
 public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
 {
     [ConVar.Client("projector.websurface.size")]
