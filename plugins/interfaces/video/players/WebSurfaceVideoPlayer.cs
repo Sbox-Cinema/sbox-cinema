@@ -32,7 +32,7 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
 
     protected virtual async Task WaitUntilReady()
     {
-        while(!VideoLoaded)
+        while (!VideoLoaded)
         {
             await GameTask.DelaySeconds(Time.Delta);
         }
@@ -46,7 +46,7 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
             VideoLoaded = true;
             InitializeTexture(size);
         }
-        
+
         Texture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
 
