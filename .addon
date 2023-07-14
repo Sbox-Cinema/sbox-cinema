@@ -13,8 +13,7 @@
   "CodePath": "/code/",
   "PackageReferences": [
     "conna.radial_menu",
-    "cinemateam.interface_video",
-    "cinemateam.dummy_video_player"
+    "cinemateam.interface_video"
   ],
   "EditorReferences": null,
   "Metadata": {
@@ -58,7 +57,7 @@
         "MapName": "cinemateam.cinema_test_ducc_02",
         "MaxPlayers": 15,
         "GameSettings": {},
-        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;duccsoft.ctmi_derpibooru#local;",
+        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;cinemateam.dummy_video_player#local;",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
       },

@@ -42,11 +42,10 @@ public abstract partial class WebSurfaceVideoPlayer : IVideoPlayer
     {
         if (Texture == null || Texture.Size != size)
         {
+            Log.Trace($"Creating texture with size {size} and length {span.Length}");
             VideoLoaded = true;
             InitializeTexture(size);
         }
-
-        Log.Info($"Updating texture with size {size} and length {span.Length}");
         
         Texture.Update(span, 0, 0, (int)size.x, (int)size.y);
     }
