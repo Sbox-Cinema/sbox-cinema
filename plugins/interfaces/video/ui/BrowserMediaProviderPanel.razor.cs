@@ -9,7 +9,8 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
 {
     public Panel UrlTextEntry { get; set; }
     public Panel BrowserPanel { get; set; }
-    public string DefaultUrl { get; set; } = "https://www.google.com";
+    public string DefaultUrl { get; set; } = "https://www.duckduckgo.com";
+    public string DefaultScheme { get; set; } = "http://";
 
     protected List<string> BrowserHistory { get; set; } = new();
     protected int BrowserHistoryIndex { get; set; } = -1;
@@ -24,6 +25,8 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
         var browser = BrowserPanel as WebPanel;
         browser.Surface.Url = DefaultUrl;
         OnUrlChanged(null, DefaultUrl);
+        var textEntry = UrlTextEntry as TextEntry;
+        textEntry.AddEventListener("onsubmit", OnClickNavigate);
     }
 
     protected override int BuildHash()
@@ -47,17 +50,29 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
             var newUrlIsEquivalent = browser.Surface.Url == LastKnownWebSurfaceUrl + "/";
             if (newUrlIsNull || newUrlIsGarbage || newUrlIsEquivalent)
                 return;
-
-            var urlText = UrlTextEntry as TextEntry;
-            urlText.Text = currentUrl;
             OnUrlChanged(LastKnownWebSurfaceUrl, currentUrl);
         }
+    }
+    
+    private void Navigate(string url)
+    {
+        if (DefaultScheme != null && !url.Contains("://"))
+        {
+            url = DefaultScheme + url;
+        }
+        var browser = BrowserPanel as WebPanel;
+        browser.Surface.Url = url;
+        var urlText = UrlTextEntry as TextEntry;
+        urlText.Text = url;
     }
 
     protected virtual void OnUrlChanged(string oldUrl, string newUrl)
     {
         if (newUrl == null)
             return;
+
+        var urlText = UrlTextEntry as TextEntry;
+        urlText.Text = newUrl;
 
         bool atEndOfHistory = BrowserHistoryIndex == BrowserHistory.Count - 1;
         // If we are overwriting the future...
@@ -88,9 +103,8 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
             return;
 
         BrowserHistoryIndex--;
-        var browser = BrowserPanel as WebPanel;
         var previousUrl = BrowserHistory[BrowserHistoryIndex];
-        browser.Surface.Url = previousUrl;
+        Navigate(previousUrl);
         LastKnownWebSurfaceUrl = previousUrl;
     }
 
@@ -100,10 +114,21 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
             return;
 
         BrowserHistoryIndex++;
-        var browser = BrowserPanel as WebPanel;
         var nextUrl = BrowserHistory[BrowserHistoryIndex];
-        browser.Surface.Url = nextUrl;
+        Navigate(nextUrl); 
         LastKnownWebSurfaceUrl = nextUrl;
+    }
+
+    public virtual void OnClickNavigate()
+    {
+        var urlText = UrlTextEntry as TextEntry;
+        Navigate(urlText.Text);
+    }
+
+    public virtual void OnClickHome()
+    {
+        var browser = BrowserPanel as WebPanel;
+        browser.Surface.Url = DefaultUrl;
     }
 
     public virtual void OnClickAdd()

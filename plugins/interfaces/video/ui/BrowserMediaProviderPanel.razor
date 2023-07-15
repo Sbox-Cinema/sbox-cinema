@@ -10,6 +10,8 @@
         <button class="icon back @(CanGoBack() ? "" : "disabled")" onclick=@(() => OnClickBack())>arrow_back</button>
         <button class="icon forward @(CanGoForward() ? "" : "disabled")" onclick="@(() => OnClickForward())">arrow_forward</button>
         <TextEntry class="url-entry" @ref=UrlTextEntry/>
+        <button class="icon url-navigate" onclick=@(() => OnClickNavigate())>navigate_next</button>
+        <button class="icon url-home" onclick=@(() => OnClickHome())>home</button>
         <button class="url-submit" onclick=@(() => OnClickAdd())>Add</button>
     </div>
     <WebPanel @ref=BrowserPanel/>
