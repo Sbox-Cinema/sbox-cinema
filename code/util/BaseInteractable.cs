@@ -47,7 +47,6 @@ public class CanTriggerResults
 public partial class BaseInteractable : BaseNetworkable
 {
     [Net] public string Name { get; set; }
-
     [Net] public Entity Parent { get; set; }
     [Net] public Vector3 Mins { get; set; }
     [Net] public Vector3 Maxs { get; set; }
@@ -95,17 +94,13 @@ public partial class BaseInteractable : BaseNetworkable
             Attachment = box.Attachment;
             
             var offset = box.OriginOffset;
-            var halfDimensions = box.Dimensions;
-
-            halfDimensions.x = halfDimensions.x * .5f;
-            halfDimensions.y = halfDimensions.y * .5f;
-            halfDimensions.z = halfDimensions.z * .5f;
+            var halfDimensions = box.Dimensions * 0.5f;
 
             var parent = Parent as ModelEntity;
 
-            var attachmentPos = parent.GetAttachment(Attachment, false).Value.Position;
+            var attachment = parent.GetAttachment(Attachment, false);
 
-            var bbox = new BBox( (offset + attachmentPos) - halfDimensions , (offset + attachmentPos) + halfDimensions );
+            var bbox = new BBox( (offset + attachment.Value.Position) - halfDimensions , (offset + attachment.Value.Position) + halfDimensions );
 
             Mins = bbox.Mins;
             Maxs = bbox.Maxs;
