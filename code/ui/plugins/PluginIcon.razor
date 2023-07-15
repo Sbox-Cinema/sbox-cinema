@@ -1,0 +1,10 @@
+﻿@using Sandbox.UI;
+
+@namespace Cinema.UI
+@inherits Panel;
+@attribute [StyleSheet]
+<root>
+    <button class="thumbnail" style="background-image: url( @Package.Thumb )" @onclick=@(() => OnClicked?.Invoke())) />
+    <div class="author">@Package.Org.Title</div>
+    <div class="title">@Package.Title</div>
+</root>

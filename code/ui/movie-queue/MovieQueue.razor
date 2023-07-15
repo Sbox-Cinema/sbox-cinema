@@ -11,7 +11,7 @@
         <MediaQueuePanel MediaQueue=@Controller?.Zone?.MediaQueue/>      
         <div class="header">
             <div class="filler left"/>
-            <VideoProviderList @ref=MediaProviderList OnProviderSelected=@CreateMediaProviderHeaderPanel/>
+            <VideoProviderList @ref=MediaProviderList OnAddClicked=@(() => (PluginBrowser as RemotePluginBrowser).Open()) OnProviderSelected=@CreateMediaProviderHeaderPanel/>
             <div class="filler right">
                 <div class="icon button" @onclick=@OnClose>close</div>
             </div>
@@ -23,7 +23,5 @@
             <CurrentMediaPanel/>
         }
     </div>
-    <div class="footer">
-
-    </div>
+    <RemotePluginBrowser @ref=PluginBrowser TagQuery="+runtime +npc"/>
 </root>

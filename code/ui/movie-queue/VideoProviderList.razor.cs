@@ -35,6 +35,7 @@ public partial class VideoProviderList : Panel
     }
     private IMediaProvider _selectedProvider;
 
+    public Action OnAddClicked { get; set; }
     public Action<IMediaProvider> OnProviderSelected { get; set; }
 
     public void RefreshVideoProviders()
@@ -58,11 +59,6 @@ public partial class VideoProviderList : Panel
         {
             panel.SetClass("selected", false);
         }
-    }
-
-    private void OnClickAdd()
-    {
-
     }
 
     protected override int BuildHash()

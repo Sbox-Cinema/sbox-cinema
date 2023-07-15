@@ -21,6 +21,7 @@ public partial class MovieQueue : Panel, IMenuScreen
     }
 
     public Panel Thumbnail { get; set; }
+    public Panel PluginBrowser { get; set; }
 
     public string VisibleClass => IsOpen ? "visible" : "";
     public Panel MediaProviderList { get; set; }
@@ -55,6 +56,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public void Close()
     {
+        (PluginBrowser as RemotePluginBrowser).Close();
         IsOpen = false;
         (MediaProviderList as VideoProviderList).SelectedProvider = null;
         Controller = null;

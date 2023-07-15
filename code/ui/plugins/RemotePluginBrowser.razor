@@ -1,0 +1,14 @@
+﻿@using Sandbox.UI;
+
+@namespace Cinema.UI
+@inherits Panel;
+@attribute [StyleSheet]
+<root class="@VisibilityClass">
+    <div class="shadow-box" onclick=@(() => Close())/>
+    <div class="body">
+        @foreach(var package in FoundPackages)
+        {
+            <PluginIcon Package=@package OnClicked=@(() => {})/>
+        }
+    </div>
+</root>
