@@ -7,6 +7,17 @@ public partial class MediaQueuePanel : Panel
 {
     public MediaQueue MediaQueue { get; set; }
 
+    public string IsEmptyClass
+    {
+        get 
+        {
+            if (MediaQueue == null)
+                return "empty";
+
+            return MediaQueue.Items.Count == 0 ? "empty" : "";
+        }
+    }
+
     protected override int BuildHash()
     {
         var hashCode = 0;

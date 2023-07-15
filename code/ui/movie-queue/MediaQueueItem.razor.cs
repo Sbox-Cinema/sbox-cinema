@@ -13,10 +13,11 @@ public partial class MediaQueueItem : Panel
     public MediaQueue.ScoredItem ScoredItem { get; set; }
     public MediaInfo MediaInfo => ScoredItem?.Item?.GenericInfo;
     public MediaQueue Queue { get; set; }
+    public int Priority { get; set; }
 
     protected override int BuildHash()
     {
-        var hashCode = 0;
+        var hashCode = Priority.GetHashCode();
         foreach (var vote in ScoredItem.PriorityVotes)
         {
             var voteHash = HashCode.Combine(vote.Key.GetHashCode(), vote.Value.GetHashCode());

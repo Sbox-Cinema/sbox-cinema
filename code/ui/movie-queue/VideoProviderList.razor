@@ -1,4 +1,5 @@
 ﻿@using System;
+@using System.Linq;
 @using System.Collections.Generic;
 @using CinemaTeam.Plugins.Media;
 @using Sandbox;
@@ -10,8 +11,11 @@
 @attribute [StyleSheet]
 
 <root>
-    @foreach (var provider in Providers)
-    {
-        <VideoProviderIcon Provider=@provider @onclick=@(_ => OnClickedProvider(provider))/>
-    }
+    <div class="providers">
+        @foreach (var provider in Providers.OrderBy(p => p.ProviderName))
+        {
+            <VideoProviderIcon Provider=@provider @onclick=@(_ => OnClickedProvider(provider))/>
+        }
+    </div>
+    <button class="icon" @onclick=@(() => OnClickAdd())>add</button>
 </root>

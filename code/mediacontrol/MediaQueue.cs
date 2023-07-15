@@ -62,6 +62,10 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         var client = ClientHelper.FindById(clientId);
         var provider = VideoProviderManager.Instance[providerId];
         var request = await provider.CreateRequest(client, query);
+        if (request.GenericInfo != null && request.GenericInfo.Thumbnail == null)
+        {
+            request.GenericInfo.Thumbnail = provider.ThumbnailPath;
+        }
         queue.Push(request);
     }
 

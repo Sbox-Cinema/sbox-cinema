@@ -4,18 +4,16 @@
 @inherits Panel;
 @attribute [StyleSheet]
 
-<root>
-    <div class="header">
-        <div class="title">Media Queue</div>
-    </div>
+<root class="@IsEmptyClass">
     <div class="body">
         @if (MediaQueue == null)
         {
             return;
         }
-        @foreach(var item in MediaQueue.Items)
+        @for(int i = 0; i < MediaQueue.Items.Count; i++)
         {
-            <MediaQueueItem ScoredItem=@item Queue=@MediaQueue/>
+            var item = MediaQueue.Items[i];
+            <MediaQueueItem ScoredItem=@item Priority=@(i + 1) Queue=@MediaQueue/>
         }
     </div>
 </root>

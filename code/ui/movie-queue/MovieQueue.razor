@@ -10,20 +10,18 @@
     <div class="placement container">
         <MediaQueuePanel MediaQueue=@Controller?.Zone?.MediaQueue/>      
         <div class="header">
+            <div class="filler left"/>
             <VideoProviderList @ref=MediaProviderList OnProviderSelected=@CreateMediaProviderHeaderPanel/>
-            <div class="close-btn button" @onclick=@OnClose>
-                Close
+            <div class="filler right">
+                <div class="icon button" @onclick=@OnClose>close</div>
             </div>
         </div>
-        <div class="contents">
-
-            <div @ref=MediaProviderHeaderContainer id="mediaHeader"/>
+        <div @ref=MediaProviderHeaderContainer id="mediaHeader"/>
     
-            @if (NowPlaying != null)
-            {
-                <CurrentMediaPanel/>
-            }
-        </div>
+        @if (NowPlaying != null)
+        {
+            <CurrentMediaPanel/>
+        }
     </div>
     <div class="footer">
 

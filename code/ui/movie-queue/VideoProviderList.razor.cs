@@ -60,6 +60,11 @@ public partial class VideoProviderList : Panel
         }
     }
 
+    private void OnClickAdd()
+    {
+
+    }
+
     protected override int BuildHash()
     {
         int hash = 0;

@@ -47,7 +47,7 @@
         "MapName": "cinemateam.cinema_test_ducc_02",
         "MaxPlayers": 15,
         "GameSettings": {},
-        "Addons": "cinemateam.interface_video",
+        "Addons": "cinemateam.ctmi#local;",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
       },

@@ -1,14 +1,9 @@
 ﻿MediaQueuePanel {
-    width: 30%;
-    height: 60%;
-    position: absolute;
-    right: 0%;
-    top: 15%;
-    z-index: 1;
-    background-color: rgba(42, 74, 127, 0.2);
+    background-color: rgba(42, 74, 127, 0.4);
     backdrop-filter: blur(8px);
     border-radius: 20px;
     flex-direction: column;
+    padding: 10px;
 
     .header {
         justify-content: center;
@@ -20,12 +15,20 @@
 
     .body {
         flex-direction: column;
-        height: 85%;
-        margin-left: 10px;
-        margin-right: 10px;
+        height: 100%;
         border-radius: 10px;
-        background-color: rgba(69, 95, 114, 0.30);
-        backdrop-filter: blur(40px);
+        background-color: rgba(42, 74, 127, 0.8);
         overflow-y: scroll;
+        // Use linear gradient to fade effect
+        mask-image: url('ui/backgrounds/scroll-fade-mask.png');
+        mask-mode: luminance;
+        mask-repeat: no-repeat;
+        mask-size: 100%;
+        padding-bottom: 50px;
+
+
+        > * {
+            min-height: 100px;
+        }
     }
 }

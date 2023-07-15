@@ -6,9 +6,8 @@ MovieQueue {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     //Chi-TownNF
-    
+
     font-family: engebrechtre-rg;
     font-size: 22px;
     color: #EEE;
@@ -19,6 +18,41 @@ MovieQueue {
         opacity: 1;
         pointer-events: all;
     }
+
+    #mediaHeader {
+        padding: 32px;
+        height: 70%;
+        width: 1088px;
+
+        > * {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    CurrentMediaPanel {
+        position: absolute;
+        width: 50%;
+        left: 25%;
+        bottom: 20px;
+    }
+
+    MediaQueuePanel {
+        width: 30%;
+        height: 60%;
+        position: absolute;
+        right: 20px;
+        transition: transform 0.2s ease-in;
+        transform: translateY(-100%);
+
+        > .body {
+            padding-top: 50px;
+        }
+
+        &:not(.empty) {
+            transform: translateY(16%);
+        }
+    }
 }
 
 .placement {
@@ -28,22 +62,43 @@ MovieQueue {
 }
 
 .container {
-    >.header {
-        flex-direction: column;
+    > .header {
         align-items: center;
         justify-content: center;
-        font-size: 100px;
-        padding-left: 32px;
         // background-image: url("ui/curtain-red.png");
         // background-size: cover;
         color: #fffD;
-        background-color: rgba(0,0,0,0.75);
-        backdrop-filter: blur(8px);
-    
-        .close-btn {
-            position: absolute;
-            right: 24px;
-            top: 24px;
+        background-color: rgba(0,0,0,0.25);
+        backdrop-filter: blur(12px);
+        box-shadow: 0px 2px 15px 2px rgba(0,0,0,0.4);
+        z-index: 1;
+
+        > VideoProviderList {
+            padding-left: 32px;
+        }
+
+        > .filler {
+            background-color: rgba(0,0,0,0.75);
+            height: 100%;
+            flex-grow: 1;
+
+            &.left {
+                border-radius: 0px 0px 30px 0px;
+            }
+
+            &.right {
+                border-radius: 0px 0px 0px 30px;
+            }
+
+            > .icon {
+                font-family: "Material Icons";
+                position: absolute;
+                top: 25%;
+                right: 40px;
+                font-size: 48px;
+                border-width: 0px;
+                border-radius: 50%;
+            }
         }
     }
 }
@@ -51,10 +106,7 @@ MovieQueue {
 .contents {
     flex-direction: column;
     overflow: hidden;
-    padding: 32px;
-    width: 60%;
-    height: 85%;
-    margin-left: 5%;
+
 }
 
 .section {
@@ -129,17 +181,5 @@ MovieQueue {
 
     &.fill {
         width: 100%;
-    }
-}
-
-#mediaHeader {
-    position: absolute;
-    top: 5%;
-    height: 70%;
-    width: 1088px;
-
-    > * {
-        width: 100%;
-        height: 100%;
     }
 }

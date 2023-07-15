@@ -2,15 +2,26 @@
     align-items: center;
     padding: 0px 10px;
 
-    > .thumbnail {
-        width: 80px;
-        height: 45px;
-        background-size: cover;
+    > .left {
+        flex-direction: column;
+        justify-content: space-between;
+
+        > .priority {
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        > .thumbnail {
+            width: 80px;
+            height: 45px;
+            background-size: cover;
+        }
     }
 
     > .details {
         flex-direction: column;
-    }
+        margin-left: 20px;
+            }
 
     .icon {
         font-family: 'Material Icons';
