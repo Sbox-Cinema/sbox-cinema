@@ -275,6 +275,19 @@
     },
     "Summary": "",
     "Description": "",
-    "Public": false
+    "Public": false,
+    "TickRate": 50,
+    "LaunchConfigs": [
+      {
+        "Name": "Cinema Concession Soda Fountain Test",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "walker/concession_test_sodafountain.vmap",
+        "MaxPlayers": 16,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }
