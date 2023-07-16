@@ -60,6 +60,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
     {
         var queue = FindByZoneId(zoneId);
         var client = ClientHelper.FindById(clientId);
+        Log.Info($"{client} - Push to zone {zoneId} queue by media provider {providerId}: {query}");
         var provider = VideoProviderManager.Instance[providerId];
         var request = await provider.CreateRequest(client, query);
         if (request.GenericInfo != null && request.GenericInfo.Thumbnail == null)

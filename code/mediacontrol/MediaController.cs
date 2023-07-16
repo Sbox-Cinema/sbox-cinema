@@ -110,6 +110,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
     private async void OnCurrentMediaChanged(MediaRequest oldValue, MediaRequest newValue)
     {
+        Log.Trace($"Media changed to \"{newValue?.GenericInfo?.Title ?? "null"}\", requestor {newValue?.Requestor}, provider {newValue?.VideoProviderId}");
         if (newValue != null)
         {
             StartPlaying?.Invoke(this, null);
@@ -118,19 +119,21 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         {
             StopPlaying?.Invoke(this, null);
         }
-        await PlayCurrentMedia();
+        await ClientPlayMedia();
     }
 
     public void PlayMedia(MediaRequest media)
     {
+        Log.Trace($"Old media. Network ident: {CurrentMedia?.NetworkIdent ?? 0}, provider: {CurrentMedia?.VideoProviderId ?? 0}, title: {CurrentMedia?.GenericInfo?.Title}");
         CurrentMedia = media;
+        Log.Trace($"New media. Network ident: {media.NetworkIdent}, provider: {media.VideoProviderId}, title: {media.GenericInfo?.Title}");
         CurrentPlaybackTime = 0;
         IsPaused = false;
         StartPlaying?.Invoke(this, null);
     }
 
     [ClientRpc]
-    private async Task PlayCurrentMedia()
+    private async Task ClientPlayMedia()
     {
         if (!Game.IsClient)
             return;
@@ -139,9 +142,12 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
         if (CurrentMedia == null)
         {
+            Log.Trace("Current media: null");
             Projector?.SetMedia(null);
             return;
         }
+
+        Log.Trace($"Current media: {CurrentMedia.GenericInfo?.Title}, provider ID: {CurrentMedia.VideoProviderId}");
 
         CurrentMediaPlayer = await CurrentMedia.GetPlayer();
         Projector?.SetMedia(CurrentMediaPlayer);

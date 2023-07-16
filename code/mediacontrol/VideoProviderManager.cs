@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using CinemaTeam.Plugins.Media;
+using System;
 
 namespace Cinema;
 
-public class VideoProviderManager
+public partial class VideoProviderManager
 {
     private IDictionary<int, TypeDescription> Providers { get; set; }
 
@@ -16,16 +17,18 @@ public class VideoProviderManager
     }
     private static VideoProviderManager _Instance;
 
+    public event EventHandler Refreshed;
+
     public VideoProviderManager()
     {
         Instance = this;
-        Initialize();
+        Refresh();
     }
 
-    public void Initialize()
+    public void Refresh()
     {
         Providers = new Dictionary<int, TypeDescription>();
-        // Get all video providers from this game and the initially loaded addons.
+        // Get all video providers from this game and its loaded addons.
         foreach (var provider in GetLoadedProviders())
         {
             var ident = TypeLibrary.GetTypeIdent(provider.TargetType);
@@ -33,6 +36,18 @@ public class VideoProviderManager
             Log.Trace($"{ident}: {provider.Name}");
             Providers.Add(ident, provider);
         }
+
+        Refreshed?.Invoke(this, null);
+        if (Game.IsServer)
+        {
+            ClientRefresh();
+        }
+    }
+
+    [ClientRpc]
+    public static void ClientRefresh()
+    {
+        Instance.Refresh();
     }
 
     /// <summary>

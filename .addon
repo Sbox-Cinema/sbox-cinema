@@ -13,8 +13,7 @@
   "CodePath": "/code/",
   "PackageReferences": [
     "conna.radial_menu",
-    "cinemateam.ctmi",
-    "local.base"
+    "cinemateam.ctmi"
   ],
   "EditorReferences": null,
   "Metadata": {
@@ -48,7 +47,7 @@
         "MapName": "cinemateam.cinema_test_ducc_02",
         "MaxPlayers": 15,
         "GameSettings": {},
-        "Addons": "cinemateam.ctmi#local;",
+        "Addons": "",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
       },

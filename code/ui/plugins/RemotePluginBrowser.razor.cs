@@ -15,10 +15,13 @@ public partial class RemotePluginBrowser : Panel
     /// The portion of a query string that is used to include or exclude tags.
     /// </summary>
     public string TagQuery { get; set; }
+    public Action<Package> OnPackageSelected { get; set; }
     
     private bool IsOpen { get; set; }
+    private Panel PackageList { get; set; }
     private List<Package> FoundPackages { get; set; } = new();
     private string GetQueryString() => $"{TagQuery} sort:popular type:library";
+
 
     public async void Open()
     {
@@ -41,5 +44,15 @@ public partial class RemotePluginBrowser : Panel
         {
             FoundPackages.AddRange(found.Packages);
         }
+    }
+
+    public void SelectPackage(Package package)
+    {
+        Log.Info("Selected package: " + package.FullIdent);
+        // Delete the package icon.
+        FoundPackages.Remove(package);
+        StateHasChanged();
+        PluginManager.AddPlugin(package.FullIdent);
+        OnPackageSelected?.Invoke(package);
     }
 }

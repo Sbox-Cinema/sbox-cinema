@@ -5,10 +5,10 @@
 @attribute [StyleSheet]
 <root class="@VisibilityClass">
     <div class="shadow-box" onclick=@(() => Close())/>
-    <div class="body">
+    <div @ref=PackageList class="body">
         @foreach(var package in FoundPackages)
         {
-            <PluginIcon Package=@package OnClicked=@(() => {})/>
+            <PluginIcon Package=@package @onClick=@(() => SelectPackage(package))/>
         }
     </div>
 </root>

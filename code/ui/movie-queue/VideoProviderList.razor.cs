@@ -11,6 +11,7 @@ public partial class VideoProviderList : Panel
     public VideoProviderList()
     {
         RefreshVideoProviders();
+        VideoProviderManager.Instance.Refreshed += (_,_) => RefreshVideoProviders();
     }
 
     private List<IMediaProvider> Providers { get; set; }

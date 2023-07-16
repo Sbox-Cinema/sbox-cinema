@@ -2,6 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CinemaTeam.Plugins.Media.Yoinked;
+
+using WebPanel = CinemaTeam.Plugins.Media.Yoinked.WebPanel;
+using TextEntry = CinemaTeam.Plugins.Media.Yoinked.TextEntry;
 
 namespace CinemaTeam.Plugins.Media;
 

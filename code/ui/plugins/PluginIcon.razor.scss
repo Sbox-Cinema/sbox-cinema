@@ -2,6 +2,19 @@
     flex-direction: column;
     border-radius: 20px;
     align-items: center;
+    padding: 10px;
+
+    &:hover {
+        border-width: 2px;
+        border-color: rgba(255,255,255,0.2);
+    }
+
+    &:active {
+        border-width: 2px;
+        border-color: rgba(102, 133, 255, 0.20);
+        background-color: rgba(102,133,255,0.05);
+        transform: scale(0.95);
+    }
 
     .thumbnail {
         width: 100%;
@@ -11,10 +24,10 @@
     }
 
     .title {
-        font-size: 18px;
+        font-size: 24px;
     }
 
     .author {
-        font-size: 12px;
+        font-size: 18px;
     }
 }
