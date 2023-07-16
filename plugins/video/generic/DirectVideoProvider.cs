@@ -1,8 +1,5 @@
 ﻿using Sandbox;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CinemaTeam.Plugins.Media;
@@ -11,7 +8,7 @@ public class DirectVideoProvider : IMediaProvider, IMediaSelector
 {
     public string ProviderName => "Direct Video Player";
 
-    public string ThumbnailPath => "ui/direct_video_icon.png";
+    public string ThumbnailPath => "assets/direct_video_icon.png";
 
     public MediaProviderHeaderPanel HeaderPanel => new BrowserMediaProviderPanel();
 

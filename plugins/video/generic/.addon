@@ -1,0 +1,22 @@
+{
+  "Title": "Generic Video Media Provider",
+  "Type": "library",
+  "Org": "cinemateam",
+  "Ident": "ctmi_video",
+  "Tags": null,
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "Resources": null,
+  "MenuResources": null,
+  "HasCode": true,
+  "CodePath": ".",
+  "PackageReferences": [
+    "cinemateam.ctmi"
+  ],
+  "EditorReferences": null,
+  "Metadata": {
+    "ProjectTemplate": null,
+    "CsProjName": ""
+  }
+}

@@ -1,5 +1,5 @@
-﻿using Cinema;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Cinema;
 
 namespace CinemaTeam.Plugins.Media;
 

@@ -7,7 +7,7 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "Resources": "*.png\n*.mp3",
+  "Resources": "*.png\n*.mp3\n*.jpg",
   "MenuResources": null,
   "HasCode": true,
   "CodePath": ".",

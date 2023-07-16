@@ -9,8 +9,8 @@ public class VideoProviderManager
 {
     private IDictionary<int, TypeDescription> Providers { get; set; }
 
-    public static VideoProviderManager Instance 
-    { 
+    public static VideoProviderManager Instance
+    {
         get => _Instance ??= new VideoProviderManager();
         private set => _Instance = value;
     }
@@ -69,7 +69,7 @@ public class VideoProviderManager
             Log.Info($"Loaded {Instance.Providers.Count} video providers:");
         }
 
-        foreach(var kvp in Instance.Providers)
+        foreach (var kvp in Instance.Providers)
         {
             Log.Info($"\t{kvp.Key} - {kvp.Value.ClassName}");
         }

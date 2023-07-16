@@ -13,7 +13,8 @@
   "CodePath": "/code/",
   "PackageReferences": [
     "conna.radial_menu",
-    "cinemateam.ctmi"
+    "cinemateam.ctmi",
+    "local.base"
   ],
   "EditorReferences": null,
   "Metadata": {

@@ -18,7 +18,7 @@ public partial class RemotePluginBrowser : Panel
     
     private bool IsOpen { get; set; }
     private List<Package> FoundPackages { get; set; } = new();
-    private string GetQueryString() => $"{TagQuery} sort:popular type:addon";
+    private string GetQueryString() => $"{TagQuery} sort:popular type:library";
 
     public async void Open()
     {
