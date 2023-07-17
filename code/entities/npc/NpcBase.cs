@@ -31,6 +31,9 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
 
         SetModel("models/citizen/citizen.vmdl");
         SetupPhysicsFromAABB(PhysicsMotionType.Keyframed, new Vector3(-16, -16, 0), new Vector3(16, 16, 72));
+
+        Tags.Add("npc");
+
         var uniform = JobUniform.Get(Uniform);
         if (uniform != null)
         {
