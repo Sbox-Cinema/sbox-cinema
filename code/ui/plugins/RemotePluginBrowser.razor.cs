@@ -25,7 +25,9 @@ public partial class RemotePluginBrowser : Panel
 
     public async void Open()
     {
-        await FindPlugins();
+        var queryString = GetQueryString();
+        FoundPackages = await PluginManager.FindPlugins(queryString);
+        Log.Info($"{queryString}: Found {FoundPackages.Count} packages not yet installed.");
         StateHasChanged();
         IsOpen = true;
     }
@@ -34,16 +36,6 @@ public partial class RemotePluginBrowser : Panel
     {
         FoundPackages.Clear();
         IsOpen = false;
-    }
-
-    public async Task FindPlugins()
-    {
-        var found = await Package.FindAsync(GetQueryString());
-        Log.Info($"{GetQueryString()}: Found {found.TotalCount} packages.");
-        if (found != null)
-        {
-            FoundPackages.AddRange(found.Packages);
-        }
     }
 
     public void SelectPackage(Package package)
