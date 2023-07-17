@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using Sandbox.Engine.Utility.RayTrace;
-using System.Linq;
 
 namespace Cinema;
 
@@ -28,10 +27,9 @@ public partial class GooglyEye : WeaponBase
             PreviewModel = new PreviewEntity
             {
                 Predictable = true,
-                Owner = Owner
+                Owner = Owner,
+                Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
             };
-
-            PreviewModel.SetModel("models/googly_eyes/preview_googly_eyes_01.vmdl");
         }
     }
 
@@ -41,6 +39,17 @@ public partial class GooglyEye : WeaponBase
             return false;
 
         if (!tr.Entity.IsValid())
+            return false;
+
+        return true;
+    }
+
+    protected virtual bool IsPreviewTraceValid(MeshTraceRequest.Result tr)
+    {
+        if (!tr.Hit)
+            return false;
+
+        if (!tr.SceneObject.IsValid())
             return false;
 
         return true;
@@ -56,19 +65,31 @@ public partial class GooglyEye : WeaponBase
             {
                 if (!Input.Pressed("attack1"))
                     return;
-
+                
                 var ray = Owner.AimRay;
-                var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * 1000.0f))
-                .WithAllTags("solid")
+                var distance = 128.0f;
+                var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * distance))
+                .WithoutTags("player", "weapon", "item", "clothes", "npc")
                 .Ignore(Owner)
                 .Run();
+                
+                /*
+                var ray = Owner.AimRay;
+                var distance = 128.0f;
+                var tr = Game.SceneWorld.Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * distance))
+                .WithoutTags("player", "weapon", "item", "clothes", "npc")
+                .Run();
+                */
 
-                var ent = new GooglyEyeEntity
+                if (IsPreviewTraceValid(tr))
                 {
-                    Position = tr.EndPosition,
-                    Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0)),
-                    Model = Model.Load("models/googly_eyes/googly_eyes_01.vmdl")
-                };
+                    var ent = new ModelEntity
+                    {
+                        Position = tr.HitPosition,
+                        Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0)),
+                        Model = Model.Load("models/googly_eyes/googly_eyes_01.vmdl")
+                    };
+                }
             }
         }
     }
@@ -76,19 +97,32 @@ public partial class GooglyEye : WeaponBase
     [GameEvent.Client.Frame]
     public void OnClientFrame()
     {
+        if ((Game.LocalPawn as Player).ActiveChild is not GooglyEye) return; 
+        
         var ray = Owner.AimRay;
-        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * 60.0f))
-        .WithAllTags("solid")
-        .Ignore(Owner)
+        var distance = 128.0f;
+        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * distance))
+            .WithoutTags("player", "weapon", "item", "clothes", "npc")
+            .Ignore(Owner)
+            .Run();
+        
+        /*
+        var ray = Owner.AimRay;
+        var distance = 128.0f;
+        var tr = Game.SceneWorld.Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * distance))
+        .WithoutTags("player", "weapon", "item", "clothes", "npc")
         .Run();
+        */
 
         if (IsPreviewTraceValid(tr) && PreviewModel.UpdateFromTrace(tr))
         {
-            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.5f);
+            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(1.0f);
         }
         else
         {
-            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.0f);
-        }
+            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.25f);
+            PreviewModel.Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0));
+            PreviewModel.Position = ray.Position + (ray.Forward.Normal * distance);
+        }   
     }
 }

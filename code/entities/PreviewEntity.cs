@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.Engine.Utility.RayTrace;
 
 namespace Cinema;
 
@@ -10,13 +11,11 @@ public partial class PreviewEntity : ModelEntity
 
     internal bool UpdateFromTrace(TraceResult tr)
     {
-        
         if(!IsTraceValid(tr))
         {
             return false;
         }
         
-
         if(RelativeToNormal)
         {
             Rotation = Rotation.LookAt(tr.Normal, tr.Direction) * RotationOffset;
@@ -31,5 +30,34 @@ public partial class PreviewEntity : ModelEntity
         return true;
     }
 
+    internal bool UpdateFromTrace(MeshTraceRequest.Result tr)
+    {
+        if (!IsTraceValid(tr))
+        {
+            return false;
+        }
+
+        if(!tr.SceneObject.IsValid())
+        {
+            return false;
+        }
+
+        if (RelativeToNormal)
+        {
+            var direction = (tr.EndPosition - tr.StartPosition).Normal;
+            Rotation = Rotation.LookAt(tr.HitNormal, direction) * RotationOffset;
+            Position = (tr.StartPosition + direction * tr.Distance) + Rotation * PositionOffset;
+        }
+        else
+        {
+            var direction = (tr.EndPosition - tr.StartPosition).Normal;
+            Rotation = Rotation.Identity * RotationOffset;
+            Position = (tr.StartPosition + direction * tr.Distance) + PositionOffset;
+        }
+
+        return true;
+    }
+
     protected virtual bool IsTraceValid(TraceResult tr) => tr.Hit;
+    protected virtual bool IsTraceValid(MeshTraceRequest.Result tr) => tr.Hit;
 }
