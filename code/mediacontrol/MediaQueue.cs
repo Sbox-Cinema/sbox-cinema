@@ -38,6 +38,9 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         }
     }
 
+    public int IndexOf(MediaRequest request)
+        => Items.IndexOf(Items.FirstOrDefault(i => i.Item == request));
+
     private static MediaQueue FindByZoneId(int zoneId)
     {
         var zone = Sandbox.Entity.FindByIndex(zoneId) as CinemaZone;
@@ -53,6 +56,45 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
 
         Items.Remove(item);
         return item.Item;
+    }
+
+    public bool CanRemove(MediaRequest request, IClient client)
+    {
+        // TODO: Make this a privileged action.
+        return true;
+    }
+
+    [ConCmd.Server]
+    public static void RemoveItem(int zoneId, int index, int clientId)
+    {
+        var zone = FindByZoneId(zoneId);
+        var item = zone.Items[index];
+        var client = ClientHelper.FindById(clientId);
+        zone.RemoveItem(item.Item, client);
+    }
+
+    /// <summary>
+    /// Remove the specified media request from the queue on behalf of the
+    /// specified client. If called on the client, a request will be sent to
+    /// the server to remove the item.
+    /// </summary>
+    /// <param name="request">The queued media that should be removed.</param>
+    /// <param name="client">The client who requested the removal, of the media,
+    /// or null if removal was requested by the server or some other absolute authority.</param>
+    public void RemoveItem(MediaRequest request, IClient client)
+    {
+        var mediaIdx = IndexOf(request);
+        if (!CanRemove(request, client))
+        {
+            Log.Info($"{Entity.Name}: Client {client} not authorized to remove item # {mediaIdx}.");
+            return;
+        }
+        if (Game.IsClient)
+        {
+            RemoveItem(Entity.NetworkIdent, mediaIdx, Game.LocalClient.NetworkIdent);
+            return;
+        }
+        Items.RemoveAt(mediaIdx);
     }
 
     [ConCmd.Server]

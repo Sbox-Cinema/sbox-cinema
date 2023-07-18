@@ -1,4 +1,5 @@
 ﻿using CinemaTeam.Plugins.Media;
+using Sandbox;
 using Sandbox.UI;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,6 @@ public partial class MediaQueueItem : Panel
 
     public void OnRemove()
     {
-
+        Queue.RemoveItem(ScoredItem.Item, Game.LocalClient);
     }
 }
