@@ -17,5 +17,8 @@
             <VideoProviderIcon Provider=@provider @onclick=@(_ => OnClickedProvider(provider))/>
         }
     </div>
-    <button class="icon" @onclick=@(() => OnAddClicked())>add</button>
+    @if (PluginManager.AllowAdd > 0)
+    {
+        <button class="icon" @onclick=@(() => OnAddClicked())>add</button>
+    }
 </root>

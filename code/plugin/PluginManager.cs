@@ -9,9 +9,22 @@ namespace Cinema;
 
 public static class PluginManager
 {
+    /// <summary>
+    /// If set to 0, nobody will be able to add plugins. <br/>
+    /// (TODO) If set to 1, only authorized persons will be able to add plugins.<br/>
+    /// If set to 2, everyone will be able to add plugins.<br/>
+    /// </summary>
+    [ConVar.Replicated("plugins.media.allowadd")]
+    public static int AllowAdd { get; set; } = 2;
+
     [ConCmd.Server("plugin.add")]
     public static async void AddPlugin(string ident)
     {
+        if (AllowAdd <= 0)
+        {
+            Log.Info("Adding media plugins is disabled.");
+            return;
+        }
         Log.Info($"{ConsoleSystem.Caller} - Adding plugin {ident}");
         var package = await Package.FetchAsync(ident, false);
         await package.MountAsync(true);

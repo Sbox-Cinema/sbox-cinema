@@ -64,7 +64,7 @@ public partial class VideoProviderList : Panel
 
     protected override int BuildHash()
     {
-        int hash = 0;
+        int hash = PluginManager.AllowAdd;
         foreach (var provider in Providers)
         {
             hash = HashCode.Combine(hash, provider);
