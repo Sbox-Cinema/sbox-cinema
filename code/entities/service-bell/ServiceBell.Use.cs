@@ -23,9 +23,7 @@ public partial class ServiceBell
     /// <returns>If the player can continue to use the entity</returns>
     public virtual bool OnUse(Entity user)
     {
-        if (Game.IsClient) return false;
-
-        Log.Info("Ringing service bell...");
+        PlaySound("servicebell");
 
         return false;
     }
