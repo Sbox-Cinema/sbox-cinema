@@ -63,7 +63,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     /// </summary>
     public float ScreenDistanceFromProjector { get; private set; }
 
-    private float BaseBounceLightBrightness { get; init; } = 10f;
+    private float BaseBounceLightBrightness { get; init; } = 20f;
 
     public FakeBounceLight()
     {
@@ -89,7 +89,7 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
             InnerConeAngle = 50f,
             OuterConeAngle = 80f,
             DynamicShadows = true,
-            FogStrength = 0.25f,
+            FogStrength = 0.05f,
             LightCookie = BounceLightCookie
         };
         spotlight.SetParent(Entity);

@@ -57,7 +57,7 @@ public partial class ProjectorEntity
             OuterConeAngle = outerConeAngle,
             InnerConeAngle = innerConeAngle,
             DynamicShadows = true,
-            FogStrength = 1.0f,
+            FogStrength = 0.025f,
             Transmit = TransmitType.Always,
         };
 
