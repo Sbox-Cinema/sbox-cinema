@@ -115,11 +115,19 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
 
     public bool CanAddPriorityVote(ScoredItem queueItem, IClient client, bool isUpvote)
     {
+        // Make sure the item is still in the queue.
         if (queueItem == null || !Items.Contains(queueItem))
         {
             Log.Info($"{Entity.Name}: No item found matching request.");
             return false;
         }
+
+        bool isFirstItem = Items.IndexOf(queueItem) == 0;
+        bool isLastItem = Items.IndexOf(queueItem) == Items.Count - 1;
+        // Don't allow votes that wouldn't affect priority.
+        if (isUpvote && isFirstItem || !isUpvote && isLastItem)
+            return false;
+
         bool hasVotedOnItem = queueItem.PriorityVotes.ContainsKey(client);
         // If the client has no active priority vote for this request, they can add one.
         if (!hasVotedOnItem)
