@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sandbox;
 using CinemaTeam.Plugins.Media;
+using System.Collections.ObjectModel;
 
 namespace Cinema;
 
-public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent
+public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent, INetworkSerializer
 {
-    [Net]
-    public IList<ScoredItem> Items { get; set; }
+    public List<ScoredItem> Items { get; private set; } = new();
     public MediaController Controller => Entity.MediaController;
 
     [GameEvent.Tick.Server]
@@ -46,6 +46,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             return null;
 
         Items.Remove(item);
+        WriteNetworkData();
         return item.Item;
     }
 
@@ -58,10 +59,10 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
     [ConCmd.Server]
     public static void RemoveItem(int zoneId, int requestId, int clientId)
     {
-        var zone = FindByZoneId(zoneId);
-        var item = zone.Items.First(r => r.RequestId == requestId);
+        var queue = FindByZoneId(zoneId);
+        var item = queue.Items.First(r => r.RequestId == requestId);
         var client = ClientHelper.FindById(clientId);
-        zone.RemoveItem(item, client);
+        queue.RemoveItem(item, client);
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
     /// specified client. If called on the client, a request will be sent to
     /// the server to remove the item.
     /// </summary>
-    /// <param name="request">The queued media that should be removed.</param>
+    /// <param name="queueItem">The queued media that should be removed.</param>
     /// <param name="client">The client who requested the removal, of the media,
     /// or null if removal was requested by the server or some other absolute authority.</param>
     public void RemoveItem(ScoredItem queueItem, IClient client)
@@ -85,6 +86,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             return;
         }
         Items.RemoveAt(IndexOf(queueItem.Item));
+        WriteNetworkData();
     }
 
     [ConCmd.Server]
@@ -105,6 +107,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
     public void Push(MediaRequest request)
     {
         Items.Add(new ScoredItem { Item = request });
+        WriteNetworkData();
     }
 
     public bool CanAddPriorityVote(ScoredItem queueItem, IClient client, bool isUpvote)
@@ -144,12 +147,12 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         }
 
         queueItem.PriorityVotes[client] = isUpvote;
+        queueItem.WriteNetworkData();
         var index = Items.IndexOf(queueItem);
         // If we remove a true vote:
         // - Index goes down
         // - Priority goes up
         SwapItem(index, isUpvote ? -1 : 1);
-        WriteNetworkData();
     }
 
     public void RemovePriorityVote(ScoredItem queueItem, IClient client)
@@ -180,20 +183,52 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             Log.Error($"Invalid media queue index: {index}");
             return;
         }
-        var newList = new List<ScoredItem>(Items);
         var offsetDirection = Math.Sign(offset);
+        Log.Info("Print previous list:");
+        foreach(var item in Items)
+        {
+            Log.Info($"\t{item.RequestId} - {item.Item.GenericInfo.Title}");
+        }
         // Swap the specified item with the adjacent item in the direction
         // of the offset. Repeat until we've arrived at the desired offset.
         for (int i = 0; i != offset; i += offsetDirection)
         {
             // Find the index of the adjacent item we will swap with.
-            var swapIndex = index + i * offsetDirection;
+            var swapIndex = index + offsetDirection + i * offsetDirection;
+            Log.Info($"Swapping indices from {index} to {swapIndex}");
             // If we've reached the end of the queue, no need to swap further.
-            if (swapIndex < 0 || swapIndex >= newList.Count)
+            if (swapIndex < 0 || swapIndex >= Items.Count)
                 return;
             // Swap the items.
-            (newList[index], newList[swapIndex]) = (newList[swapIndex], newList[index]);
+            var temp = Items[index];
+            Items[index] = Items[swapIndex];
+            Items[swapIndex] = temp;
         }
-        Items = newList;
+        Log.Info("Print new list:");
+        foreach(var item in Items)
+        {
+            Log.Info($"\t{item.RequestId} - {item.Item.GenericInfo.Title}");
+        }
+        WriteNetworkData();
+    }
+
+    public void Read(ref NetRead read)
+    {
+        Items.Clear();
+        var count = read.Read<int>();
+        for (int i = 0; i < count; i++)
+        {
+            var item = read.ReadClass<ScoredItem>();
+            Items.Add(item);
+        }
+    }
+
+    public void Write(NetWrite write)
+    {
+        write.Write(Items.Count);
+        foreach(var item in Items)
+        {
+            write.Write(item);
+        }
     }
 }
