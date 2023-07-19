@@ -10,9 +10,9 @@
         {
             return;
         }
-        @for(int i = 0; i < MediaQueue.Items.Count; i++)
+        @for(int i = 0; i < MediaQueue.Count; i++)
         {
-            var item = MediaQueue.Items[i];
+            var item = MediaQueue.GetItem(i);
             <MediaQueueItem ScoredItem=@item Priority=@(i + 1) Queue=@MediaQueue/>
         }
     </div>

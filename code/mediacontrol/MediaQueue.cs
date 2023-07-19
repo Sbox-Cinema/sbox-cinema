@@ -10,7 +10,7 @@ namespace Cinema;
 
 public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent, INetworkSerializer
 {
-    public List<ScoredItem> Items { get; private set; } = new();
+    private List<ScoredItem> Items { get; init; } = new();
     public MediaController Controller => Entity.MediaController;
 
     [GameEvent.Tick.Server]
@@ -29,7 +29,10 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         }
     }
 
-    protected int IndexOf(MediaRequest request)
+    public int Count => Items.Count;
+    public IEnumerable<ScoredItem> GetItems() => Items;
+    public ScoredItem GetItem(int index) => Items[index];
+    public int IndexOf(MediaRequest request)
         => Items.IndexOf(Items.FirstOrDefault(i => i.Item == request));
 
     private static MediaQueue FindByZoneId(int zoneId)

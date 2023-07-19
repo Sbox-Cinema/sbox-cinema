@@ -14,7 +14,7 @@ public partial class MediaQueuePanel : Panel
             if (MediaQueue == null)
                 return "empty";
 
-            return MediaQueue.Items.Count == 0 ? "empty" : "";
+            return MediaQueue.Count == 0 ? "empty" : "";
         }
     }
 
@@ -25,7 +25,7 @@ public partial class MediaQueuePanel : Panel
         {
             return 0;
         }
-        foreach (var item in MediaQueue.Items)
+        foreach (var item in MediaQueue.GetItems())
         {
             hashCode = HashCode.Combine(hashCode, item.GetHashCode());
         }
