@@ -6,7 +6,7 @@ namespace CinemaTeam.Plugins.Media;
 /// <summary>
 /// Contains information about media that is applicable to all providers.
 /// </summary>
-public partial class MediaInfo : BaseNetworkable
+public partial class MediaInfo : BaseNetworkable, INetworkSerializer
 {
     /// <summary>
     /// The title of the media.
@@ -32,4 +32,20 @@ public partial class MediaInfo : BaseNetworkable
     /// Gets the duration as a pretty, formatted string (hh:mm:ss).
     /// </summary>
     public string DurationFormatted => TimeSpan.FromSeconds(Duration).ToString(@"hh\:mm\:ss");
+
+    public void Read(ref NetRead read)
+    {
+        Title = read.ReadString();
+        Author = read.ReadString();
+        Thumbnail = read.ReadString();
+        Duration = read.Read<int>();
+    }
+
+    public void Write(NetWrite write)
+    {
+        write.Write(Title);
+        write.Write(Author);
+        write.Write(Thumbnail);
+        write.Write(Duration);
+    }
 }

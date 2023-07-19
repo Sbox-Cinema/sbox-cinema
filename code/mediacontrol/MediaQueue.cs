@@ -9,18 +9,9 @@ namespace Cinema;
 
 public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent
 {
-    public partial class ScoredItem : BaseNetworkable
-    {
-        [Net]
-        public MediaRequest Item { get; set; }
-        [Net]
-        public IDictionary<IClient, bool> PriorityVotes { get; set; }
-    }
-
     [Net]
     public IList<ScoredItem> Items { get; set; }
     public MediaController Controller => Entity.MediaController;
-
 
     [GameEvent.Tick.Server]
     public void OnServerTick()
@@ -38,7 +29,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         }
     }
 
-    public int IndexOf(MediaRequest request)
+    protected int IndexOf(MediaRequest request)
         => Items.IndexOf(Items.FirstOrDefault(i => i.Item == request));
 
     private static MediaQueue FindByZoneId(int zoneId)
@@ -58,19 +49,19 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         return item.Item;
     }
 
-    public bool CanRemove(MediaRequest request, IClient client)
+    public bool CanRemove(ScoredItem queueItem, IClient client)
     {
         // TODO: Make this a privileged action.
         return true;
     }
 
     [ConCmd.Server]
-    public static void RemoveItem(int zoneId, int index, int clientId)
+    public static void RemoveItem(int zoneId, int requestId, int clientId)
     {
         var zone = FindByZoneId(zoneId);
-        var item = zone.Items[index];
+        var item = zone.Items.First(r => r.RequestId == requestId);
         var client = ClientHelper.FindById(clientId);
-        zone.RemoveItem(item.Item, client);
+        zone.RemoveItem(item, client);
     }
 
     /// <summary>
@@ -81,20 +72,19 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
     /// <param name="request">The queued media that should be removed.</param>
     /// <param name="client">The client who requested the removal, of the media,
     /// or null if removal was requested by the server or some other absolute authority.</param>
-    public void RemoveItem(MediaRequest request, IClient client)
+    public void RemoveItem(ScoredItem queueItem, IClient client)
     {
-        var mediaIdx = IndexOf(request);
-        if (!CanRemove(request, client))
+        if (!CanRemove(queueItem, client))
         {
-            Log.Info($"{Entity.Name}: Client {client} not authorized to remove item # {mediaIdx}.");
+            Log.Info($"{Entity.Name}: Client {client} not authorized to remove item: {queueItem.RequestId}");
             return;
         }
         if (Game.IsClient)
         {
-            RemoveItem(Entity.NetworkIdent, mediaIdx, Game.LocalClient.NetworkIdent);
+            RemoveItem(Entity.NetworkIdent, queueItem.RequestId, Game.LocalClient.NetworkIdent);
             return;
         }
-        Items.RemoveAt(mediaIdx);
+        Items.RemoveAt(IndexOf(queueItem.Item));
     }
 
     [ConCmd.Server]
@@ -117,32 +107,59 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         Items.Add(new ScoredItem { Item = request });
     }
 
-    public void AddPriorityVote(MediaRequest request, IClient client, bool isUpvote)
+    public bool CanAddPriorityVote(ScoredItem queueItem, IClient client, bool isUpvote)
     {
-        var item = Items.FirstOrDefault(i => i.Item == request);
-        if (item == null)
+        if (queueItem == null || !Items.Contains(queueItem))
+        {
+            Log.Info($"{Entity.Name}: No item found matching request.");
+            return false;
+        }
+        bool hasVotedOnItem = queueItem.PriorityVotes.ContainsKey(client);
+        // If the client has no active priority vote for this request, they can add one.
+        if (!hasVotedOnItem)
+            return true;
+        // If the client has already cast a priority vote for this request, they cannot
+        // vote again with the same value.
+        return queueItem.PriorityVotes[client] != isUpvote;
+    }
+
+    [ConCmd.Server]
+    public static void AddPriorityVote(int zoneId, int clientId, int requestId, bool isUpvote)
+    {
+        var zone = FindByZoneId(zoneId);
+        var client = ClientHelper.FindById(clientId);
+        var item = zone.Items.First(r => r.RequestId == requestId);
+        zone.AddPriorityVote(item, client, isUpvote);
+    }
+
+    public void AddPriorityVote(ScoredItem queueItem, IClient client, bool isUpvote)
+    {
+        if (!CanAddPriorityVote(queueItem, client, isUpvote))
             return;
 
-        // If this client already voted, don't 
-        if (item.PriorityVotes.ContainsKey(client) && item.PriorityVotes[client] == isUpvote)
+        if (Game.IsClient)
+        {
+            AddPriorityVote(Entity.NetworkIdent, Game.LocalClient.NetworkIdent, queueItem.RequestId, isUpvote);
             return;
-        item.PriorityVotes[client] = isUpvote;
-        var index = Items.IndexOf(item);
+        }
+
+        queueItem.PriorityVotes[client] = isUpvote;
+        var index = Items.IndexOf(queueItem);
         // If we remove a true vote:
         // - Index goes down
         // - Priority goes up
         SwapItem(index, isUpvote ? -1 : 1);
+        WriteNetworkData();
     }
 
-    public void RemovePriorityVote(MediaRequest request, IClient client)
+    public void RemovePriorityVote(ScoredItem queueItem, IClient client)
     {
-        var item = Items.FirstOrDefault(i => i.Item == request);
         // If no priority votes were cast, there's nothing to remove. 
-        if (item != null && !item.PriorityVotes.ContainsKey(client))
+        if (queueItem == null || !queueItem.PriorityVotes.ContainsKey(client))
             return;
 
-        var voteValue = item.PriorityVotes[client];
-        var index = Items.IndexOf(item);
+        var voteValue = queueItem.PriorityVotes[client];
+        var index = Items.IndexOf(queueItem);
         // If we remove a true vote:
         // - Index goes down
         // - Priority goes up
@@ -163,6 +180,7 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             Log.Error($"Invalid media queue index: {index}");
             return;
         }
+        var newList = new List<ScoredItem>(Items);
         var offsetDirection = Math.Sign(offset);
         // Swap the specified item with the adjacent item in the direction
         // of the offset. Repeat until we've arrived at the desired offset.
@@ -171,10 +189,11 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             // Find the index of the adjacent item we will swap with.
             var swapIndex = index + i * offsetDirection;
             // If we've reached the end of the queue, no need to swap further.
-            if (swapIndex < 0 || swapIndex >= Items.Count)
+            if (swapIndex < 0 || swapIndex >= newList.Count)
                 return;
             // Swap the items.
-            (Items[swapIndex], Items[index]) = (Items[index], Items[swapIndex]);
+            (newList[index], newList[swapIndex]) = (newList[swapIndex], newList[index]);
         }
+        Items = newList;
     }
 }

@@ -27,13 +27,25 @@ public partial class MediaQueueItem : Panel
         return hashCode;
     }
 
+    public string GetUpvoteClass() => CanUpvote() ? "" : "disabled";
+    public string GetDownvoteClass() => CanDownvote() ? "" : "disabled";
+
+    public bool CanUpvote()
+        => Queue.CanAddPriorityVote(ScoredItem, Game.LocalClient, true);
+
+    public bool CanDownvote()
+        => Queue.CanAddPriorityVote(ScoredItem, Game.LocalClient, false);
+
+    public bool CanRemove()
+        => Queue.CanRemove(ScoredItem, Game.LocalClient);
+
     public void OnVote(bool isUpvote)
     {
-
+        Queue.AddPriorityVote(ScoredItem, Game.LocalClient, isUpvote);
     }
 
     public void OnRemove()
     {
-        Queue.RemoveItem(ScoredItem.Item, Game.LocalClient);
+        Queue.RemoveItem(ScoredItem, Game.LocalClient);
     }
 }

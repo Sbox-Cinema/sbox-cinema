@@ -27,6 +27,16 @@
         font-family: 'Material Icons';
         font-size: 28px;
         border-color: rgba(0,0,0,0);
+
+        &.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+
+            &:hover {
+                background-color: transparent;
+                border-color: rgba(0,0,0,0);
+            }
+        }
     }
 
     > button {

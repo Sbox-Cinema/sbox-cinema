@@ -10,7 +10,7 @@ namespace CinemaTeam.Plugins.Media;
 /// the getting and setting of arbitrary string data that may be used by media providers 
 /// to store information required for their implementation.
 /// </summary>
-public partial class MediaRequest : BaseNetworkable
+public partial class MediaRequest : BaseNetworkable, INetworkSerializer
 {
     public MediaRequest()
     {
@@ -100,4 +100,31 @@ public partial class MediaRequest : BaseNetworkable
     public void SetRequestData(string key, string value)
         => RequestData[key] = value;
 
+    public void Read(ref NetRead read)
+    {
+        GenericInfo = read.ReadClass<MediaInfo>();
+        Requestor = read.ReadClass<IClient>();
+        VideoProviderId = read.Read<int>();
+        var count = read.Read<int>();
+        RequestData = new Dictionary<string, string>(count);
+        for (int i = 0; i < count; i++)
+        {
+            var key = read.ReadString();
+            var value = read.ReadString();
+            RequestData.Add(key, value);
+        }
+    }
+
+    public void Write(NetWrite write)
+    {
+        write.Write(GenericInfo);
+        write.Write(Requestor);
+        write.Write(VideoProviderId);
+        write.Write(RequestData.Count);
+        foreach(var kvp in RequestData)
+        {
+            write.Write(kvp.Key);
+            write.Write(kvp.Value);
+        }
+    }
 }
