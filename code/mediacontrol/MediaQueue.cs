@@ -137,6 +137,12 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         return queueItem.PriorityVotes[client] != isUpvote;
     }
 
+    public bool HasVoted(ScoredItem queueItem, IClient client, bool isUpvote)
+    {
+        return queueItem.PriorityVotes.ContainsKey(client)
+            && queueItem.PriorityVotes[client] == isUpvote;
+    }
+
     [ConCmd.Server]
     public static void AddPriorityVote(int zoneId, int clientId, int requestId, bool isUpvote)
     {
@@ -157,10 +163,20 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             return;
         }
 
+        // If you're voting for the opposite of what you voted for before, remove the old vote.
+        if (HasVoted(queueItem, client, !isUpvote))
+        {
+            RemovePriorityVote(queueItem, client);
+            return;
+        }
+
+        // TODO: Log this in an audit log.
+        Log.Trace($"{Entity.Name}: Request # {queueItem.RequestId} {(isUpvote ? "upvoted" : "downvoted")} by {client}");
+
         queueItem.PriorityVotes[client] = isUpvote;
         queueItem.WriteNetworkData();
         var index = Items.IndexOf(queueItem);
-        // If we remove a true vote:
+        // If we add a true vote:
         // - Index goes down
         // - Priority goes up
         SwapItem(index, isUpvote ? -1 : 1);
@@ -172,12 +188,16 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
         if (queueItem == null || !queueItem.PriorityVotes.ContainsKey(client))
             return;
 
-        var voteValue = queueItem.PriorityVotes[client];
+        var previousVoteValue = queueItem.PriorityVotes[client];
+        // TODO: Log this in an audit log.
+        Log.Trace($"{Entity.Name}: Request # {queueItem.RequestId} previous {(previousVoteValue ? "upvote" : "downvote")} removed by {client}");
+        queueItem.PriorityVotes.Remove(client);
+        queueItem.WriteNetworkData();
         var index = Items.IndexOf(queueItem);
         // If we remove a true vote:
-        // - Index goes down
-        // - Priority goes up
-        SwapItem(index, voteValue ? -1 : 1);
+        // - Index goes up
+        // - Priority goes down
+        SwapItem(index, previousVoteValue ? 1 : -1);
     }
 
     /// <summary>
@@ -195,18 +215,13 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             return;
         }
         var offsetDirection = Math.Sign(offset);
-        Log.Info("Print previous list:");
-        foreach(var item in Items)
-        {
-            Log.Info($"\t{item.RequestId} - {item.Item.GenericInfo.Title}");
-        }
         // Swap the specified item with the adjacent item in the direction
         // of the offset. Repeat until we've arrived at the desired offset.
         for (int i = 0; i != offset; i += offsetDirection)
         {
             // Find the index of the adjacent item we will swap with.
             var swapIndex = index + offsetDirection + i * offsetDirection;
-            Log.Info($"Swapping indices from {index} to {swapIndex}");
+            Log.Trace($"{Entity.Name}: Swapping queue indices from {index} to {swapIndex}");
             // If we've reached the end of the queue, no need to swap further.
             if (swapIndex < 0 || swapIndex >= Items.Count)
                 return;
@@ -214,11 +229,6 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
             var temp = Items[index];
             Items[index] = Items[swapIndex];
             Items[swapIndex] = temp;
-        }
-        Log.Info("Print new list:");
-        foreach(var item in Items)
-        {
-            Log.Info($"\t{item.RequestId} - {item.Item.GenericInfo.Title}");
         }
         WriteNetworkData();
     }
