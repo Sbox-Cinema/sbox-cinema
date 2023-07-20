@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class ServiceBell
 {
-    public string UseText { get; set; } = "Ring Service Bell";
+    public string UseText => "Ring Service Bell";
 
     /// <summary>
     /// Whether this entity is usable or not
