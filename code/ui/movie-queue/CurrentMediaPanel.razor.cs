@@ -86,7 +86,7 @@ public partial class CurrentMediaPanel : Panel
 
     protected void OnRestart()
     {
-        MediaController.SeekMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent, 0f);
+        Controller.SeekMedia(Game.LocalClient, 0f);
     }
 
     protected void OnToggleMute()
@@ -110,6 +110,6 @@ public partial class CurrentMediaPanel : Panel
 
     protected void OnProgressChanged(float progress)
     {
-        MediaController.SeekMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent, progress);
+        Controller.SeekMedia(Game.LocalClient, progress);
     }
 }

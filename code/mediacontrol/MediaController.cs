@@ -66,9 +66,21 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     public static void SeekMedia(int zoneId, int clientId, float time)
     {
         var controller = FindByZoneId(zoneId);
+        var client = ClientHelper.FindById(clientId);
+        controller.SeekMedia(client, time);
+    }
+
+    public void SeekMedia(IClient client, float time)
+    {
+        if (Game.IsClient)
+        {
+            SeekMedia(Entity.NetworkIdent, client.NetworkIdent, time);
+            return;
+        }
+        Log.Info($"{Entity.Name}: Seek to {time} requested by {client.ToString() ?? "null"}");
         // TODO: Verify whether client is allowed to seek.
         // Due to ChangeAttribute, all clients should now seek to the new position.
-        controller.CurrentPlaybackTime = time;
+        CurrentPlaybackTime = time;
     }
 
     [ClientRpc]
