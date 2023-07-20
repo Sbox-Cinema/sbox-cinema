@@ -55,7 +55,7 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
 
     public async Task<IMediaPlayer> Play(MediaRequest requestData)
     {
-        var player = new YouTubeVideoPlayer();
+        var player = new VideoPlayerMediaAdapter();
         await player.StartAsync(requestData);
         return player;
     }

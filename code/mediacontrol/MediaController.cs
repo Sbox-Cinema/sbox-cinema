@@ -27,7 +27,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     public event EventHandler StopPlaying;
 
     [GameEvent.Tick.Server]
-    private void OnTick()
+    private void OnServerTick()
     {
         if (CurrentMedia != null && CurrentPlaybackTime > CurrentMedia.GenericInfo?.Duration)
         {
@@ -36,6 +36,17 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         if (CurrentMedia != null && !IsPaused)
         {
             CurrentPlaybackTime += Time.Delta;
+        }
+    }
+
+    [GameEvent.Tick.Client]
+    private void OnClientTick()
+    {
+        // If the current media is more than a second out of sync with the server, seek.
+        if (CurrentMediaPlayer?.Controls != null 
+            && Math.Abs(CurrentMediaPlayer.Controls.PlaybackTime - CurrentPlaybackTime) >= 1f)
+        {
+            CurrentMediaPlayer.Controls.Seek(CurrentPlaybackTime);
         }
     }
 

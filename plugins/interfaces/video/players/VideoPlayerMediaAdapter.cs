@@ -23,7 +23,6 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
         get => _VideoPlayer?.PlaybackTime ?? 0;
         set => Seek(value);
     }
-    public virtual void Seek(float time) => _VideoPlayer?.Seek(time);
 
     public virtual Texture Texture { get; protected set; }
     protected virtual VideoPlayer _VideoPlayer { get; set; }
@@ -32,6 +31,7 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
     protected IEntity CurrentSoundSource { get; set; }
     protected float LastVolume { get; set; }
     protected bool IsInitializing { get; set; }
+    protected virtual bool VideoHasHitched => !IsPaused && VideoLoaded && VideoLastUpdated > 1f;
     protected bool VideoLoaded { get; set; }
     protected bool AudioLoaded { get; set; }
     protected TimeSince VideoLastUpdated { get; set; }
@@ -71,14 +71,16 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
 
     protected virtual void OnTextureData(ReadOnlySpan<byte> span, Vector2 size)
     {
-        VideoLoaded = true;
-        VideoLastUpdated = 0;
+        if (!VideoLoaded)
+            Log.Info($"Video is now loaded: {size.x}x{size.y}");
+
         if (Texture == null || Texture.Size != size)
         {
             InitializeTexture(size);
         }
-
         Texture.Update(span, 0, 0, (int)size.x, (int)size.y);
+        VideoLoaded = true;
+        VideoLastUpdated = 0;
     }
 
     protected virtual void InitializeTexture(Vector2 size)
@@ -139,6 +141,20 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
         _VideoPlayer = null;
     }
 
+    public virtual void Seek(float time)
+    {
+        // To allow for <c>Seek</c> to be called for as long as a video is not synched,
+        // we return early here if the video is not loaded.
+        if (!VideoLoaded)
+            return;
+
+        // Seeking an online video will likely cause the video to hitch, which
+        // causes the default anti-hitch mechanism to seek again, possibly forever.
+        // To prevent this, make sure we set a flag seen by <c>VideoHasHitched</c>.
+        VideoLoaded = false;
+        _VideoPlayer?.Seek(time);
+    }
+
     protected virtual void Refresh()
     {
         IsInitializing = true;
@@ -153,9 +169,27 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
         });
     }
 
+    /// <summary>
+    /// By default, this is called when <c>VideoHasHitched</c> returns true.
+    /// This method will call <c>Refresh</c> to fix the hitch.
+    /// </summary>
+    protected virtual void FixVideoHitch()
+    {
+        Log.Info("Video hitch detected. Seeking to current time.");
+        VideoLoaded = false;
+        Refresh();
+    }
+
     [GameEvent.Client.Frame]
     public virtual void OnFrame()
     {
         _VideoPlayer?.Present();
+
+        // When streaming a video from certain streaming websites, it may hitch. This
+        // also occurs in VLC, so it's not our fault. The workaround is to refresh the video.
+        if (VideoHasHitched)
+        {
+            FixVideoHitch();
+        }
     }
 }
