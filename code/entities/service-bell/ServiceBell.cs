@@ -8,7 +8,6 @@ namespace Cinema;
 [EditorModel("models/servicebell/servicebell.vmdl")]
 public partial class ServiceBell : AnimatedEntity, ICinemaUse
 {
-
     /// <summary>
     /// Set up the model when spawned by the server
     /// Setup model
@@ -16,8 +15,6 @@ public partial class ServiceBell : AnimatedEntity, ICinemaUse
     public override void Spawn()
     {
         base.Spawn();
-
-        Transmit = TransmitType.Always;
 
         SetModel("models/servicebell/servicebell.vmdl");
 
