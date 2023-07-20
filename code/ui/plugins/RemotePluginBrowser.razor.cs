@@ -20,13 +20,17 @@ public partial class RemotePluginBrowser : Panel
     private bool IsOpen { get; set; }
     private Panel PackageList { get; set; }
     private List<Package> FoundPackages { get; set; } = new();
-    private string GetQueryString() => $"{TagQuery} sort:popular type:library";
+    private string GetQueryString() => $"{TagQuery}{(PluginManager.UseLocalOnly ? " local:true" : "")} sort:popular type:library";
 
 
     public async void Open()
     {
         var queryString = GetQueryString();
         FoundPackages = await PluginManager.FindPlugins(queryString);
+        if (PluginManager.UseLocalOnly)
+        {
+            FoundPackages = PluginManager.FilterPlugins(FoundPackages).ToList();
+        }
         Log.Info($"{queryString}: Found {FoundPackages.Count} packages not yet installed.");
         StateHasChanged();
         IsOpen = true;

@@ -71,17 +71,17 @@ public partial class VideoProviderManager
         }
     }
 
-    [ConCmd.Client("plugins.video.dumpall")]
+    [ConCmd.Client("plugin.media.dumpall")]
     public static void DumpVideoProviders()
     {
         if (!Instance.Providers.Any())
         {
-            Log.Info("No video providers were loaded.");
+            Log.Info("No media providers were loaded.");
             return;
         }
         else
         {
-            Log.Info($"Loaded {Instance.Providers.Count} video providers:");
+            Log.Info($"Loaded {Instance.Providers.Count} media providers:");
         }
 
         foreach (var kvp in Instance.Providers)

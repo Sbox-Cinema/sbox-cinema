@@ -80,6 +80,16 @@
         "Addons": "cinemateam.youtube_media_provider;",
         "PreLaunchCommand": "",
         "PostLaunchCommand": ""
+      },
+      {
+        "Name": "Projector Test Local Plugins",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "cinemateam.cinema_test_ducc_02",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": "plugin.localonly 1"
       }
     ],
     "ControlModes": {
