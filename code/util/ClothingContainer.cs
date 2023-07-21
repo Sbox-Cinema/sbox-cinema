@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -17,8 +18,10 @@ public class ClothingContainer
     /// </summary>
     public void Toggle(Clothing clothing)
     {
-        if (Has(clothing)) Remove(clothing);
-        else Add(clothing);
+        if (Has(clothing))
+            Remove(clothing);
+        else
+            Add(clothing);
     }
 
     /// <summary>
@@ -81,7 +84,9 @@ public class ClothingContainer
     /// </summary>
     public string Serialize()
     {
-        return System.Text.Json.JsonSerializer.Serialize(Clothing.Select(x => new Entry { Id = x.ResourceId }));
+        return System.Text.Json.JsonSerializer.Serialize(
+            Clothing.Select(x => new Entry { Id = x.ResourceId })
+        );
     }
 
     /// <summary>
@@ -101,7 +106,8 @@ public class ClothingContainer
             foreach (var entry in entries)
             {
                 var item = ResourceLibrary.Get<Clothing>(entry.Id);
-                if (item == null) continue;
+                if (item == null)
+                    continue;
                 Add(item);
             }
         }
@@ -140,7 +146,11 @@ public class ClothingContainer
     /// Dress this citizen with clothes defined inside this class. We'll save the created entities in ClothingModels.
     /// All clothing entities are tagged with "clothes".
     /// </summary>
-    public void DressEntity(AnimatedEntity citizen, bool hideInFirstPerson = true, bool castShadowsInFirstPerson = true)
+    public void DressEntity(
+        AnimatedEntity citizen,
+        bool hideInFirstPerson = true,
+        bool castShadowsInFirstPerson = true
+    )
     {
         //
         // Start with defaults
@@ -152,11 +162,21 @@ public class ClothingContainer
         //
         ClearEntities();
 
-        var SkinMaterial = Clothing.Select(x => x.SkinMaterial).Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => Material.Load(x)).FirstOrDefault();
-        var EyesMaterial = Clothing.Select(x => x.EyesMaterial).Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => Material.Load(x)).FirstOrDefault();
+        var SkinMaterial = Clothing
+            .Select(x => x.SkinMaterial)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => Material.Load(x))
+            .FirstOrDefault();
+        var EyesMaterial = Clothing
+            .Select(x => x.EyesMaterial)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => Material.Load(x))
+            .FirstOrDefault();
 
-        if (SkinMaterial != null) citizen.SetMaterialOverride(SkinMaterial, "skin");
-        if (EyesMaterial != null) citizen.SetMaterialOverride(EyesMaterial, "eyes");
+        if (SkinMaterial != null)
+            citizen.SetMaterialOverride(SkinMaterial, "skin");
+        if (EyesMaterial != null)
+            citizen.SetMaterialOverride(EyesMaterial, "eyes");
 
         //
         // Create clothes models
@@ -173,12 +193,17 @@ public class ClothingContainer
 
             anim.Tags.Add("clothes");
 
-            if (SkinMaterial != null) anim.SetMaterialOverride(SkinMaterial, "skin");
-            if (EyesMaterial != null) anim.SetMaterialOverride(EyesMaterial, "eyes");
+            if (SkinMaterial != null)
+                anim.SetMaterialOverride(SkinMaterial, "skin");
+            if (EyesMaterial != null)
+                anim.SetMaterialOverride(EyesMaterial, "eyes");
 
             anim.EnableHideInFirstPerson = hideInFirstPerson;
             anim.EnableShadowInFirstPerson = castShadowsInFirstPerson;
             anim.EnableTraceAndQueries = false;
+
+            var category = Enum.GetName(typeof(Clothing.ClothingCategory), c.Category);
+            anim.Tags.Add(category);
 
             if (!string.IsNullOrEmpty(c.MaterialGroup))
                 anim.SetMaterialGroup(c.MaterialGroup);
@@ -210,11 +235,21 @@ public class ClothingContainer
         citizen.SetMaterialGroup("default");
         citizen.SetMaterialOverride(null);
 
-        var SkinMaterial = Clothing.Select(x => x.SkinMaterial).Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => Material.Load(x)).FirstOrDefault();
-        var EyesMaterial = Clothing.Select(x => x.EyesMaterial).Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => Material.Load(x)).FirstOrDefault();
+        var SkinMaterial = Clothing
+            .Select(x => x.SkinMaterial)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => Material.Load(x))
+            .FirstOrDefault();
+        var EyesMaterial = Clothing
+            .Select(x => x.EyesMaterial)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => Material.Load(x))
+            .FirstOrDefault();
 
-        if (SkinMaterial != null) citizen.SetMaterialOverride(SkinMaterial, "skin");
-        if (EyesMaterial != null) citizen.SetMaterialOverride(EyesMaterial, "eyes");
+        if (SkinMaterial != null)
+            citizen.SetMaterialOverride(SkinMaterial, "skin");
+        if (EyesMaterial != null)
+            citizen.SetMaterialOverride(EyesMaterial, "eyes");
 
         foreach (var c in Clothing)
         {
@@ -231,8 +266,10 @@ public class ClothingContainer
 
             citizen.AddChild("clothing", anim);
 
-            if (SkinMaterial != null) anim.SetMaterialOverride(SkinMaterial, "skin");
-            if (EyesMaterial != null) anim.SetMaterialOverride(EyesMaterial, "eyes");
+            if (SkinMaterial != null)
+                anim.SetMaterialOverride(SkinMaterial, "skin");
+            if (EyesMaterial != null)
+                anim.SetMaterialOverride(EyesMaterial, "eyes");
 
             anim.Update(0.1f);
         }

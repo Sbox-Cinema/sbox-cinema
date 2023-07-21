@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Sandbox;
 
 namespace Cinema;
@@ -89,10 +90,12 @@ public partial class NpcBase : AnimatedEntity, ICinemaUse
     /// Called on the server when the player stops using the NPC
     /// </summary>
     /// <param name="user">The player</param>
-    public virtual void OnStopUse(Entity user)
+    public virtual bool OnStopUse(Entity user)
     {
-        if (user is not Player player) return;
+        if (user is not Player player) return true;
         TriggerOnClientStopUse(player);
+
+        return true;
     }
 
     // Internal, trigger OnClientStopUse on the client

@@ -2,6 +2,12 @@
 
 These are some style conventions to follow when contributing to the project.
 
+## Easy Code Style
+
+Use "CSharpier" for easy code formatting.  
+Available in VSCode and VS.  
+Auto format on save for optimal use.
+
 ## File and Folder Conventions
 
 Folders should be lower case and with dashes if it's more than one word (/like-this/)
@@ -69,6 +75,7 @@ To illustrate this point, look at the below example.
 ### Bad Example
 
 `HealthDisplay.razor/cs`
+
 ```
 <root>
   @CurrentHealth
@@ -80,6 +87,7 @@ public partial class HealthDisplay : Panel {
 ```
 
 `Player.cs`
+
 ```
 public partial class Player : AnimatedEntity {
   public int Health {get; set;}
@@ -100,6 +108,7 @@ We want to strive to make code that requires us to touch as few places as necces
 ### Good Example
 
 `HealthDisplay.razor/cs`
+
 ```
 <root>
   @CurrentHealth
@@ -111,6 +120,7 @@ public partial class HealthDisplay : Panel {
 ```
 
 `Player.cs`
+
 ```
 public partial class Player : AnimatedEntity {
   public int Health {get; set;}
@@ -120,5 +130,3 @@ public partial class Player : AnimatedEntity {
 While this example couples the UI element to the `Player` class, it allows for the player pawn code to not care about UI elements.
 
 If we decide to change the UI element we don't need to do anything to the `Player` class.
-
-

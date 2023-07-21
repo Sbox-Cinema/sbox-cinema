@@ -51,12 +51,14 @@ public partial class GarbageBin : AnimatedEntity, ICinemaUse
         return true;
     }
 
-    public void OnStopUse(Entity user)
+    public bool OnStopUse(Entity user)
     {
-        if (user is not Player player) return;
-        if (BeingUsedBy != player) return;
+        if (user is not Player player) return true;
+        if (BeingUsedBy != player) return true;
 
         BeingUsedBy = null;
+
+        return true;
     }
 
     public bool OnUse(Entity user)

@@ -35,8 +35,8 @@ public partial class HotdogRoller
     /// </summary>
     /// <param name="user"></param>
     /// <returns>If the player can continue to use the Hotdog Roller</returns>
-    public void OnStopUse(Entity user)
+    public bool OnStopUse(Entity user)
     {
-        
+        return true;
     }
 }
