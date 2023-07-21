@@ -1,3 +1,4 @@
+using Conna.Inventory;
 using Sandbox;
 using Sandbox.UI;
 
