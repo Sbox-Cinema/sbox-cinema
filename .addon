@@ -227,7 +227,7 @@
           "GroupName": "Game"
         },
         {
-          "Name": "swap",
+          "Name": "swap_shoulder",
           "KeyboardCode": "p",
           "GroupName": "Camera"
         }
@@ -280,6 +280,7 @@
     },
     "Summary": "",
     "Description": "",
-    "Public": false
+    "Public": false,
+    "TickRate": 50
   }
 }
