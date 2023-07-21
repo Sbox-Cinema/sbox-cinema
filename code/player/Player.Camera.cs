@@ -9,8 +9,8 @@ public partial class Player
 
     public void ThirdPersonSwapShoulder()
     {
-    if (!ThirdPersonCamera)
-        return;
+        if (!ThirdPersonCamera)
+            return;
 
         isRightShoulderView = !isRightShoulderView;
     }
