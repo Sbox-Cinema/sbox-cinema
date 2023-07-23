@@ -1,16 +1,12 @@
-﻿using Cinema.player.bots;
-using Sandbox;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sandbox;
 
 namespace Cinema;
 
 public class AstroTurferBot : CinemaBot
 {
     public CinemaChair AssignedSeat { get; set; }
+    private TimeUntil StopLookTime { get; set; }
+    private Vector3 RandomLookPos { get; set; }
 
     [ConCmd.Admin("bot.astro.spawn")]
     public static void SpawnAstroTurfer()
@@ -38,9 +34,49 @@ public class AstroTurferBot : CinemaBot
         AssignedSeat.OnUse(Client.Pawn as Player);
     }
 
-    public override void Tick()
+    public override void BuildInput()
+    {
+        base.BuildInput();
+
+        if (Client.Pawn is not Player ply)
+            return;
+
+        var currentZone = ply.GetCurrentTheaterZone();
+
+        var nearestPlayer = FindNearestPlayer(100f);
+        // If there's a nearby player, look at them.
+        if (nearestPlayer.IsValid())
+        {
+            LookAt(nearestPlayer.EyePosition + Vector3.Zero.WithZ(8f));
+        }
+        // Otherwise, look at the screen if media is playing.
+        else if (currentZone?.MediaController?.CurrentMedia != null)
+        {
+            var screenPos = ply.GetCurrentTheaterZone().ProjectorEntity.ScreenPosition;
+            LookAt(screenPos);
+        }
+        // Otherwise, look somewhere random.
+        else
+        {
+            LookRandomly();
+        }
+    }
+
+    private void LookRandomly()
     {
         if (Client.Pawn is not Player ply)
             return;
+
+        if (!StopLookTime)
+        {
+            LookAt(RandomLookPos);
+            return;
+        }
+
+        StopLookTime = Game.Random.Float(0.25f, 15f);
+        var frontPos = ply.Position + ply.Rotation.Forward * 200f + Vector3.Zero.WithZ(64f);
+        var frontBox = BBox.FromPositionAndSize(frontPos, 180f);
+        RandomLookPos = frontBox.RandomPointInside;
+        LookAt(RandomLookPos);
     }
 }
