@@ -1,10 +1,11 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace Cinema;
 
 public partial class SodaFountain 
 {
-    public string UseText { get; set; } = "Use Soda Fountain";
+    public string UseText => "Use Soda Fountain";
 
     /// <summary>
     /// Whether this Soda Fountain is usable or not
@@ -40,17 +41,19 @@ public partial class SodaFountain
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns> </returns>
     public void HandleUse(Entity player)
     {
-        foreach (var (_, interactable) in Interactables)
-        {
-            var rayResult = interactable.CanRayTrigger(player.AimRay);
+        var interactable = Interactables
+                            .OrderBy(x => x.Key)
+                            .Select(x => x.Value)
+                            .Where(x => x.CanRayTrigger(player.AimRay).Hit)
+                            .FirstOrDefault();
 
-            if (rayResult.Hit)
-            {
-                interactable.Trigger(player as Player);
-                break;
-            }
-        }
+        interactable?.Trigger(player as Player);
     }
 }

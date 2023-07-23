@@ -1,4 +1,5 @@
 ﻿using Cinema;
+using System.Collections.Generic;
 
 namespace Sandbox.util;
 public class Slot
@@ -14,19 +15,22 @@ public class Slot
         Attachment = attachment;
     }
 
-    public void Occupy(Entity entity)
+    public void SetItem(Entity entity)
     {
         Entity = entity;
     }
-
     public void Clear()
     {
         Entity.Delete();
     }
-
     public bool IsEmpty()
     {
         return !Entity.IsValid();
+    }
+
+    public bool HasItem()
+    {
+        return Entity.IsValid();
     }
 }
 

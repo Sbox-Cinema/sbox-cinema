@@ -11,7 +11,6 @@ public class Platform : BaseInteractable
     static private int NumSlots = 3;
 
     private Slot[] Slots = new Slot[NumSlots];
-    
     public Platform() 
     {
         for (int i = 0; i < NumSlots; i++)
@@ -26,14 +25,34 @@ public class Platform : BaseInteractable
     /// <param name="player"></param>
     public override void Trigger(Player player)
     {
+        var slot = GetClosestSlot(player);
+
+        if (slot.IsEmpty())
+        {
+            AddCup(slot);
+        }
+
+        if (slot.HasItem())
+        {
+            TakeCup(slot, player);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns> </returns>
+    private Slot GetClosestSlot(Player player)
+    {
         var ray = player.AimRay;
-        var tr = Trace.Ray(ray.Position, ray.Position + (ray.Forward.Normal * MaxDistance))
-        .WithoutTags("player")
-        .DynamicOnly()
-        .Run();
+        var tr = Trace.Ray(ray, MaxDistance)
+                   .WithoutTags("player")
+                   .DynamicOnly()
+                   .Run();
 
         IDictionary<Slot, float> slotsByDistance = new Dictionary<Slot, float>();
-
+        
         for (int i = 0; i < NumSlots; i++)
         {
             var slot = Slots[i];
@@ -42,22 +61,10 @@ public class Platform : BaseInteractable
             slotsByDistance.Add(slot, distance);
         }
 
-        foreach (var (slot, distance) in slotsByDistance.OrderBy(x => x.Value))
-        {
-            if (slot.IsEmpty())
-            {
-                AddCup(slot);
-
-                break;
-            }
-
-            if (distance < slot.MaxDistanceTarget)
-            { 
-                PickupCup(slot, player);   
-                
-                break;
-            }
-        }
+        return slotsByDistance
+                .OrderBy(x => x.Value)
+                .Select(x => x.Key)
+                .FirstOrDefault();
     }
 
     /// <summary>
@@ -74,45 +81,47 @@ public class Platform : BaseInteractable
         // Play sound for cup placement
         Sound.FromEntity("cup_place", Parent);
 
-        var cup = new CupFillable(dispenser)
+        var cup = CreateCup(slot, dispenser);
+
+        // Add entity to this slot
+        slot.SetItem(cup);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <param name="player"></param>
+    /// <returns> </returns>
+    private void TakeCup(Slot slot, Player player)
+    {
+        if ((Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] is not Dispenser dispenser) return;
+
+        if (slot.Entity is not FillableCup cup || !cup.Assembled() || dispenser.IsDispensing) return;
+
+        // Add cup to player's inventory
+        player.PickupItem(InventorySystem.CreateItem(cup.ItemId()));
+
+        // Remove entity from this slot
+        slot.Clear();   
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <param name="dispenser"></param>
+    /// <returns></returns>
+    private FillableCup CreateCup(Slot slot, Dispenser dispenser)
+    {
+        var cup = new FillableCup()
         {
             Transform = GetParentTransform(slot.Attachment),
-            Parent = Parent
+            Parent = Parent,
+            CupItemUniqueId = SodaFountain.GetCupItemIdBySodaType(dispenser.SodaType),
+            Dispenser = dispenser
         };
+    
+        cup.Initialize();
 
-        cup.SetCupColor(dispenser.SodaType);
-
-        slot.Entity = cup;
-    }
-
-    private void PickupCup(Slot slot, Player player)
-    {
-        if (slot.Entity is CupFillable cup && cup.CanPickup())
-        {
-            var cupColor = cup.GetMaterialGroup();
-
-            switch (cupColor)
-            {
-                case (int)CupFillable.MaterialGroup.Red:
-                    player.PickupItem(InventorySystem.CreateItem(CupFillable.CupItemUniqueIdConk));
-                    break;
-                case (int)CupFillable.MaterialGroup.Blue:
-                    player.PickupItem(InventorySystem.CreateItem(CupFillable.CupItemUniqueIdMionPisz));
-                    break;
-                case (int)CupFillable.MaterialGroup.Green:
-                    player.PickupItem(InventorySystem.CreateItem(CupFillable.CupItemUniqueIdSpooge));
-                    break;
-                default:
-                    player.PickupItem(InventorySystem.CreateItem(CupFillable.CupItemUniqueId));
-                    break;
-            }
-
-            // Remove entity from this slot
-            slot.Entity.Delete();
-
-            // Remove cup from dispenser parent
-            var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
-            dispenser.Cup?.Delete();
-        }
+        return cup;
     }
 }

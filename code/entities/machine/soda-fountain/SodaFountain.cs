@@ -16,6 +16,15 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         MionPisz = 1,
         Spooge = 2
     }
+    public enum CupColor : int
+    {
+        White = 0,
+        Blue = 1,
+        Green = 2,
+        Red = 3,
+        Black = 4
+    }
+
     [Net] public IDictionary<string, BaseInteractable> Interactables { get; set; }
 
     /// <summary>
@@ -26,8 +35,6 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
     public override void Spawn()
     {
         base.Spawn();
-
-        Transmit = TransmitType.Always;
 
         SetModel("models/sodafountain/sodafountain_01.vmdl");
 
@@ -53,27 +60,26 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
     /// </summary>
     public void AddInteractables()
     {
-        Interactables.Add("Dispenser1", new Dispenser("Lever1State", SodaType.Conk)
-        .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_1")
-        );
-
-        Interactables.Add("Dispenser2", new Dispenser("Lever2State", SodaType.MionPisz)
-        .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_2")
-        );
-
-        Interactables.Add("Dispenser3", new Dispenser("Lever3State", SodaType.Spooge)
-        .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_3")
-        );
-
         Interactables.Add("Platform", new Platform()
         .SetParent(this)
         .SetBoundsFromInteractionBox("platform")
         );
-    }
 
+        Interactables.Add("Dispenser1", CreateDispenser("Lever1State", SodaType.Conk)
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_1")
+        );
+
+        Interactables.Add("Dispenser2", CreateDispenser("Lever2State", SodaType.MionPisz)
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_2")
+        );
+
+        Interactables.Add("Dispenser3", CreateDispenser("Lever3State", SodaType.Spooge)
+        .SetParent(this)
+        .SetBoundsFromInteractionBox("tap_3")
+        );
+    }
     /// <summary>
     /// Simulates the interaction volumes
     /// </summary>
@@ -84,5 +90,22 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         {
             interactable.Simulate();
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="animation"></param>
+    /// <param name="type"></param>
+    /// <returns> </returns>
+    private Dispenser CreateDispenser(string animation, SodaType type)
+    {
+        var dispenser = new Dispenser()
+        {
+            AnimationName = animation,
+            SodaType = type
+        };
+       
+        return dispenser;
     }
 }
