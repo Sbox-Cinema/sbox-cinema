@@ -12,10 +12,15 @@ public partial class CurrentMediaPanel : Panel
     public Panel ProgressSlider { get; set; }
 
     public MediaController Controller { get; set; } = null;
+    public MediaRating Rating { get; set; } = null;
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
-    public TimeSince TimeSinceStartedPlaying => Controller?.CurrentPlaybackTime ?? 0;
+    public TimeSince TimeSinceStartedPlaying => Controller?.CurrentPlaybackPosition ?? 0;
     public string NowPlayingTimeString => NowPlaying == null ? "0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss}";
     public string ThumbnailPath => NowPlaying?.GenericInfo?.Thumbnail ?? "https://i.ytimg.com/vi/EbnH3VHzhu8/default.jpg";
+    /// <summary>
+    /// Returns true if the current media is something that can be liked/disliked.
+    /// </summary>
+    public bool AllowSentimentVotes => NowPlaying != null;
 
     private bool _ProgressSliderClicked = false;
 
@@ -30,7 +35,7 @@ public partial class CurrentMediaPanel : Panel
             return;
 
         Controller = currentTheaterZone.MediaController;
-
+        Rating = currentTheaterZone.MediaRating;
     }
 
     protected override void OnAfterTreeRender(bool firstTime)
@@ -79,6 +84,13 @@ public partial class CurrentMediaPanel : Panel
         MediaController.TogglePauseMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
     }
 
+    protected string GetLikeClass() => HasLiked ? "selected" : "";
+    protected string GetDislikeClass() => HasDisliked ? "selected" : "";
+    protected bool HasLiked => Rating.HasRated(Game.LocalClient, true);
+    protected bool HasDisliked => Rating.HasRated(Game.LocalClient, false);
+    protected void OnLike() => Rating.AddRating(Game.LocalClient, true);
+    protected void OnDislike() => Rating.AddRating(Game.LocalClient, false);
+
     protected void OnSkip()
     {
         MediaController.StopMedia(Controller.Zone.NetworkIdent, Game.LocalClient.NetworkIdent);
@@ -104,7 +116,7 @@ public partial class CurrentMediaPanel : Panel
         if (!_ProgressSliderClicked)
         {
             var progress = ProgressSlider as SliderControl;
-            progress.Value = Controller.CurrentPlaybackTime;
+            progress.Value = Controller.CurrentPlaybackPosition;
         }
     }
 

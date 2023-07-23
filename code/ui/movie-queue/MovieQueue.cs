@@ -32,7 +32,7 @@ public partial class MovieQueue : Panel, IMenuScreen
 
     public MediaRequest NowPlaying => Controller?.CurrentMedia;
 
-    public TimeSince TimeSinceStartedPlaying => Controller?.CurrentPlaybackTime ?? 0;
+    public TimeSince TimeSinceStartedPlaying => Controller?.CurrentPlaybackPosition ?? 0;
 
     public string NowPlayingTimeString => NowPlaying == null ? "0:00 / 0:00" : $"{TimeSpan.FromSeconds(TimeSinceStartedPlaying.Relative):hh\\:mm\\:ss} / {TimeSpan.FromSeconds(NowPlaying.GenericInfo?.Duration ?? 0):hh\\:mm\\:ss}";
 

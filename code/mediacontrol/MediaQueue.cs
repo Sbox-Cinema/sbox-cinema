@@ -10,6 +10,24 @@ namespace Cinema;
 
 public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonComponent, INetworkSerializer
 {
+    [ConCmd.Client("media.queue.dump.client")]
+    public static void DumpQueueClient()
+        => ClientHelper.GetNearestZone(ConsoleSystem.Caller)?.MediaQueue?.DumpQueueToLog();
+
+    [ConCmd.Server("media.queue.dump.server")]
+    public static void DumpQueueServer()
+        => ClientHelper.GetNearestZone(ConsoleSystem.Caller)?.MediaQueue?.DumpQueueToLog();
+
+    private void DumpQueueToLog()
+    {
+        Log.Info($"Dumping queue for CinemaZone: {Entity.Name}");
+        for (int i = 0; i < Items.Count; i++)
+        {
+            var request = Items[i].Item;
+            Log.Info($"\t#{i} {request.Requestor} {request.GenericInfo.Title}");
+        }
+    }
+
     private List<ScoredItem> Items { get; init; } = new();
     public MediaController Controller => Entity.MediaController;
 

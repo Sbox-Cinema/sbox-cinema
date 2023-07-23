@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 namespace Cinema;
 public static class ClientHelper
 {
+    public static CinemaZone GetNearestZone(IClient client)
+    {
+        if (client.Pawn is not Player ply)
+            return null;
+
+        return ply.GetCurrentTheaterZone();
+    }
+
     public static IClient FindById(int clientId)
     {
         IClient client = null;

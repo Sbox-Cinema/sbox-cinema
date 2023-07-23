@@ -12,6 +12,28 @@ namespace Cinema;
 /// </summary>
 public partial class MediaController : EntityComponent<CinemaZone>, ISingletonComponent
 {
+    public class MediaStartedEventArgs : EventArgs
+    {
+        public MediaStartedEventArgs(MediaRequest request)
+        {
+            Request = request;
+        }
+
+        public MediaRequest Request { get; init; }
+    }
+
+    public class MediaStoppedEventArgs : EventArgs
+    {
+        public MediaStoppedEventArgs(MediaRequest request, float watchTime)
+        {
+            Request = request;
+            WatchTime = watchTime;
+        }
+
+        public MediaRequest Request { get; init; }
+        public float WatchTime { get; init; }
+    }
+
     public CinemaZone Zone => Entity;
     public ProjectorEntity Projector => Zone.ProjectorEntity;
 
@@ -19,23 +41,31 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     public MediaRequest CurrentMedia { get; set; }
     private IMediaPlayer CurrentMediaPlayer { get; set; }
     [Net, Change]
-    public float CurrentPlaybackTime { get; private set; }
+    public float CurrentPlaybackPosition { get; private set; }
+    /// <summary>
+    /// The total playback time of the current media. Unlike <c>CurrentPlaybackPosition</c>,
+    /// this value does not get reset when seeking. This is useful for granting rewards based
+    /// on actual watch time.
+    /// </summary>
+    [Net]
+    public float CurrentWatchTime { get; private set; }
     [Net]
     public bool IsPaused { get; set; }
 
-    public event EventHandler StartPlaying;
-    public event EventHandler StopPlaying;
+    public event EventHandler<MediaStartedEventArgs> StartPlaying;
+    public event EventHandler<MediaStoppedEventArgs> StopPlaying;
 
     [GameEvent.Tick.Server]
     private void OnServerTick()
     {
-        if (CurrentMedia != null && CurrentPlaybackTime > CurrentMedia.GenericInfo?.Duration)
+        if (CurrentMedia != null && CurrentPlaybackPosition > CurrentMedia.GenericInfo?.Duration)
         {
             StopMedia(null);
         }
         if (CurrentMedia != null && !IsPaused)
         {
-            CurrentPlaybackTime += Time.Delta;
+            CurrentPlaybackPosition += Time.Delta;
+            CurrentWatchTime += Time.Delta;
         }
     }
 
@@ -44,9 +74,9 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     {
         // If the current media is more than a second out of sync with the server, seek.
         if (CurrentMediaPlayer?.Controls != null 
-            && Math.Abs(CurrentMediaPlayer.Controls.PlaybackTime - CurrentPlaybackTime) >= 1f)
+            && Math.Abs(CurrentMediaPlayer.Controls.PlaybackTime - CurrentPlaybackPosition) >= 1f)
         {
-            CurrentMediaPlayer.Controls.Seek(CurrentPlaybackTime);
+            CurrentMediaPlayer.Controls.Seek(CurrentPlaybackPosition);
         }
     }
 
@@ -91,7 +121,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         Log.Info($"{Entity.Name}: Seek to {time} requested by {client.ToString() ?? "null"}");
         // TODO: Verify whether client is allowed to seek.
         // Due to ChangeAttribute, all clients should now seek to the new position.
-        CurrentPlaybackTime = time;
+        CurrentPlaybackPosition = time;
     }
 
     [ClientRpc]
@@ -117,17 +147,18 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
     public void StopMedia(IClient client)
     {
+        StopPlaying?.Invoke(this, new MediaStoppedEventArgs(CurrentMedia, CurrentWatchTime));
         CurrentMedia = null;
-        StopPlaying?.Invoke(this, null);
+        CurrentWatchTime = 0;
     }
 
-    private void OnCurrentPlaybackTimeChanged(float oldValue, float newValue)
+    private void OnCurrentPlaybackPositionChanged(float oldValue, float newValue)
     {
         // If the server's playback position has been changed by at least one second,
         // all of the clients should seek to the new position.
         if (Math.Abs(newValue - oldValue) >= 1f)
         {
-            CurrentMediaPlayer.Controls?.Seek(CurrentPlaybackTime);
+            CurrentMediaPlayer.Controls?.Seek(CurrentPlaybackPosition);
         }
     }
 
@@ -136,11 +167,11 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         Log.Trace($"Media changed to \"{newValue?.GenericInfo?.Title ?? "null"}\", requestor {newValue?.Requestor}, provider {newValue?.VideoProviderId}");
         if (newValue != null)
         {
-            StartPlaying?.Invoke(this, null);
+            StartPlaying?.Invoke(this, new MediaStartedEventArgs(newValue));
         }
         else
         {
-            StopPlaying?.Invoke(this, null);
+            StopPlaying?.Invoke(this, new MediaStoppedEventArgs(oldValue, CurrentWatchTime));
         }
         await ClientPlayMedia();
     }
@@ -150,9 +181,10 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         Log.Trace($"Old media. Network ident: {CurrentMedia?.NetworkIdent ?? 0}, provider: {CurrentMedia?.VideoProviderId ?? 0}, title: {CurrentMedia?.GenericInfo?.Title}");
         CurrentMedia = media;
         Log.Trace($"New media. Network ident: {media.NetworkIdent}, provider: {media.VideoProviderId}, title: {media.GenericInfo?.Title}");
-        CurrentPlaybackTime = 0;
+        CurrentPlaybackPosition = 0;
+        CurrentWatchTime = 0;
         IsPaused = false;
-        StartPlaying?.Invoke(this, null);
+        StartPlaying?.Invoke(this, new MediaStartedEventArgs(CurrentMedia));
     }
 
     [ClientRpc]

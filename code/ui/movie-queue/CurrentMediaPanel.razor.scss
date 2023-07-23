@@ -1,11 +1,41 @@
 ﻿CurrentMediaPanel {
-    flex-direction: row;
-    background-color: rgba(42, 74, 127, 0.2);
-    backdrop-filter: blur(8px);
-    padding: 10px;
-    border-radius: 20px;
     transition: transform 0.1s ease-in;
     transform: translateY(0);
+
+    > .like-panel {
+        flex-direction: column;
+
+        > button {
+            font-family: 'Material Icons';
+            font-size: 48px;
+            border-radius: 40% 0% 0% 40%;
+            border-width: 2px;
+            background-color: rgb(8, 1, 1);
+            height: 50%;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.25s ease-in;
+
+            &.like .selected {
+                text-shadow: 0px 0px 5px 5px #5c5cdb;
+                color: white;
+            }
+
+            &.dislike .selected {
+                text-shadow: 0px 0px 5px 5px #ad0909;
+                color: white;
+            }
+        }
+
+        > .icon {
+        }
+    }
+
+    > .main-panel {
+        background-color: rgba(42, 74, 127, 0.2);
+        backdrop-filter: blur(8px);
+        padding: 10px;
+        border-radius: 20px;
+    }
 
     &:intro {
         transform: translateY(100%);
@@ -100,6 +130,4 @@
             }
         }
     }
-
-
 }
