@@ -62,22 +62,22 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
     {
         Interactables.Add("Platform", new Platform()
         .SetParent(this)
-        .SetBoundsFromInteractionBox("platform")
+        .InitializeFromInteractionBox("platform")
         );
 
         Interactables.Add("Dispenser1", CreateDispenser("Lever1State", SodaType.Conk)
         .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_1")
+        .InitializeFromInteractionBox("tap_1")
         );
 
         Interactables.Add("Dispenser2", CreateDispenser("Lever2State", SodaType.MionPisz)
         .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_2")
+        .InitializeFromInteractionBox("tap_2")
         );
 
         Interactables.Add("Dispenser3", CreateDispenser("Lever3State", SodaType.Spooge)
         .SetParent(this)
-        .SetBoundsFromInteractionBox("tap_3")
+        .InitializeFromInteractionBox("tap_3")
         );
     }
     /// <summary>

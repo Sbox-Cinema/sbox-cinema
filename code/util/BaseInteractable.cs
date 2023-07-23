@@ -1,5 +1,4 @@
 ﻿using Cinema;
-using System.Collections.Generic;
 
 namespace Sandbox.util;
 public class Slot
@@ -85,7 +84,7 @@ public partial class BaseInteractable : BaseNetworkable
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public BaseInteractable SetBoundsFromInteractionBox(string name)
+    public BaseInteractable InitializeFromInteractionBox(string name)
     {
         var interactionBoxes = (Parent as ModelEntity).Model.GetData<ModelInteractionBox[]>();
 
