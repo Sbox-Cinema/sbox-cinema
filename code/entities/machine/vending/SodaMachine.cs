@@ -36,6 +36,41 @@ public partial class SodaMachine : AnimatedEntity, ICinemaUse
     public void AddInteractables()
     {
         Interactables = new Dictionary<string, BaseInteractable>();
+
+        Interactables.Add("coin_slot", new CoinSlot()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("platform")
+        );
+
+        Interactables.Add("refund_button", new RefundButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_1")
+        );
+
+        Interactables.Add("soda_button_1", new SodaButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_2")
+        );
+
+        Interactables.Add("soda_button_2", new SodaButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_2")
+        );
+
+        Interactables.Add("soda_button_3", new SodaButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_2")
+        );
+
+        Interactables.Add("soda_button_4", new SodaButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_2")
+        );
+
+        Interactables.Add("soda_button_5", new SodaButton()
+        //.SetParent(this)
+        //.SetBoundsFromInteractionBox("tap_2")
+        );
     }
 
     /// <summary>
