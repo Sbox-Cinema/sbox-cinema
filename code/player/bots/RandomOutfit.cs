@@ -52,7 +52,7 @@ public static class RandomOutfit
                 && c.SlotsOver.HasFlag(Clothing.Slots.Chest)
                 && !c.HideBody.HasFlag(Clothing.BodyGroups.Legs),
             includeNull: mayBeShirtless,
-            exclude: new[] { "Binman Polo Shirt" }
+            exclude: new[] { "Binman Polo Shirt", "Usher Jacket" }
             );
     }
 
@@ -71,7 +71,7 @@ public static class RandomOutfit
         return GetRandomClothing(
             c => c.Category == Clothing.ClothingCategory.Bottoms,
             includeNull: false,
-            exclude: new[] { "Leg Armour", "Cardboard Trousers", "Bin Man Trousers" }
+            exclude: new[] { "Leg Armour", "Cardboard Trousers", "Bin Man Trousers", "Usher Trousers" }
             );
     }
 
