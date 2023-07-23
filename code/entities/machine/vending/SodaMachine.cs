@@ -21,8 +21,6 @@ public partial class SodaMachine : AnimatedEntity, ICinemaUse
     {
         base.Spawn();
 
-        Transmit = TransmitType.Always;
-
         SetModel("models/vendingmachine/vendingmachine.vmdl");
 
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
@@ -48,7 +46,7 @@ public partial class SodaMachine : AnimatedEntity, ICinemaUse
     {
         foreach (var (_, interactable) in Interactables)
         {
-            
+
         }
     }
 }

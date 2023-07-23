@@ -4,7 +4,7 @@ namespace Cinema;
 
 public partial class SodaMachine
 {
-    public string UseText { get; set; } = "Use Soda Vending Machine";
+    public string UseText => "Use Soda Vending Machine";
 
     /// <summary>
     /// Whether this Soda Fountain is usable or not

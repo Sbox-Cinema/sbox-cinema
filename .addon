@@ -275,6 +275,29 @@
     },
     "Summary": "",
     "Description": "",
-    "Public": false
+    "Public": false,
+    "TickRate": 50,
+    "LaunchConfigs": [
+      {
+        "Name": "Cinema Concession Test",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "walker/concession_test_sodafountain.vmap",
+        "MaxPlayers": 11,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      },
+      {
+        "Name": "Cinema Default Test",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "josh/cn_visworld_a1.vmap",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }
