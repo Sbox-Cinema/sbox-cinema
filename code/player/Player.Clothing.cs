@@ -25,9 +25,18 @@ public partial class Player
 
         if (AvatarClothing == null)
         {
-            AvatarClothing ??= new();
-            AvatarClothing.LoadFromClient(Client);
-            ClothingAsString = Client.GetClientData("avatar", "");
+            AvatarClothing = new();
+            if (Client.IsBot)
+            {
+                var bot = Client.GetBot();
+                AvatarClothing.Deserialize(bot.ClothingString);
+                ClothingAsString = bot.ClothingString;
+            }
+            else
+            {
+                AvatarClothing.LoadFromClient(Client);
+                ClothingAsString = Client.GetClientData("avatar", "");
+            }
         }
 
         AvatarClothing.DressEntity(this);

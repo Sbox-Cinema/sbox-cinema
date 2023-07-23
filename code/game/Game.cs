@@ -1,6 +1,7 @@
 ﻿using Conna.Inventory;
 using Cinema.UI;
 using Sandbox;
+using Cinema.player.bots;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -36,15 +37,29 @@ public partial class CinemaGame : GameManager
     /// <summary>
     /// A client has joined the server. Make them a pawn to play with
     /// </summary>
-    public override void ClientJoined(IClient client)
+    public override async void ClientJoined(IClient client)
     {
         base.ClientJoined(client);
+
+        if (client.IsBot)
+        {
+            // Wait a frame for botId in ClientData to become available.
+            await GameTask.DelaySeconds(Time.Delta);
+        }
 
         // Create a pawn for this client to play with
         var pawn = new Player();
         pawn.MakePawnOf(client);
         pawn.Money = 500; // @TEMP: Give players money when they join
         pawn.Respawn();
+        if (client.IsBot)
+        {
+            var bot = client.GetBot();
+            if (bot.SpawnPosition.HasValue)
+            {
+                pawn.Position = bot.SpawnPosition.Value;
+            }
+        }
         
         Chat.AddChatEntry( To.Everyone, "Server", $"{client.Name} has joined the game", isInfo: true );
     }

@@ -98,6 +98,11 @@ partial class Player : AnimatedEntity, IEyes
         LoadAvatarClothing();
 
         ClientRespawn(To.Single(Client));
+
+        if (Client.IsBot)
+        {
+            Client.GetBot().OnRespawn();
+        }
     }
 
     private void SetupBodyController()

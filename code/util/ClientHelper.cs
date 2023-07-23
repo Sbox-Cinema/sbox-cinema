@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Cinema.player.bots;
+using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,26 @@ using System.Threading.Tasks;
 namespace Cinema;
 public static class ClientHelper
 {
-    public static CinemaZone GetNearestZone(IClient client)
+    public static CinemaBot GetBot(this IClient client)
+    {
+        if (!client.IsBot)
+            return null;
+
+        var botId = client.GetBotId();
+        return BotManager.Get(botId);
+    }
+
+    public static int GetBotId(this IClient client)
+    {
+        return client.GetInt("botId");
+    }
+
+    public static void SetBotId(this IClient client, int botId)
+    {
+        client.SetInt("botId", botId);
+    }
+
+    public static CinemaZone GetNearestZone(this IClient client)
     {
         if (client.Pawn is not Player ply)
             return null;

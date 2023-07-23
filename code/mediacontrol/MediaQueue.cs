@@ -12,11 +12,11 @@ public partial class MediaQueue : EntityComponent<CinemaZone>, ISingletonCompone
 {
     [ConCmd.Client("media.queue.dump.client")]
     public static void DumpQueueClient()
-        => ClientHelper.GetNearestZone(ConsoleSystem.Caller)?.MediaQueue?.DumpQueueToLog();
+        => ConsoleSystem.Caller?.GetNearestZone()?.MediaQueue?.DumpQueueToLog();
 
     [ConCmd.Server("media.queue.dump.server")]
     public static void DumpQueueServer()
-        => ClientHelper.GetNearestZone(ConsoleSystem.Caller)?.MediaQueue?.DumpQueueToLog();
+        => ConsoleSystem.Caller?.GetNearestZone()?.MediaQueue?.DumpQueueToLog();
 
     private void DumpQueueToLog()
     {

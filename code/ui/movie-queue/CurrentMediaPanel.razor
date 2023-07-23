@@ -1,4 +1,5 @@
 ﻿@using CinemaTeam.Plugins.Media;
+@using Sandbox;
 @using Sandbox.UI;
 
 @namespace Cinema.UI
@@ -6,7 +7,7 @@
 @attribute [StyleSheet]
 
 <root>
-    @if (AllowSentimentVotes)
+    @if (AllowSentimentVotes && Controller.CurrentMedia?.Requestor != Game.LocalClient)
     {
     <div class="like-panel">
         <button class="icon like @GetLikeClass()" onclick=@(() => OnLike())>thumb_up</button>
