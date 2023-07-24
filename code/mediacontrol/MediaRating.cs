@@ -36,12 +36,22 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         switch (netRating)
         {
             case 0:
-                // Video was mid, return without penalty.
+                // Video was mid, play crickets and return without penalty.
                 break;
             case < 0:
+                if (media.Requestor?.Pawn is Entity badMediaEntity)
+                {
+                    var snd = Sound.FromEntity("ui_downvote", badMediaEntity);
+                    snd.SetVolume(0.3f);
+                }
                 // TODO: Implement a pentalty for posting cringe.
                 break;
             default:
+                if (media.Requestor?.Pawn is Entity goodMediaEntity)
+                {
+                    var snd = Sound.FromEntity("ui_upvote", goodMediaEntity);
+                    snd.SetVolume(0.3f);
+                }
                 // Video was good, award the requestor.
                 GrantReward(requestor, netRating, (int)watchTime);
                 break;
