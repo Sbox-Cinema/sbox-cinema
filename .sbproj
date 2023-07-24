@@ -79,7 +79,7 @@
         "GameSettings": {},
         "Addons": "cinemateam.youtube_media_provider;",
         "PreLaunchCommand": "",
-        "PostLaunchCommand": ""
+        "PostLaunchCommand": "sv_cheats 1;"
       },
       {
         "Name": "Projector Test Local Plugins",
@@ -279,6 +279,26 @@
           "Name": "JobMenu",
           "KeyboardCode": "B",
           "GroupName": "Other"
+        },
+        {
+          "Name": "BotSpawn",
+          "KeyboardCode": "mouse3",
+          "GroupName": "Bot"
+        },
+        {
+          "Name": "BotQueue",
+          "KeyboardCode": "KP_ENTER",
+          "GroupName": "Bot"
+        },
+        {
+          "Name": "BotDislike",
+          "KeyboardCode": "KP_MINUS",
+          "GroupName": "Bot"
+        },
+        {
+          "Name": "BotLike",
+          "KeyboardCode": "KP_PLUS",
+          "GroupName": "Bot"
         }
       ]
     },
