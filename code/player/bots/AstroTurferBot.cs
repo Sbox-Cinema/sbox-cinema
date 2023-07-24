@@ -56,24 +56,10 @@ public class AstroTurferBot : CinemaBot
     [ConCmd.Admin("bot.astro.queue")]
     public static async void QueueTestMedia()
     {
-        if (ConsoleSystem.Caller?.Pawn is not Player ply)
-        {
-            Log.Info("This command must be called as a player.");
-            return;
-        }
+        var zone = GetConsoleCallerZone();
 
-        var zone = ply.GetCurrentTheaterZone();
-        if (zone == null)
-        {
-            Log.Info("Not in a theater zone.");
+        if (!zone.IsValid())
             return;
-        }
-
-        if (!Astroturfers.ContainsKey(zone) || !Astroturfers[zone].Any())
-        {
-            Log.Info("Cannot find astroturfer in current cinema zone.");
-            return;
-        }
 
         var randomBot = Astroturfers[zone].OrderBy(_ => Guid.NewGuid()).First();
         var youTubeProvider = VideoProviderManager
@@ -90,6 +76,91 @@ public class AstroTurferBot : CinemaBot
         var randomVideo = GoodVideos.OrderBy(_ => Guid.NewGuid()).First();
         var request = await youTubeProvider.CreateRequest(randomBot.Client, randomVideo);
         zone.MediaQueue.Push(request);
+    }
+
+    [ConCmd.Admin("bot.astro.like")]
+    public static void LikeCurrentMedia()
+    {
+        var zone = GetConsoleCallerZone();
+
+        if (!zone.IsValid())
+            return;
+
+        RateCurrentMedia(zone, true);
+    }
+
+    private static void RateCurrentMedia(CinemaZone zone, bool rating)
+    {
+        if (!zone.IsValid())
+            return;
+
+        var notYetRated = Astroturfers[zone]
+            .Where(at => zone.MediaRating.CanAddRating(at.Client, rating))
+            .OrderBy(_ => Guid.NewGuid())
+            .FirstOrDefault();
+        if (!notYetRated.IsValid())
+        {
+            Log.Info("No astroturfer in this zone has not yet rated the current media.");
+            return;
+        }
+        zone.MediaRating.AddRating(notYetRated.Client, rating);
+    }
+    
+    [ConCmd.Admin("bot.astro.unlike")]
+    public static void UnLikeCurrentMedia()
+    {
+        var zone = GetConsoleCallerZone();
+
+        if (!zone.IsValid())
+            return;
+    }
+
+    [ConCmd.Admin("bot.astro.dislike")]
+    public static void DislikeCurrentMedia()
+    {
+        var zone = GetConsoleCallerZone();
+
+        if (!zone.IsValid())
+            return;
+
+        RateCurrentMedia(zone, false);
+    }
+
+    [ConCmd.Admin("bot.astro.undislike")]
+    public static void UnDislikeCurrentMedia()
+    {
+        var zone = GetConsoleCallerZone();
+
+        if (!zone.IsValid())
+            return;
+    }
+
+    /// <summary>
+    /// Retrieve the <c>CinemaZone</c> containing the player who called the console command.
+    /// If no such zone is found or the zone contains no astroturfer bots, return <c>null</c>.
+    /// </summary>
+    private static CinemaZone GetConsoleCallerZone()
+    {
+        if (ConsoleSystem.Caller?.Pawn is not Player ply)
+        {
+            Log.Info("This command must be called as a player.");
+            return null;
+        }
+
+        var zone = ply.GetCurrentTheaterZone();
+        if (zone == null)
+        {
+            Log.Info("Not in a theater zone.");
+            return null;
+        }
+
+        if (!Astroturfers.ContainsKey(zone) || !Astroturfers[zone].Any())
+        {
+            Log.Info("Cannot find astroturfer in current cinema zone.");
+            return null;
+        }
+
+        return zone;
     }
 
     public override void OnRespawn()
@@ -110,6 +181,4 @@ public class AstroTurferBot : CinemaBot
         "https://www.youtube.com/watch?v=aaLrCdIsTPs", // Earthbound, Titanic Ant fight (in 4:3 resolution)
         "https://www.youtube.com/shorts/iQWY6j4aGc8", // Skibidi Toilet 6 (in vertical resolution)
     };
-
-
 }

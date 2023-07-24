@@ -2,6 +2,7 @@
 using Sandbox;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Cinema;
@@ -65,29 +66,59 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         Log.Info($"Awarded {requestor.Name} ${moneyEarned} for playing {Controller.CurrentMedia.GenericInfo.Title} and getting {netRating} likes.");
     }
 
+    public bool HasRated(IClient client)
+    {
+        return Controller.CurrentMedia != null && CurrentRatings.ContainsKey(client);
+    }
+
     public bool HasRated(IClient client, bool isLike)
     {
-        if (!CurrentRatings.ContainsKey(client))
+        if (Controller.CurrentMedia == null || !CurrentRatings.ContainsKey(client))
             return false;
         return CurrentRatings[client] == isLike;
     }
 
     public bool CanAddRating(IClient client, bool isLike)
     {
-        // The requestor of media cannot rate their own media.
-        if (Controller.CurrentMedia.Requestor == client)
+        if (Controller.CurrentMedia == null)
+        {
+            Log.Trace($"{client} - Cannot add rating: no media is playing.");
             return false;
+        }
 
-        // A client may not rate media if they are not in the same zone.
-        if (ClientHelper.GetNearestZone(client) != Entity)
+        if (Controller.CurrentMedia.Requestor == client)
+        {
+            Log.Trace($"{client} - Cannot add rating: requestor cannot rate their own media.");
             return false;
+        }
+
+        if (ClientHelper.GetNearestZone(client) != Entity)
+        {
+            Log.Trace($"{client} - Cannot add rating: client is not in the same zone as the media.");
+            return false;
+        }
 
         // Any non-requestor who has not yet rated media may rate it.
         if (!CurrentRatings.ContainsKey(client))
             return true;
 
-        // A client may not apply the same rating twice.
         if (CurrentRatings[client] == isLike)
+        {
+            Log.Trace($"{client} - Cannot add rating: client has already applied this rating.");
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool CanRemoveRating(IClient client)
+    {
+        // No rating may be removed if no media is playing.
+        if (Controller.CurrentMedia == null)
+            return false;
+
+        // If no rating already exists for this client, it cannot be removed.
+        if (!HasRated(client))
             return false;
 
         return true;
@@ -104,7 +135,7 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
 
     public void AddRating(IClient client, bool isLike)
     {
-        if (CurrentRatings.ContainsKey(client) && CurrentRatings[client] == isLike)
+        if (!CanAddRating(client, isLike))
             return;
 
         if (Game.IsClient)
@@ -113,7 +144,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
             return;
         }
 
-        // Add the rating.
+        // TODO: Log this to the audit log.
+        Log.Info($"{Entity.Name} - Rating by {client}: {(isLike ? "like" : "dislike")}");
+        CurrentRatings[client] = isLike;
     }
 
     [ConCmd.Server]
@@ -127,7 +160,7 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
 
     public void RemoveRating(IClient client)
     {
-        if (!CurrentRatings.ContainsKey(client))
+        if (!CanRemoveRating(client))
             return;
 
         if (Game.IsClient)
@@ -136,6 +169,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
             return;
         }
 
+        var oldRating = CurrentRatings[client];
+        // TODO: Log this to the audit log.
+        Log.Info($"{Entity.Name} - Removing rating by {client}. Removed rating: {(oldRating ? "like" : "dislike")}");
         CurrentRatings.Remove(client);
     }
 }
