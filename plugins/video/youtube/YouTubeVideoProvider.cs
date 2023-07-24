@@ -8,7 +8,7 @@ using System.Web;
 
 namespace CinemaTeam.Plugins.Media;
 
-public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMediaCurator
+public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector
 {
     public string ProviderName => "YouTube (VideoPlayer)";
     public string ThumbnailPath => "assets/youtube_icon_good.png";
@@ -31,26 +31,6 @@ public partial class YouTubeVideoProvider : IMediaProvider, IMediaSelector, IMed
         request["Url"] = SelectBestStream(youtubePlayerResponse);
         request.SetVideoProvider<YouTubeVideoProvider>();
         return request;
-    }
-
-    private static List<string> GoodVideos = new()
-    {
-        "https://www.youtube.com/watch?v=QH2-TGUlwu4", // Nyan cat
-        "https://www.youtube.com/watch?v=wKbU8B-QVZk", // I can't believe you've done this
-        "https://www.youtube.com/watch?v=FtutLA63Cp8", // Bad Apple
-        "https://www.youtube.com/watch?v=ygI-2F8ApUM", // BrodyQuest
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Never Gonna Give You Up
-        "https://www.youtube.com/watch?v=irU_2h60T50", // Earthbound, Mr. Carpainter fight
-        "https://www.youtube.com/watch?v=0ee0syZi9E0", // Royco Cup-a-Soup
-        "https://www.youtube.com/watch?v=aaLrCdIsTPs", // Earthbound, Titanic Ant fight (in 4:3 resolution)
-        "https://www.youtube.com/watch?v=eLbLKKlna00", // Eridium short (in vertical resolution)
-        "https://www.youtube.com/watch?v=IIqtuupvdWg", // Test video (useful for testing borders)
-    };
-
-    public async Task<MediaRequest> SuggestMedia()
-    {
-        var randomVid = GoodVideos.OrderBy(_ => new Guid()).FirstOrDefault();
-        return await CreateRequest(null, randomVid);
     }
 
     public async Task<IMediaPlayer> Play(MediaRequest requestData)
