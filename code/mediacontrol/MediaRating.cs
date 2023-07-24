@@ -171,6 +171,26 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         // TODO: Log this to the audit log.
         Log.Info($"{Entity.Name} - Rating by {client}: {(isLike ? "like" : "dislike")}");
         CurrentRatings[client] = isLike;
+        SpawnRatingEffect(client.Pawn as Entity, isLike);
+    }
+
+    [ClientRpc]
+    public void SpawnRatingEffect(Entity target, bool isLike)
+    {
+        if (!target.IsValid())
+            return;
+
+        /* TODO: To allow these particles to be shipped with the Cinema game, we must either:
+         * 1. Move the particles to the Cinema game project
+         * 2. Create an asset like a model or GameResource that depends on the particles
+         * 3. Upload the particles to asset party and mount them at the start of the game
+         * 4. Wait for Facepunch to implement Cloud.Particle and use that here
+         */
+        var effectPath = isLike
+            ? "particles/voting/upvote_01.vpcf"
+            : "particles/voting/downvote_01.vpcf";
+        var effect = Particles.Create(effectPath);
+        effect.SetEntityAttachment(0, target, "eyes", Vector3.Zero.WithZ(16f));
     }
 
     [ConCmd.Server]
