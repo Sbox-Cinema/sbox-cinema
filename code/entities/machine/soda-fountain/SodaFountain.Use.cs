@@ -49,8 +49,6 @@ public partial class SodaFountain
     public void HandleUse(Entity player)
     {
         var interactable = Interactables
-                            .OrderBy(x => x.Key)
-                            .Select(x => x.Value)
                             .Where(x => x.CanRayTrigger(player.AimRay).Hit)
                             .FirstOrDefault();
 

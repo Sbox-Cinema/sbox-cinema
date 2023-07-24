@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using Editor;
 using Sandbox;
 using Sandbox.util;
@@ -25,7 +27,7 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         Black = 4
     }
 
-    [Net] public IDictionary<string, BaseInteractable> Interactables { get; set; }
+    [Net] public IList<BaseInteractable> Interactables { get; set; }
 
     /// <summary>
     /// Set up the model when spawned by the server
@@ -60,22 +62,22 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
     /// </summary>
     public void AddInteractables()
     {
-        Interactables.Add("Platform", new Platform()
+        Interactables.Add(new Platform()
         .SetParent(this)
         .InitializeFromInteractionBox("platform")
         );
 
-        Interactables.Add("Dispenser1", CreateDispenser("Lever1State", SodaType.Conk)
+        Interactables.Add(CreateDispenser("Lever1State", SodaType.Conk)
         .SetParent(this)
         .InitializeFromInteractionBox("tap_1")
         );
 
-        Interactables.Add("Dispenser2", CreateDispenser("Lever2State", SodaType.MionPisz)
+        Interactables.Add(CreateDispenser("Lever2State", SodaType.MionPisz)
         .SetParent(this)
         .InitializeFromInteractionBox("tap_2")
         );
 
-        Interactables.Add("Dispenser3", CreateDispenser("Lever3State", SodaType.Spooge)
+        Interactables.Add(CreateDispenser("Lever3State", SodaType.Spooge)
         .SetParent(this)
         .InitializeFromInteractionBox("tap_3")
         );
@@ -86,7 +88,7 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
     [GameEvent.Tick.Server]
     public void OnServerTick()
     {
-        foreach (var (_, interactable) in Interactables)
+        foreach (var interactable in Interactables)
         {
             interactable.Simulate();
         }
@@ -107,5 +109,10 @@ public partial class SodaFountain : AnimatedEntity, ICinemaUse
         };
        
         return dispenser;
+    }
+
+    public BaseInteractable FindInteractable(string name)
+    {
+        return Interactables.Where(x => x.Name == name).FirstOrDefault();
     }
 }

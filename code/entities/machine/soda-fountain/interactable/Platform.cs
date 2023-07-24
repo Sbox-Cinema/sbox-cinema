@@ -73,7 +73,7 @@ public class Platform : BaseInteractable
     /// <param name="slot"></param>
     private void AddCup(Slot slot)
     {
-        var dispenser = (Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] as Dispenser;
+        var dispenser = (Parent as SodaFountain).FindInteractable($"tap_{slot.Index + 1}") as Dispenser;
 
         // Don't add cup if the dispenser is already dispensing
         if (dispenser.IsDispensing) return;
@@ -94,9 +94,11 @@ public class Platform : BaseInteractable
     /// <returns> </returns>
     private void TakeCup(Slot slot, Player player)
     {
-        if ((Parent as SodaFountain).Interactables[$"Dispenser{slot.Index + 1}"] is not Dispenser dispenser) return;
-
-        if (slot.Entity is not FillableCup cup || !cup.Assembled() || dispenser.IsDispensing) return;
+        var dispenser = (Parent as SodaFountain).FindInteractable($"tap_{slot.Index + 1}") as Dispenser;
+        var cup = slot.Entity as FillableCup;
+        
+        // Dont take cup if dispenser hasn't finished dispensing
+        if (!cup.Assembled() || dispenser.IsDispensing) return;
 
         // Add cup to player's inventory
         player.PickupItem(InventorySystem.CreateItem(cup.ItemId()));
