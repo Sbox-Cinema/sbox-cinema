@@ -24,6 +24,8 @@ public partial class Player
     public void AddMoney(int amount)
     {
         Money += amount;
+        if (Money < 0)
+            Money = 0;
     }
 
     /// <summary>

@@ -14,6 +14,8 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
 {
     [ConVar.Replicated("media.rating.moneyreward")]
     public int MoneyPerLikePerMinute { get; set; } = 5;
+    [ConVar.Replicated("media.rating.moneypenaltyscale")]
+    public float MoneyPenaltyScale { get; set; } = 1f;
 
     [Net]
     private IDictionary<IClient, bool> CurrentRatings { get; set; }
@@ -44,7 +46,7 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
                     var snd = Sound.FromEntity("ui_downvote", badMediaEntity);
                     snd.SetVolume(0.3f);
                 }
-                // TODO: Implement a pentalty for posting cringe.
+                GrantReward(requestor, netRating, (int)watchTime);
                 break;
             default:
                 if (media.Requestor?.Pawn is Entity goodMediaEntity)
@@ -81,6 +83,10 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
 
         var minutesPlayed = (int)Math.Max(1, MathF.Floor(timePlayed / 60));
         var moneyEarned = netRating * minutesPlayed * MoneyPerLikePerMinute;
+        if (netRating < 0)
+        {
+            moneyEarned = (int)(moneyEarned * MoneyPenaltyScale);
+        }
         player.AddMoney(moneyEarned);
         Log.Info($"Awarded {requestor.Name} ${moneyEarned} for playing {Controller.CurrentMedia.GenericInfo.Title} and getting {netRating} likes.");
     }
