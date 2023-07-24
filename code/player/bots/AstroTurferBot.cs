@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,17 +79,6 @@ public class AstroTurferBot : CinemaBot
         zone.MediaQueue.Push(request);
     }
 
-    [ConCmd.Admin("bot.astro.like")]
-    public static void LikeCurrentMedia()
-    {
-        var zone = GetConsoleCallerZone();
-
-        if (!zone.IsValid())
-            return;
-
-        RateCurrentMedia(zone, true);
-    }
-
     private static void RateCurrentMedia(CinemaZone zone, bool rating)
     {
         if (!zone.IsValid())
@@ -105,14 +95,16 @@ public class AstroTurferBot : CinemaBot
         }
         zone.MediaRating.AddRating(notYetRated.Client, rating);
     }
-    
-    [ConCmd.Admin("bot.astro.unlike")]
-    public static void UnLikeCurrentMedia()
+
+    [ConCmd.Admin("bot.astro.like")]
+    public static void LikeCurrentMedia()
     {
         var zone = GetConsoleCallerZone();
 
         if (!zone.IsValid())
             return;
+
+        RateCurrentMedia(zone, true);
     }
 
     [ConCmd.Admin("bot.astro.dislike")]
@@ -126,6 +118,41 @@ public class AstroTurferBot : CinemaBot
         RateCurrentMedia(zone, false);
     }
 
+    /// <summary>
+    /// Returns the bot who has rated the current media with the specfieid rating,
+    /// or null if no such bot is found.
+    /// </summary>
+    private static AstroTurferBot GetBotHavingRated(CinemaZone zone, bool rating)
+    {
+        if (!zone.IsValid())
+            return null;
+
+        var botHavingRated = Astroturfers[zone]
+            .Where(at => zone.MediaRating.HasRated(at.Client, rating))
+            .OrderBy(_ => Guid.NewGuid())
+            .FirstOrDefault();
+
+        return botHavingRated;
+    }
+
+    [ConCmd.Admin("bot.astro.unlike")]
+    public static void UnLikeCurrentMedia()
+    {
+        var zone = GetConsoleCallerZone();
+
+        if (!zone.IsValid())
+            return;
+
+        var botHavingLiked = GetBotHavingRated(zone, true);
+        if (!botHavingLiked.IsValid())
+        {
+            Log.Info($"No astroturfer in this zone has liked the current media.");
+            return;
+        }
+
+        zone.MediaRating.RemoveRating(botHavingLiked.Client);
+    }
+
     [ConCmd.Admin("bot.astro.undislike")]
     public static void UnDislikeCurrentMedia()
     {
@@ -133,6 +160,15 @@ public class AstroTurferBot : CinemaBot
 
         if (!zone.IsValid())
             return;
+
+        var botHavingLiked = GetBotHavingRated(zone, false);
+        if (!botHavingLiked.IsValid())
+        {
+            Log.Info($"No astroturfer in this zone has disliked the current media.");
+            return;
+        }
+
+        zone.MediaRating.RemoveRating(botHavingLiked.Client);
     }
 
     /// <summary>

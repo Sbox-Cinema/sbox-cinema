@@ -37,17 +37,22 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         {
             case 0:
                 // Video was mid, return without penalty.
-                return;
+                break;
             case < 0:
                 // TODO: Implement a pentalty for posting cringe.
-                return;
+                break;
             default:
                 // Video was good, award the requestor.
                 GrantReward(requestor, netRating, (int)watchTime);
-                return;
+                break;
         }
+        CurrentRatings.Clear();
     }
 
+    /// <summary>
+    /// Returns the net rating of the current media. This number is calculated by subtracting the 
+    /// number of dislikes from the number of likes.
+    /// </summary>
     public int GetNetRating()
     {
         var totalLikes = CurrentRatings.Where(r => r.Value).Count();
@@ -55,6 +60,10 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         return totalLikes - totalDislikes;
     }
 
+    /// <summary>
+    /// Give the specified client rewards appropriate for the rating and playtime of
+    /// the media that has been played.
+    /// </summary>
     protected void GrantReward(IClient requestor, int netRating, int timePlayed)
     {
         if (requestor.Pawn is not Player player)
@@ -66,11 +75,17 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         Log.Info($"Awarded {requestor.Name} ${moneyEarned} for playing {Controller.CurrentMedia.GenericInfo.Title} and getting {netRating} likes.");
     }
 
+    /// <summary>
+    /// Returns whether the specified client has rated the current media.
+    /// </summary>
     public bool HasRated(IClient client)
     {
         return Controller.CurrentMedia != null && CurrentRatings.ContainsKey(client);
     }
 
+    /// <summary>
+    /// Returns whether the specified client has rated the current media with the specified rating.
+    /// </summary>
     public bool HasRated(IClient client, bool isLike)
     {
         if (Controller.CurrentMedia == null || !CurrentRatings.ContainsKey(client))
@@ -78,6 +93,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         return CurrentRatings[client] == isLike;
     }
 
+    /// <summary>
+    /// Returns whether the specified client may give the specified rating to the current media.
+    /// </summary>
     public bool CanAddRating(IClient client, bool isLike)
     {
         if (Controller.CurrentMedia == null)
@@ -111,6 +129,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         return true;
     }
 
+    /// <summary>
+    /// Returns whether the specified client may remove their rating from the current media.
+    /// </summary>
     public bool CanRemoveRating(IClient client)
     {
         // No rating may be removed if no media is playing.
@@ -133,6 +154,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         rating.AddRating(client, isLike);
     }
 
+    /// <summary>
+    /// If possible, adds the specified rating to the current media on behalf of the specified client.
+    /// </summary>
     public void AddRating(IClient client, bool isLike)
     {
         if (!CanAddRating(client, isLike))
@@ -158,6 +182,9 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
         rating.RemoveRating(client);
     }
 
+    /// <summary>
+    /// If possible, removes the specified client's rating from the current media.
+    /// </summary>
     public void RemoveRating(IClient client)
     {
         if (!CanRemoveRating(client))
