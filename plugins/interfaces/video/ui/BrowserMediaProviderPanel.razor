@@ -14,6 +14,7 @@
         <button class="icon url-navigate" onclick=@(() => OnClickNavigate())>navigate_next</button>
         <button class="icon url-home" onclick=@(() => OnClickHome())>home</button>
         <button class="url-submit" onclick=@(() => OnClickAdd())>Add</button>
+        <button class="icon close" onclick=@(() => OnRequestClose())>close</button>
     </div>
     <CinemaTeam.Plugins.Media.Yoinked.WebPanel @ref=BrowserPanel/>
 </root>

@@ -41,6 +41,11 @@ public partial class BrowserMediaProviderPanel : MediaProviderHeaderPanel
     public override void Tick()
     {
         var browser = BrowserPanel as WebPanel;
+
+        // Browser may be null for a bit after the panel is destroyed.
+        if (!browser.IsValid)
+            return;
+
         var currentUrl = browser.Surface.Url;
         // If the web surface URL changed on its own
         // (i.e. without clicking back or forward)

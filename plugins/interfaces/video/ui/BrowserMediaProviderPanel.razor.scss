@@ -10,9 +10,14 @@
         align-items: center;
         margin: 0px 40px 10px 40px;
 
+        > * {
+            margin: 0px 5px;
+        }
+
         > .icon {
             border-color: rgba(0, 0, 0, 0);
             font-family: "Material Icons";
+            width: 30px;
 
             &.disabled {
                 color: rgba(255,255,255,0.5);
