@@ -15,11 +15,11 @@ public partial class WebSurfaceMediaPlayer : IMediaPlayer, IVideoPlayer
     public virtual IAudioPlayer AudioPlayer => null; 
     // The playback controls would be implemented per-website.
     public virtual IPlaybackControls Controls => null;
+    public virtual bool VideoLoaded { get; protected set; }
 
     protected WebSurface WebSurface { get; set; }
     protected bool WebSurfaceMouseClickedDown { get; set; }
     protected MediaRequest RequestData { get; set; }
-    protected bool VideoLoaded { get; set; }
 
     public WebSurfaceMediaPlayer()
     {

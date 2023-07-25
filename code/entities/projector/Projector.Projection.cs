@@ -26,6 +26,8 @@ public partial class ProjectorEntity
     public Vector3 ScreenPosition { get; set; }
     [Net]
     public float ScreenDistance { get; set; }
+    [Net]
+    public Vector3 ScreenNormal { get; set; }
     protected bool ShouldRemakeLight { get; set; }
 
 
@@ -151,6 +153,10 @@ public partial class ProjectorEntity
         ScreenDistance = tr.Hit
             ? tr.Distance
             : maxDistance;
+
+        ScreenNormal = tr.Hit
+            ? tr.Normal
+            : Vector3.Zero;
     }
 
     protected void UpdateProjectorAngles()

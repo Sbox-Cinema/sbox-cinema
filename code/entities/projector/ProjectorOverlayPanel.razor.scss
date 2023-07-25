@@ -1,0 +1,16 @@
+﻿ProjectorOverlayPanel {
+    justify-content: center;
+    align-items: center;
+
+    .playback-icon {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        font-size: 300px;
+        font-family: 'Material Icons';
+        color: white;
+    }
+}

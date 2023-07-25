@@ -32,8 +32,8 @@ public class VideoPlayerMediaAdapter : IMediaPlayer, IVideoPlayer, IAudioPlayer,
     protected float LastVolume { get; set; }
     protected bool IsInitializing { get; set; }
     protected virtual bool VideoHasHitched => !IsPaused && VideoLoaded && VideoLastUpdated > 1f;
-    protected bool VideoLoaded { get; set; }
-    protected bool AudioLoaded { get; set; }
+    public virtual bool VideoLoaded { get; protected set; }
+    public virtual bool AudioLoaded { get; protected set; }
     protected TimeSince VideoLastUpdated { get; set; }
 
     public virtual async Task StartAsync(MediaRequest requestData)

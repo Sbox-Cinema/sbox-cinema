@@ -17,6 +17,7 @@ public partial class ProjectorEntity : Entity
 
     [Net, Property(Title = "Projection Size (Units)")]
     public Vector2 ProjectionSize { get; set; }
+    public ProjectorOverlayPanel OverlayPanel { get; set; }
 
     [Net]
     public CinemaZone Zone { get; set; }
@@ -56,12 +57,18 @@ public partial class ProjectorEntity : Entity
     public void OnClientTick()
     {
         UpdateClientProjection();
+        OverlayPanel.Position = ScreenPosition + ScreenNormal;
+        OverlayPanel.Rotation = Rotation.LookAt(ScreenNormal, ScreenNormal);
     }
 
     public override void ClientSpawn()
     {
         base.ClientSpawn();
         InitializeProjection();
+        OverlayPanel = new ProjectorOverlayPanel();
+        OverlayPanel.Style.Width = ProjectionSize.x;
+        OverlayPanel.Style.Height = ProjectionSize.y;
+        OverlayPanel.WorldScale = 1f;
     }
 
     public void SetMedia(IMediaPlayer media)
@@ -69,6 +76,7 @@ public partial class ProjectorEntity : Entity
         // Stop whatever media might already be playing.
         CurrentMedia?.Stop();
         CurrentMedia = media;
+        OverlayPanel.Media = media;
         ProjectCurrentMedia();
     }
 

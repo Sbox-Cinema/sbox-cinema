@@ -1,0 +1,15 @@
+﻿@using Sandbox.UI;
+
+@namespace Cinema
+@inherits WorldPanel;
+@attribute [StyleSheet]
+<root>
+    @if (IsPaused)
+    {
+        <div class="playback-icon">@(IsPaused ? "pause_circle_filled" : "play_circle_filled")</div>
+    }
+    else if (IsBuffering)
+    {
+        <div style="transform: rotate(@(BufferIconRotation)deg)" class="buffering-image"></div>
+    }
+</root>

@@ -31,4 +31,9 @@ public interface IMediaPlayer
     /// method is called, the media player should not be used again.
     /// </summary>
     void Stop();
+    /// <summary>
+    /// Returns true if all components of this media have been loaded; i.e., nothing
+    /// is buffering or waiting to be initialized.
+    /// </summary>
+    bool MediaLoaded => (VideoPlayer?.VideoLoaded ?? true) && (AudioPlayer?.AudioLoaded ?? true);
 }

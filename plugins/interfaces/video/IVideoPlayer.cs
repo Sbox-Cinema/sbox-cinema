@@ -13,4 +13,9 @@ public interface IVideoPlayer
     /// have been updated only once, during initialization.
     /// </summary>
     Texture Texture { get; }
+    /// <summary>
+    /// Returns true if the video is fully loaded and updating <c>Texture</c> as normal. 
+    /// May return false if the video is buffering or has not yet finished initializing.
+    /// </summary>
+    bool VideoLoaded { get; }
 }
