@@ -21,6 +21,8 @@ public partial class CurrentMediaPanel : Panel
     /// Returns true if the current media is something that can be liked/disliked.
     /// </summary>
     public bool AllowSentimentVotes => NowPlaying != null;
+    public string RatingButtonClass => MayRateVideo ? "" : "disabled";
+    private bool MayRateVideo => AllowSentimentVotes && NowPlaying?.Requestor != Game.LocalClient;
 
     private bool _ProgressSliderClicked = false;
 
@@ -68,13 +70,18 @@ public partial class CurrentMediaPanel : Panel
                 };
             }
             );
-
-
     }
 
     protected override int BuildHash()
     {
-        return HashCode.Combine(NowPlaying, TimeSinceStartedPlaying.Relative, Controller.IsPaused);
+        var combinedRatinghash = 0;
+        // If any vote is changed, the hash should change.
+        foreach(var rating in Rating.GetAllRatings())
+        {
+            var ratingHash = HashCode.Combine(rating.Key, rating.Value);
+            combinedRatinghash = HashCode.Combine(combinedRatinghash, ratingHash);
+        }
+        return HashCode.Combine(combinedRatinghash, NowPlaying, TimeSinceStartedPlaying.Relative, Controller.IsPaused);
     }
 
     protected void OnTogglePause()
@@ -88,8 +95,29 @@ public partial class CurrentMediaPanel : Panel
     protected string GetDislikeClass() => HasDisliked ? "selected" : "";
     protected bool HasLiked => Rating.HasRated(Game.LocalClient, true);
     protected bool HasDisliked => Rating.HasRated(Game.LocalClient, false);
-    protected void OnLike() => Rating.AddRating(Game.LocalClient, true);
-    protected void OnDislike() => Rating.AddRating(Game.LocalClient, false);
+
+    protected void OnLike()
+    {
+        if (HasLiked)
+        {
+            Rating.RemoveRating(Game.LocalClient);
+        }
+        else
+        {
+            Rating.AddRating(Game.LocalClient, true);
+        }
+    }
+    protected void OnDislike()
+    {
+        if (HasDisliked)
+        {
+            Rating.RemoveRating(Game.LocalClient);
+        }
+        else
+        {
+            Rating.AddRating(Game.LocalClient, false);
+        }
+    }
 
     protected void OnSkip()
     {

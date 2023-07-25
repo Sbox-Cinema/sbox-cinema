@@ -7,13 +7,16 @@
 @attribute [StyleSheet]
 
 <root>
-    @if (AllowSentimentVotes && Controller.CurrentMedia?.Requestor != Game.LocalClient)
-    {
     <div class="like-panel">
-        <button class="icon like @GetLikeClass()" onclick=@(() => OnLike())>thumb_up</button>
-        <button class="icon dislike @GetDislikeClass()"  onclick=@(() => OnDislike())>thumb_down</button>
+        <div class="rating-tab">
+            <button class="icon like @RatingButtonClass @GetLikeClass()" onclick=@(() => OnLike())>thumb_up</button>
+            <div class="counter">@Rating.LikeCount</div>
+        </div>
+        <div class="rating-tab">
+            <button class="icon dislike @RatingButtonClass @GetDislikeClass()"  onclick=@(() => OnDislike())>thumb_down</button>
+            <div class="counter">@Rating.DislikeCount</div>
+        </div>
     </div>
-    }
     <div class="main-panel">
         <div class="thumbnail" @ref=Thumbnail style="background-image: url(@ThumbnailPath);" />
         <div class="playback">

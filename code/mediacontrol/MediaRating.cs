@@ -17,6 +17,10 @@ public partial class MediaRating : EntityComponent<CinemaZone>, ISingletonCompon
     [ConVar.Replicated("media.rating.moneypenaltyscale")]
     public float MoneyPenaltyScale { get; set; } = 1f;
 
+    public IEnumerable<KeyValuePair<IClient, bool>> GetAllRatings() => CurrentRatings;
+    public int LikeCount => CurrentRatings.Where(r => r.Value).Count();
+    public int DislikeCount => CurrentRatings.Where(r => !r.Value).Count();
+
     [Net]
     private IDictionary<IClient, bool> CurrentRatings { get; set; }
     private MediaController Controller => Entity.MediaController;

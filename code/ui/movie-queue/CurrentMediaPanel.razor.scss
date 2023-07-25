@@ -4,25 +4,65 @@
 
     > .like-panel {
         flex-direction: column;
+        width: 300px;
+        transition: all 0.25s ease-in;
+        transform: translateX(0);
+        opacity: 1;
 
-        > button {
-            font-family: 'Material Icons';
-            font-size: 48px;
+        &:intro {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(100%);
+        }
+
+        > .rating-tab {
             border-radius: 40% 0% 0% 40%;
+            border-color: rgba(255,255,255,0.02);
             border-width: 2px;
             background-color: rgb(8, 1, 1);
             height: 50%;
-            color: rgba(255, 255, 255, 0.5);
-            transition: all 0.25s ease-in;
+            padding: 10px;
 
-            &.like .selected {
-                text-shadow: 0px 0px 5px 5px #5c5cdb;
-                color: white;
+            > button {
+                font-family: 'Material Icons';
+                font-size: 48px;
+                margin: 10px;
+                border-color: transparent;
+                color: rgba(255,255,255,0.9);
+                transition: all 0.25s ease-in;
+
+                &.disabled {
+                    color: rgba(255,255,255,0.2);
+
+                    &:hover {
+                        background-color: transparent;
+                        pointer-events: none;
+                    }
+
+                    &:active {
+                        background-color: transparent;
+                    }
+                }
+
+                &.like.selected {
+                    text-shadow: 0px 0px 5px 5px #5c5cdb;
+                    color: white;
+                }
+
+                &.dislike.selected {
+                    text-shadow: 0px 0px 5px 5px #ad0909;
+                    color: white;
+                }
             }
 
-            &.dislike .selected {
-                text-shadow: 0px 0px 5px 5px #ad0909;
+            > .counter {
+                justify-content: center;
+                align-items: center;
+                font-size: 48px;
+                border-radius: 10px;
+                width: 100px;
                 color: white;
+                background-color: rgba(255,255,255,0.01);
             }
         }
 
