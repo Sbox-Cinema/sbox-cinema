@@ -66,9 +66,8 @@ public partial class ProjectorEntity : Entity
         base.ClientSpawn();
         InitializeProjection();
         OverlayPanel = new ProjectorOverlayPanel();
-        OverlayPanel.Style.Width = ProjectionSize.x;
-        OverlayPanel.Style.Height = ProjectionSize.y;
-        OverlayPanel.WorldScale = 1f;
+        OverlayPanel.PanelBounds = new Rect(Vector2.Zero - ProjectionSize / 2, ProjectionSize);
+        OverlayPanel.WorldScale = 1 / ScenePanelObject.ScreenToWorldScale;
     }
 
     public void SetMedia(IMediaPlayer media)
