@@ -30,8 +30,6 @@ public partial class ProjectorEntity
     public Vector3 ScreenNormal { get; set; }
     protected bool ShouldRemakeLight { get; set; }
 
-
-
     private void InitializeProjection()
     {
         var outerConeAngle = 60f;
@@ -204,6 +202,7 @@ public partial class ProjectorEntity
 
     protected void CleanupProjection()
     {
+        ProjectionLight?.Delete();
         LightCookieTexture?.Dispose();
     }
 }

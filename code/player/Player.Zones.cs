@@ -14,6 +14,8 @@ public partial class Player
 
     public List<CinemaZone> GetZones() => Zones.ToList();
     public void IsInZone(CinemaZone zone) => Zones.Contains(zone);
+    public event EventHandler<CinemaZone> ZoneEntered;
+    public event EventHandler<CinemaZone> ZoneExited;
 
     public CinemaZone GetCurrentZone()
         => Zones
@@ -33,11 +35,13 @@ public partial class Player
             return;
         }
         Zones.Add(zone);
+        ZoneEntered?.Invoke(this, zone);
     }
 
     public void ExitZone(CinemaZone zone)
     {
         Zones.Remove(zone);
+        ZoneExited?.Invoke(this, zone);
     }
 
     [ConCmd.Server("player.zones.dump")]

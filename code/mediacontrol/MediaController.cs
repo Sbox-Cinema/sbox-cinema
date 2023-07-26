@@ -56,7 +56,7 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     public event EventHandler<MediaStoppedEventArgs> StopPlaying;
 
     [GameEvent.Tick.Server]
-    private void OnServerTick()
+    protected void OnServerTick()
     {
         if (CurrentMedia != null && CurrentPlaybackPosition > CurrentMedia.GenericInfo?.Duration)
         {
@@ -70,14 +70,41 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     }
 
     [GameEvent.Tick.Client]
-    private void OnClientTick()
+    protected void OnClientTick()
+    {
+        if (Game.LocalPawn is not Player ply)
+            return;
+
+        // Don't check for desyncs if the player is not in the theater zone.
+        if (ply.GetCurrentTheaterZone() != Zone)
+            return;
+
+        FixDesync();
+    }
+
+    private void FixDesync()
     {
         // If the current media is more than a second out of sync with the server, seek.
-        if (CurrentMediaPlayer?.Controls != null 
+        if (CurrentMediaPlayer?.Controls != null
             && Math.Abs(CurrentMediaPlayer.Controls.PlaybackTime - CurrentPlaybackPosition) >= 1f)
         {
+            Log.Trace($"Desync detected, seeking. Server Time: {CurrentPlaybackPosition} Client time: {CurrentMediaPlayer.Controls.PlaybackTime}");
             CurrentMediaPlayer.Controls.Seek(CurrentPlaybackPosition);
         }
+    }
+
+    [ConCmd.Client("media.playback.info")]
+    protected static void DumpPlaybackInfoCmd()
+    {
+        if (Game.LocalPawn is not Player ply)
+            return;
+
+        ply.GetCurrentTheaterZone()?.MediaController?.DumpPlaybackInfo();
+    }
+
+    protected void DumpPlaybackInfo()
+    {
+        Log.Info($"Server Time: {CurrentPlaybackPosition} Client time: {CurrentMediaPlayer.Controls.PlaybackTime}");
     }
 
     public static MediaController FindByZoneId(int zoneId)
@@ -187,10 +214,23 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
         StartPlaying?.Invoke(this, new MediaStartedEventArgs(CurrentMedia));
     }
 
+    /// <summary>
+    /// Get a media player for <c>CurrentMedia</c> and set it on the projector. 
+    /// This method gets called when <c>CurrentMedia</c> changes on the server, or
+    /// when entering a theater zone where media is already playing.
+    /// </summary>
     [ClientRpc]
-    private async Task ClientPlayMedia()
+    internal async Task ClientPlayMedia()
     {
         if (!Game.IsClient)
+            return;
+
+        if (Game.LocalPawn is not Player ply)
+            return;
+
+        // Don't play the new media if the player is not in the theater zone.
+        // This will get updated when the player enters the zone.
+        if (ply.GetCurrentTheaterZone() != Zone)
             return;
 
         CurrentMediaPlayer?.Stop();
@@ -212,6 +252,16 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
             MediaConfig.DefaultMediaVolumeChanged += (_, volume) => CurrentMediaPlayer.AudioPlayer.SetVolume(volume);
             PlayAudio();
         }
+    }
+
+    /// <summary>
+    /// Used to stop the current media playback on the client without affecting the server.
+    /// This is used when the client leaves a theater zone.
+    /// </summary>
+    [ClientRpc]
+    internal void ClientStopMedia()
+    {
+        CurrentMediaPlayer?.Stop();
     }
 
     private void PlayAudio()

@@ -55,9 +55,9 @@ public class AstroTurferBot : CinemaBot
     }
 
     [ConCmd.Admin("bot.astro.queue")]
-    public static async void QueueTestMedia()
+    public static async void QueueTestMedia(int zoneId)
     {
-        var zone = GetConsoleCallerZone();
+        var zone = Entity.FindByIndex<CinemaZone>(zoneId);
 
         if (!zone.IsValid())
             return;

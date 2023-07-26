@@ -62,14 +62,14 @@
         "PostLaunchCommand": ""
       },
       {
-        "Name": "Main Test All Plugins",
+        "Name": "Main Test Cinema Plugins",
         "GameIdent": "cinemateam.cinema#local",
         "MapName": "cinemateam.cinema_test_main_01",
-        "MaxPlayers": 1,
+        "MaxPlayers": 16,
         "GameSettings": {},
-        "Addons": "cinemateam.interface_video#local;cinemateam.youtube_video_player#local;",
+        "Addons": "cinemateam.youtube_media_provider;cinemateam.ctmi_video;cinemateam.dummy_media_provider;",
         "PreLaunchCommand": "",
-        "PostLaunchCommand": ""
+        "PostLaunchCommand": "sv_cheats 1"
       },
       {
         "Name": "Projector Test YouTube Only",

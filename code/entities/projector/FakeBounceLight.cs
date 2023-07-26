@@ -77,6 +77,13 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
         BounceSpotlight ??= CreateSpotlight();
     }
 
+    protected override void OnDeactivate()
+    {
+        base.OnDeactivate();
+
+        BounceSpotlight.Delete();
+    }
+
     private SpotLightEntity CreateSpotlight()
     {
         var spotlight = new SpotLightEntity()
@@ -99,6 +106,9 @@ public partial class FakeBounceLight : EntityComponent, ISingletonComponent
     [GameEvent.Tick.Client]
     public void OnClientTick()
     {
+        if (!BounceSpotlight.IsValid())
+            return;
+
         // Trace forward from the projector light to find the surface it projects on to.
         var traceStart = Entity.Position;
         var traceEnd = Entity.Position + Entity.Rotation.Forward * 5000f;

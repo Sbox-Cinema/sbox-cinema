@@ -27,6 +27,8 @@ public partial class ProjectorEntity : Entity
     {
         base.Spawn();
 
+        // Always transmit to clients, as we'll manually control the creation/destruction of
+        // resources when a player enters or exits a CinemaZone.
         Transmit = TransmitType.Always;
 
         if (ProjectionSize == default)
@@ -57,17 +59,38 @@ public partial class ProjectorEntity : Entity
     public void OnClientTick()
     {
         UpdateClientProjection();
-        OverlayPanel.Position = ScreenPosition + ScreenNormal;
-        OverlayPanel.Rotation = Rotation.LookAt(ScreenNormal, ScreenNormal);
+        if (OverlayPanel.IsValid())
+        {
+            OverlayPanel.Position = ScreenPosition + ScreenNormal;
+            OverlayPanel.Rotation = Rotation.LookAt(ScreenNormal, ScreenNormal);
+        }
     }
 
-    public override void ClientSpawn()
+    [ClientRpc]
+    public void ClientInitialize()
     {
-        base.ClientSpawn();
         InitializeProjection();
+        InitializeOverlay();
+        ProjectCurrentMedia();
+    }
+
+    private void InitializeOverlay()
+    {
         OverlayPanel = new ProjectorOverlayPanel();
         OverlayPanel.PanelBounds = new Rect(Vector2.Zero - ProjectionSize / 2, ProjectionSize);
         OverlayPanel.WorldScale = 1 / ScenePanelObject.ScreenToWorldScale;
+    }
+
+    private void CleanupOverlay()
+    {
+        OverlayPanel.Delete();
+    }
+
+    [ClientRpc]
+    public void ClientCleanup()
+    {
+        CleanupProjection();
+        CleanupOverlay();
     }
 
     public void SetMedia(IMediaPlayer media)

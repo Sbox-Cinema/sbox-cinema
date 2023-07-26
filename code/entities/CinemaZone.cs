@@ -146,6 +146,11 @@ public partial class CinemaZone : BaseTrigger
         if (toucher is Player ply)
         {
             ply.EnterZone(this);
+            // We don't need for the bots to be able to see/hear media.
+            if (ply.Client.IsBot)
+                return;
+            ProjectorEntity.ClientInitialize(To.Single(ply.Client));
+            MediaController.ClientPlayMedia(To.Single(ply.Client));
         }
     }
 
@@ -156,6 +161,11 @@ public partial class CinemaZone : BaseTrigger
         if (toucher is Player ply)
         {
             ply.ExitZone(this);
+            // Bots are never presented any media, so there's nothing to clean up.
+            if (ply.Client.IsBot)
+                return;
+            ProjectorEntity.ClientCleanup(To.Single(ply.Client));
+            MediaController.ClientStopMedia(To.Single(ply.Client));
         }
     }
 }
