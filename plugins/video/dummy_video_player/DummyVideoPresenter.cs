@@ -17,6 +17,9 @@ public class DummyVideoPresenter : IMediaPlayer, IVideoPlayer, IAudioPlayer, IPl
         set => Seek(value);
     }
     public bool IsPaused => Music?.Paused ?? false;
+    public virtual bool VideoLoaded => true;
+    public virtual bool AudioLoaded => true;
+
     public void Pause()
     {
         if (Music == null)
