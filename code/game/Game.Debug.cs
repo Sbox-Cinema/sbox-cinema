@@ -136,6 +136,24 @@ public partial class CinemaGame
         player.Inventory.Give(item);
     }
 
+    // creates a world entity for usable items.
+    [ConCmd.Server("item.create")]
+    public static void CreateItemCMD(string itemId)
+    {
+        if (!ValidateUser(ConsoleSystem.Caller.SteamId)) return;
+
+        if (ConsoleSystem.Caller.Pawn is not Player player) return;
+
+        var item = InventorySystem.CreateItem(itemId);
+        if (item == null) return;
+
+        var entity = new ItemEntity();
+        entity.SetItem(item);
+        entity.Position = player.EyePosition + player.EyeRotation.Forward * 100;
+
+    }
+
+
     [ConCmd.Server("player.bring")]
     public static void BringPlayerCMD(string playerName)
     {

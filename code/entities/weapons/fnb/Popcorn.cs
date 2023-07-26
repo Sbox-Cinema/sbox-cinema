@@ -13,8 +13,6 @@ public partial class Popcorn : WeaponBase
 {
     public override float PrimaryFireRate => 0.85f;
     public override int BaseUses => 10;
-    private string UniqueId = "popcorn_tub"; // The unique id for the hotdog item
-    private Player Owner;
     public override void Spawn()
     {
         base.Spawn();
@@ -39,7 +37,7 @@ public partial class Popcorn : WeaponBase
             };
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
-            
+
             if (Projectile.AutoRemoveThrown)
                 RemoveFromHolder();
         }
@@ -49,10 +47,4 @@ public partial class Popcorn : WeaponBase
     {
     }
 
-    public override void Trigger (Player player)
-    {
-        base.OnUse(player);
-
-        Owner = player;
-    }
 }

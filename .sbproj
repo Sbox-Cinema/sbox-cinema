@@ -275,6 +275,19 @@
     },
     "Summary": "",
     "Description": "",
-    "Public": false
+    "Public": false,
+    "TickRate": 50,
+    "LaunchConfigs": [
+      {
+        "Name": "My New Config",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "testing/cinema_test_main_01.vmap",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }

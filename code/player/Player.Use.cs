@@ -52,10 +52,12 @@ public partial class Player
                     return;
                 }
 
+
                 if (Using is not IUse usable) return;
 
                 if (usable.OnUse(this))
                     return;
+
 
                 StopUsing();
                 return;
