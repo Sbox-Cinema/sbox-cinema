@@ -9,7 +9,7 @@ public partial class ProjectorOverlayPanel : WorldPanel
     public IMediaPlayer Media;
     public bool IsPaused => Media?.Controls.IsPaused ?? false;
     public bool IsBuffering => !(Media?.MediaLoaded ?? true);
-    public int BufferIconRotation { get; set; } = 0;
+    public int BufferIconRotation { get; set; } = 359;
 
     protected override int BuildHash()
     {
@@ -22,7 +22,7 @@ public partial class ProjectorOverlayPanel : WorldPanel
 
         if (IsBuffering)
         {
-            BufferIconRotation += 1;
+            BufferIconRotation--;
             BufferIconRotation %= 360;
             StateHasChanged();
         }
