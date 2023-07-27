@@ -279,20 +279,10 @@
     "TickRate": 50,
     "LaunchConfigs": [
       {
-        "Name": "My New Config",
-        "GameIdent": "cinemateam.cinema#local",
-        "MapName": "facepunch.square",
-        "MaxPlayers": 1,
-        "GameSettings": {},
-        "Addons": "",
-        "PreLaunchCommand": "",
-        "PostLaunchCommand": ""
-      },
-      {
-        "Name": "Cinema Concessions Test",
+        "Name": "Concession Test",
         "GameIdent": "cinemateam.cinema#local",
         "MapName": "walker/concession_test_sodafountain.vmap",
-        "MaxPlayers": 10,
+        "MaxPlayers": 8,
         "GameSettings": {},
         "Addons": "",
         "PreLaunchCommand": "",
