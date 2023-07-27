@@ -27,14 +27,14 @@ public class Platform : BaseInteractable
     {
         var slot = GetClosestSlot(player);
 
-        if (slot.IsEmpty())
-        {
-            AddCup(slot);
-        }
-
         if (slot.HasItem())
         {
             TakeCup(slot, player);
+        }
+
+        if (slot.IsEmpty())
+        {
+            AddCup(slot);
         }
     }
 
@@ -51,20 +51,7 @@ public class Platform : BaseInteractable
                    .DynamicOnly()
                    .Run();
 
-        IDictionary<Slot, float> slotsByDistance = new Dictionary<Slot, float>();
-        
-        for (int i = 0; i < NumSlots; i++)
-        {
-            var slot = Slots[i];
-            var distance = tr.HitPosition.Distance(GetParentTransform(slot.Attachment).Position);
-
-            slotsByDistance.Add(slot, distance);
-        }
-
-        return slotsByDistance
-                .OrderBy(x => x.Value)
-                .Select(x => x.Key)
-                .FirstOrDefault();
+        return Slots.OrderBy(x => tr.HitPosition.Distance(GetParentTransform(x.Attachment).Position)).FirstOrDefault();
     }
 
     /// <summary>
