@@ -48,10 +48,8 @@ public partial class SodaFountain
     /// <returns> </returns>
     public void HandleUse(Entity player)
     {
-        var interactable = Interactables
-                            .Where(x => x.CanRayTrigger(player.AimRay).Hit)
-                            .FirstOrDefault();
-
+        var interactable = Interactables.FirstOrDefault(x => x.CanRayTrigger(player.AimRay).Hit);
+                
         interactable?.Trigger(player as Player);
     }
 }
