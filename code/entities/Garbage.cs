@@ -64,8 +64,9 @@ public partial class Garbage : AnimatedEntity, ICinemaUse
         return false;
     }
 
-    public void OnStopUse(Entity user)
+    public bool OnStopUse(Entity user)
     {
+        return true;
     }
 
     public static GarbageBag GetPlayerGarbageBag(Player player)

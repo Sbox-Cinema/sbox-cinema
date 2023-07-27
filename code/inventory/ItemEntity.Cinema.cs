@@ -12,9 +12,9 @@ public partial class ItemEntity : ICinemaUse
         return true;
     }
 
-    public void OnStopUse(Entity user)
+    public bool OnStopUse(Entity user)
     {
-
+        return true;
     }
 
     public bool OnUse(Entity user)
