@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Sandbox;
 using Sandbox.util;
 using Conna.Inventory;
@@ -20,7 +19,7 @@ public class Platform : BaseInteractable
     }
 
     /// <summary>
-    /// This will add or take the cup you are pressing closest to, if nothing is close it will just add a cup to the nearest possible slot.
+    /// This will add or take the cup you are pressing closest to, if nothing is close to it, it will add a cup to the nearest possible slot.
     /// </summary>
     /// <param name="player"></param>
     public override void Trigger(Player player)
@@ -39,10 +38,10 @@ public class Platform : BaseInteractable
     }
 
     /// <summary>
-    /// 
+    /// Gets the slot the player was to add/take an item from
     /// </summary>
     /// <param name="player"></param>
-    /// <returns> </returns>
+    /// <returns>The closest slot to the player's aim ray</returns>
     private Slot GetClosestSlot(Player player)
     {
         var ray = player.AimRay;
@@ -78,7 +77,6 @@ public class Platform : BaseInteractable
     /// </summary>
     /// <param name="slot"></param>
     /// <param name="player"></param>
-    /// <returns> </returns>
     private void TakeCup(Slot slot, Player player)
     {
         var dispenser = (Parent as SodaFountain).FindInteractable($"tap_{slot.Index + 1}") as Dispenser;

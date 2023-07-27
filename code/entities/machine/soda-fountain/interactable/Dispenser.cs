@@ -7,14 +7,15 @@ namespace Cinema;
 public partial class Dispenser : BaseInteractable
 {
     static private float DispenseTime = 3.0f;
+    
+    private RealTimeUntil TimeUntilFinishedDispensing = 0.0f;
+    public bool IsDispensing { get; set; }
+
     public string AnimationName { get; set; }
     public SodaFountain.SodaType SodaType { get; set; }
     private Particles SodaParticles { get; set; }
     private FillableCup Cup { get; set; }
 
-    private RealTimeUntil TimeUntilFinishedDispensing = 0.0f;
-    public bool IsDispensing { get; set; }
-   
     public Dispenser() // For the compiler...
     {
         
@@ -24,7 +25,6 @@ public partial class Dispenser : BaseInteractable
     /// 
     /// </summary>
     /// <param name="cup"></param>
-    /// <returns> </returns>
     public void SetCup(FillableCup cup)
     {
         Cup = cup;
@@ -34,7 +34,6 @@ public partial class Dispenser : BaseInteractable
     /// 
     /// </summary>
     /// <param name="player"></param>
-    /// <returns> </returns>
     public override void Trigger(Player player)
     {
         if(!IsDispensing)
@@ -42,9 +41,6 @@ public partial class Dispenser : BaseInteractable
             // If an assembled cup is underneath this dispenser,
             // don't dispense until it is picked up
             if (Cup.IsValid() && Cup.Assembled()) return;
-
-            TimeUntilFinishedDispensing = DispenseTime;
-            IsDispensing = true;
 
             if (Cup.IsValid()) // If empty cup is underneath this dispenser, create soda fill particles
             {
@@ -63,6 +59,11 @@ public partial class Dispenser : BaseInteractable
 
             // Play sound for soda dispensing
             Sound.FromEntity("cup_filling_01", Parent);
+
+            // Reset timer for dispensing 
+            TimeUntilFinishedDispensing = DispenseTime;
+
+            IsDispensing = true;
         }
     }
 
@@ -88,6 +89,6 @@ public partial class Dispenser : BaseInteractable
         var leverPos = IsDispensing ? EasingExtensions.EaseArch((float)TimeUntilFinishedDispensing.Fraction).Clamp(0.0f, 1.0f) : 0.0f;
         
         (Parent as AnimatedEntity).SetAnimParameter(AnimationName, leverPos);
-   }
+    }
     
 }

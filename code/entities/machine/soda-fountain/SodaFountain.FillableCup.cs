@@ -40,14 +40,6 @@ public partial class FillableCup : ModelEntity
     /// 
     /// </summary>
     /// <returns> </returns>
-    public bool CanPickup()
-    {
-        return !Dispenser.IsDispensing && IsAssembled;
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns> </returns>
     public bool Assembled()
     {
         return IsAssembled;

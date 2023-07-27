@@ -1,4 +1,5 @@
 ﻿using Cinema;
+using System.Linq;
 
 namespace Sandbox.util;
 public class Slot
@@ -83,33 +84,32 @@ public partial class BaseInteractable : BaseNetworkable
     /// If it doesnt find anything it wont set anything.
     /// </summary>
     /// <param name="name"></param>
-    /// <returns></returns>
+    /// <returns>BaseInteractable, if found</returns>
     public BaseInteractable InitializeFromInteractionBox(string name)
     {
         var interactionBoxes = (Parent as ModelEntity).Model.GetData<ModelInteractionBox[]>();
 
-        foreach (var box in interactionBoxes)
+        var box = interactionBoxes.FirstOrDefault(x => x.Name == name);
+
+        if(box.Equals(default(ModelInteractionBox)))
         {
-            if (box.Name != name)
-                continue;
+            Log.Error($"Cannot find interaction box for: {name}");
 
-            Name = box.Name;
-            Attachment = box.Attachment;
-            
-            var offset = box.OriginOffset;
-            var halfDimensions = box.Dimensions * 0.5f;
-
-            var parent = Parent as ModelEntity;
-
-            var attachment = parent.GetAttachment(Attachment, false);
-
-            var bbox = new BBox( (offset + attachment.Value.Position) - halfDimensions , (offset + attachment.Value.Position) + halfDimensions );
-
-            Mins = bbox.Mins;
-            Maxs = bbox.Maxs;
-
-            break;
+            return this;
         }
+
+        Name = box.Name;
+        Attachment = box.Attachment;
+
+        var offset = box.OriginOffset;
+        var halfDimensions = box.Dimensions * 0.5f;
+
+        var attachment = (Parent as ModelEntity).GetAttachment(Attachment, false);
+
+        var bbox = new BBox((offset + attachment.Value.Position) - halfDimensions, (offset + attachment.Value.Position) + halfDimensions);
+
+        Mins = bbox.Mins;
+        Maxs = bbox.Maxs;
 
         return this;
     }
@@ -135,27 +135,13 @@ public partial class BaseInteractable : BaseNetworkable
     {
         var mins = Parent.Transform.PointToWorld(Mins);
         var maxs = Parent.Transform.PointToWorld(Maxs);
+
         var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
+        
         var hit = bounds.Trace(ray, MaxDistance, out float distance);
+        
         var triggerResults = new CanTriggerResults(hit, distance, this);
 
         return triggerResults;
-    }
-
-    /// <summary>
-    /// This will check if you can trigger, if it can it will actually trigger.
-    /// </summary>
-    /// <param name="ray"></param>
-    /// <returns></returns>
-    public bool TryTrigger(Ray ray)
-    {
-        var canTrigger = CanRayTrigger(ray);
-
-        if (canTrigger.Hit)
-        {
-            Trigger();
-        }
-
-        return canTrigger.Hit;
     }
 }
