@@ -136,7 +136,7 @@ public partial class BaseInteractable : BaseNetworkable
         var mins = Parent.Transform.PointToWorld(Mins);
         var maxs = Parent.Transform.PointToWorld(Maxs);
 
-        var bounds = new BBox(mins, maxs); // Would be nice if FP returned the HitPosition here.
+        var bounds = new BBox(mins, maxs);
         
         var hit = bounds.Trace(ray, MaxDistance, out float distance);
         

@@ -5,7 +5,7 @@ namespace Cinema;
 public partial class FillableCup : ModelEntity
 {
     public Dispenser Dispenser { get; set; }
-    public string CupItemUniqueId {get; set;} 
+    public string CupItemUniqueId { get; set; } 
     private bool IsAssembled { get; set; }
 
     /// <summary>
@@ -26,7 +26,7 @@ public partial class FillableCup : ModelEntity
     {
         SetMaterialGroup((int)SodaFountain.GetCupColorBySodaType(Dispenser.SodaType));
 
-        Dispenser.SetCup(this);        
+        Dispenser.SetCup(this);
     }
     /// <summary>
     /// 

@@ -8,13 +8,13 @@ public partial class SodaFountain
     /// </summary>
     /// <param name="type"></param>
     /// <returns> </returns>
-    public static string GetSodaFillParticlePath(SodaFountain.SodaType type)
+    public static string GetSodaFillParticlePath(SodaType type)
     {
         return type switch
         {
-            SodaFountain.SodaType.Conk => "particles/soda_fountain/walker/sodafill2_conk_f.vpcf",
-            SodaFountain.SodaType.MionPisz => "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf",
-            SodaFountain.SodaType.Spooge => "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf",
+            SodaType.Conk => "particles/soda_fountain/walker/sodafill2_conk_f.vpcf",
+            SodaType.MionPisz => "particles/soda_fountain/walker/sodafill2_mionpisz_f.vpcf",
+            SodaType.Spooge => "particles/soda_fountain/walker/sodafill2_spooge_f.vpcf",
 
             _ => "particles/soda_fountain/walker/sodafill2_conk_f.vpcf"
         };
@@ -24,13 +24,13 @@ public partial class SodaFountain
     /// </summary>
     /// <param name="type"></param>
     /// <returns> </returns>
-    public static string GetSodaDispenseParticlePath(SodaFountain.SodaType type)
+    public static string GetSodaDispenseParticlePath(SodaType type)
     {
         return type switch
         {
-            SodaFountain.SodaType.Conk => "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf",
-            SodaFountain.SodaType.MionPisz => "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf",
-            SodaFountain.SodaType.Spooge => "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf",
+            SodaType.Conk => "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf",
+            SodaType.MionPisz => "particles/soda_fountain/walker/sodafill1_nocup_mionpisz_f.vpcf",
+            SodaType.Spooge => "particles/soda_fountain/walker/sodafill1_nocup_spooge_f.vpcf",
 
             _ => "particles/soda_fountain/walker/sodafill1_nocup_conk_f.vpcf"
         };
@@ -40,13 +40,13 @@ public partial class SodaFountain
     /// </summary>
     /// <param name="type"></param>
     /// <returns> </returns>
-    public static CupColor GetCupColorBySodaType(SodaFountain.SodaType type)
+    public static CupColor GetCupColorBySodaType(SodaType type)
     {
         return type switch
         {
-            SodaFountain.SodaType.Conk => CupColor.Red,
-            SodaFountain.SodaType.MionPisz => CupColor.Blue,
-            SodaFountain.SodaType.Spooge => CupColor.Green,
+            SodaType.Conk => CupColor.Red,
+            SodaType.MionPisz => CupColor.Blue,
+            SodaType.Spooge => CupColor.Green,
 
             _ => CupColor.White
         };
@@ -56,13 +56,13 @@ public partial class SodaFountain
     /// </summary>
     /// <param name="type"></param>
     /// <returns> </returns>
-    public static string GetCupItemIdBySodaType(SodaFountain.SodaType type)
+    public static string GetCupItemIdBySodaType(SodaType type)
     {
         return type switch
         {
-            SodaFountain.SodaType.Conk => "soda-conk",
-            SodaFountain.SodaType.MionPisz => "soda-mionpisz",
-            SodaFountain.SodaType.Spooge => "soda-spooge",
+            SodaType.Conk => "soda-conk",
+            SodaType.MionPisz => "soda-mionpisz",
+            SodaType.Spooge => "soda-spooge",
 
             _ => "soda"
         };
