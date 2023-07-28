@@ -37,7 +37,7 @@ public partial class Dispenser : BaseInteractable
     public override void Trigger(Player player) {
         // If an assembled cup is underneath this dispenser,
         // don't dispense until it is picked up
-        if (IsDispensing || (Cup.IsValid() && Cup.Assembled()))
+        if (IsDispensing || (Cup.IsValid() && Cup.IsAssembled))
             return;
 
         string particlePath;

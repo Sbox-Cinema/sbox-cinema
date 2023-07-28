@@ -81,12 +81,12 @@ public class Platform : BaseInteractable
     {
         var dispenser = (Parent as SodaFountain).FindInteractable($"tap_{slot.Index + 1}") as Dispenser;
         var cup = slot.Entity as FillableCup;
-        
+ 
         // Dont take cup if dispenser hasn't finished dispensing
-        if (!cup.Assembled() || dispenser.IsDispensing) return;
+        if (!cup.IsAssembled || dispenser.IsDispensing) return;
 
         // Add cup to player's inventory
-        player.PickupItem(InventorySystem.CreateItem(cup.ItemId()));
+        player.PickupItem(InventorySystem.CreateItem(cup.ItemId));
 
         // Remove entity from this slot
         slot.Clear();   
@@ -103,7 +103,7 @@ public class Platform : BaseInteractable
         {
             Transform = GetParentTransform(slot.Attachment),
             Parent = Parent,
-            CupItemUniqueId = SodaFountain.GetCupItemIdBySodaType(dispenser.SodaType),
+            ItemId = SodaFountain.GetCupItemIdBySodaType(dispenser.SodaType),
             Dispenser = dispenser
         };
     
