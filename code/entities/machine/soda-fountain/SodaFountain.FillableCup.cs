@@ -5,8 +5,8 @@ namespace Cinema;
 public partial class FillableCup : ModelEntity
 {
     public Dispenser Dispenser { get; set; }
-    public string ItemId { get; set; } 
-    public bool IsAssembled { get; set; }
+    public string ItemId { get; set; }
+    public bool IsAssembled { get; protected set; } = false;
 
     /// <summary>
     /// 
@@ -34,6 +34,8 @@ public partial class FillableCup : ModelEntity
     /// <returns> </returns>
     public void Assemble()
     {
+        if (IsAssembled) return;
+
         //Set to "assembled" body group
         SetBodyGroup(1, 1);
 
