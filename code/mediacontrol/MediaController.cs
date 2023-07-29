@@ -222,9 +222,6 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
     [ClientRpc]
     internal async Task ClientPlayMedia()
     {
-        if (!Game.IsClient)
-            return;
-
         if (Game.LocalPawn is not Player ply)
             return;
 
@@ -237,12 +234,12 @@ public partial class MediaController : EntityComponent<CinemaZone>, ISingletonCo
 
         if (CurrentMedia == null)
         {
-            Log.Trace("Current media: null");
+            Log.Trace($"{Entity.Name} - Current media: null");
             Projector?.SetMedia(null);
             return;
         }
 
-        Log.Trace($"Current media: {CurrentMedia.GenericInfo?.Title}, provider ID: {CurrentMedia.VideoProviderId}");
+        Log.Trace($"{Entity.Name} - Current media: {CurrentMedia.GenericInfo?.Title}, provider ID: {CurrentMedia.VideoProviderId}");
 
         CurrentMediaPlayer = await CurrentMedia.GetPlayer();
         Projector?.SetMedia(CurrentMediaPlayer);

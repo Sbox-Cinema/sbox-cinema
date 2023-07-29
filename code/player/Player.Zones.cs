@@ -28,26 +28,48 @@ public partial class Player
             .OrderBy(x => x.Position.Distance(Position))
             .FirstOrDefault();
 
-    public void EnterZone(CinemaZone zone)
+    public async void EnterZone(CinemaZone zone)
     {
         if (Zones.Contains(zone))
         {
             return;
         }
         Zones.Add(zone);
+        if (!Client.IsBot && zone.IsTheaterZone)
+        {
+            // Wait a frame to ensure that the added zone has been replicated to the client
+            // before sending the RPCs to initialize on the client.
+            await GameTask.DelaySeconds(Time.Delta);
+            zone.ProjectorEntity.ClientInitialize(To.Single(Client));
+            zone.MediaController.ClientPlayMedia(To.Single(Client));
+        }
         ZoneEntered?.Invoke(this, zone);
     }
 
     public void ExitZone(CinemaZone zone)
     {
         Zones.Remove(zone);
+        if (!Client.IsBot && zone.IsTheaterZone)
+        {
+            zone.ProjectorEntity.ClientCleanup(To.Single(Client));
+            zone.MediaController.ClientStopMedia(To.Single(Client));
+        }
         ZoneExited?.Invoke(this, zone);
     }
 
-    [ConCmd.Server("player.zones.dump")]
-    public static void DumpZonesCmd()
+    [ConCmd.Server("player.zones.dump.server")]
+    public static void DumpZonesServer()
     {
-        if (ConsoleSystem.Caller.Pawn is not Player ply)
+        if (ConsoleSystem.Caller?.Pawn is not Player ply)
+            return;
+
+        ply.DumpZones();
+    }
+
+    [ConCmd.Client("player.zones.dump.client")]
+    public static void DumpZonesClient()
+    {
+        if (Game.LocalPawn is not Player ply)
             return;
 
         ply.DumpZones();
