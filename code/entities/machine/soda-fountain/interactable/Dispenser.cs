@@ -40,6 +40,7 @@ public partial class Dispenser : BaseInteractable
         if (IsDispensing || (Cup.IsValid() && Cup.IsAssembled))
             return;
 
+        // Create particles for soda dispensing
         string particlePath;
 
         if (Cup.IsValid())
@@ -54,19 +55,19 @@ public partial class Dispenser : BaseInteractable
         SodaParticles = Particles.Create(particlePath, Parent);
         SodaParticles.SetEntityAttachment(0, Parent, Attachment);
 
-        FillCup();
-    }
-
-    public async void FillCup()
-    {
-        IsDispensing = true;
-
         // Play sound for soda dispensing
         Sound.FromEntity("cup_filling_01", Parent);
 
         // Reset timer for dispensing 
         TimeUntilFinishedDispensing = DispenseTime;
 
+        FillCup();
+
+        IsDispensing = true;
+    }
+
+    private async void FillCup()
+    {
         await GameTask.DelaySeconds(DispenseTime);
 
         Cup?.Assemble();
