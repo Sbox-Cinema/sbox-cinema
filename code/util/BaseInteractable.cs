@@ -15,7 +15,7 @@ public class Slot
         Attachment = attachment;
     }
 
-    public void SetItem(Entity entity)
+    public void SetContents(Entity entity)
     {
         Entity = entity;
     }
@@ -28,7 +28,7 @@ public class Slot
         return !Entity.IsValid();
     }
 
-    public bool HasItem()
+    public bool HasContents()
     {
         return Entity.IsValid();
     }

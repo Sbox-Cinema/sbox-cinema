@@ -26,7 +26,7 @@ public class Platform : BaseInteractable
     {
         var slot = GetClosestSlot(player);
 
-        if (slot.HasItem())
+        if (slot.HasContents())
         {
             TakeCup(slot, player);
 
@@ -72,7 +72,7 @@ public class Platform : BaseInteractable
         var cup = CreateCup(slot, dispenser);
 
         // Add entity to this slot
-        slot.SetItem(cup);
+        slot.SetContents(cup);
     }
     /// <summary>
     /// 
