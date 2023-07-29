@@ -29,6 +29,8 @@ public class Platform : BaseInteractable
         if (slot.HasItem())
         {
             TakeCup(slot, player);
+
+            return;
         }
 
         if (slot.IsEmpty())
