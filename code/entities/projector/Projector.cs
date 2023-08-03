@@ -3,6 +3,7 @@ using System.Linq;
 using CinemaTeam.Plugins.Media;
 using Editor;
 using Sandbox;
+using Sandbox.UI;
 
 namespace Cinema;
 
@@ -77,8 +78,10 @@ public partial class ProjectorEntity : Entity
     private void InitializeOverlay()
     {
         OverlayPanel = new ProjectorOverlayPanel();
-        OverlayPanel.PanelBounds = new Rect(Vector2.Zero - ProjectionSize / 2, ProjectionSize);
-        OverlayPanel.WorldScale = 1 / ScenePanelObject.ScreenToWorldScale;
+        var resolutionScale = 0.15f;
+        var scaledProjectionSize = ProjectionSize / ScenePanelObject.ScreenToWorldScale * resolutionScale;
+        OverlayPanel.PanelBounds = new Rect(Vector2.Zero - scaledProjectionSize / 2, scaledProjectionSize);
+        OverlayPanel.WorldScale = 1 / resolutionScale;
     }
 
     private void CleanupOverlay()

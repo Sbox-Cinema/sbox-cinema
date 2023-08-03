@@ -6,7 +6,7 @@
 <root>
     @if (IsPaused)
     {
-        <div class="playback-icon">@(IsPaused ? "pause_circle_filled" : "play_circle_filled")</div>
+        <div style="font-size: @(PlaybackFontSize)px;" class="playback-icon">@(IsPaused ? "pause_circle_filled" : "play_circle_filled")</div>
     }
     else if (IsBuffering)
     {

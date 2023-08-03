@@ -10,6 +10,14 @@ public partial class ProjectorOverlayPanel : WorldPanel
     public bool IsPaused => Media?.Controls.IsPaused ?? false;
     public bool IsBuffering => !(Media?.MediaLoaded ?? true);
     public int BufferIconRotation { get; set; } = 359;
+    public int PlaybackFontSize
+    {
+        get
+        {
+            var smallestDimension = Math.Min(PanelBounds.Width, PanelBounds.Height);
+            return (int)(smallestDimension / 4.5);
+        }
+    }
 
     protected override int BuildHash()
     {
