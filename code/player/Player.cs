@@ -141,6 +141,11 @@ partial class Player : AnimatedEntity, IEyes
             ThirdPersonCamera = !ThirdPersonCamera;
         }
 
+        if (Input.Pressed("swap_shoulder"))
+        {
+            ThirdPersonSwapShoulder();
+        }
+
         TickPlayerUse();
 
         ActiveController?.Simulate(cl);
