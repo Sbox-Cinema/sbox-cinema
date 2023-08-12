@@ -1,4 +1,11 @@
-﻿using Sandbox;
+﻿using Conna.Inventory;
+using Sandbox;
+using Sandbox.util;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+
 
 namespace Cinema;
 
@@ -6,7 +13,6 @@ public partial class Popcorn : WeaponBase
 {
     public override float PrimaryFireRate => 0.85f;
     public override int BaseUses => 10;
-
     public override void Spawn()
     {
         base.Spawn();
@@ -31,7 +37,7 @@ public partial class Popcorn : WeaponBase
             };
 
             projectile.LaunchFromEntityViewpoint(WeaponHolder);
-            
+
             if (Projectile.AutoRemoveThrown)
                 RemoveFromHolder();
         }
@@ -40,4 +46,5 @@ public partial class Popcorn : WeaponBase
     public override void Reload()
     {
     }
+
 }

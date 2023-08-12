@@ -47,11 +47,13 @@ public partial class Player
     {
         if (instance is not IHandheldItem weapon)
         {
+            Log.Info("Not Handheld Item");
             return;
         }
 
         if (!weapon.Weapon.IsValid())
         {
+            Log.Info("Not valid isWeapon Item");
             return;
         }
 
