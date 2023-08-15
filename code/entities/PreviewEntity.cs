@@ -10,10 +10,7 @@ public partial class PreviewEntity : ModelEntity
 
     internal bool UpdateFromTrace(TraceResult tr)
     {
-        if(!IsTraceValid(tr))
-        {
-            return false;
-        }
+        if (!IsTraceValid(tr)) return false;
         
         if(RelativeToNormal)
         {
