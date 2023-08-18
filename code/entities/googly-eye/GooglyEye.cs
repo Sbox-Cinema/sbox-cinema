@@ -11,14 +11,12 @@ public partial class GooglyEye : WeaponBase
     public override void Spawn()
     {
         base.Spawn();
-
-        ViewModelPath = "models/googly_eyes/v_googly_eyes_01.vmdl";
     }
     public override void ClientSpawn()
     {
         base.ClientSpawn();
 
-        if (!PreviewModel.IsValid())
+        if (!PreviewModel.IsValid()) 
         {
             PreviewModel = new PreviewEntity
             {
@@ -42,8 +40,7 @@ public partial class GooglyEye : WeaponBase
         {
             using (Prediction.Off())
             {
-                if (!Input.Pressed("attack1"))
-                    return;
+                if (!Input.Pressed("attack1")) return;
                
                 var ray = Owner.AimRay;
                 var distance = PlacementDistance;
@@ -56,6 +53,7 @@ public partial class GooglyEye : WeaponBase
                 {
                     var ent = new GooglyEyeEntity
                     {
+                        Parent = tr.Entity,
                         Position = tr.HitPosition,
                         Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0)),
                         Model = Model.Load("models/googly_eyes/googly_eyes_01.vmdl"),
