@@ -30,11 +30,7 @@ public partial class GooglyEye : WeaponBase
     }
     protected virtual bool IsPreviewTraceValid(TraceResult tr)
     {
-        if (!tr.Hit)
-            return false;
-
-        if (!tr.Entity.IsValid())
-            return false;
+        if (!tr.Hit || !tr.Entity.IsValid()) return false;
 
         return true;
     }
