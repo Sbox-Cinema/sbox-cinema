@@ -30,6 +30,8 @@ public partial class GooglyEye : WeaponBase
     {
         if (!tr.Hit || !tr.Entity.IsValid()) return false;
 
+        if (tr.Entity is GooglyEyeEntity) return false;
+
         return true;
     }
     public override void Simulate(IClient cl)
@@ -45,9 +47,9 @@ public partial class GooglyEye : WeaponBase
                 var ray = Owner.AimRay;
                 var distance = PlacementDistance;
                 var tr = Trace.Ray(ray, distance)
-                .WithoutTags("player", "weapon", "item", "clothes", "npc")
-                .Ignore(Owner)
-                .Run();
+                    .WithoutTags("player", "weapon", "item", "clothes", "npc")
+                    .Ignore(Owner)
+                    .Run();
 
                 if (IsPreviewTraceValid(tr))
                 {
@@ -72,7 +74,7 @@ public partial class GooglyEye : WeaponBase
             .WithoutTags("player", "weapon", "item", "clothes", "npc")
             .Ignore(Owner)
             .Run();
-        
+       
         if((Game.LocalPawn as Player).ActiveChild is GooglyEye)
         {
             if (IsPreviewTraceValid(tr) && PreviewModel.UpdateFromTrace(tr))
