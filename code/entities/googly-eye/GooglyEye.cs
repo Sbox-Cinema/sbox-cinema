@@ -69,6 +69,8 @@ public partial class GooglyEye : WeaponBase
     [GameEvent.Client.Frame]
     public void OnClientFrame()
     {
+        if (!Owner.IsAuthority) return;
+
         var ray = Owner.AimRay;
         var tr = Trace.Ray(ray, PlacementDistance)
             .WithoutTags("player", "weapon", "item", "clothes", "npc")
