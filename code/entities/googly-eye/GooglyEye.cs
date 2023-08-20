@@ -21,7 +21,6 @@ public partial class GooglyEye : WeaponBase
             PreviewModel = new PreviewEntity
             {
                 Predictable = true,
-                Owner = Owner,
                 Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
             };
         }
@@ -66,29 +65,29 @@ public partial class GooglyEye : WeaponBase
         }
     }
 
-    [GameEvent.Client.Frame]
-    public void OnClientFrame()
+    [GameEvent.Tick.Client]
+    public void OnClientTick()
     {
         if (!Owner.IsAuthority) return;
+
+        if ((Game.LocalPawn as Player).ActiveChild is not GooglyEye) return;
 
         var ray = Owner.AimRay;
         var tr = Trace.Ray(ray, PlacementDistance)
             .WithoutTags("player", "weapon", "item", "clothes", "npc")
             .Ignore(Owner)
             .Run();
-       
-        if((Game.LocalPawn as Player).ActiveChild is GooglyEye)
+
+            
+        if (IsPreviewTraceValid(tr) && PreviewModel.UpdateFromTrace(tr))
         {
-            if (IsPreviewTraceValid(tr) && PreviewModel.UpdateFromTrace(tr))
-            {
-                PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(1.0f);
-            }
-            else
-            {
-                PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.4f);
-                PreviewModel.Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0));
-                PreviewModel.Position = ray.Project(PlacementDistance);
-            }
+            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(1.0f);
+        }
+        else
+        {
+            PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.4f);
+            PreviewModel.Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0));
+            PreviewModel.Position = ray.Project(PlacementDistance);
         }
     }
 }
