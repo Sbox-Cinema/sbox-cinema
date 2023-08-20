@@ -6,7 +6,7 @@ namespace Cinema;
 
 public partial class Dispenser : BaseInteractable
 {
-    static private float DispenseTime = 3.0f;
+    static private float DispenseTime => 3.0f;
     
     private RealTimeUntil TimeUntilFinishedDispensing = 0.0f;
     public bool IsDispensing { get; set; }
