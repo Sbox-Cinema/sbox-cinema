@@ -25,6 +25,18 @@ public partial class CigaretteMachine
     {
         if (Game.IsClient) return false;
 
+        var position = GetAttachment("Box_Spawner").Value.Position;
+        
+        var ent = new CigarettePackEntity
+        {
+            Position = position,
+            Model = Model.Load("models/cigarettepack/cigarettepack.vmdl"),
+            Scale = 0.25f
+        };
+
+        ent.ApplyAbsoluteImpulse(Vector3.Forward * 1000.0f);
+        ent.ApplyLocalAngularImpulse(Vector3.Random * 1000f);
+
         HandleUse(user);
 
         return false;
