@@ -1,6 +1,6 @@
 {
   "ClassName": "CigarettePack",
-  "ViewModel": "models/cigarettepack/cigarettepack.vmdl",
+  "ViewModel": "models/cigarettepack/v_cigarettepack.vmdl",
   "ItemName": "Cigarette Pack (Strike Force)",
   "UniqueId": "cigarettepack-strikeforce",
   "Description": "Smoke for freedom",
