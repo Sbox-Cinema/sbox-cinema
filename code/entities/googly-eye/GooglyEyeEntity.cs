@@ -6,6 +6,8 @@ public partial class GooglyEyeEntity : ModelEntity
     {
         base.Spawn();
 
+        SetModel("models/googly_eyes/googly_eyes_01.vmdl");
+
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
     }
 }

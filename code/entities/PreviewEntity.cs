@@ -8,6 +8,8 @@ public partial class PreviewEntity : ModelEntity
     [Net] public Rotation RotationOffset { get; set; } = Rotation.Identity;
     [Net] public Vector3 PositionOffset { get; set; } = Vector3.Zero;
 
+    protected virtual bool IsTraceValid(TraceResult tr) => tr.Hit;
+
     internal bool UpdateFromTrace(TraceResult tr)
     {
         if (!IsTraceValid(tr)) return false;
@@ -25,5 +27,4 @@ public partial class PreviewEntity : ModelEntity
 
         return true;
     }
-    protected virtual bool IsTraceValid(TraceResult tr) => tr.Hit;
 }

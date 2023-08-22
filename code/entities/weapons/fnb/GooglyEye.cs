@@ -4,14 +4,9 @@ namespace Cinema;
 
 public partial class GooglyEye : WeaponBase
 {
-    static private float PlacementDistance = 128.0f;
-
+    static private float MaxPlacementDistance = 96.0f;
     PreviewEntity PreviewModel { get; set; }
-    
-    public override void Spawn()
-    {
-        base.Spawn();
-    }
+
     public override void ClientSpawn()
     {
         base.ClientSpawn();
@@ -20,7 +15,6 @@ public partial class GooglyEye : WeaponBase
         {
             PreviewModel = new PreviewEntity
             {
-                Predictable = true,
                 Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
             };
         }
@@ -44,7 +38,7 @@ public partial class GooglyEye : WeaponBase
                 if (!Input.Pressed("attack1")) return;
                
                 var ray = Owner.AimRay;
-                var distance = PlacementDistance;
+                var distance = MaxPlacementDistance;
                 var tr = Trace.Ray(ray, distance)
                     .WithoutTags("player", "weapon", "item", "clothes", "npc")
                     .Ignore(Owner)
@@ -56,8 +50,7 @@ public partial class GooglyEye : WeaponBase
                     {
                         Parent = tr.Entity,
                         Position = tr.HitPosition,
-                        Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0)),
-                        Model = Model.Load("models/googly_eyes/googly_eyes_01.vmdl"),
+                        Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0))
                     };
                 }
                 
@@ -73,7 +66,7 @@ public partial class GooglyEye : WeaponBase
         if ((Game.LocalPawn as Player).ActiveChild is not GooglyEye) return;
 
         var ray = Owner.AimRay;
-        var tr = Trace.Ray(ray, PlacementDistance)
+        var tr = Trace.Ray(ray, MaxPlacementDistance)
             .WithoutTags("player", "weapon", "item", "clothes", "npc")
             .Ignore(Owner)
             .Run();
@@ -87,7 +80,7 @@ public partial class GooglyEye : WeaponBase
         {
             PreviewModel.RenderColor = PreviewModel.RenderColor.WithAlpha(0.4f);
             PreviewModel.Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0));
-            PreviewModel.Position = ray.Project(PlacementDistance);
+            PreviewModel.Position = ray.Project(MaxPlacementDistance);
         }
     }
 }
