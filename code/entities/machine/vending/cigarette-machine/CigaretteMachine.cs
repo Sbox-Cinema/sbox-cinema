@@ -11,7 +11,8 @@ namespace Cinema;
 public partial class CigaretteMachine : AnimatedEntity, ICinemaUse
 {
     [Net] public IDictionary<string, BaseInteractable> Interactables { get; set; }
-
+    [Net] public int NumDispensed { get; set; } = 0;
+    
     /// <summary>
     /// Set up the model when spawned by the server
     /// Setup model
