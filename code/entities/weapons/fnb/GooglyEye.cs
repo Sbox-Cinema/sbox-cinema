@@ -11,10 +11,13 @@ public partial class GooglyEye : WeaponBase
     {
         base.ClientSpawn();
 
-        PreviewModel = new PreviewEntity
+        if (!PreviewModel.IsValid()) 
         {
-            Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
-        }; 
+            PreviewModel = new PreviewEntity
+            {
+                Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
+            };
+        }
     }
     protected virtual bool IsPreviewTraceValid(TraceResult tr)
     {
