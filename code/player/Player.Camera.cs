@@ -1,4 +1,6 @@
+using System;
 using Sandbox;
+using Sandbox.Utility;
 
 namespace Cinema;
 
@@ -6,6 +8,7 @@ public partial class Player
 {
     // default
     public bool isRightShoulderView;
+    
 
     public void ThirdPersonSwapShoulder()
     {
@@ -18,9 +21,14 @@ public partial class Player
     public void SimulateCamera(IClient cl)
     {
         Camera.Rotation = EyeRotation;
+        
+        float FOV = Camera.FieldOfView;
+        float defaultFov = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        float targetFov = 30f;
 
-        // Set field of view to whatever the user chose in options
-        Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        FOV = Input.Down("Zoom") ? MathX.Lerp(FOV, targetFov, Time.Delta * 7) : defaultFov;
+
+        Camera.FieldOfView = FOV;
 
         if (ThirdPersonCamera)
         {
