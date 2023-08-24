@@ -4,9 +4,7 @@ namespace Cinema;
 
 public partial class PreviewEntity : ModelEntity
 {
-    [Net] public bool RelativeToNormal { get; set; } = true;
-    [Net] public Rotation RotationOffset { get; set; } = Rotation.Identity;
-    [Net] public Vector3 PositionOffset { get; set; } = Vector3.Zero;
+    public bool RelativeToNormal { get; set; } = true;
 
     protected virtual bool IsTraceValid(TraceResult tr) => tr.Hit;
 
@@ -16,13 +14,13 @@ public partial class PreviewEntity : ModelEntity
         
         if(RelativeToNormal)
         {
-            Rotation = Rotation.LookAt(tr.Normal, tr.Direction) * RotationOffset;
-            Position = tr.EndPosition + Rotation * PositionOffset;
+            Rotation = Rotation.LookAt(tr.Normal, tr.Direction);
+            Position = tr.EndPosition;
         }
         else
         {
-            Rotation = Rotation.Identity * RotationOffset;
-            Position = tr.EndPosition + PositionOffset;
+            Rotation = Rotation.Identity;
+            Position = tr.EndPosition;
         }
 
         return true;

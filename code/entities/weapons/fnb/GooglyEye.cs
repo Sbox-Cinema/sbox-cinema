@@ -21,49 +21,44 @@ public partial class GooglyEye : WeaponBase
     }
     protected virtual bool IsPreviewTraceValid(TraceResult tr)
     {
-        if (!tr.Hit || !tr.Entity.IsValid()) return false;
-
-        if (tr.Entity is GooglyEyeEntity) return false;
+        if (!tr.Hit || !tr.Entity.IsValid() || tr.Entity is GooglyEyeEntity) return false;
 
         return true;
     }
     public override void Simulate(IClient cl)
     {
         base.Simulate(cl);
-       
-        if(Game.IsServer)
-        {
-            using (Prediction.Off())
-            {
-                if (!Input.Pressed("attack1")) return;
-               
-                var ray = Owner.AimRay;
-                var distance = MaxPlacementDistance;
-                var tr = Trace.Ray(ray, distance)
-                    .WithoutTags("player", "weapon", "item", "clothes", "npc")
-                    .Ignore(Owner)
-                    .Run();
 
-                if (IsPreviewTraceValid(tr))
+        if (!Game.IsServer) return;
+        
+        using (Prediction.Off())
+        {
+            if (!Input.Pressed("attack1")) return;
+               
+            var ray = Owner.AimRay;
+            var distance = MaxPlacementDistance;
+            var tr = Trace.Ray(ray, distance)
+                .WithoutTags("player", "weapon", "item", "clothes", "npc")
+                .Ignore(Owner)
+                .Run();
+
+            if (IsPreviewTraceValid(tr))
+            {
+                var ent = new GooglyEyeEntity
                 {
-                    var ent = new GooglyEyeEntity
-                    {
-                        Parent = tr.Entity,
-                        Position = tr.HitPosition,
-                        Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0))
-                    };
-                }
-                
+                    Parent = tr.Entity,
+                    Position = tr.HitPosition,
+                    Rotation = Rotation.LookAt(tr.Normal, Owner.AimRay.Forward) * Rotation.From(new Angles(90, 0, 0))
+                };
             }
         }
+        
     }
 
     [GameEvent.Tick.Client]
     public void OnClientTick()
     {
-        if (!Owner.IsAuthority) return;
-
-        if ((Game.LocalPawn as Player).ActiveChild is not GooglyEye) return;
+        if (!Owner.IsAuthority || (Game.LocalPawn as Player).ActiveChild is not GooglyEye) return;
 
         var ray = Owner.AimRay;
         var tr = Trace.Ray(ray, MaxPlacementDistance)
