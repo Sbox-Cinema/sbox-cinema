@@ -7,18 +7,6 @@ public partial class GooglyEye : WeaponBase
     static private float MaxPlacementDistance = 96.0f;
     PreviewEntity PreviewModel { get; set; }
 
-    public override void ClientSpawn()
-    {
-        base.ClientSpawn();
-
-        if (!PreviewModel.IsValid()) 
-        {
-            PreviewModel = new PreviewEntity
-            {
-                Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
-            };
-        }
-    }
     protected virtual bool IsPreviewTraceValid(TraceResult tr)
     {
         if (!tr.Hit || !tr.Entity.IsValid() || tr.Entity is GooglyEyeEntity) return false;
@@ -52,7 +40,27 @@ public partial class GooglyEye : WeaponBase
                 };
             }
         }
-        
+    }
+
+    public override void ActiveStart(Entity ent)
+    {
+        base.ActiveStart(ent);
+
+        if (Game.IsServer || PreviewModel.IsValid()) return;
+
+        PreviewModel = new PreviewEntity
+        {
+            Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
+        };
+    }
+
+    public override void ActiveEnd(Entity ent, bool dropped)
+    {
+        base.ActiveEnd(ent, dropped);
+
+        if (Game.IsServer || !PreviewModel.IsValid()) return;
+
+        PreviewModel.Delete();
     }
 
     [GameEvent.Tick.Client]
