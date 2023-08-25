@@ -17,7 +17,7 @@ public partial class GooglyEye : WeaponBase
     {
         base.Simulate(cl);
 
-        if (!Game.IsServer) return;
+        if (Game.IsClient) return;
         
         using (Prediction.Off())
         {
@@ -46,9 +46,9 @@ public partial class GooglyEye : WeaponBase
     {
         base.ActiveStart(ent);
 
-        if (Game.IsServer || PreviewModel.IsValid()) return;
-
-        PreviewModel = new PreviewEntity
+        if (Game.IsServer) return;
+        
+        PreviewModel = PreviewModel.IsValid() ? PreviewModel : new PreviewEntity
         {
             Model = Model.Load("models/googly_eyes/preview_googly_eyes_01.vmdl")
         };
@@ -58,9 +58,9 @@ public partial class GooglyEye : WeaponBase
     {
         base.ActiveEnd(ent, dropped);
 
-        if (Game.IsServer || !PreviewModel.IsValid()) return;
+        if (Game.IsServer) return;
 
-        PreviewModel.Delete();
+        PreviewModel?.Delete();
     }
 
     [GameEvent.Tick.Client]
