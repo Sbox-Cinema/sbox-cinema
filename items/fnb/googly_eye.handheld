@@ -1,0 +1,10 @@
+{
+  "ClassName": "GooglyEye",
+  "ViewModel": "models/googly_eyes/v_googly_eyes_01.vmdl",
+  "ItemName": "Googly Eye",
+  "UniqueId": "googly_eye",
+  "Description": "ICUP",
+  "Icon": "models/googly_eyes/googly_eyes_01.vmdl.png",
+  "WorldModel": "models/googly_eyes/googly_eyes_01.vmdl",
+  "Tags": []
+}
