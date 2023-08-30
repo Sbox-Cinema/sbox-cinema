@@ -284,10 +284,6 @@
     "TickRate": 50,
     "LaunchConfigs": [
       {
-        "Name": "My New Config",
-        "GameIdent": "cinemateam.cinema#local",
-        "MapName": "walker/concession_test_sodafountain.vmap",
-        "MaxPlayers": 1,
         "GameSettings": {},
         "Addons": "",
         "PreLaunchCommand": "",
