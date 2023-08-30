@@ -1,27 +1,48 @@
+using System;
 using Sandbox;
+using Sandbox.Utility;
 
 namespace Cinema;
 
 public partial class Player
 {
+    // default
+    public bool isRightShoulderView;
+    
+
+    public void ThirdPersonSwapShoulder()
+    {
+        if (!ThirdPersonCamera)
+            return;
+
+        isRightShoulderView = !isRightShoulderView;
+    }
+
     public void SimulateCamera(IClient cl)
     {
         Camera.Rotation = EyeRotation;
+        
+        float FOV = Camera.FieldOfView;
+        float defaultFov = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        float targetFov = 30f;
 
-        // Set field of view to whatever the user chose in options
-        Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        FOV = Input.Down("Zoom") ? MathX.Lerp(FOV, targetFov, Time.Delta * 7) : defaultFov;
+
+        Camera.FieldOfView = FOV;
 
         if (ThirdPersonCamera)
         {
             Camera.FirstPersonViewer = null;
 
             Vector3 targetPos;
-            var center = Position + Vector3.Up * 64;
+            var center = Position + Vector3.Up * 80;
             var pos = center;
-            var rot = Rotation.FromAxis(Vector3.Up, -16) * Camera.Rotation;
+            var rot = Rotation.FromAxis(Vector3.Up, 0) * Camera.Rotation;
 
             float distance = 130.0f * Scale;
             targetPos = pos + rot.Right * ((CollisionBounds.Mins.x + 32) * Scale);
+            targetPos = pos + rot.Right * ((isRightShoulderView ? 1 : -1) * 32 * Scale);
+
             targetPos += rot.Forward * -distance;
 
             var tr = Trace.Ray(pos, targetPos)
