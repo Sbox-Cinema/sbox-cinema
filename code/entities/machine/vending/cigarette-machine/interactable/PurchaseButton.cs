@@ -22,6 +22,8 @@ public partial class PurchaseButton : BaseInteractable
     /// <param name="player"></param>
     public override void Trigger(Player player)
     {
+        Sound.FromEntity("switch_press_01", Parent);
+
         var position = (Parent as AnimatedEntity).GetAttachment("Box_Spawner").Value.Position;
 
         var ent = new CigarettePackEntity
