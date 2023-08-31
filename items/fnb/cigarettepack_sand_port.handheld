@@ -1,0 +1,10 @@
+{
+  "ClassName": "CigarettePack",
+  "ViewModel": "models/cigarettepack/handheld/view/v_cigarettepack-sandport.vmdl",
+  "ItemName": "Cigarette Pack (Sand Port)",
+  "UniqueId": "cigarettepack-sandport",
+  "Description": "The Smoothness of Sand",
+  "Icon": "models/cigarettepack/handheld/world/cigarettepack-sandport.vmdl.png",
+  "WorldModel": "models/cigarettepack/handheld/world/cigarettepack-sandport.vmdl",
+  "Tags": []
+}

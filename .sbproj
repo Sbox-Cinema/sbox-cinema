@@ -284,6 +284,10 @@
     "TickRate": 50,
     "LaunchConfigs": [
       {
+        "Name": "Concession Test",
+        "GameIdent": "cinemateam.cinema#local",
+        "MapName": "walker/concession_test_sodafountain.vmap",
+        "MaxPlayers": 13,
         "GameSettings": {},
         "Addons": "",
         "PreLaunchCommand": "",
