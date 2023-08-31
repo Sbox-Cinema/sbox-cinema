@@ -19,9 +19,9 @@ public partial class Machine : AnimatedEntity, ICinemaUse
         return false;
     }
 
-    public virtual void OnStopUse(Entity user)
+    public virtual bool OnStopUse(Entity user)
     {
-
+        return true;
     }
 
     public virtual bool OnUse(Entity user)

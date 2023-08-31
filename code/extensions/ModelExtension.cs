@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace Cinema;
 
 [GameData("interact_box", AllowMultiple = true)]
-[Box("dimensions", Origin = "offset_origin", Attachment = "attachment_point")]
+[Box("dimensions", Origin ="offset_origin", Attachment = "attachment_point")]
 [Axis(Origin = "offset_origin", Attachment = "attachment_point")]
 public struct ModelInteractionBox
 {

@@ -171,9 +171,12 @@ public partial class Player
     }
 
     /// <summary>
-    /// If we're using an entity, stop using it
+    /// Tells the player pawn to stop using an entity.
+    /// Used internally but can also be called from the entity itself or an other external method.
+    /// Returns true if the entity was successfully stopped being used.
+    /// Use with caution.
     /// </summary>
-    protected virtual bool StopUsing(Entity entity = null)
+    public bool StopUsing(Entity entity = null)
     {
         if (entity == null)
         {
@@ -192,13 +195,16 @@ public partial class Player
             return false;
         }
 
+        var canStopUsing = true;
+
         if (Using is ICinemaUse cinemaUse)
         {
-            cinemaUse.OnStopUse(this);
+            canStopUsing = cinemaUse.OnStopUse(this);
         }
 
-        Using = null;
-        return true;
+        if (canStopUsing) Using = null;
+
+        return canStopUsing;
     }
 
 }

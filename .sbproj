@@ -225,6 +225,11 @@
           "Name": "JobMenu",
           "KeyboardCode": "B",
           "GroupName": "Game"
+        },
+        {
+          "Name": "Zoom",
+          "KeyboardCode": "Z",
+          "GroupName": "Other"
         }
       ]
     },
@@ -279,10 +284,6 @@
     "TickRate": 50,
     "LaunchConfigs": [
       {
-        "Name": "Concession Test",
-        "GameIdent": "cinemateam.cinema#local",
-        "MapName": "walker/concession_test_sodafountain.vmap",
-        "MaxPlayers": 5,
         "GameSettings": {},
         "Addons": "",
         "PreLaunchCommand": "",

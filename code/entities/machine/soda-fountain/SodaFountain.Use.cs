@@ -1,13 +1,14 @@
 ﻿using Sandbox;
+using System.Linq;
 
-namespace Cinema.HotdogRoller;
+namespace Cinema;
 
-public partial class HotdogRoller
+public partial class SodaFountain 
 {
-    public string UseText { get; set; }
+    public string UseText => "Use Soda Fountain";
 
     /// <summary>
-    /// Whether this Hotdog Roller is usable or not
+    /// Whether this Soda Fountain is usable or not
     /// </summary>
     /// <param name="user">The player who is using</param>
     /// <returns>If this is useable</returns>
@@ -17,7 +18,7 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    /// Called on the server when the Hotdog Roller is used by a player
+    /// Called on the server when the Soda Fountain is used by a player
     /// </summary>
     /// <param name="user"></param>
     /// <returns>If the player can continue to use the Hotdog Roller</returns>
@@ -31,12 +32,24 @@ public partial class HotdogRoller
     }
 
     /// <summary>
-    /// Called on the server when the Hotdog Roller is stopped being used by a player
+    /// Called on the server when the Soda Fountain is stopped being used by a player
     /// </summary>
     /// <param name="user"></param>
     /// <returns>If the player can continue to use the Hotdog Roller</returns>
-    public bool OnStopUse(Entity user)
+    public void OnStopUse(Entity user)
     {
-        return true;
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns> </returns>
+    public void HandleUse(Entity player)
+    {
+        var interactable = Interactables.FirstOrDefault(x => x.CanRayTrigger(player.AimRay).Hit);
+                
+        interactable?.Trigger(player as Player);
     }
 }

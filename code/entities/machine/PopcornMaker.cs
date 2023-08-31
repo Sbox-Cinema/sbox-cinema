@@ -53,12 +53,14 @@ public partial class PopcornMaker : Machine
         return true;
     }
 
-    public override void OnStopUse(Entity user)
+    public override bool OnStopUse(Entity user)
     {
-        if (user is not Player player) return;
-        if (BeingUsedBy != player) return;
+        if (user is not Player player) return true;
+        if (BeingUsedBy != player) return true;
 
         BeingUsedBy = null;
+
+        return true;
     }
 
     private void StartMakingPopcorn(Player player)

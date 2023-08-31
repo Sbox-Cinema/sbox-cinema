@@ -1,0 +1,56 @@
+@inherits Panel
+@using Sandbox.UI;
+
+@namespace Cinema.UI
+
+@attribute [StyleSheet("/ui/toilet/PoopGame.scss")]
+<root class="@VisibleClass">
+
+    <div @ref=GameWindow class="placement container game @GameVisibleClass">
+        <div class="placement container lives">
+            @foreach (var (_, index) in TryArray.WithIndex())
+            {
+                <div class="poopicon" />
+            }
+        </div>
+    </div>
+
+    @if (GameState == State.Instructions) {
+        <div class="placement container instructions">
+            <div class="section header">
+                <h1>  
+                    Crappy Turd
+                </h1>
+            </div>
+            <div class="section">
+                <p>
+                    @($"Press {JumpButtonName} to jump")
+                </p>
+                <p>
+                    Make it to the end
+                </p>
+                <p>
+                    Fewer tries = better prize
+                </p>
+            </div>
+            <div class="section bottom">
+                <p class="action">
+                    @($"Press {JumpButtonName} to start")
+                </p>
+            </div>
+        </div>
+    }
+    @if (GameState == State.Pooping) {
+        <div class="placement container gameover">
+            <div class="section header">
+                <h1>
+                    <span>@($"{PoopText[TriesRemaining + 1]}")</span>
+                    
+                    <div class="poopicon" />
+                </h1>
+            </div>
+        </div>
+    }
+
+    
+</root>

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Cinema;
 
-[GameResource(title: "Uniform Definition", extension: "uniform", 
-    description: "Defines an outfit that is worn by a specific job, which will be used to replace the existing clothes worn by a player.", 
+[GameResource(title: "Uniform Definition", extension: "uniform",
+    description: "Defines an outfit that is worn by a specific job, which will be used to replace the existing clothes worn by a player.",
     Icon = "checkroom")]
 public class JobUniform : GameResource
 {
@@ -56,6 +56,11 @@ public class JobUniform : GameResource
         foreach (var clothingPath in Clothing)
         {
             var article = ResourceLibrary.Get<Clothing>(clothingPath);
+            if (article == null)
+            {
+                Log.Warning($"Could not find clothing with path {clothingPath} for uniform {ResourcePath}");
+                continue;
+            }
             if (!HatShouldReplaceHair && article.Category == Sandbox.Clothing.ClothingCategory.Hat)
             {
                 // If we force hats to replace hair, we're still removing existing hats,

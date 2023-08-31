@@ -1,0 +1,10 @@
+{
+  "ClassName": "Soda",
+  "ViewModel": "models/papercup/walker/v_papercup_red.vmdl",
+  "ItemName": "Cup of Soda (Conk)",
+  "UniqueId": "soda-conk",
+  "Description": "A delicious taste of Conk",
+  "Icon": "ui/icons/soda.png",
+  "WorldModel": "models/papercup/walker/w_papercup_red.vmdl",
+  "Tags": []
+}
